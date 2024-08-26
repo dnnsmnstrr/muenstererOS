@@ -115,8 +115,8 @@ export const redirects: Redirect[] = [
 	},
 	{
 		name: 'printables',
-		url: 'https://www.printables.com/@dnnsmnstrr_304895',
-    aliases: ['models', '3dprints', 'prusa']
+		url: 'https://www.printables.com/@' + USERNAME_SHORT,
+    	aliases: ['print', 'models', '3dprint', 'prusa']
 	},
 	{
 		name: 'tiktok',
