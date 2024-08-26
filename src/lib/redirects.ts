@@ -3,7 +3,7 @@ import {
   DEFAULT_URL,
   USERNAME,
   USERNAME_SHORT,
-  EMAIL
+  links
 } from '$lib/config'
 import type { Redirect } from './redirect'
 
@@ -22,71 +22,71 @@ export const redirects: Redirect[] = [
 	{
 		name: 'contact',
 		description: 'Send me an email',
-		url: 'mailto:' + EMAIL,
+		url: links.mailto,
 		aliases: ['email', 'message', 'mail', '📧']
 	},
 	{
 		name: 'github',
-		url: 'https://www.github.com/' + USERNAME_SHORT,
+		url: links.github,
 		aliases: ['g', 'gh', 'git', 'hub', 'code', 'repo', 'hack', '🤖']
 	},
 	{
 		name: 'gitlab',
-		url: 'https://www.gitlab.com/' + USERNAME_SHORT,
+		url: links.gitlab,
 		aliases: ['gl', 'lab', '🦊']
 	},
 	{
 		name: 'spotify',
 		description: 'Music is life!',
-		url: 'https://open.spotify.com/user/' + USERNAME,
+		url: links.spotify,
 		aliases: ['s', 'sp', 'spot', 'music', '🎵', '🎧']
 	},
 	{ name: 'statsfm', url: 'https://stats.fm/' + USERNAME, aliases: ['spotistats', '📊'] },
 	// Socials
 	{
 		name: 'instagram',
-		url: 'https://www.instagram.com/' + USERNAME_SHORT,
+		url: links.instagram,
 		aliases: ['i', 'ig', 'insta', 'gram', 'nofilter', 'pictures', 'photos', 'stories', '📷']
 	},
 	{
 		name: 'twitter',
-		url: 'https://twitter.com/' + USERNAME_SHORT,
-		aliases: ['t', 'tw', 'tweet', 'tweets', 'hashtag', '🐦']
+		url: links.x,
+		aliases: ['x', 't', 'tw', 'tweet', 'tweets', 'hashtag', '🐦']
 	},
 	{
 		name: 'mastodon',
-		url: 'https://mastodon.social/@' + USERNAME_SHORT,
+		url: links.mastodon,
 		description: 'twitter alternative',
 		aliases: ['mast', 'tröt', 'fediverse', 'toot', '🦣']
 	},
 	{
 		name: 'facebook',
-		url: 'https://facebook.com/' + USERNAME,
+		url: links.facebook,
 		aliases: ['f', 'fb', 'book', 'gesichtsbuch', 'meta']
 	},
 	{
 		name: 'reddit',
-		url: 'https://www.reddit.com/user/themissing_link',
+		url: links.reddit,
 		aliases: ['r', 'readit', 'neckbeard', '👽']
 	},
 	{
 		name: 'linkedin',
-		url: 'https://www.linkedin.com/in/' + USERNAME,
+		url: links.linkedin,
 		aliases: ['l', 'in', 'linked', 'jobs', '🧑‍💼', '💼']
 	},
 	{
 		name: 'youtube',
-		url: 'https://www.youtube.com/user/' + USERNAME,
+		url: links.youtube,
 		aliases: ['y', 'yt', 'tube', 'videos', 'watch', '📹', '📺']
 	},
 	{
 		name: 'telegram',
-		url: 'https://t.me/' + USERNAME_SHORT,
+		url: links.telegram,
 		aliases: ['tg', 'tele', '📠', '💬']
 	},
 	{
 		name: 'bereal',
-		url: 'https://bere.al/' + USERNAME_SHORT,
+		url: links.bereal,
 		aliases: ['real', '⏰']
 	},
 	{
@@ -110,37 +110,37 @@ export const redirects: Redirect[] = [
 	},
 	{
 		name: 'making',
-		url: 'https://www.tiktok.com/@dennis.makerer',
+		url: links.makerer,
 		aliases: ['makerer', 'make', 'maker', 'makermonday', '🛠️']
 	},
 	{
 		name: 'printables',
-		url: 'https://www.printables.com/@' + USERNAME_SHORT,
+		url: links.printables,
     	aliases: ['print', 'models', '3dprint', 'prusa']
 	},
 	{
 		name: 'tiktok',
-		url: `https://www.tiktok.com/@${USERNAME_SHORT}`,
+		url: links.tiktok,
 		aliases: ['tt', 'spyware', '🇨🇳']
 	},
 	{
 		name: 'paypal',
-		url: 'https://www.paypal.com/paypalme/' + USERNAME,
+		url: links.paypal,
 		aliases: ['p', 'pp', 'pay', 'donate', 'sendmoney', 'wheremymoneyat', '💰', '💸', '🫰']
 	},
 	{
 		name: 'kickstarter',
-		url: 'https://www.kickstarter.com/profile/' + USERNAME,
+		url: links.kickstarter,
 		aliases: ['ks', 'crowdfunding', 'backed']
 	},
 	{
 		name: 'imdb',
-		url: 'https://www.imdb.com/user/ur31201407',
+		url: links.imdb,
 		aliases: ['movies', 'ratings', 'watchlist', '🎥', '🎬', '🍿']
 	},
 	{
 		name: 'steam',
-		url: 'https://steamcommunity.com/id/' + USERNAME_SHORT,
+		url: links.steam,
 		aliases: ['gaming', 'play', 'zocken', '🎮', '👾']
 	},
 	{ name: 'discord', url: 'https://discord.gg/CrB72mXEzN' },
@@ -169,7 +169,7 @@ export const redirects: Redirect[] = [
 		url: 'https://y.at/robot.laptop.phone.watch.headphone',
 		aliases: ['emoji', '🤖💻📱⌚🎧']
 	},
-  { name: 'sherrit', url: 'https://sherr.it/9jxNdPCzff2Iwsk', aliases: ['rollingsquare', 'aircard']},
+  	{ name: 'sherrit', url: 'https://sherr.it/9jxNdPCzff2Iwsk', aliases: ['rollingsquare', 'aircard']},
 	{ name: 'vet', url: 'https://vet.domains/muensterer.vet', aliases: ['vechain'] },
 	{
 		name: 'stickers',
@@ -196,7 +196,7 @@ export const redirects: Redirect[] = [
 		description: 'the best flax oil you can buy!',
 		aliases: ['oil', 'grandma']
 	},
-	{ name: 'linus', url: 'https://linus3d.de/', aliases: ['cousin'] },
+	{ name: 'linus', url: 'https://linus3d.de/', aliases: ['cousin', 'linus3d'] },
 	{
 		name: 'wishlist',
 		url: 'https://www.amazon.de/hz/wishlist/ls/1Y2URDXEYY1JO',
@@ -295,11 +295,11 @@ export const redirects: Redirect[] = [
 	{ name: 'playlists', url: 'universe/playlists' }, //extend existing redirects
 	{ name: 'shuffle', url: 'random', aliases: ['feelinglucky', '🔀', '🎲', 'roll'] },
 	{ name: 'google', url: 'https://www.google.com/search?q=Dennis+Muensterer' },
-	{ name: 'admin', url: 'https://youareanidiot.cc/', aliases: ['wp-admin', 'idiot', 'troll'] },
+	{ name: 'admin', url: 'https://youareanidiot.cc/', aliases: ['wp-admin', 'idiot'] },
 	{
 		name: 'insult',
 		url: 'contact?Subject=Fuck%20You%21',
-		aliases: ['hate', 'fu', '🖕', 'haters-gonna-hate']
+		aliases: ['hate', 'fu', '🖕']
 	}, //add query params
 	{ name: 'edit', url: 'github/dnnsmnstrr.github.io', aliases: ['✏️', '🖊️'] }, //shortcut to website repo
 	{

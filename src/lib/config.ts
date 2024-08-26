@@ -17,6 +17,7 @@ export const links = {
 	yat: 'https://y.at/🤖💻📱⌚🎧',
 	spotify: 'https://open.spotify.com/user/' + USERNAME_LONG,
 	github: 'https://github.com/' + USERNAME_SHORT,
+	gitlab: 'https://gitlab.com/' + USERNAME_SHORT,
 	source: 'https://github.com/' + USERNAME_SHORT + '/muenstererOS',
 	instagram: 'https://www.instagram.com/' + USERNAME_SHORT,
 	twitter: 'https://twitter.com/' + USERNAME_SHORT,
@@ -30,8 +31,10 @@ export const links = {
 	tiktok: 'https://www.tiktok.com/@' + USERNAME_SHORT,
 	makerer: 'https://www.tiktok.com/@dennis.makerer',
 	paypal: 'https://www.paypal.com/paypalme/' + USERNAME_LONG,
+	printables: 'https://www.printables.com/@' + USERNAME_SHORT,
 	kickstarter: 'https://www.kickstarter.com/profile/' + USERNAME_LONG,
 	steam: 'https://steamcommunity.com/id/' + USERNAME_SHORT,
+	reddit: 'https://www.reddit.com/user/themissing_link',
 	routinehub: 'https://routinehub.co/user/' + USERNAME_SHORT,
 	imdb: 'https://www.imdb.com/user/ur31201407',
 	mailto: 'mailto:' + EMAIL,
@@ -47,6 +50,7 @@ export const descriptions = [
     { name: '💚 Backer of Projects', href: links.kickstarter },
     { name: '🎧 Music enthusiast', href: links.spotify},
     { name: '📺 Watcher of Movies', href: links.imdb},
+    { name: '🧡 Printer of Objects', href: links.printables},
 ];
 
 export const defaultColors = {
