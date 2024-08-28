@@ -85,6 +85,12 @@ export const redirects: Redirect[] = [
 		aliases: ['tg', 'tele', '📠', '💬']
 	},
 	{
+		name: 'signal',
+		url: 'https://signal.me/#eu/Gww087GavA56RIZ4-vdF9QbkhdRcWXvCgXu-h-u7ags8jPdnQClCeY9u7R7rLwKa',
+		description: 'a potential alternative to telegram for when that gets shut down',
+		aliases: ['📶']
+	},
+	{
 		name: 'bereal',
 		url: links.bereal,
 		aliases: ['real', '⏰']
@@ -162,7 +168,7 @@ export const redirects: Redirect[] = [
 		name: 'shortcuts',
 		url: 'https://routinehub.co/user/' + USERNAME_SHORT,
 		description: 'my published shortcuts',
-		aliases: ['sc', 'siri']
+		aliases: ['sc', 'siri', 'routinehub']
 	},
 	{
 		name: 'yat',
