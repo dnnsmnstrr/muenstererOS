@@ -50,7 +50,6 @@ export const getRedirectURL = ({url, name}: Redirect, { query, noReturn }: { que
     // a failed redirect will end up back here, therefore the 'noReturn' parameter is used to avoid endless loops on redirect attempts
     path = `${DEFAULT_URL}/${!noReturn ? query : ''}`
   }
-  console.log('path', path)
 
   return path
 }

@@ -12,6 +12,7 @@ export const USERNAME_LONG = USERNAME;
 export const USERNAME_SHORT = disemvowel(USERNAME_LONG);
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
 export const DEFAULT_URL = 'https://dnnsmnstrr.github.io';
+export const CURRENT_DOMAIN = 'muensterer.tech';
 
 export const links = {
 	yat: 'https://y.at/🤖💻📱⌚🎧',

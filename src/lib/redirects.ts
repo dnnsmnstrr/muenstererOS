@@ -1,5 +1,6 @@
 import {
   API_URL,
+  CURRENT_DOMAIN,
   DEFAULT_URL,
   USERNAME,
   USERNAME_SHORT,
@@ -150,6 +151,11 @@ export const redirects: Redirect[] = [
 		aliases: ['gaming', 'play', 'zocken', '🎮', '👾']
 	},
 	{ name: 'discord', url: 'https://discord.gg/CrB72mXEzN' },
+	{
+	  name: 'raycast',
+	  url: 'https://raycast.com/?via=' + USERNAME_SHORT,
+	  aliases: ['ray', 'launcher', 'spotlight', '🔍', '🔎']
+	},
 	// Projects
 	{
 		name: 'ToolShare',
@@ -169,6 +175,11 @@ export const redirects: Redirect[] = [
 		url: 'https://routinehub.co/user/' + USERNAME_SHORT,
 		description: 'my published shortcuts',
 		aliases: ['sc', 'siri', 'routinehub']
+	},
+	{
+		name: 'oblique-strategies',
+		url: 'https://oblique.' + CURRENT_DOMAIN,
+		aliases: ['oblique', 'strategies', 'eno']
 	},
 	{
 		name: 'yat',
