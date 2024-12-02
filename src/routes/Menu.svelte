@@ -20,7 +20,7 @@
     [
       { name: 'Curriculum Vitae', href: links.cv },
       { name: 'Redirects' },
-      { name: 'Imprint' },
+      { name: 'Legal Notice', href: '/legal' },
     ],
     { name: 'Social', sub: [
       { name: 'Instagram', href: links.instagram },
@@ -146,21 +146,21 @@
 		<Menubar.Content>
 			{#each bookmarks as bookmark}
 				{#if Array.isArray(bookmark)}
-				{#each bookmark as bookmarkItem}
-					<Menubar.Link {...bookmarkItem} />
-				{/each}
-				<Menubar.Separator />
-				{:else if bookmark.sub}
-				<Menubar.Sub>
-					<Menubar.SubTrigger>{bookmark.name}</Menubar.SubTrigger>
-					<Menubar.SubContent>
-					{#each bookmark.sub as bookmarkItem}
+					{#each bookmark as bookmarkItem}
 						<Menubar.Link {...bookmarkItem} />
 					{/each}
-					</Menubar.SubContent>
-				</Menubar.Sub>
+					<Menubar.Separator />
+				{:else if bookmark.sub}
+					<Menubar.Sub>
+						<Menubar.SubTrigger>{bookmark.name}</Menubar.SubTrigger>
+						<Menubar.SubContent>
+						{#each bookmark.sub as bookmarkItem}
+							<Menubar.Link {...bookmarkItem} />
+						{/each}
+						</Menubar.SubContent>
+					</Menubar.Sub>
 				{:else}
-				<Menubar.Link {...bookmark} />
+					<Menubar.Link {...bookmark} />
 				{/if}
 			{/each}
 	    </Menubar.Content>

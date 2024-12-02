@@ -29,7 +29,7 @@
       { name: 'About', href: '/about', icon: FileQuestion },
       { name: 'Redirects', href: '/redirects', icon: Signpost },
       { name: 'Settings', href: '/settings', icon: Settings },
-      { name: 'Imprint', href: '/imprint', icon: Gavel }
+      { name: 'Legal Notice', href: '/legal', icon: Gavel }
     ],
     { name: 'Social', sub: [
       { name: 'Instagram', href: links.instagram, icon: Instagram },
