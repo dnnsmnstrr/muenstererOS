@@ -1,48 +1,64 @@
 <script context="module" lang="ts">
-  export type BookmarkItem = { name: string, href?: string, sub?: BookmarkItem[], icon?: ConstructorOfATypedSvelteComponent };
+	export type BookmarkItem = {
+		name: string;
+		href?: string;
+		sub?: BookmarkItem[];
+		icon?: ConstructorOfATypedSvelteComponent;
+	};
 </script>
-<script lang="ts">
-	import * as Menubar from "$lib/components/ui/menubar";
-	import * as Dialog from "$lib/components/ui/dialog";
-	import { closeWindow, isBrowserInFullscreen, printPage, reloadPage, toggleFullscreen, waitForElementToDisplay } from "$lib/browser";
-	import { WEBSITE_NAME, links } from "$lib/config";
-	import { toggleMode } from "mode-watcher";
-	import { debugLog, showHelp } from "$lib/stores/app";
-	import { toast } from "svelte-sonner";
-	import type { SvelteComponent } from "svelte";
 
-  // import 'emoji-picker-element'; // causes ReferenceError: requestAnimationFrame is not defined
+<script lang="ts">
+	import * as Menubar from '$lib/components/ui/menubar';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import {
+		closeWindow,
+		isBrowserInFullscreen,
+		printPage,
+		reloadPage,
+		toggleFullscreen,
+	} from '$lib/browser';
+	import { WEBSITE_NAME, links } from '$lib/config';
+	import { toggleMode } from 'mode-watcher';
+	import { debugLog, showHelp } from '$lib/stores/app';
+	import { toast } from 'svelte-sonner';
+	import type { SvelteComponent } from 'svelte';
+
+	// import 'emoji-picker-element'; // causes ReferenceError: requestAnimationFrame is not defined
 	// import type { EmojiClickEvent } from "emoji-picker-element/shared";
 	// import type { Picker } from "emoji-picker-element";
 
-  let showPicker = false
-  const bookmarks: Array<BookmarkItem[] | BookmarkItem> = [
-    [
-      { name: 'Curriculum Vitae', href: links.cv },
-      { name: 'Redirects' },
-      { name: 'Legal Notice', href: '/legal' },
-    ],
-    { name: 'Social', sub: [
-      { name: 'Instagram', href: links.instagram },
-      { name: 'Twitter', href: links.twitter },
-      { name: 'Mastodon', href: links.mastodon },
-    ]}
-  ]
-  // $: if (showPicker) {
-  //   waitForElementToDisplay<Picker>('emoji-picker', (picker) => {
-  //     picker.addEventListener('emoji-click', (e: EmojiClickEvent) => {
-  //       const message = `Selected ${e.detail.emoji.shortcodes ? e.detail.emoji.shortcodes[0] : ''}emoji: ${e.detail.unicode}`
-  //       debugLog(message, e.detail)
-  //       toast.success(message, {
-  //           description: "Click to copy to clipboard",
-  //           action: {
-  //             label: "Copy",
-  //             onClick: () => e.detail.unicode && navigator.clipboard.writeText(e.detail.unicode)
-  //           }
-  //         })
-  //     })
-  //   }, 500)
-  // }
+	let showPicker = false;
+	const bookmarks: Array<BookmarkItem[] | BookmarkItem> = [
+		[
+			{ name: 'Projects' },
+			{ name: 'Curriculum Vitae', href: links.cv },
+			{ name: 'Redirects' },
+			{ name: 'Legal Notice', href: '/legal' }
+		],
+		{
+			name: 'Social',
+			sub: [
+				{ name: 'Instagram', href: links.instagram },
+				{ name: 'Twitter', href: links.twitter },
+				{ name: 'Mastodon', href: links.mastodon }
+			]
+		}
+	];
+	// $: if (showPicker) {
+	//   waitForElementToDisplay<Picker>('emoji-picker', (picker) => {
+	//     picker.addEventListener('emoji-click', (e: EmojiClickEvent) => {
+	//       const message = `Selected ${e.detail.emoji.shortcodes ? e.detail.emoji.shortcodes[0] : ''}emoji: ${e.detail.unicode}`
+	//       debugLog(message, e.detail)
+	//       toast.success(message, {
+	//           description: "Click to copy to clipboard",
+	//           action: {
+	//             label: "Copy",
+	//             onClick: () => e.detail.unicode && navigator.clipboard.writeText(e.detail.unicode)
+	//           }
+	//         })
+	//     })
+	//   }, 500)
+	// }
 </script>
 
 <Menubar.Root class="rounded-none border-b border-none">
@@ -52,11 +68,12 @@
 			<Menubar.Item href="/about">About {WEBSITE_NAME}</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item href="/settings">
-        Settings... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
+				Settings... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
 			</Menubar.Item>
-      <Menubar.Separator />
+			<Menubar.Separator />
 			<Menubar.Item on:click={closeWindow}>
-				Quit {WEBSITE_NAME} <Menubar.Shortcut>⌘Q</Menubar.Shortcut>
+				Quit {WEBSITE_NAME}
+				<Menubar.Shortcut>⌘Q</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
@@ -64,9 +81,9 @@
 	<Menubar.Menu>
 		<Menubar.Trigger class="relative">File</Menubar.Trigger>
 		<Menubar.Content>
-      <Menubar.Item href="/about" target="_blank">
-        New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
-      </Menubar.Item>
+			<Menubar.Item href="/about" target="_blank">
+				New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
+			</Menubar.Item>
 			<Menubar.Item on:click={closeWindow}>
 				Close Window <Menubar.Shortcut>⌘W</Menubar.Shortcut>
 			</Menubar.Item>
@@ -97,15 +114,15 @@
 				Paste <Menubar.Shortcut>⌘V</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={() => document.execCommand("selectall")}>
+			<Menubar.Item on:click={() => document.execCommand('selectall')}>
 				Select All <Menubar.Shortcut>⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
 				Deselect All <Menubar.Shortcut>⇧⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={() => showPicker = true}>
-				Emoji & Symbols{" "}
+			<Menubar.Item on:click={() => (showPicker = true)}>
+				Emoji & Symbols{' '}
 				<Menubar.Shortcut>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -130,12 +147,16 @@
 	<Menubar.Menu>
 		<Menubar.Trigger>View</Menubar.Trigger>
 		<Menubar.Content>
-      <Menubar.Item on:click={reloadPage}>
+			<Menubar.Item on:click={reloadPage}>
 				Reload <Menubar.Shortcut>⌘R</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={toggleFullscreen}>{isBrowserInFullscreen() ? 'Exit' : 'Enter'} Full Screen <Menubar.Shortcut>⌘F</Menubar.Shortcut></Menubar.Item>
-      <Menubar.Item on:click={toggleMode}>
+			<Menubar.Item on:click={toggleFullscreen}
+				>{isBrowserInFullscreen() ? 'Exit' : 'Enter'} Full Screen <Menubar.Shortcut
+					>⌘F</Menubar.Shortcut
+				></Menubar.Item
+			>
+			<Menubar.Item on:click={toggleMode}>
 				Toggle Dark Mode <Menubar.Shortcut>^M</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
@@ -154,34 +175,34 @@
 					<Menubar.Sub>
 						<Menubar.SubTrigger>{bookmark.name}</Menubar.SubTrigger>
 						<Menubar.SubContent>
-						{#each bookmark.sub as bookmarkItem}
-							<Menubar.Link {...bookmarkItem} />
-						{/each}
+							{#each bookmark.sub as bookmarkItem}
+								<Menubar.Link {...bookmarkItem} />
+							{/each}
 						</Menubar.SubContent>
 					</Menubar.Sub>
 				{:else}
 					<Menubar.Link {...bookmark} />
 				{/if}
 			{/each}
-	    </Menubar.Content>
-    </Menubar.Menu>
+		</Menubar.Content>
+	</Menubar.Menu>
 
-  <Menubar.Menu>
+	<Menubar.Menu>
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
-      <Menubar.Item on:click={() => $showHelp = !$showHelp}>
+			<Menubar.Item on:click={() => ($showHelp = !$showHelp)}>
 				Keyboard Shortcuts <Menubar.Shortcut>?</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-      <Menubar.Item href={links.mailto} target="_blank">
+			<Menubar.Item href={links.mailto} target="_blank">
 				Contact <Menubar.Shortcut>@</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 </Menubar.Root>
 
-<Dialog.Root open={showPicker} onOpenChange={value => showPicker = value}>
-  <Dialog.Content class="max-w-[340px] p-0" showClose={false}>
-    <div id="docsearch"></div>
-  </Dialog.Content>
+<Dialog.Root open={showPicker} onOpenChange={(value) => (showPicker = value)}>
+	<Dialog.Content class="max-w-[340px] p-0" showClose={false}>
+		<div id="docsearch"></div>
+	</Dialog.Content>
 </Dialog.Root>

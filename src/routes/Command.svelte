@@ -32,7 +32,8 @@
 		ScrollText,
 		Search,
 		Signpost,
-		Github
+		Github,
+		LayoutGrid
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -330,6 +331,7 @@
 			{ name: 'About', icon: User, url: '/about' },
 			{ name: 'Playground', icon: Shapes, url: '/playground' },
 			{ name: 'Redirects', icon: Signpost, url: '/redirects' },
+			{ name: 'Projects', icon: LayoutGrid, url: '/projects' },
 			{
 				name: 'Search Zettelkasten',
 				aliases: 'search notes find information knowledge second brain',
