@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+	import { capitalize } from '$lib/helper';
 	interface PlaylistItem {
 		title: string;
 		season: 'winter' | 'spring' | 'summer' | 'autumn';
@@ -7,7 +8,9 @@
 		uri: string;
 		emoji?: string;
 		gif?: string;
+		imageId?: string;
 	}
+	const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/'
 	const playlists: PlaylistItem[] = [
 		{
 			title: 'Warten',
@@ -38,6 +41,37 @@
 			uri: '0RtPwbbEC1Okw9Zi2M5FBs',
 			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHkzczQ4cDNvMnJrcWpxZnBiM2QzdmVicmN2eTlrb2NobWRqOGI0cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1Az20wU0ArVMk/giphy.gif',
 		},
+		{
+			title: 'Monsters',
+			year: 2023,
+			season: 'winter',
+			emoji: '👹',
+			uri: '3tes9ptMPMRmiR4HFcqk4J',
+			imageId: 'ab67706c0000da84d5f914c118f5bfaacaf7e81a'
+		},
+		{
+			title: 'Regen',
+			emoji: '🌧️',
+			year: 2023,
+			season: 'autumn',
+			uri: '2BamYUcYazuRqudq38MX8Q',
+			imageId: 'ab67706c0000da8482bdfe8492e17ebe3277359f'
+		},
+		{
+			title: 'summer pt. ii',
+			year: 2023,
+			season: 'summer',
+			uri: '6vv0k98f8LOdER20fGDk6T',
+			imageId: 'ab67706c0000da84190c48db823c4f0bdfe11b60'
+		},
+		{
+			title: 'Take it off',
+			emoji: '🧑‍🚀',
+			year: 2023,
+			season: 'spring',
+			uri: '1w9orNgLp1zrOXxt5dAURP',
+			imageId: 'ab67706c0000da84ee11e38c63e5e4562e8cdf79'
+		},
 	];
 
 	const currentPlaylist = playlists[0]
@@ -55,10 +89,12 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 pt-6">
 		{#each playlists as playlist}
 			<Card.Root>
-				<a href={'https://open.spotify.com/playlist/' + playlist.uri} target="_blank">
+				<a href={SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank">
 					<Card.Content class="pt-6">
 						{#if playlist.gif}
 							<img src={playlist.gif} alt="Playlist GIF" class="w-full aspect-square object-cover" />
+						{:else}
+							<img src={`https://i.scdn.co/image/${playlist.imageId}`} alt="No GIF available" class="w-full aspect-square object-cover" />
 						{/if}
 						<h2 class="py-2 text-xl font-semibold">
 							{#if playlist.emoji}
@@ -66,7 +102,7 @@
 							{/if}
 							{playlist.title}
 						</h2>
-						<p class="text-muted-foreground">{playlist.year}</p>
+						<p class="text-muted-foreground">{capitalize(playlist.season)} - {playlist.year}</p>
 					</Card.Content>
 				</a>
 			</Card.Root>
