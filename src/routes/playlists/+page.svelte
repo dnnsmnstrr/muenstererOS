@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+	import { Input } from '$lib/components/ui/input';
 	import { capitalize } from '$lib/helper';
 	interface PlaylistItem {
 		title: string;
@@ -11,28 +12,28 @@
 		gif?: string;
 		imageId?: string;
 	}
-	const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/'
+	const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
 	const playlists: PlaylistItem[] = [
 		{
 			title: 'Warten',
 			year: 2024,
 			season: 'winter',
 			uri: '5k4CrIEvYeNCg0go3BPR56',
-			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG51MWo2c2d4aW04M2Rwa2w4MnI1NjU2NnN3Y2twZm51OXYzazFqNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K3G6ZEHsbHKGnogFaP/giphy.gif',
+			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG51MWo2c2d4aW04M2Rwa2w4MnI1NjU2NnN3Y2twZm51OXYzazFqNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K3G6ZEHsbHKGnogFaP/giphy.gif'
 		},
 		{
 			title: 'Wien / München / Köln / Leipzig',
 			year: 2024,
 			season: 'autumn',
 			uri: '2BamYUcYazuRqudq38MX8Q',
-			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2M3emdlZHA2MTl1cnl3MWE3azJ6NHRna2RpZ3Fza2gzaTI2bGZycyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4P6JgvKB3KFWM/giphy.gif',
+			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2M3emdlZHA2MTl1cnl3MWE3azJ6NHRna2RpZ3Fza2gzaTI2bGZycyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4P6JgvKB3KFWM/giphy.gif'
 		},
 		{
 			title: 'Pools & Palm Trees',
 			year: 2024,
 			season: 'summer',
 			uri: '7fKN8cSY9vaqQU3yEErWHk',
-			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjF3YXYxejYwOGk2ajdic2htbDV4b3RyMHVrbWM4eHBuejNvcHk1NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9xvjobE8fQedmw9f3i/giphy.gif',
+			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMjF3YXYxejYwOGk2ajdic2htbDV4b3RyMHVrbWM4eHBuejNvcHk1NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9xvjobE8fQedmw9f3i/giphy.gif'
 		},
 		{
 			title: 'Still Blue',
@@ -40,7 +41,7 @@
 			year: 2024,
 			season: 'spring',
 			uri: '0RtPwbbEC1Okw9Zi2M5FBs',
-			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHkzczQ4cDNvMnJrcWpxZnBiM2QzdmVicmN2eTlrb2NobWRqOGI0cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1Az20wU0ArVMk/giphy.gif',
+			gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHkzczQ4cDNvMnJrcWpxZnBiM2QzdmVicmN2eTlrb2NobWRqOGI0cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1Az20wU0ArVMk/giphy.gif'
 		},
 		{
 			title: 'Monsters',
@@ -73,102 +74,127 @@
 			season: 'spring',
 			uri: '1w9orNgLp1zrOXxt5dAURP',
 			imageId: 'ab67706c0000da84ee11e38c63e5e4562e8cdf79'
-		},
+		}
 	];
 
-	const currentPlaylist = playlists[0]
+	const currentPlaylist = playlists[0];
 	const otherPlaylists: Record<string, PlaylistItem> = {
-		"spring": {
-			uri: "68z163CKUImi0QB6ZpSigr",
+		spring: {
+			uri: '68z163CKUImi0QB6ZpSigr',
 			title: 'Spring',
 			description: 'All songs from my spring playlists',
-			emoji: '🌼',
+			emoji: '🌼'
 		},
-		"summer": {
-			uri: "5wpb3PdQOzFb3jurTcVfZO",
+		summer: {
+			uri: '5wpb3PdQOzFb3jurTcVfZO',
 			title: 'Summer',
 			description: 'All songs from my summer playlists',
-			emoji: '☀️',
+			emoji: '☀️'
 		},
-		"autumn": {
-			uri: "22XncHS02W5RWJ1yM4lV6l",
+		autumn: {
+			uri: '22XncHS02W5RWJ1yM4lV6l',
 			title: 'Autumn',
 			description: 'All songs from my autumn playlists',
-			emoji: '🍂',
+			emoji: '🍂'
 		},
-		"winter": {
-			uri: "67SvJfEofXhdIXwsuUJbCJ",
+		winter: {
+			uri: '67SvJfEofXhdIXwsuUJbCJ',
 			title: 'Winter',
 			description: 'All songs from my winter playlists',
-			emoji: '❄️',
+			emoji: '❄️'
 		},
-		"chill": {
-			uri: "0x0ZQcmLsamIx5bF5px2Tc",
+		chill: {
+			uri: '0x0ZQcmLsamIx5bF5px2Tc',
 			title: 'Sloth Mode',
 			description: 'Songs to Relax to',
-			emoji: '🦥',
+			emoji: '🦥'
 		},
-		"sleep": {
-			uri: "13RQxSzWqVg3fHlalxlyhC",
+		sleep: {
+			uri: '13RQxSzWqVg3fHlalxlyhC',
 			title: 'Milk of the Poppy',
 			description: 'Songs to fall asleep to',
-			emoji: '🛌',
+			emoji: '🛌'
 		},
-		"coding": {
-			uri: "0camicGxGNwB9YS66nAwtb",
+		coding: {
+			uri: '0camicGxGNwB9YS66nAwtb',
 			title: '1337 h4xX0r',
 			emoji: '🖥  ⌨️🖱',
-			description: 'Songs to code to',
+			description: 'Songs to code to'
 		},
-		"sports": {
-			uri: "4X1uZRUIccnwcofS8QjBku",
+		sports: {
+			uri: '4X1uZRUIccnwcofS8QjBku',
 			title: '',
 			description: 'Songs to run to',
-			emoji: '🏃‍➡️',
+			emoji: '🏃‍➡️'
 		},
-		"meme": {
-			uri: "4HvN65IMe9oEWqMl1zHCIE",
+		meme: {
+			uri: '4HvN65IMe9oEWqMl1zHCIE',
 			title: 'Memeology',
 			description: 'Songs that became a meme',
-			emoji: '🐸',
+			emoji: '🐸'
 		},
-		"party": {
-			uri: "1E5n3EWqT9MDPUb1qvGjsb",
+		party: {
+			uri: '1E5n3EWqT9MDPUb1qvGjsb',
 			title: 'Partytime',
 			description: 'Songs to party to',
-			emoji: '🎉',
+			emoji: '🎉'
 		},
-		"night": {
-			uri: "2OHb3F8gQqQY4hb14p2uoe",
+		night: {
+			uri: '2OHb3F8gQqQY4hb14p2uoe',
 			title: 'Latenite',
 			description: 'Songs to get through a long night',
-			emoji: '🌃',
+			emoji: '🌃'
 		},
-		"morning": {
-			uri: "6FhnyDVlq5Az6Bllb7einR",
+		morning: {
+			uri: '6FhnyDVlq5Az6Bllb7einR',
 			title: 'the morning after',
 			description: 'Songs to cure your hangover',
-			emoji: '🌅',
+			emoji: '🌅'
 		},
-		"piano": {
-			uri: "5w86GPXC86kKEpbLSKVxFS",
+		piano: {
+			uri: '5w86GPXC86kKEpbLSKVxFS',
 			title: 'Piano',
 			description: 'Songs I can play on the piano',
-			emoji: '🎹',
+			emoji: '🎹'
 		},
-		"clean": {
-			uri: "5idv5XxAwr7q9u4hyWNaNH",
+		clean: {
+			uri: '5idv5XxAwr7q9u4hyWNaNH',
 			title: 'Blitzblank',
 			description: 'Songs to clean your house to',
-			emoji: '🧹',
+			emoji: '🧹'
 		},
-		"cook": {
-			uri: "66wQsRoITiTV5xeG6T19wH",
+		cook: {
+			uri: '66wQsRoITiTV5xeG6T19wH',
 			title: 'Cooking Inspo',
 			description: 'Songs to get your taste buds ready',
-			emoji: '🧑‍🍳',
-		},
-	}
+			emoji: '🧑‍🍳'
+		}
+	};
+
+	let filterQuery = '';
+
+	const searchFilter = (playlist: PlaylistItem) => {
+		if (!filterQuery) {
+			return true;
+		}
+		const query = filterQuery.toLowerCase();
+		return (
+			playlist.title.toLowerCase().includes(query) ||
+			playlist.description?.toLowerCase().includes(query) ||
+			playlist.season?.toLowerCase().includes(query)
+		);
+	};
+
+	$: filteredPlaylists = filterQuery ? playlists.filter(searchFilter) : playlists;
+	$: filteredOtherPlaylists = Object.entries(otherPlaylists).filter(([key, playlist]) => {
+		if (!filterQuery) return true;
+		const query = filterQuery.toLowerCase();
+		return (
+			key.toLowerCase().includes(query) ||
+			playlist.title.toLowerCase().includes(query) ||
+			playlist.description?.toLowerCase().includes(query)
+		);
+	});
 </script>
 
 <svelte:head>
@@ -176,37 +202,71 @@
 </svelte:head>
 
 <div class="container overflow-y-scroll p-4">
-	<h1 class="mb-6 text-3xl font-bold">My Playlists</h1>
-
-	<iframe title="Current Playlist" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{currentPlaylist.uri}" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-
-	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 pt-6">
-		{#each playlists as playlist}
-			<Card.Root>
-				<a href={SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank">
-					<Card.Content class="pt-6">
-						{#if playlist.gif}
-							<img src={playlist.gif} alt="Playlist GIF" class="w-full aspect-square object-cover" />
-						{:else}
-							<img src={`https://i.scdn.co/image/${playlist.imageId}`} alt="No GIF available" class="w-full aspect-square object-cover" />
-						{/if}
-						<h2 class="py-2 text-xl font-semibold">
-							{#if playlist.emoji}
-								{playlist.emoji}
-							{/if}
-							{playlist.title}
-						</h2>
-						<p class="text-muted-foreground">{capitalize(playlist.season)} - {playlist.year}</p>
-					</Card.Content>
-				</a>
-			</Card.Root>
-		{/each}
+	<div class="mb-6 flex items-start justify-between gap-2">
+		<h1 class="text-3xl font-bold">My Playlists</h1>
+		<Input placeholder="Search playlists..." type="search" class="w-52" bind:value={filterQuery} />
 	</div>
 
+	{#if filterQuery && !filteredPlaylists.length && !filteredOtherPlaylists.length}
+		<div class="text-center opacity-50">
+			No matching playlists found
+		</div>
+	{/if}
+	{#if !filterQuery}
+		<iframe
+			title="Current Playlist"
+			style="border-radius:12px"
+			src="https://open.spotify.com/embed/playlist/{currentPlaylist.uri}"
+			width="100%"
+			height="352"
+			frameBorder="0"
+			allowfullscreen=""
+			allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+			loading="lazy"
+		></iframe>
+	{/if}
+
+	{#if filteredPlaylists.length}
+		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2 lg:grid-cols-3">
+			{#each filteredPlaylists as playlist}
+				<Card.Root>
+					<a href={SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank">
+						<Card.Content class="pt-6">
+							{#if !filterQuery}
+								{#if playlist.gif}
+									<img
+										src={playlist.gif}
+										alt="Playlist GIF"
+										class="aspect-square w-full object-cover pb-2"
+									/>
+								{:else}
+									<img
+										src={`https://i.scdn.co/image/${playlist.imageId}`}
+										alt="No GIF available"
+										class="aspect-square w-full object-cover pb-2"
+									/>
+								{/if}
+							{/if}
+							<h2 class="pb-2 text-xl font-semibold">
+								{#if playlist.emoji}
+									{playlist.emoji}
+								{/if}
+								{playlist.title}
+							</h2>
+							<p class="text-muted-foreground">{capitalize(playlist.season)} - {playlist.year}</p>
+						</Card.Content>
+					</a>
+				</Card.Root>
+			{/each}
+		</div>
+	{/if}
+
 	<div class="mt-12">
-		<h2 class="my-4 text-2xl font-semibold">Other Playlists</h2>
-		<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
-			{#each Object.entries(otherPlaylists) as [key, otherPlaylist]}
+		{#if filteredOtherPlaylists.length}
+			<h2 class="my-4 text-2xl font-semibold">Other Playlists</h2>
+		{/if}
+		<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-4">
+			{#each filteredOtherPlaylists as [key, otherPlaylist]}
 				<Card.Root>
 					<a href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri} target="_blank">
 						<Card.Content class="pt-6">
