@@ -1,10 +1,16 @@
 <script lang="ts">
 	import Link from '$lib/components/typography/Link.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input';
 	import Switch from '$lib/components/ui/switch/switch.svelte';
 	import { links } from '$lib/config';
 	import { capitalize } from '$lib/helper';
+	import TopArtists from './TopArtists.svelte';
+	import { 
+		Users,
+	} from 'lucide-svelte';
 	interface PlaylistItem {
 		title: string;
 		type: 'season' | 'aggregated' | 'theme'
@@ -442,6 +448,7 @@
 	};
 
 	$: filteredPlaylists = filterQuery ? allPlaylists.filter(searchFilter) : seasonPlaylists;
+	let showTopArtists = false
 </script>
 
 <svelte:head>
@@ -449,6 +456,17 @@
 </svelte:head>
 
 <div class="container overflow-y-scroll p-4">
+	<Dialog.Root open={showTopArtists} onOpenChange={(value) => (showTopArtists = value)}>
+		<Dialog.Content showClose>
+			<Dialog.Header>
+				<Dialog.Title>Top Artists</Dialog.Title>
+				<Dialog.Description>
+					These were my top artists on Spotify over the years
+				</Dialog.Description>
+			</Dialog.Header>
+			<TopArtists />
+		</Dialog.Content>
+	</Dialog.Root>
 	<div class="mb-6 flex items-start justify-between gap-2">
 		<h1 class="text-3xl font-bold">My Playlists</h1>
 		<div class="flex items-center">
@@ -557,4 +575,11 @@
 			</div>
 		</div>
 	{/if}
+
+	<div class="flex w-full justify-center my-8">
+		<Button on:click={() => showTopArtists = true} variant='secondary' >
+			<Users class="w-4 mr-2"/>
+			Top Artists
+		</Button>
+	</div>
 </div>

@@ -33,7 +33,8 @@
 		Search,
 		Signpost,
 		Github,
-		LayoutGrid
+		LayoutGrid,
+		ListMusic
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -332,6 +333,7 @@
 			{ name: 'Playground', icon: Shapes, url: '/playground' },
 			{ name: 'Redirects', icon: Signpost, url: '/redirects' },
 			{ name: 'Projects', icon: LayoutGrid, url: '/projects' },
+			{ name: 'Playlists', icon: ListMusic, url: '/playlists' },
 			{
 				name: 'Search Zettelkasten',
 				aliases: 'search notes find information knowledge second brain',
