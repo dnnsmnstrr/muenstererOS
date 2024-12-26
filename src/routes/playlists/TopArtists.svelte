@@ -3,6 +3,8 @@
     import { flip } from 'svelte/animate';
     
     let years: Record<number, string[]> = {
+        2017: ['Kanye West', 'Ahzumjot', 'Cro', 'Prinz Pi', 'Casper'],
+        2018: ['Ahzumjot', 'Rockstah', 'Kanye West', 'Cro', 'Casper'],
         2019: ['Kitschkrieg', 'Trettmann', 'Cro', 'Tua', 'Kanye West'],
         2020: ['Die Orsons', 'Fynn Kliemann', 'Cro', 'Fatoni', 'Kanye West'],
         2021: ['Cro', 'Ahzumjot', 'Maeckes', 'MAJAN', 'Kanye West'],
