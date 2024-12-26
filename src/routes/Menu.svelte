@@ -19,46 +19,11 @@
 	} from '$lib/browser';
 	import { WEBSITE_NAME, links } from '$lib/config';
 	import { toggleMode } from 'mode-watcher';
-	import { debugLog, showHelp } from '$lib/stores/app';
-	import { toast } from 'svelte-sonner';
-	import type { SvelteComponent } from 'svelte';
-
-	// import 'emoji-picker-element'; // causes ReferenceError: requestAnimationFrame is not defined
-	// import type { EmojiClickEvent } from "emoji-picker-element/shared";
-	// import type { Picker } from "emoji-picker-element";
+	import { showHelp } from '$lib/stores/app';
 
 	let showPicker = false;
-	const bookmarks: Array<BookmarkItem[] | BookmarkItem> = [
-		[
-			{ name: 'Projects' },
-			{ name: 'Curriculum Vitae', href: links.cv },
-			{ name: 'Redirects' },
-			{ name: 'Legal Notice', href: '/legal' }
-		],
-		{
-			name: 'Social',
-			sub: [
-				{ name: 'Instagram', href: links.instagram },
-				{ name: 'Twitter', href: links.twitter },
-				{ name: 'Mastodon', href: links.mastodon }
-			]
-		}
-	];
-	// $: if (showPicker) {
-	//   waitForElementToDisplay<Picker>('emoji-picker', (picker) => {
-	//     picker.addEventListener('emoji-click', (e: EmojiClickEvent) => {
-	//       const message = `Selected ${e.detail.emoji.shortcodes ? e.detail.emoji.shortcodes[0] : ''}emoji: ${e.detail.unicode}`
-	//       debugLog(message, e.detail)
-	//       toast.success(message, {
-	//           description: "Click to copy to clipboard",
-	//           action: {
-	//             label: "Copy",
-	//             onClick: () => e.detail.unicode && navigator.clipboard.writeText(e.detail.unicode)
-	//           }
-	//         })
-	//     })
-	//   }, 500)
-	// }
+	export let bookmarks: Array<BookmarkItem | BookmarkItem[]> = [];
+
 </script>
 
 <Menubar.Root class="rounded-none border-b border-none">

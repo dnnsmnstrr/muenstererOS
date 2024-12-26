@@ -9,6 +9,7 @@
 		Settings,
 		Signpost,
 		Twitter,
+    ListMusic,
 	} from 'lucide-svelte';
 	import * as Sheet from '$lib/components/ui/sheet';
 	import { Separator } from '$lib/components/ui/separator';
@@ -20,22 +21,30 @@
 	import { WEBSITE_NAME, links } from '$lib/config';
 
 	import Heading from '$lib/components/typography/Heading.svelte';
+	import BookmarkButton from '$lib/components/BookmarkButton.svelte';
 
 	let isMobileMenuOpen = false;
-	const bookmarks: Array<BookmarkItem[] | BookmarkItem> = [
-		[
-			{ name: 'Home', href: '/', icon: Home },
-			{ name: 'About', href: '/about', icon: FileQuestion },
-			{ name: 'Projects', href: '/projects', icon: LayoutGrid },
-			{ name: 'Redirects', href: '/redirects', icon: Signpost },
-			{ name: 'Settings', href: '/settings', icon: Settings },
-			{ name: 'Legal Notice', href: '/legal', icon: Gavel }
-		],
+	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = [
+    [
+        { name: 'Home', href: '/', icon: Home },
+        { name: 'About', icon: FileQuestion },
+        { name: 'Settings', icon: Settings },
+        { name: 'Legal Notice', href: '/legal', icon: Gavel },
+    ],
+    {
+      name: 'Pages',
+      sub: [
+        { name: 'Projects', icon: LayoutGrid },
+        { name: 'Playlists', icon: ListMusic },
+        { name: 'Redirects', icon: Signpost },
+      ]
+    },
 		{
 			name: 'Social',
 			sub: [
 				{ name: 'Instagram', href: links.instagram, icon: Instagram },
-				{ name: 'Twitter', href: links.twitter, icon: Twitter }
+				{ name: 'Twitter', href: links.twitter, icon: Twitter },
+        { name: 'Mastodon', href: links.mastodon },
 			]
 		}
 	];
@@ -46,7 +55,7 @@
 		<a href="/">
 			<enhanced:img src="../../static/muenstererOS.png" alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
-		<Menu />
+		<Menu {bookmarks} />
 	</nav>
 	<nav class="flex items-center sm:hidden">
 		<Sheet.Root open={isMobileMenuOpen} onOpenChange={(value) => (isMobileMenuOpen = value)}>
@@ -55,7 +64,7 @@
 					<MenuIcon />
 				</Button>
 			</Sheet.Trigger>
-			<Sheet.Content side="left" class="w-48">
+			<Sheet.Content side="left" class="w-48 overflow-scroll">
 				<Sheet.Header>
 					<Sheet.Title class="py-2">
 						<Heading depth={4}>
@@ -68,33 +77,17 @@
 								{#if Array.isArray(bookmark)}
 									{#each bookmark as bookmarkItem}
 										<ul>
-											<Button
-												href={bookmarkItem.href}
-												class="w-full justify-start"
-												variant="secondary"
-												on:click={() => (isMobileMenuOpen = false)}
-											>
-												{#if bookmarkItem.icon}
-													<!-- content here -->
-													<svelte:component this={bookmarkItem.icon} class="mr-4 h-4 w-4" />
-												{/if}
-
-												{bookmarkItem.name}
-											</Button>
+                      <BookmarkButton bookmark={bookmarkItem} on:click={() => (isMobileMenuOpen = false)} />
 										</ul>
 									{/each}
 									<Separator />
 								{:else if bookmark.sub}
 									<Heading depth={4}>{bookmark.name}</Heading>
 									{#each bookmark.sub as bookmarkItem}
-										<Button href={bookmarkItem.href} class="w-full" variant="secondary">
-											{bookmarkItem.name}
-										</Button>
+                    <BookmarkButton bookmark={bookmarkItem} on:click={() => (isMobileMenuOpen = false)} />
 									{/each}
 								{:else}
-									<Button href={bookmark.href} class="w-full" variant="secondary">
-										{bookmark.name}
-									</Button>
+									<BookmarkButton {bookmark} on:click={() => (isMobileMenuOpen = false)} />
 								{/if}
 							{/each}
 						</div>
