@@ -165,7 +165,7 @@
 	<title>Playlists</title>
 </svelte:head>
 
-<div class="container p-4">
+<div class="container">
 	<Dialog.Root open={showTopArtists} onOpenChange={(value) => (showTopArtists = value)}>
 		<Dialog.Content>
 			<Dialog.Header>
@@ -213,7 +213,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 
-	<div class="mb-2 flex flex-col items-start justify-between gap-4 sm:mb-4 sm:flex-row">
+	<div class="mb-4 flex flex-col items-start sm:items-center justify-between gap-4 sm:mb-6 sm:flex-row">
 		<Heading class="mb-0">My Playlists</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
 			<Input
@@ -243,7 +243,7 @@
 	{/if}
 
 	{#if filteredPlaylists.length}
-		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+		<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 			{#each filteredPlaylists as playlist}
 				<PlaylistCard
 					{playlist}

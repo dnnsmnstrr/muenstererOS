@@ -43,7 +43,7 @@
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger class="relative">File</Menubar.Trigger>
+		<Menubar.Trigger class="hidden lg:flex">File</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item href="/about" target="_blank">
 				New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
@@ -59,7 +59,7 @@
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger>Edit</Menubar.Trigger>
+		<Menubar.Trigger class="hidden lg:flex">Edit</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item disabled>
 				Undo <Menubar.Shortcut>⌘Z</Menubar.Shortcut>
@@ -109,7 +109,7 @@
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger>View</Menubar.Trigger>
+		<Menubar.Trigger class="hidden md:flex">View</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item on:click={reloadPage}>
 				Reload <Menubar.Shortcut>⌘R</Menubar.Shortcut>
@@ -127,7 +127,7 @@
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger class="hidden md:block">Bookmarks</Menubar.Trigger>
+		<Menubar.Trigger class="hidden sm:flex">Bookmarks</Menubar.Trigger>
 		<Menubar.Content>
 			{#each bookmarks as bookmark, index}
 				{#if Array.isArray(bookmark)}

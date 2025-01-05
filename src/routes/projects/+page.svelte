@@ -2,6 +2,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { setContext } from 'svelte';
 	import { page } from '$app/stores';
+	import { Heading } from '$lib/components/typography';
 
 	type Project = {
 		title: string;
@@ -62,8 +63,8 @@
 	<title>Projects</title>
 </svelte:head>
 
-<div class="container p-4">
-	<h1 class="mb-6 text-3xl font-bold">My Projects</h1>
+<div class="container">
+	<Heading>My Projects</Heading>
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each projects as project}

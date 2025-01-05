@@ -25,7 +25,7 @@
 </script>
 
 <div class="container">
-  <div class="flex flex-col sm:flex-row items-start justify-between gap-2 mb-4">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
     <Heading class="mb-0">Redirects</Heading>
     <Input placeholder="Type to search..." type="search" class="w-full sm:w-52 text-base" bind:value={filterQuery} />
   </div>
