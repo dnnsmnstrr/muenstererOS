@@ -158,7 +158,7 @@
 		<Input
 			placeholder="Search playlists..."
 			type="search"
-			class="w-full sm:w-52"
+			class="w-full text-base sm:w-52"
 			bind:value={filterQuery}
 		/>
 	</div>

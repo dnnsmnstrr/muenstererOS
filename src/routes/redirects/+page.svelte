@@ -25,9 +25,9 @@
 </script>
 
 <div class="container">
-  <div class="flex items-start justify-between gap-2">
-    <Heading>Redirects</Heading>
-    <Input placeholder="Type to search..." type="search" class="w-52" bind:value={filterQuery} />
+  <div class="flex flex-col sm:flex-row items-start justify-between gap-2 mb-4">
+    <Heading class="mb-0">Redirects</Heading>
+    <Input placeholder="Type to search..." type="search" class="w-52 text-base" bind:value={filterQuery} />
   </div>
   
   <Card.Root class="max-h-[75vh] overflow-scroll">
