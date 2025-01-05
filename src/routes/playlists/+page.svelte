@@ -4,6 +4,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input';
+	import { Switch } from '$lib/components/ui/switch';
 	import { breakpoints, links } from '$lib/config';
 	import { capitalize } from '$lib/helper';
 	import TopArtists from './TopArtists.svelte';
@@ -61,7 +62,7 @@
 					if (window.innerWidth < breakpoints.sm) {
 						playlist.isHovered = entry.isIntersecting;
 					} else {
-						playlist.isHovered = false	
+						playlist.isHovered = false;
 					}
 					seasonPlaylists = [...seasonPlaylists];
 				});
@@ -106,8 +107,13 @@
 			<TopArtists />
 		</Dialog.Content>
 	</Dialog.Root>
-	<Dialog.Root open={!!selectedPlaylistUri} onOpenChange={(value) => !value && (selectedPlaylistUri = null)}>
-		<Dialog.Content class="max-w-3xl p-0 h-3/4 bg-transparent overflow-hidden border-8 border-transparent !rounded-3xl">
+	<Dialog.Root
+		open={!!selectedPlaylistUri}
+		onOpenChange={(value) => !value && (selectedPlaylistUri = null)}
+	>
+		<Dialog.Content
+			class="h-3/4 max-w-3xl overflow-hidden !rounded-3xl border-8 border-transparent bg-transparent p-0"
+		>
 			{#if selectedPlaylistUri}
 				<iframe
 					title="Playlist Preview"
@@ -122,7 +128,7 @@
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>
-	<div class="mb-2 sm:mb-4 flex flex-col items-start justify-between gap-4 sm:flex-row">
+	<div class="mb-2 flex flex-col items-start justify-between gap-4 sm:mb-4 sm:flex-row">
 		<h1 class="text-3xl font-bold">My Playlists</h1>
 		<Input
 			placeholder="Search playlists..."
@@ -144,7 +150,7 @@
 		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 			{#each filteredPlaylists as playlist}
 				<Card.Root data-playlist-card>
-					<div class="relative group">
+					<div class="group relative">
 						<a href={SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank">
 							<Card.Content class="pt-6">
 								{#if !filterQuery}
@@ -154,15 +160,17 @@
 												src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
 												alt="Playlist cover"
 												class="aspect-square w-full object-cover pb-2 transition-opacity duration-300"
-												class:opacity-0={showGifs || playlist.isHovered}
+												class:opacity-0={playlist.isHovered}
 											/>
 											<img
 												src={playlist.gif}
 												alt="Playlist GIF"
 												class="absolute inset-0 aspect-square w-full object-cover pb-2 transition-opacity duration-300"
-												class:opacity-0={!showGifs && !playlist.isHovered}
-												on:mouseenter={() => window.innerWidth >= breakpoints.sm && (playlist.isHovered = true)}
-												on:mouseleave={() => window.innerWidth >= breakpoints.sm && (playlist.isHovered = false)}
+												class:opacity-0={!playlist.isHovered}
+												on:mouseenter={() =>
+													window.innerWidth >= breakpoints.sm && (playlist.isHovered = true)}
+												on:mouseleave={() =>
+													window.innerWidth >= breakpoints.sm && (playlist.isHovered = false)}
 											/>
 										</div>
 									{:else}
@@ -225,18 +233,34 @@
 		</div>
 		<div class="mt-12">
 			{#if otherPlaylists.length}
-				<h2 class="my-4 text-2xl font-semibold">Other Playlists</h2>
+				<div class="flex justify-between items-center">
+					<h2 class="my-4 text-2xl font-semibold">Other Playlists</h2>
+					<div class="flex items-center">
+						<Switch bind:checked={showGifs} class="mr-2"/> <span class="opacity-70">Show GIFs</span>
+					</div>
+				</div>
 			{/if}
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-4">
 				{#each otherPlaylists as otherPlaylist}
-					<Card.Root>
+					<Card.Root class="min-h-[120px]">
 						<a href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri} target="_blank">
-							<Card.Content class="pt-6">
-								<h2 class="py-2 text-xl font-semibold">
-									{otherPlaylist.title}
-									{otherPlaylist.emoji}
-								</h2>
-								<p class="text-muted-foreground">{otherPlaylist.description}</p>
+							<Card.Content class="pt-6 flex justify-between items-start">
+								<div>
+									<h2 class="pb-2 text-xl font-semibold">
+										{otherPlaylist.title}
+										{otherPlaylist.emoji}
+									</h2>
+									<p class="text-muted-foreground">{otherPlaylist.description}</p>
+								</div>
+
+								{#if otherPlaylist.gif}
+									<img
+										src={otherPlaylist.gif}
+										alt="otherPlaylist GIF"
+										class="w-16 aspect-square object-cover pb-2 transition-opacity duration-300"
+										class:opacity-0={!showGifs}
+									/>
+								{/if}
 							</Card.Content>
 						</a>
 					</Card.Root>
