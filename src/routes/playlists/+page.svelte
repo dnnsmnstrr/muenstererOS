@@ -1,18 +1,5 @@
-<script lang="ts">
-	import Link from '$lib/components/typography/Link.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import * as Card from '$lib/components/ui/card';
-	import * as Dialog from '$lib/components/ui/dialog';
-	import { Input } from '$lib/components/ui/input';
-	import { Switch } from '$lib/components/ui/switch';
-	import { breakpoints, links } from '$lib/config';
-	import { capitalize } from '$lib/helper';
-	import TopArtists from './TopArtists.svelte';
-	import playlistData from './playlists.json';
-	import { Users, Info, X } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-
-	interface PlaylistItem {
+<script context="module" lang="ts">
+	export interface PlaylistItem {
 		title: string;
 		type: 'season' | 'aggregated' | 'theme';
 		season?: 'winter' | 'spring' | 'summer' | 'autumn';
@@ -26,8 +13,23 @@
 		imageUrl?: string;
 		isHovered?: boolean;
 	}
+	export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
+</script>
 
-	const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
+<script lang="ts">
+	import Link from '$lib/components/typography/Link.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Card from '$lib/components/ui/card';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { Input } from '$lib/components/ui/input';
+	import { Switch } from '$lib/components/ui/switch';
+	import { breakpoints, links } from '$lib/config';
+	import PlaylistCard from './PlaylistCard.svelte';
+	import TopArtists from './TopArtists.svelte';
+	import playlistData from './playlists.json';
+	import { Users, Info, X } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+
 
 	let showGifs = false;
 
@@ -144,13 +146,13 @@
 					shuffleEmoji = firstEmoji || '🎲';
 				}
 				setTimeout(() => {
-					shuffleEmoji = '';
 					const url = SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
 					if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 						window.open(url, '_self');
 					} else {
 						window.open(url, '_blank', 'noopener,noreferrer');
 					}
+					shuffleEmoji = '';
 				}, 500);
 			}
 		}, 100);
@@ -161,7 +163,7 @@
 	<title>Playlists</title>
 </svelte:head>
 
-<div class="container overflow-y-scroll p-4">
+<div class="container p-4">
 	<Dialog.Root open={showTopArtists} onOpenChange={(value) => (showTopArtists = value)}>
 		<Dialog.Content>
 			<Dialog.Header>
@@ -240,70 +242,10 @@
 	{#if filteredPlaylists.length}
 		<div class="grid grid-cols-1 gap-6 pt-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 			{#each filteredPlaylists as playlist}
-				<Card.Root data-playlist-card>
-					<div class="group relative">
-						<a href={SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank">
-							<Card.Content class="pt-6">
-								{#if !filterQuery}
-									{#if playlist.gif}
-										<div class="relative">
-											<img
-												src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
-												alt="Playlist cover"
-												class="aspect-square w-full object-cover pb-2 transition-opacity duration-300 rounded"
-												class:opacity-0={playlist.isHovered}
-											/>
-											<img
-												src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-												data-gif-src={playlist.gif}
-												data-gif-lazy
-												alt="Playlist GIF"
-												class="absolute inset-0 aspect-square w-full object-cover pb-2 transition-opacity duration-300 rounded"
-												class:opacity-0={!playlist.isHovered}
-												on:mouseenter={() =>
-													window.innerWidth >= breakpoints.sm && (playlist.isHovered = true)}
-												on:mouseleave={() =>
-													window.innerWidth >= breakpoints.sm && (playlist.isHovered = false)}
-											/>
-										</div>
-									{:else}
-										<img
-											src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
-											alt="No GIF available"
-											class="aspect-square w-full object-cover pb-2"
-										/>
-									{/if}
-								{/if}
-								<div class="flex justify-between items-start">
-									<div>
-										<h2 class="pb-2 text-xl font-semibold">
-											{#if playlist.emoji}
-												{playlist.emoji}
-											{/if}
-											{playlist.title}
-										</h2>
-										{#if playlist.season}
-											<p class="text-muted-foreground">
-												{capitalize(playlist.season)} - {playlist.year || 'All Years'}
-											</p>
-										{/if}
-										{#if playlist.description}
-											<p class="text-muted-foreground">
-												{playlist.description}
-											</p>
-										{/if}
-									</div>
-								</div>
-							</Card.Content>
-						</a>
-						<button
-							class="absolute top-6 right-6 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
-							on:click|preventDefault|stopPropagation={() => (selectedPlaylistUri = playlist.uri)}
-						>
-							<Info class="h-4 w-4" />
-						</button>
-					</div>
-				</Card.Root>
+				<PlaylistCard
+					{playlist}
+					compact={!!filterQuery}
+				/>
 			{/each}
 		</div>
 	{/if}
@@ -328,6 +270,7 @@
 				{/each}
 			</div>
 		</div>
+
 		<div class="mt-12">
 			{#if otherPlaylists.length}
 				<div class="flex justify-between items-center">
