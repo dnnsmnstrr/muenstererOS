@@ -15,7 +15,7 @@
 		isBrowserInFullscreen,
 		printPage,
 		reloadPage,
-		toggleFullscreen,
+		toggleFullscreen
 	} from '$lib/browser';
 	import { WEBSITE_NAME, links } from '$lib/config';
 	import { toggleMode } from 'mode-watcher';
@@ -23,7 +23,6 @@
 
 	let showPicker = false;
 	export let bookmarks: Array<BookmarkItem | BookmarkItem[]> = [];
-
 </script>
 
 <Menubar.Root class="rounded-none border-b border-none">
@@ -130,13 +129,16 @@
 	<Menubar.Menu>
 		<Menubar.Trigger class="hidden md:block">Bookmarks</Menubar.Trigger>
 		<Menubar.Content>
-			{#each bookmarks as bookmark}
+			{#each bookmarks as bookmark, index}
 				{#if Array.isArray(bookmark)}
+					{#if index > 1}
+						<Menubar.Separator />
+					{/if}
 					{#each bookmark as bookmarkItem}
 						<Menubar.Link {...bookmarkItem} />
 					{/each}
-					<Menubar.Separator />
 				{:else if bookmark.sub}
+					<Menubar.Separator />
 					<Menubar.Sub>
 						<Menubar.SubTrigger>{bookmark.name}</Menubar.SubTrigger>
 						<Menubar.SubContent>

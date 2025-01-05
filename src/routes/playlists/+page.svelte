@@ -17,6 +17,8 @@
 </script>
 
 <script lang="ts">
+	import { Heading } from '$lib/components/typography';
+
 	import Link from '$lib/components/typography/Link.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
@@ -210,8 +212,9 @@
 			</div>
 		</Dialog.Content>
 	</Dialog.Root>
+
 	<div class="mb-2 flex flex-col items-start justify-between gap-4 sm:mb-4 sm:flex-row">
-		<h1 class="text-3xl font-bold">My Playlists</h1>
+		<Heading class="mb-0">My Playlists</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
 			<Input
 				placeholder="Search playlists..."
