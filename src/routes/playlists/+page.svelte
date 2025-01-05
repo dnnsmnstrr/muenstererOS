@@ -145,11 +145,12 @@
 				}
 				setTimeout(() => {
 					shuffleEmoji = '';
-					const a = document.createElement('a');
-					a.href = SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
-					a.target = '_blank';
-					a.rel = 'noopener noreferrer';
-					a.click();
+					const url = SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
+					if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+						window.open(url, '_self');
+					} else {
+						window.open(url, '_blank', 'noopener,noreferrer');
+					}
 				}, 500);
 			}
 		}, 100);
