@@ -216,12 +216,6 @@
 	<div class="mb-4 flex flex-col items-start sm:items-center justify-between gap-4 sm:mb-6 sm:flex-row">
 		<Heading class="mb-0">My Playlists</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
-			<Input
-				placeholder="Search playlists..."
-				type="search"
-				class="w-full text-base sm:w-52"
-				bind:value={filterQuery}
-			/>
 			<Button
 				title="I'm feeling lucky"
 				variant="outline"
@@ -231,6 +225,12 @@
 			>
 				🎲
 			</Button>
+			<Input
+				placeholder="Search playlists..."
+				type="search"
+				class="w-full text-base sm:w-52"
+				bind:value={filterQuery}
+			/>
 		</div>
 	</div>
 
@@ -247,6 +247,7 @@
 			{#each filteredPlaylists as playlist}
 				<PlaylistCard
 					{playlist}
+					setSelectedPlaylistUri={() => selectedPlaylistUri = playlist.uri}
 					compact={!!filterQuery}
 				/>
 			{/each}
@@ -287,7 +288,7 @@
 				{#each otherPlaylists as otherPlaylist}
 					<Card.Root class="min-h-[120px]">
 						<a href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri} target="_blank">
-							<Card.Content class="pt-6 flex justify-between items-start">
+							<Card.Content class="pt-6 flex justify-between items-start gap-2">
 								<div>
 									<h2 class="pb-2 text-xl font-semibold">
 										{otherPlaylist.title}
