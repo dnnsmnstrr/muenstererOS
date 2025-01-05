@@ -116,6 +116,41 @@
 	});
 
 	let selectedPlaylistUri: string | null = null;
+
+	let showShuffleDialog = false;
+	let shuffleEmojis: string[] = [];
+	let shuffleInterval: number;
+	let selectedPlaylist: PlaylistItem | null = null;
+
+	function getPlaylistEmojis() {
+		return allPlaylists
+			.map(p => p.emoji)
+			.filter((emoji): emoji is string => emoji !== undefined);
+	}
+
+	function shuffleAndPick() {
+		showShuffleDialog = true;
+		const emojis = getPlaylistEmojis();
+		shuffleEmojis = [];
+		let count = 0;
+		
+		shuffleInterval = window.setInterval(() => {
+			count++;
+			shuffleEmojis = [emojis[Math.floor(Math.random() * emojis.length)]];
+			
+			if (count > 10) {
+				clearInterval(shuffleInterval);
+				selectedPlaylist = allPlaylists[Math.floor(Math.random() * allPlaylists.length)];
+				if (selectedPlaylist.emoji) {
+					shuffleEmojis = [selectedPlaylist.emoji]
+				}
+				setTimeout(() => {
+					showShuffleDialog = false;
+					window.open(SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri, '_blank');
+				}, 500);
+			}
+		}, 100);
+	}
 </script>
 
 <svelte:head>
@@ -153,14 +188,41 @@
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>
+	<Dialog.Root 
+		open={showShuffleDialog} 
+		onOpenChange={(value) => {
+			showShuffleDialog = value;
+			if (!value) {
+				clearInterval(shuffleInterval);
+			}
+		}}
+	>
+		<Dialog.Content class="max-w-[120px]" showClose={false}>
+			<div class="flex min-h-[100px] items-center justify-center text-6xl">
+				{#each shuffleEmojis as emoji}
+					{emoji}
+				{/each}
+			</div>
+		</Dialog.Content>
+	</Dialog.Root>
 	<div class="mb-2 flex flex-col items-start justify-between gap-4 sm:mb-4 sm:flex-row">
 		<h1 class="text-3xl font-bold">My Playlists</h1>
-		<Input
-			placeholder="Search playlists..."
-			type="search"
-			class="w-full text-base sm:w-52"
-			bind:value={filterQuery}
-		/>
+		<div class="flex w-full gap-2 sm:w-auto">
+			<Input
+				placeholder="Search playlists..."
+				type="search"
+				class="w-full text-base sm:w-52"
+				bind:value={filterQuery}
+			/>
+			<Button
+				variant="outline"
+				size="icon"
+				class="shrink-0"
+				on:click={shuffleAndPick}
+			>
+				🎲
+			</Button>
+		</div>
 	</div>
 
 	{#if filterQuery && !filteredPlaylists.length}
@@ -184,7 +246,7 @@
 											<img
 												src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
 												alt="Playlist cover"
-												class="aspect-square w-full object-cover pb-2 transition-opacity duration-300"
+												class="aspect-square w-full object-cover pb-2 transition-opacity duration-300 rounded"
 												class:opacity-0={playlist.isHovered}
 											/>
 											<img
@@ -192,7 +254,7 @@
 												data-gif-src={playlist.gif}
 												data-gif-lazy
 												alt="Playlist GIF"
-												class="absolute inset-0 aspect-square w-full object-cover pb-2 transition-opacity duration-300"
+												class="absolute inset-0 aspect-square w-full object-cover pb-2 transition-opacity duration-300 rounded"
 												class:opacity-0={!playlist.isHovered}
 												on:mouseenter={() =>
 													window.innerWidth >= breakpoints.sm && (playlist.isHovered = true)}
@@ -208,27 +270,31 @@
 										/>
 									{/if}
 								{/if}
-								<h2 class="pb-2 text-xl font-semibold">
-									{#if playlist.emoji}
-										{playlist.emoji}
-									{/if}
-									{playlist.title}
-								</h2>
-								{#if playlist.season}
-									<p class="text-muted-foreground">
-										{capitalize(playlist.season)} - {playlist.year || 'All Years'}
-									</p>
-								{/if}
-								{#if playlist.description}
-									<p class="text-muted-foreground">
-										{playlist.description}
-									</p>
-								{/if}
+								<div class="flex justify-between items-start">
+									<div>
+										<h2 class="pb-2 text-xl font-semibold">
+											{#if playlist.emoji}
+												{playlist.emoji}
+											{/if}
+											{playlist.title}
+										</h2>
+										{#if playlist.season}
+											<p class="text-muted-foreground">
+												{capitalize(playlist.season)} - {playlist.year || 'All Years'}
+											</p>
+										{/if}
+										{#if playlist.description}
+											<p class="text-muted-foreground">
+												{playlist.description}
+											</p>
+										{/if}
+									</div>
+								</div>
 							</Card.Content>
 						</a>
 						<button
-							class="absolute right-2 top-2 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
-							on:click|stopPropagation={() => (selectedPlaylistUri = playlist.uri)}
+							class="absolute top-6 right-6 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
+							on:click|preventDefault|stopPropagation={() => (selectedPlaylistUri = playlist.uri)}
 						>
 							<Info class="h-4 w-4" />
 						</button>
