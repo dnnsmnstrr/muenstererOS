@@ -64,3 +64,10 @@ export const defaultColors = {
 		background: '240 10% 3.9%'
 	}
 };
+
+export const breakpoints = {
+    sm: 768,
+    md: 1024,
+    lg: 1280,
+    xl: 1920
+}

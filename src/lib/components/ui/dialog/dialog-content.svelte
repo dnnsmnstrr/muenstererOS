@@ -4,7 +4,7 @@
 	import { cn, flyAndScale } from "$lib/utils";
 	import { X } from "lucide-svelte";
 
-	type $$Props = DialogPrimitive.ContentProps & { showClose: boolean };
+	type $$Props = DialogPrimitive.ContentProps & { showClose?: boolean };
 
 	let className: $$Props["class"] = undefined;
 	export let transition: $$Props["transition"] = flyAndScale;
@@ -12,7 +12,7 @@
 		duration: 200,
 	};
 	export { className as class };
-  export let showClose = true;
+  	export let showClose: $$Props["showClose"] = true;
 </script>
 
 <Dialog.Portal>
