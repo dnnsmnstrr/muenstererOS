@@ -1,7 +1,7 @@
 [
 	{
 		"title": "Warten",
-        "emoji": "⌛",
+		"emoji": "⌛",
 		"type": "season",
 		"season": "winter",
 		"year": 2024,
@@ -47,7 +47,7 @@
 		"emoji": "👹",
 		"uri": "3tes9ptMPMRmiR4HFcqk4J",
 		"imageId": "ab67706c0000da84d5f914c118f5bfaacaf7e81a",
-        "gif": "https://media3.giphy.com/media/3o6wrdG8vt4X86Pauc/giphy.webp"
+		"gif": "https://media3.giphy.com/media/3o6wrdG8vt4X86Pauc/giphy.webp"
 	},
 	{
 		"title": "Regen",
@@ -75,7 +75,7 @@
 		"emoji": "🧑‍🚀",
 		"uri": "1w9orNgLp1zrOXxt5dAURP",
 		"imageId": "ab67706c0000da84ee11e38c63e5e4562e8cdf79",
-        "gif": "https://media3.giphy.com/media/b85mPT4Usz7fq/giphy.webp"
+		"gif": "https://media3.giphy.com/media/b85mPT4Usz7fq/giphy.webp"
 	},
 	{
 		"title": "Let it Breathe",
@@ -85,7 +85,7 @@
 		"emoji": "😷",
 		"uri": "3T8e2O5sYOVqSERJnmTqvL",
 		"imageId": "ab67706c0000da8496c18a547c776710a0574226",
-        "gif": "https://media1.giphy.com/media/h26R1JMxiqYpwp0rkF/giphy.webp"
+		"gif": "https://media1.giphy.com/media/h26R1JMxiqYpwp0rkF/giphy.webp"
 	},
 	{
 		"title": "Temporär Winter",
@@ -95,7 +95,7 @@
 		"emoji": "⏱",
 		"uri": "3YKHRGx3OoWO2tRe3Duorm",
 		"imageId": "ab67706c0000da84293cd683441ea1eea0a75181",
-        "gif": "https://media3.giphy.com/media/d3yxg15kJppJilnW/giphy.webp"
+		"gif": "https://media3.giphy.com/media/d3yxg15kJppJilnW/giphy.webp"
 	},
 	{
 		"title": "Wheelspin",
@@ -105,7 +105,7 @@
 		"emoji": "🛞",
 		"uri": "3tjs4iA2kxUTg0eRvI7CXu",
 		"imageId": "ab67706c0000da8403eec05b46073bf5ecdd5f45",
-        "gif": "https://media1.giphy.com/media/Gjnpx6nps0yS4/giphy.webp"
+		"gif": "https://media1.giphy.com/media/Gjnpx6nps0yS4/giphy.webp"
 	},
 	{
 		"title": "Haus am See",
@@ -115,7 +115,7 @@
 		"emoji": "🏊",
 		"uri": "4NKKIGbSYz87c5kGSAzcKj",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e021c0b1d95400d20030901cfe2ab67616d00001e028b7b5271186292e2cd13c456ab67616d00001e02905615e09cfbd090ae342337ab67616d00001e02e30db4eeb184b8e04d78140c",
-        "gif": "https://media2.giphy.com/media/K1JaHN9vuWKg9MfvS4/giphy.webp"
+		"gif": "https://media2.giphy.com/media/K1JaHN9vuWKg9MfvS4/giphy.webp"
 	},
 	{
 		"title": "Wann strahlst du?",
@@ -125,7 +125,7 @@
 		"emoji": "🌅",
 		"uri": "6e8W0uUCobxVSU5BiWFTBA",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e02256ef0f5036e304e5bd29da0ab67616d00001e0247c3c96f265f33dafa5b733bab67616d00001e029b5f1ef435fd5565dc561b17ab67616d00001e02dadf36e0f82bdc1e1f59fe66",
-        "gif": "https://media4.giphy.com/media/lyVNcb1n5Ob0Q/giphy.webp"
+		"gif": "https://media4.giphy.com/media/lyVNcb1n5Ob0Q/giphy.webp"
 	},
 	{
 		"title": "Schneemann",
@@ -135,7 +135,7 @@
 		"emoji": "⛄",
 		"uri": "5WA3l00TkcKOx7s2J9CvoK",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e021e7790e5b09c42c3f5948719ab67616d00001e022c414d292370ca0e27cb9133ab67616d00001e023a1bdb8d2b9dd573fa3d27f8ab67616d00001e024fcdd3305b9d121585fd46d2",
-        "gif": "https://media2.giphy.com/media/Ao5UPt5gj9Z1C/giphy.webp"
+		"gif": "https://media2.giphy.com/media/Ao5UPt5gj9Z1C/giphy.webp"
 	},
 	{
 		"title": "Another Click In The Firewall, Pt. 1 - 2021 Remastered Version",
@@ -145,7 +145,7 @@
 		"emoji": "🧱",
 		"uri": "6TYM6OrQUrYOdUqqB1mSdq",
 		"imageId": "ab67706c0000da84ba36b26b76443887ec9bc8cf",
-        "gif": "https://media0.giphy.com/media/077i6AULCXc0FKTj9s/giphy.webp"
+		"gif": "https://media0.giphy.com/media/077i6AULCXc0FKTj9s/giphy.webp"
 	},
 	{
 		"title": "House on the Hills",
@@ -155,8 +155,7 @@
 		"emoji": "🏘️",
 		"uri": "0id9REyrwK1SVDjFzHQg1d",
 		"imageId": "ab67706c0000da841e12e004f410fd5ea340ad94",
-        "gif": "https://media0.giphy.com/media/l0IsIJE63zBQBVwfm/giphy.webp"
-        
+		"gif": "https://media0.giphy.com/media/l0IsIJE63zBQBVwfm/giphy.webp"
 	},
 	{
 		"title": "Dandelion",
@@ -166,7 +165,7 @@
 		"emoji": "🌼",
 		"uri": "3ppo3GRmO9Qe0NUCkjBMlk",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e02063f384fe7c80bb1acafaf5dab67616d00001e02762d8a7a159d07187d8b2121ab67616d00001e02cc964e9b51ec54ed99379178ab67616d00001e02cca7a030886ad60309a7ea25",
-        "gif": "https://media1.giphy.com/media/7uPz3aoWgCJMs/giphy.webp"
+		"gif": "https://media1.giphy.com/media/7uPz3aoWgCJMs/giphy.webp"
 	},
 	{
 		"title": "",
@@ -176,7 +175,7 @@
 		"emoji": "⬜",
 		"uri": "6ntnHjoU5nToi2PWreboAS",
 		"imageId": "ab67706c0000da84fa0f37669e75c0adebafe8f5",
-        "gif": " "
+		"gif": " "
 	},
 	{
 		"title": "Woods",
@@ -186,7 +185,7 @@
 		"emoji": "🌲",
 		"uri": "6eVrGIe9pLWlgHGYV69BhH",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e0235018788537f9ea1eb8785dcab67616d00001e0240af1e135acae3fa926214e2ab67616d00001e026f9273c9e2491b5282034ed5ab67616d00001e02d9194aa18fa4c9362b47464f",
-        "gif": "https://media0.giphy.com/media/o3Gap8TcEIfPa/giphy.webp"
+		"gif": "https://media0.giphy.com/media/o3Gap8TcEIfPa/giphy.webp"
 	},
 	{
 		"title": "Flamingo",
@@ -196,7 +195,7 @@
 		"emoji": "🦩",
 		"uri": "4WsbLNwhiiChiIdonkMY0H",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e0201ed93619be25bfbb7f7d6efab67616d00001e026d79c6a1b7e13ec8dcbce1a1ab67616d00001e029a47344c4ee6d15fd04a80f1ab67616d00001e02c5edbbbd82c91bc43c67688d",
-        "gif": "https://media2.giphy.com/media/l0MYGjkdIIoJdugTK/giphy.webp"
+		"gif": "https://media2.giphy.com/media/l0MYGjkdIIoJdugTK/giphy.webp"
 	},
 	{
 		"title": "Springtime",
@@ -206,7 +205,7 @@
 		"emoji": "🐦",
 		"uri": "29XQuVB5OImZi8SM5kjGnj",
 		"imageUrl": "https://mosaic.scdn.co/300/ab67616d00001e02697fa80f305cc7ed8139fcb5ab67616d00001e029709ddd3d238254048199ae0ab67616d00001e02cc2504583eeb105a99b54cc8ab67616d00001e02fb0a0070021c43528bbcce6d",
-        "gif": "https://media0.giphy.com/media/cjJZyh11NH1Xbxkapl/giphy.webp"
+		"gif": "https://media0.giphy.com/media/cjJZyh11NH1Xbxkapl/giphy.webp"
 	},
 	{
 		"title": "Dear Winter",
@@ -216,7 +215,7 @@
 		"emoji": "🌨️",
 		"uri": "3BusobJEAVCmrxoCnRk04p",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84406ebf2ec3c7645a241f0340",
-        "gif": "https://media2.giphy.com/media/gH2bKIakvLuW4/giphy.webp"
+		"gif": "https://media2.giphy.com/media/gH2bKIakvLuW4/giphy.webp"
 	},
 	{
 		"title": "Kein Bock",
@@ -226,7 +225,7 @@
 		"emoji": "🖕",
 		"uri": "6aHiIClhGX8WLTo1H8SolP",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84d043060eaa14dd54acc9c7e5",
-        "gif": "https://media1.giphy.com/media/xT0BKwiAVPV1JHR6Io/giphy.webp"
+		"gif": "https://media1.giphy.com/media/xT0BKwiAVPV1JHR6Io/giphy.webp"
 	},
 	{
 		"title": "38317",
@@ -236,7 +235,7 @@
 		"emoji": "❤️",
 		"uri": "4pSWJr2g1WIz38BQqhw2qa",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da842bf0ff0d4f6e274034c3a3ce",
-        "gif": "https://media2.giphy.com/media/SzAU4SPvU4IW4/giphy.webp"
+		"gif": "https://media2.giphy.com/media/SzAU4SPvU4IW4/giphy.webp"
 	},
 	{
 		"title": "Peach Fuzz",
@@ -246,7 +245,7 @@
 		"emoji": "🍑",
 		"uri": "1sd3QxFmsm5klpNUWo4bj8",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da843467705ce3a35c97ab263935",
-        "gif": "https://media2.giphy.com/media/xT8qBw1IEMErvwhcPu/giphy.webp"
+		"gif": "https://media2.giphy.com/media/xT8qBw1IEMErvwhcPu/giphy.webp"
 	},
 	{
 		"title": "Snow White",
@@ -256,7 +255,7 @@
 		"emoji": "❄︎",
 		"uri": "5DUdK2ydPgYEsithmi0PWQ",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84c3e1c29023c07fd90a34913b",
-        "gif": "https://media0.giphy.com/media/14uJKhQMZ1wLfO/giphy.webp"
+		"gif": "https://media0.giphy.com/media/14uJKhQMZ1wLfO/giphy.webp"
 	},
 	{
 		"title": "hard rain.",
@@ -266,7 +265,7 @@
 		"emoji": "",
 		"uri": "2Sd0pHb7Z6IrD7eNPLPSrp",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da8452de2f366915d239cd104427",
-        "gif": "https://media3.giphy.com/media/v0R4uwLqGKvQY/giphy.webp"
+		"gif": "https://media3.giphy.com/media/v0R4uwLqGKvQY/giphy.webp"
 	},
 	{
 		"title": "Waves & Sun",
@@ -276,7 +275,7 @@
 		"emoji": "🌊☀️",
 		"uri": "1ddFBysF1pBiUQnU7lhQie",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84064cc0f310a582a2e9e7917f",
-        "gif": "https://media0.giphy.com/media/HGvjR72DXRHWw/giphy.webp"
+		"gif": "https://media0.giphy.com/media/HGvjR72DXRHWw/giphy.webp"
 	},
 	{
 		"title": "Honey Lavender",
@@ -286,7 +285,7 @@
 		"emoji": "🪻",
 		"uri": "0NItn3gQG1xvcEJBVsvyYa",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84ddebaaa5ba27ee72bacb3d05",
-        "gif": "https://media1.giphy.com/media/WOkrdOZIrjGkVJly9e/giphy.webp"
+		"gif": "https://media1.giphy.com/media/WOkrdOZIrjGkVJly9e/giphy.webp"
 	},
 	{
 		"title": "Deutsch in Kaltland",
@@ -296,7 +295,7 @@
 		"emoji": "🥶",
 		"uri": "1848N9RTlN3StgrX9eLARj",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84228fa213943c94bb37e1aefd",
-        "gif": "https://media1.giphy.com/media/10HYnc0laZc4Hm/giphy.webp"
+		"gif": "https://media1.giphy.com/media/10HYnc0laZc4Hm/giphy.webp"
 	},
 	{
 		"title": "the_leaves_are_brown",
@@ -306,7 +305,7 @@
 		"emoji": "🍂",
 		"uri": "0ZixkDiC6lyORcnGdZSpgq",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84a2b82428bf0049a00b0b1724",
-        "gif": "https://media3.giphy.com/media/MOWSl9v0TQwTu/giphy.webp"
+		"gif": "https://media3.giphy.com/media/MOWSl9v0TQwTu/giphy.webp"
 	},
 	{
 		"title": "i might...",
@@ -316,11 +315,11 @@
 		"emoji": "💸",
 		"uri": "0KYlHTlDl0LrolDolsZg2e",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84a8cd500430be26bf76bed6f3",
-        "gif": "https://media3.giphy.com/media/1APhDggUPlkRdK5w1n/giphy.webp"
+		"gif": "https://media3.giphy.com/media/1APhDggUPlkRdK5w1n/giphy.webp"
 	},
 	{
 		"uri": "68z163CKUImi0QB6ZpSigr",
-        "title": "Spring",
+		"title": "Spring",
 		"season": "spring",
 		"description": "All songs from my spring playlists",
 		"emoji": "🌼",
@@ -363,7 +362,7 @@
 		"description": "Songs to relax to",
 		"emoji": "🦥",
 		"type": "theme",
-        "gif": "https://media0.giphy.com/media/NcSksWOl9OHyU/giphy.webp"
+		"gif": "https://media0.giphy.com/media/NcSksWOl9OHyU/giphy.webp"
 	},
 	{
 		"uri": "0camicGxGNwB9YS66nAwtb",
@@ -371,7 +370,7 @@
 		"emoji": "🖥  ⌨️🖱",
 		"description": "Songs to code to",
 		"type": "theme",
-        "gif": "https://media3.giphy.com/media/o0vwzuFwCGAFO/giphy.webp"
+		"gif": "https://media3.giphy.com/media/o0vwzuFwCGAFO/giphy.webp"
 	},
 	{
 		"uri": "4X1uZRUIccnwcofS8QjBku",
@@ -379,7 +378,7 @@
 		"description": "Songs to run to",
 		"emoji": "🏃‍➡️",
 		"type": "theme",
-        "gif": "https://media3.giphy.com/media/2bUpP71bbVnZ3x7lgQ/giphy.webp"
+		"gif": "https://media3.giphy.com/media/2bUpP71bbVnZ3x7lgQ/giphy.webp"
 	},
 	{
 		"uri": "4HvN65IMe9oEWqMl1zHCIE",
@@ -387,7 +386,7 @@
 		"description": "Songs that became a meme",
 		"emoji": "🐸",
 		"type": "theme",
-        "gif": "https://media3.giphy.com/media/aFTt8wvDtqKCQ/giphy.webp"
+		"gif": "https://media3.giphy.com/media/aFTt8wvDtqKCQ/giphy.webp"
 	},
 	{
 		"uri": "1E5n3EWqT9MDPUb1qvGjsb",
@@ -395,7 +394,7 @@
 		"description": "Songs to party to",
 		"emoji": "🎉",
 		"type": "theme",
-        "gif": "https://media2.giphy.com/media/KzDqC8LvVC4lshCcGK/giphy.webp"
+		"gif": "https://media2.giphy.com/media/KzDqC8LvVC4lshCcGK/giphy.webp"
 	},
 	{
 		"uri": "2OHb3F8gQqQY4hb14p2uoe",
@@ -403,7 +402,7 @@
 		"description": "Songs to get through a long night",
 		"emoji": "🌃",
 		"type": "theme",
-        "gif": "https://media2.giphy.com/media/YNk9HRcH9zJfi/giphy.webp"
+		"gif": "https://media2.giphy.com/media/YNk9HRcH9zJfi/giphy.webp"
 	},
 	{
 		"uri": "6FhnyDVlq5Az6Bllb7einR",
@@ -411,7 +410,7 @@
 		"description": "Songs to cure your hangover",
 		"emoji": "🌅",
 		"type": "theme",
-        "gif": "https://media0.giphy.com/media/h6wECAPoB3Vtu/giphy.webp"
+		"gif": "https://media0.giphy.com/media/h6wECAPoB3Vtu/giphy.webp"
 	},
 	{
 		"uri": "5w86GPXC86kKEpbLSKVxFS",

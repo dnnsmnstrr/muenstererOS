@@ -117,36 +117,39 @@
 
 	let selectedPlaylistUri: string | null = null;
 
-	let showShuffleDialog = false;
-	let shuffleEmojis: string[] = [];
+	let shuffleEmoji: string = '';
 	let shuffleInterval: number;
 	let selectedPlaylist: PlaylistItem | null = null;
 
 	function getPlaylistEmojis() {
 		return allPlaylists
-			.map(p => p.emoji)
+			.flatMap(p => p.emoji ? [...new Intl.Segmenter().segment(p.emoji)].map(segment => segment.segment) : [])
 			.filter((emoji): emoji is string => emoji !== undefined);
 	}
 
 	function shuffleAndPick() {
-		showShuffleDialog = true;
 		const emojis = getPlaylistEmojis();
-		shuffleEmojis = [];
+		shuffleEmoji = '🎲';
 		let count = 0;
 		
 		shuffleInterval = window.setInterval(() => {
 			count++;
-			shuffleEmojis = [emojis[Math.floor(Math.random() * emojis.length)]];
+			shuffleEmoji = emojis[Math.floor(Math.random() * emojis.length)];
 			
 			if (count > 10) {
 				clearInterval(shuffleInterval);
 				selectedPlaylist = allPlaylists[Math.floor(Math.random() * allPlaylists.length)];
 				if (selectedPlaylist.emoji) {
-					shuffleEmojis = [selectedPlaylist.emoji]
+					const firstEmoji = [...new Intl.Segmenter().segment(selectedPlaylist.emoji)].map(segment => segment.segment).pop();
+					shuffleEmoji = firstEmoji || '🎲';
 				}
 				setTimeout(() => {
-					showShuffleDialog = false;
-					window.open(SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri, '_blank');
+					shuffleEmoji = '';
+					const a = document.createElement('a');
+					a.href = SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
+					a.target = '_blank';
+					a.rel = 'noopener noreferrer';
+					a.click();
 				}, 500);
 			}
 		}, 100);
@@ -159,7 +162,7 @@
 
 <div class="container overflow-y-scroll p-4">
 	<Dialog.Root open={showTopArtists} onOpenChange={(value) => (showTopArtists = value)}>
-		<Dialog.Content showClose>
+		<Dialog.Content>
 			<Dialog.Header>
 				<Dialog.Title>Top Artists</Dialog.Title>
 				<Dialog.Description>These were my top artists on Spotify over the years</Dialog.Description>
@@ -173,6 +176,7 @@
 	>
 		<Dialog.Content
 			class="h-3/4 max-w-3xl overflow-hidden !rounded-3xl border-8 border-transparent bg-transparent p-0"
+			showClose={false}
 		>
 			{#if selectedPlaylistUri}
 				<iframe
@@ -189,19 +193,17 @@
 		</Dialog.Content>
 	</Dialog.Root>
 	<Dialog.Root 
-		open={showShuffleDialog} 
+		open={!!shuffleEmoji} 
 		onOpenChange={(value) => {
-			showShuffleDialog = value;
 			if (!value) {
+				shuffleEmoji = '';
 				clearInterval(shuffleInterval);
 			}
 		}}
 	>
 		<Dialog.Content class="max-w-[120px]" showClose={false}>
 			<div class="flex min-h-[100px] items-center justify-center text-6xl">
-				{#each shuffleEmojis as emoji}
-					{emoji}
-				{/each}
+				{shuffleEmoji}
 			</div>
 		</Dialog.Content>
 	</Dialog.Root>
@@ -215,6 +217,7 @@
 				bind:value={filterQuery}
 			/>
 			<Button
+				title="I'm feeling lucky"
 				variant="outline"
 				size="icon"
 				class="shrink-0"

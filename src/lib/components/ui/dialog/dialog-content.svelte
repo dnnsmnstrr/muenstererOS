@@ -12,7 +12,7 @@
 		duration: 200,
 	};
 	export { className as class };
-  	export let showClose: $$Props["showClose"] = true;
+  export let showClose: $$Props["showClose"] = true;
 </script>
 
 <Dialog.Portal>
