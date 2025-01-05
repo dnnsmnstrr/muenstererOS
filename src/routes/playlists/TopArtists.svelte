@@ -13,17 +13,18 @@
         2024: ['Tua', 'Paula Hartmann', 'Levin Liam', 'Maeckes', 'Berq'],
     }
 
-    let currentYear = 2024;
+    let currentYear = Number(Object.keys(years).pop()) || 2017;
+    
+    $: yearsList = Object.keys(years).map(Number);
+    $: currentIndex = yearsList.indexOf(currentYear);
+    $: isFirstYear = currentIndex === 0;
+    $: isLastYear = currentIndex === yearsList.length - 1;
 
     function nextYear() {
-        const yearsList = Object.keys(years).map(Number);
-        const currentIndex = yearsList.indexOf(currentYear);
         currentYear = yearsList[(currentIndex + 1) % yearsList.length];
     }
 
     function previousYear() {
-        const yearsList = Object.keys(years).map(Number);
-        const currentIndex = yearsList.indexOf(currentYear);
         currentYear = yearsList[(currentIndex - 1 + yearsList.length) % yearsList.length];
     }
 </script>
@@ -31,15 +32,17 @@
 <div class="container mx-auto p-4">
     <div class="flex justify-between items-center mb-8">
         <button 
-            class="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+            class="px-4 py-2 bg-primary hover:scale-105 active:scale-110 text-primary-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-200"
             on:click={previousYear}
+            disabled={isFirstYear}
         >
             Previous
         </button>
         <h2 class="text-2xl font-bold">{currentYear}</h2>
         <button 
-            class="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+            class="px-4 py-2 bg-primary hover:scale-105 active:scale-110 text-primary-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-transform duration-200"
             on:click={nextYear}
+            disabled={isLastYear}
         >
             Next
         </button>
@@ -61,10 +64,4 @@
         {/each}
     </div>
 </div>
-
-<style>
-    .container {
-        max-width: 600px;
-    }
-</style>
 
