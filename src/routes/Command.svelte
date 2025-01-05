@@ -224,7 +224,9 @@
 		if (['Escape', '/'].includes(e.key) && $showHelp) {
 			$showHelp = false;
 		}
-		if ($page.url.pathname === '/redirects' && !$isCommandActive) {
+
+    const pagesWithSearchField = ['/redirects', '/playlists'] // immediately search on these pages
+		if (pagesWithSearchField.includes($page.url.pathname) && !$isCommandActive && e.key !== 'Enter' && e.key !== 'Tab') {
 			const input = document.querySelector('input');
 			if (input && input.focus) {
 				input.focus();
