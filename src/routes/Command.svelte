@@ -376,7 +376,7 @@
 </script>
 
 <Command.Dialog bind:open={$isCommandActive}>
-	<Command.Input bind:value={query} placeholder="Type a command or search..." />
+	<Command.Input bind:value={query} placeholder="Type a command or search..." class="text-base" />
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>
 		{#each Object.entries(commandConfig) as [group, commands]}
