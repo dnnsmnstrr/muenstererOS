@@ -75,14 +75,39 @@
 		return observer;
 	}
 
+	function createGifObserver(element: HTMLImageElement, gifSrc: string) {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						element.src = gifSrc;
+						observer.disconnect();
+					}
+				});
+			},
+			{ rootMargin: '50px' }
+		);
+		observer.observe(element);
+		return observer;
+	}
+
 	onMount(() => {
 		const observers = new Map();
 
 		const playlistElements = document.querySelectorAll('[data-playlist-card]');
-		playlistElements.forEach((element, index) => {
-			const observer = createIntersectionObserver(seasonPlaylists[index]);
-			observer.observe(element);
-			observers.set(element, observer);
+			playlistElements.forEach((element, index) => {
+				const observer = createIntersectionObserver(seasonPlaylists[index]);
+				observer.observe(element);
+				observers.set(element, observer);
+			});
+
+		const gifElements = document.querySelectorAll('[data-gif-lazy]');
+		gifElements.forEach((element) => {
+			const gifSrc = element.getAttribute('data-gif-src');
+			if (gifSrc) {
+				const observer = createGifObserver(element as HTMLImageElement, gifSrc);
+				observers.set(element, observer);
+			}
 		});
 
 		return () => {
@@ -163,7 +188,9 @@
 												class:opacity-0={playlist.isHovered}
 											/>
 											<img
-												src={playlist.gif}
+												src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+												data-gif-src={playlist.gif}
+												data-gif-lazy
 												alt="Playlist GIF"
 												class="absolute inset-0 aspect-square w-full object-cover pb-2 transition-opacity duration-300"
 												class:opacity-0={!playlist.isHovered}
@@ -255,7 +282,9 @@
 
 								{#if otherPlaylist.gif}
 									<img
-										src={otherPlaylist.gif}
+										src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+										data-gif-src={otherPlaylist.gif}
+										data-gif-lazy
 										alt="otherPlaylist GIF"
 										class="w-16 aspect-square object-cover pb-2 transition-opacity duration-300"
 										class:opacity-0={!showGifs}
