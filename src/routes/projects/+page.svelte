@@ -62,7 +62,7 @@
 	<title>Projects</title>
 </svelte:head>
 
-<div class="container overflow-y-scroll p-4">
+<div class="container p-4">
 	<h1 class="mb-6 text-3xl font-bold">My Projects</h1>
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
