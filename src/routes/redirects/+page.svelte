@@ -16,7 +16,7 @@
       return true
     }
 
-    return redirect.name.includes(filterQuery.toLowerCase()) || redirect.aliases?.some(alias => alias.includes(filterQuery))
+    return redirect.name.includes(filterQuery.toLowerCase()) || redirect.aliases?.some(alias => alias.includes(filterQuery.toLowerCase()))
   }
   let filteredRedirects = data.redirects
   $: if (filterQuery || data.redirects) {
