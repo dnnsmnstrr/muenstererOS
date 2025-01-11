@@ -221,20 +221,28 @@
 
 	// Get unique tags from all items
 	$: allTags = [...new Set(uses.flatMap((item) => item.tags || []))].sort();
-
 	$: filteredUses = uses.filter((item) => {
-		const lowerCaseQuery = searchQuery.toLowerCase();
+        const lowerCaseQuery = searchQuery.toLowerCase();
 		const matchesSearch =
-			item.name.toLowerCase().includes(lowerCaseQuery) ||
-			item.description?.toLowerCase().includes(lowerCaseQuery) ||
-			item.tags?.some((tag) => tag.includes(lowerCaseQuery));
-
+        item.name.toLowerCase().includes(lowerCaseQuery) ||
+        item.description?.toLowerCase().includes(lowerCaseQuery) ||
+        item.tags?.some((tag) => tag.includes(lowerCaseQuery));
+        
 		const matchesCategory = !selectedCategory || item.category === selectedCategory;
-
+        
 		const matchesTags = !selectedTag || item.tags?.includes(selectedTag);
-
+        
 		return matchesSearch && matchesCategory && matchesTags;
 	});
+    $: filteredTags = allTags.filter(tag => {
+        const lowerCaseQuery = searchQuery.toLowerCase();
+        const matchesSearch = !lowerCaseQuery || filteredUses.some(item => item.tags?.includes(tag) && (item.tags?.some(tag => tag.includes(lowerCaseQuery)) || item.name.includes(lowerCaseQuery) || item.description?.includes(lowerCaseQuery)));
+        const matchesCategory = !selectedCategory || filteredUses.some(item => item.tags?.includes(tag) && item.category === selectedCategory);
+        return matchesSearch && matchesCategory;
+    });
+    $: if (selectedCategory) {
+        selectedTag = null;
+    }
 
 	function toggleTag(tag: string) {
 		selectedTag = selectedTag !== tag ? tag : null;
@@ -278,7 +286,7 @@
 		</div>
 
 		<div class="flex flex-wrap gap-2">
-			{#each allTags as tag}
+			{#each filteredTags as tag}
 				<button
 					class="rounded-full px-3 py-1 text-sm transition-colors {selectedTag === tag
 						? 'bg-primary text-primary-foreground'
