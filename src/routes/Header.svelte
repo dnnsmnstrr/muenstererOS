@@ -10,7 +10,10 @@
 		ListMusic,
 		Gavel,
 
-		Scale
+		Scale,
+
+		TabletSmartphone
+
 
 	} from 'lucide-svelte';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
@@ -28,6 +31,7 @@
 		{
 			name: 'Pages',
 			sub: [
+				{ name: 'Uses', icon: TabletSmartphone },
 				{ name: 'Projects', icon: LayoutGrid },
 				{ name: 'Playlists', icon: ListMusic },
 				{ name: 'Redirects', icon: Signpost }
