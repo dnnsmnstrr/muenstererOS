@@ -34,7 +34,8 @@
 		Signpost,
 		Github,
 		LayoutGrid,
-		ListMusic
+		ListMusic,
+		Monitor
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -48,7 +49,7 @@
 		backgroundColor,
 		resetColors,
 		showHelp,
-		modifiedColors
+		modifiedColors,
 	} from '$lib/stores/app';
 	import Progress from '$lib/components/ui/progress/progress.svelte';
 	import { tweened } from 'svelte/motion';
@@ -92,7 +93,8 @@
 		p: '/projects',
 		h: '/', // home
 		r: '/redirects',
-		s: '/settings'
+		s: '/settings',
+		u: '/uses'
 	};
 	const konamiCode = [
 		'ArrowUp',
@@ -107,6 +109,7 @@
 		'a'
 	];
 	let konamiIndex = 0;
+
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) {
 			console.log(e);
@@ -118,6 +121,11 @@
 		}
 		if (e.key !== 'Escape' && e.key !== '/') {
 			e.stopImmediatePropagation();
+		}
+
+		if (document.querySelector('.DocSearch-Modal')) {
+			console.log('DocSearch-Modal')
+			return;
 		}
 
 		// konami easter egg https://en.wikipedia.org/wiki/Konami_Code
@@ -221,15 +229,22 @@
 		if (e.key === 'Escape' && $isCommandActive) {
 			$isCommandActive = false;
 		}
-		if (['Escape', '/'].includes(e.key) && $showHelp) {
+		const isOverlayVisible = $isCommandActive || $showHelp;
+		if (['Escape', '/'].includes(e.key) && isOverlayVisible) {
 			$showHelp = false;
 		}
-
-    const pagesWithSearchField = ['/redirects', '/playlists'] // immediately search on these pages
-		if (pagesWithSearchField.includes($page.url.pathname) && !$isCommandActive && e.key !== 'Enter' && e.key !== 'Tab') {
+		
+    	const pagesWithSearchField = ['/redirects', '/playlists'] // immediately search on these pages
+		if (pagesWithSearchField.includes($page.url.pathname) && !isOverlayVisible && !['Enter', 'Tab', 'Escape'].includes(e.key)) {
 			const input = document.querySelector('input');
 			if (input && input.focus) {
 				input.focus();
+			}
+		}
+		if (e.key === 'Escape' && document.activeElement instanceof HTMLInputElement) {
+			const inputElement = document.activeElement as HTMLInputElement;
+			if (inputElement.value === '') {
+				inputElement.blur();
 			}
 		}
 		lastKey = e.key;
@@ -336,6 +351,7 @@
 			{ name: 'Redirects', icon: Signpost, url: '/redirects' },
 			{ name: 'Projects', icon: LayoutGrid, url: '/projects' },
 			{ name: 'Playlists', icon: ListMusic, url: '/playlists' },
+			{ name: 'Uses', icon: Monitor, url: '/uses' },
 			{
 				name: 'Search Zettelkasten',
 				aliases: 'search notes find information knowledge second brain',
