@@ -7,7 +7,7 @@
     BatteryCharging,
   } from "lucide-svelte";
   import * as Tooltip from "$lib/components/ui/tooltip";
-	import { battery } from "svelte-legos";
+	import { battery } from "@sveltelegos-blue/svelte-legos";
   const batteryInfo = battery();
   let {
       charging,

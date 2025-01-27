@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { get, writable } from 'svelte/store';
-import { cssVarStore } from 'svelte-legos';
+import { cssVarStore } from '@sveltelegos-blue/svelte-legos';
 import { defaultColors } from '$lib/config';
 import { mode } from 'mode-watcher';
 

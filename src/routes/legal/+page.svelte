@@ -1,7 +1,7 @@
 <script lang="ts">
   import { run } from 'svelte/legacy';
 
-  import SvelteMarkdown from 'svelte-markdown'
+  import { MdSvelte } from '@jazzymcjazz/mdsvelte';
   import legalText from "./impressum.md?raw";
 	import { renderers } from "$lib/components/typography";
 	import type { TypographyContext } from '$lib/components/typography';
@@ -32,7 +32,7 @@
 <div class="container overflow-y-scroll p-4 card">
   <Card.Root>
     <Card.Content class="pt-6">
-      <SvelteMarkdown source={legalText} {renderers} />
+      <MdSvelte source={legalText} {renderers} />
     </Card.Content>
   </Card.Root>
 </div>

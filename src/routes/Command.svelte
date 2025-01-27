@@ -65,7 +65,7 @@
 		scrollToTop,
 		toggleFullscreen
 	} from '$lib/browser';
-	import { confettiAction, eyeDropperAction } from 'svelte-legos';
+	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';

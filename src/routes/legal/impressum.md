@@ -20,17 +20,11 @@ Diese Website wird mit [Vercel](https://vercel.com/) betrieben. Deren Datenschut
 
 Teile dieser Website werden auf [GitHub](https://www.github.com/) mit [GitHub Pages](https://help.github.com/articles/what-is-github-pages/) gehostet. Die GitHub Datenschutzerklärung ist [hier](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement) hinterlegt.
 
-
-Um etwaige Fehler zu identifizieren, wird die Monitoring-Software [Sentry](https://sentry.io) eingesetzt. Hierbei  werden lediglich Informationen zum besseren Nachvollziehen aufgetretener Fehler übertragen, jedoch keine persönlichen Daten. Die Datenschutzerklärung von Sentry findet sich [hier](https://sentry.io/privacy/).
-
 ## Third Party Inclusion
 This website runs on [Vercel](https://vercel.com/). Their privacy policy can be found [here](https://vercel.com/legal/privacy-policy).
 
 Parts of the website are hosted on [GitHub](https://www.github.com/) using [GitHub Pages](https://help.github.com/articles/what-is-github-pages/). The GitHub Privacy Statement can be found [here](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
 
-In order to identify potential errors, the monitoring software [Sentry](https://sentry.io) is used on this website. It only transmits information relevant to the problem and does not include personal information. Sentry's privacy policy is detailed [here](https://sentry.io/privacy/)
-
-<br />
 
 ## Haftungsausschluss
 

@@ -4,7 +4,7 @@
 	import { WEBSITE_NAME } from '$lib/config';
 	import File from '$lib/components/File.svelte';
 	import DraggableWindow from '$lib/components/DraggableWindow.svelte';
-  import { elementBoundingStore } from 'svelte-legos';
+  import { elementBoundingStore } from '@sveltelegos-blue/svelte-legos';
 	import Profile from '$lib/components/Profile.svelte';
 	import { onMount } from 'svelte';
 	import { filePosition, initializeFile } from '$lib/stores/desktop';
