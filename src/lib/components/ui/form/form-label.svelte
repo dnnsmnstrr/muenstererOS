@@ -6,12 +6,18 @@
 
 	type $$Props = LabelPrimitive.Props;
 
-	let className: $$Props["class"] = undefined;
-	export { className as class };
+	interface Props {
+		class?: $$Props["class"];
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = undefined, children, ...rest }: Props = $props();
+	
 
 	const { errors, ids } = getFormField();
 </script>
 
-<Label for={$ids.input} class={cn($errors && "text-destructive", className)} {...$$restProps}>
-	<slot />
+<Label for={$ids.input} class={cn($errors && "text-destructive", className)} {...rest}>
+	{@render children?.()}
 </Label>

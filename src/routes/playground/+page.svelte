@@ -111,7 +111,7 @@
           <Card.Content
             class="flex items-center justify-center p-6 relative h-80 w-full inset-0"
           >
-            <div class="absolute rounded-full bg-primary w-4 h-4" style="left: {Math.round($cursor.x - 220)}px; top:{Math.round($cursor.y - 320)}px" />
+            <div class="absolute rounded-full bg-primary w-4 h-4" style="left: {Math.round($cursor.x - 220)}px; top:{Math.round($cursor.y - 320)}px"></div>
             x: {Math.round($cursor.x - 220)}px <br>
             y: {Math.round($cursor.y - 320)}px
           </Card.Content>

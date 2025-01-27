@@ -2,7 +2,11 @@
 	import type { BookmarkItem } from '../../routes/Menu.svelte';
 	import { Button } from './ui/button';
 
-	export let bookmark: BookmarkItem;
+	interface Props {
+		bookmark: BookmarkItem;
+	}
+
+	let { bookmark }: Props = $props();
 </script>
 
 <Button
@@ -12,7 +16,7 @@
 	on:click
 >
     {#if bookmark.icon}
-        <svelte:component this={bookmark.icon} class="mr-4 h-4 w-4" />
+        <bookmark.icon class="mr-4 h-4 w-4" />
     {/if}
 	{bookmark.name}
 </Button>

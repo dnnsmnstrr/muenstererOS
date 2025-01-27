@@ -1,13 +1,22 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { Tabs as TabsPrimitive } from "bits-ui";
 	import { cn } from "$lib/utils";
 
 	type $$Props = TabsPrimitive.TriggerProps & { href: string };
 	type $$Events = TabsPrimitive.TriggerEvents;
 
-	let className: $$Props["class"] = undefined;
-	export let href: $$Props["href"];
-	export { className as class };
+	interface Props {
+		class?: $$Props["class"];
+		href: $$Props["href"];
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { class: className = undefined, href, children, ...rest }: Props = $props();
+	
 </script>
 
 <a
@@ -16,8 +25,8 @@
 		className
 	)}
 	{href}
-	{...$$restProps}
-	on:click
+	{...rest}
+	onclick={bubble('click')}
 >
-	<slot />
+	{@render children?.()}
 </a>

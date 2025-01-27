@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	type CommandData = {
 		name: string;
 		value?: string;
@@ -9,6 +9,8 @@
 </script>
 
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import {
 		Home,
 		User,
@@ -75,7 +77,7 @@
 	import '@docsearch/css';
 
 	let loading = false;
-	let query = '';
+	let query = $state('');
 	let lastKey = '';
 
 	const keyboardShortcuts = [
@@ -285,7 +287,9 @@
 		easing: cubicInOut
 	});
 
-	$: $loadingProgress = loading ? 100 : 0;
+	run(() => {
+		$loadingProgress = loading ? 100 : 0;
+	});
 
 	const ALIAS_SEPARATOR = '::';
 	const enrichLink = (link: CommandData & { aliases?: string }): CommandData => {
@@ -343,7 +347,7 @@
 			console.log('error', error);
 		}
 	}
-	$: commandConfig = {
+	let commandConfig = $derived({
 		navigation: [
 			{ name: 'Home', icon: Home, url: '/' },
 			{ name: 'About', icon: User, url: '/about' },
@@ -388,7 +392,7 @@
 				action: toggleDebug
 			}
 		]
-	} as Record<string, CommandData[]>;
+	} as Record<string, CommandData[]>);
 </script>
 
 <Command.Dialog bind:open={$isCommandActive}>
@@ -400,7 +404,7 @@
 				{#each commands as command}
 					<Command.Item onSelect={command.action} value={command.value}>
 						{#if command.icon}
-							<svelte:component this={command.icon} class="mr-2" />
+							<command.icon class="mr-2" />
 						{/if}
 						{command.name}
 					</Command.Item>
@@ -510,4 +514,4 @@
 	</Dialog.Content>
 </Dialog.Root>
 
-<div class="hidden" id="docsearch" />
+<div class="hidden" id="docsearch"></div>

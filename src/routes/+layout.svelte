@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
 	import '../app.pcss';
   import { ModeWatcher, mode } from "mode-watcher";
   import { Toaster } from "$lib/components/ui/sonner";
@@ -12,9 +14,16 @@
   import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-  $: innerWidth = 0
-  $: innerHeight = 0
+  let { children }: Props = $props();
+
+  let innerWidth = $state(0);
+  
+  let innerHeight = $state(0);
+  
 
   const cursor = spring({ x: innerWidth / 2 || 0, y: innerHeight / 2 || 0 }, {
 		stiffness: 0.05,
@@ -118,26 +127,34 @@
     };
   });
 
-  $: if ($page.url.href) {
-    $isCommandActive = false
-    debugLog('Visiting new page: ' + $page.url.href)
-    handleMouseMove()
-  }
-  $: debugLog("Debug Mode", $debug ? "enabled" : "disabled");
-  $: if ($mode) {
-    document.documentElement.setAttribute("data-theme", $mode)
-    debugLog('Theme was set to ' + $mode);
-    resetColors();
-    // handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
-  }
-  $: console.log('browser', browser)
-  $: {
+  run(() => {
+    if ($page.url.href) {
+      $isCommandActive = false
+      debugLog('Visiting new page: ' + $page.url.href)
+      handleMouseMove()
+    }
+  });
+  run(() => {
+    debugLog("Debug Mode", $debug ? "enabled" : "disabled");
+  });
+  run(() => {
+    if ($mode) {
+      document.documentElement.setAttribute("data-theme", $mode)
+      debugLog('Theme was set to ' + $mode);
+      resetColors();
+      // handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
+    }
+  });
+  run(() => {
+    console.log('browser', browser)
+  });
+  run(() => {
     debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`)
-  }
-  $: isLightMode = $mode === 'light' 
-  $: bgClass = isLightMode
+  });
+  let isLightMode = $derived($mode === 'light') 
+  let bgClass = $derived(isLightMode
     ? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
-    : 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
+    : 'bg-[radial-gradient(#222222_1px,transparent_1px)]')
 
 </script>
 
@@ -157,15 +174,15 @@
 	<main
     class="w-full h-full max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 {bgClass} [background-size:16px_16px]"
   >
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div 
       role="region"
-      on:mousedown={() => setMaskSize(50)}
-      on:mouseup={() => setMaskSize(100)}
+      onmousedown={() => setMaskSize(50)}
+      onmouseup={() => setMaskSize(100)}
       class="absolute inset-0 top-20 pointer-events-none transition-[background-position] duration-100"
       style="--tw-bg-opacity: 0.8; background-image: radial-gradient({$maskWidth}px {$maskHeight}px at var(--x) var(--y), transparent 0%, transparent {$innerRadius}px, rgba({isLightMode ? '255, 255, 255' : '0, 0, 0'}, var(--tw-bg-opacity)) {$outerRadius}px); --x: {$cursor.x}px; --y: {$cursor.y}px;">
     </div>
-    <slot />
+    {@render children?.()}
 	</main>
 	<Footer />
 </div>

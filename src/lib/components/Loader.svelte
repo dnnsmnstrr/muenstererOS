@@ -1,9 +1,13 @@
-<script>
+<script lang="ts">
     import { Loader } from "lucide-svelte";
 	import Typewriter from "svelte-typewriter";
-    export let size = '12';
-    export let color = 'text-primary';
-    export let title = ''
+    interface Props {
+        size?: string;
+        color?: string;
+        title?: string;
+    }
+
+    let { size = '12', color = 'text-primary', title = '' }: Props = $props();
 </script>
 
 <div class="flex flex-col gap-4 justify-center items-center h-full">

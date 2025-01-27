@@ -7,7 +7,7 @@
 	import { onMount } from 'svelte';
 	import { debugLog } from '$lib/stores/app';
 
-	let loading = true;
+	let loading = $state(true);
 
 	onMount(() => {
 		const query = $page.url.pathname.replace('/', '');

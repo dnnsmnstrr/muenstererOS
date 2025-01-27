@@ -9,11 +9,10 @@
   import * as Tooltip from "$lib/components/ui/tooltip";
 	import { battery } from "svelte-legos";
   const batteryInfo = battery();
-  $: (
-    {
+  let {
       charging,
       level
-    } = $batteryInfo
+    } = $derived($batteryInfo
   )
   debugLog('Battery Info:', $batteryInfo)
 </script>

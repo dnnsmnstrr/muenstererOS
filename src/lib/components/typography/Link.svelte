@@ -5,8 +5,14 @@
 	import type { TypographyContext } from ".";
   const typography = getContext<TypographyContext>('typography')
 
-  export let href: string | undefined
-  export let target: HTMLAttributeAnchorTarget | null | undefined = undefined
+  interface Props {
+    href: string | undefined;
+    target?: HTMLAttributeAnchorTarget | null | undefined;
+    children?: import('svelte').Snippet;
+    [key: string]: any
+  }
+
+  let { href, target = $bindable(undefined), children, ...rest }: Props = $props();
   export const text: string = ''
   if (typography?.externalLinks) {
     target = '_blank'
@@ -17,9 +23,9 @@
   {href}
   {target}
   class="font-medium text-primary underline underline-offset-4 inline-flex items-center gap-1 transition-opacity hover:opacity-80"
-  {...$$restProps}
+  {...rest}
 >
-  <slot />
+  {@render children?.()}
   {#if target === '_blank' && !typography?.externalLinks}
     <ExternalLink size=14 />
   {/if}

@@ -1,16 +1,25 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { spring } from 'svelte/motion';
 
-	export let visible = false;
+	interface Props {
+		visible?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let { visible = false, children }: Props = $props();
 
 	const offset = spring(0);
-	$: offset.set(visible ? 0 : 1);
+	run(() => {
+		offset.set(visible ? 0 : 1);
+	});
 </script>
 
 <div class="counter-viewport">
 	<div class="counter-digits" style="transform: translate(0, {visible ? '' : '-'}{100 * $offset}%)">
 		<strong class="hidden" aria-hidden="true"></strong>
-		<slot />
+		{@render children?.()}
 	</div>
 </div>
 

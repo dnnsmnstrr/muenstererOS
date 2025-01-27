@@ -7,7 +7,11 @@
     gif: string;
   }
 
-  export let items: TimelineItem[];
+  interface Props {
+    items: TimelineItem[];
+  }
+
+  let { items }: Props = $props();
 </script>
 
 <div class="relative">

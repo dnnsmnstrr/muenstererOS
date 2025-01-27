@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export interface PlaylistItem {
 		title: string;
 		type: 'season' | 'aggregated' | 'theme';
@@ -33,16 +33,16 @@
 	import { onMount } from 'svelte';
 
 
-	let showGifs = false;
+	let showGifs = $state(false);
 
 	const allPlaylists = playlistData as PlaylistItem[];
 
 	const currentPlaylist = allPlaylists[0];
-	let seasonPlaylists = allPlaylists.filter((playlist) => playlist.type === 'season');
+	let seasonPlaylists = $state(allPlaylists.filter((playlist) => playlist.type === 'season'));
 	const aggregatedPlaylists = allPlaylists.filter((playlist) => playlist.type === 'aggregated');
 	const otherPlaylists = allPlaylists.filter((playlist) => playlist.type === 'theme');
 
-	let filterQuery = '';
+	let filterQuery = $state('');
 	const searchFilter = (playlist: PlaylistItem) => {
 		if (!filterQuery) {
 			return true;
@@ -56,8 +56,8 @@
 		);
 	};
 
-	$: filteredPlaylists = filterQuery ? allPlaylists.filter(searchFilter) : seasonPlaylists;
-	let showTopArtists = false;
+	let filteredPlaylists = $derived(filterQuery ? allPlaylists.filter(searchFilter) : seasonPlaylists);
+	let showTopArtists = $state(false);
 
 	function createIntersectionObserver(playlist: PlaylistItem) {
 		const observer = new IntersectionObserver(
@@ -119,10 +119,10 @@
 		};
 	});
 
-	let selectedPlaylistUri: string | null = null;
+	let selectedPlaylistUri: string | null = $state(null);
 
-	let shuffleEmoji: string = '';
-	let shuffleInterval: number;
+	let shuffleEmoji: string = $state('');
+	let shuffleInterval: number = $state();
 	let selectedPlaylist: PlaylistItem | null = null;
 
 	function getPlaylistEmojis() {

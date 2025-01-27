@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	const categories = ['hardware', 'software', 'development'] as const;
 	export type UsesItem = {
 		name: string;
@@ -11,6 +11,8 @@
 </script>
 
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { Heading } from '$lib/components/typography';
 	import * as Card from '$lib/components/ui/card';
 	import { Input } from '$lib/components/ui/input';
@@ -20,13 +22,13 @@
 	import SvgIcons from './icons';
 	import uses from './uses.json';;
 
-	let searchQuery = '';
-	let selectedCategory: string | null = null;
-	let selectedTag: string | null = null;
+	let searchQuery = $state('');
+	let selectedCategory: string | null = $state(null);
+	let selectedTag: string | null = $state(null);
 
 	// Get unique tags from all items
-	$: allTags = [...new Set(uses.flatMap((item) => item.tags || []))].sort();
-	$: filteredUses = uses.filter((item) => {
+	let allTags = $derived([...new Set(uses.flatMap((item) => item.tags || []))].sort());
+	let filteredUses = $derived(uses.filter((item) => {
         const lowerCaseQuery = searchQuery.toLowerCase();
 		const matchesSearch =
         item.name.toLowerCase().includes(lowerCaseQuery) ||
@@ -38,16 +40,18 @@
 		const matchesTags = !selectedTag || item.tags?.includes(selectedTag);
         
 		return matchesSearch && matchesCategory && matchesTags;
-	});
-    $: filteredTags = allTags.filter(tag => {
+	}));
+    let filteredTags = $derived(allTags.filter(tag => {
         const lowerCaseQuery = searchQuery.toLowerCase();
         const matchesSearch = !lowerCaseQuery || filteredUses.some(item => item.tags?.includes(tag) && (item.tags?.some(tag => tag.includes(lowerCaseQuery)) || item.name.includes(lowerCaseQuery) || item.description?.includes(lowerCaseQuery)));
         const matchesCategory = !selectedCategory || filteredUses.some(item => item.tags?.includes(tag) && item.category === selectedCategory);
         return matchesSearch && matchesCategory;
-    });
-    $: if (selectedCategory) {
-        selectedTag = null;
-    }
+    }));
+    run(() => {
+		if (selectedCategory) {
+	        selectedTag = null;
+	    }
+	});
 
 	function toggleTag(tag: string) {
 		selectedTag = selectedTag !== tag ? tag : null;
@@ -96,7 +100,7 @@
 					class="rounded-full px-3 py-1 text-sm transition-colors {selectedTag === tag
 						? 'bg-primary text-primary-foreground'
 						: 'bg-primary/10'}"
-					on:click={() => toggleTag(tag)}
+					onclick={() => toggleTag(tag)}
 				>
 					{capitalize(tag)}
 				</button>
@@ -105,7 +109,7 @@
             {#if selectedCategory || selectedTag || searchQuery}
                 <button
                     class="flex items-center rounded-full px-3 py-1 text-sm transition-colors bg-primary text-primary-foreground"
-                    on:click={handleReset}
+                    onclick={handleReset}
                 >
                     <RotateCcw class="h-4" />
                     Reset Filters
@@ -120,7 +124,7 @@
             <br />
             <button
                 class="hover:bg-primary-500 mt-4 rounded-md bg-secondary px-4 py-2 transition duration-300 ease-in-out"
-                on:click={handleReset}
+                onclick={handleReset}
             >
                 Reset filters
             </button>

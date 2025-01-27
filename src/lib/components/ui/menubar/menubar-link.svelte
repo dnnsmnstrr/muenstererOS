@@ -7,11 +7,24 @@
 	};
 	type $$Events = MenubarPrimitive.ItemEvents;
 
-	let className: $$Props["class"] = undefined;
-	export let inset: $$Props["inset"] = undefined;
-  export let name = ''
-  export let href = ''
-	export { className as class };
+	interface Props {
+		class?: $$Props["class"];
+		inset?: $$Props["inset"];
+		name?: string;
+		href?: string;
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let {
+		class: className = undefined,
+		inset = undefined,
+		name = '',
+		href = '',
+		children,
+		...rest
+	}: Props = $props();
+	
 </script>
 
 <MenubarPrimitive.Item
@@ -21,7 +34,7 @@
 		className
 	)}
   href={href || "/" + name.toLocaleLowerCase()}
-	{...$$restProps}
+	{...rest}
 	on:click
 	on:keydown
 	on:focusin
@@ -33,5 +46,5 @@
   {#if name}
     <span>{name}</span>
   {/if}
-	<slot />
+	{@render children?.()}
 </MenubarPrimitive.Item>

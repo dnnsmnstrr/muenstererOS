@@ -8,11 +8,17 @@
 	};
 	type $$Events = SelectPrimitive.TriggerEvents;
 	const { attrStore, value } = getFormField();
-	export let placeholder = "";
+	interface Props {
+		placeholder?: string;
+		children?: import('svelte').Snippet<[any]>;
+		[key: string]: any
+	}
+
+	let { placeholder = "", children, ...rest }: Props = $props();
 </script>
 
-<Select.Trigger {...$$restProps} {...$attrStore} on:click on:keydown type="button">
-	<slot value={$value}>
+<Select.Trigger {...rest} {...$attrStore} on:click on:keydown type="button">
+	{#if children}{@render children({ value: $value, })}{:else}
 		<Select.Value {placeholder} />
-	</slot>
+	{/if}
 </Select.Trigger>

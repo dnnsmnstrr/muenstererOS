@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type BookmarkItem = {
 		name: string;
 		href?: string;
@@ -21,8 +21,12 @@
 	import { toggleMode } from 'mode-watcher';
 	import { showHelp } from '$lib/stores/app';
 
-	let showPicker = false;
-	export let bookmarks: Array<BookmarkItem | BookmarkItem[]> = [];
+	let showPicker = $state(false);
+	interface Props {
+		bookmarks?: Array<BookmarkItem | BookmarkItem[]>;
+	}
+
+	let { bookmarks = [] }: Props = $props();
 </script>
 
 <Menubar.Root class="rounded-none border-b border-none">

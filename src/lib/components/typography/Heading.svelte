@@ -8,8 +8,13 @@
 	import type { TypographyContext } from ".";
   const typography = getContext<TypographyContext>('typography')
 
-  let className: string | undefined = undefined;
-  export let depth = 1
+  interface Props {
+    class?: string | undefined;
+    depth?: number;
+    children?: import('svelte').Snippet;
+  }
+
+  let { class: className = undefined, depth = 1, children }: Props = $props();
   const levels = [
     'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-6',
     'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 mt-4 mb-2',
@@ -17,15 +22,15 @@
     'scroll-m-20 text-xl font-semibold tracking-tight my-2'
   ]
 
-  let data: HTMLHeadingElement;
-  $: id = slugify(data?.innerText || data?.innerHTML.toString() || '', {remove: /[\/*+~.()'"!:@]/g})
-  $: isLinked = $page.url.hash === '#' + id
-  export { className as class };
+  let data: HTMLHeadingElement = $state();
+  let id = $derived(slugify(data?.innerText || data?.innerHTML.toString() || '', {remove: /[\/*+~.()'"!:@]/g}))
+  let isLinked = $derived($page.url.hash === '#' + id)
+  
 </script>
 
 
 <svelte:element this={"h" + depth} class={cn(levels[depth - 1], "group", className)} bind:this={data} {id} >
-  <slot />
+  {@render children?.()}
   {#if typography?.renderHeadingAnchors}
     <Button
       variant={isLinked ? "outline" : "link"}

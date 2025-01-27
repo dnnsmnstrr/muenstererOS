@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
 	import { WEBSITE_NAME } from '$lib/config';
 	import File from '$lib/components/File.svelte';
 	import DraggableWindow from '$lib/components/DraggableWindow.svelte';
@@ -8,10 +10,12 @@
 	import { filePosition, initializeFile } from '$lib/stores/desktop';
 	import Dock from './Dock.svelte';
 
-  let element: HTMLElement | null = null;
-  let rect = null;
-  $: element && (rect = elementBoundingStore(element));
-  $: ({ width, height } = $rect || { width: 0, height: 0 });
+  let element: HTMLElement | null = $state(null);
+  let rect = $state(null);
+  run(() => {
+    element && (rect = elementBoundingStore(element));
+  });
+  let { width, height } = $derived($rect || { width: 0, height: 0 });
 
   onMount(() => {
     if (!$filePosition.x && !$filePosition.y) {
@@ -28,7 +32,9 @@
 <section class="w-full h-full" bind:this={element}>
   <DraggableWindow {width} {height} class="flex justify-center items-center">
     <Profile />
-    <File name='test.txt' href='/playground' slot="file" />
+    {#snippet file()}
+        <File name='test.txt' href='/playground'  />
+      {/snippet}
   </DraggableWindow>
   <Dock />
 </section>

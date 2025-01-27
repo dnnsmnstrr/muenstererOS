@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script context="module">
 	import 'dragdroptouch-bug-fixed'; // for mobile platforms
 	import { asDraggable } from 'svelte-drag-and-drop-actions';

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import SvelteMarkdown from 'svelte-markdown'
   import legalText from "./impressum.md?raw";
 	import { renderers } from "$lib/components/typography";
@@ -13,12 +15,14 @@
     externalLinks: true,
   })
 
-  $: if ($page.url.hash) {
-    const anchorId = $page.url.hash
-    waitForElementToDisplay(anchorId, (anchor) => {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    })
-  }
+  run(() => {
+    if ($page.url.hash) {
+      const anchorId = $page.url.hash
+      waitForElementToDisplay(anchorId, (anchor) => {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
+    }
+  });
 </script>
 
 <svelte:head>

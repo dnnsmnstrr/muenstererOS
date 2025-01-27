@@ -8,8 +8,12 @@
 	import { MenuIcon } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 
-  export let bookmarks: Array<BookmarkItem | BookmarkItem[]>;
-  let open = false;
+	interface Props {
+		bookmarks: Array<BookmarkItem | BookmarkItem[]>;
+	}
+
+	let { bookmarks }: Props = $props();
+  let open = $state(false);
 </script>
 
 <Sheet.Root {open} onOpenChange={(value) => (open = value)}>
