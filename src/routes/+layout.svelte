@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
 	import '../app.pcss';
   import { ModeWatcher, mode } from "mode-watcher";
   import { Toaster } from "$lib/components/ui/sonner";
 	import Command from './Command.svelte';
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
 	import { onMount } from 'svelte';
-  import { spring } from 'svelte/motion';
-  import { tweened } from 'svelte/motion';
+  import { Spring, Tween } from 'svelte/motion';
+
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
   interface Props {
@@ -19,23 +17,21 @@
   }
 
   let { children }: Props = $props();
-
   let innerWidth = $state(0);
-  
   let innerHeight = $state(0);
   
 
-  const cursor = spring({ x: innerWidth / 2 || 0, y: innerHeight / 2 || 0 }, {
+  const cursor = Spring.of(() => ({ x: 0, y: 0 }), {
 		stiffness: 0.05,
 		damping: 0.25,
     precision: 0.5
 	});
 
-  let innerRadius = tweened(browser && $page.url.pathname !== '/' ? window?.innerWidth : 200, {
+  let innerRadius = Tween.of(() => browser && page.url.pathname !== '/' ? window?.innerWidth : 200, {
 		duration: 300,
 		easing: cubicOut
 	});
-  let outerRadius = tweened(browser && $page.url.pathname !== '/' ? window?.innerWidth : 300, {
+  let outerRadius = Tween.of(() => browser && page.url.pathname !== '/' ? window?.innerWidth : 300, {
 		duration: 300,
 		easing: cubicOut
 	});
@@ -44,11 +40,11 @@
     outerRadius.set(outer || inner * 2, { duration })
   }
   // mask
-  const maskWidth = tweened(300, {
+  const maskWidth = Tween.of(() => 300, {
 		duration: 300,
 		easing: cubicOut
 	});
-  const maskHeight = tweened(200, {
+  const maskHeight = Tween.of(() => 200, {
 		duration: 300,
 		easing: cubicOut
 	});
@@ -57,14 +53,10 @@
     maskHeight.set(y || x, { duration })
   }
 
-  
-  
   let timeout: number|undefined = undefined;
   function handleMouseMove(event?: MouseEvent & { timeout?: number, duration?: number }) {
-    // console.log(event)
-    
     clearTimeout(timeout)
-    switch ($page.url.pathname) {
+    switch (page.url.pathname) {
       case '/':
         if (event) {
           // focus on cursor
@@ -108,7 +100,8 @@
   }
 
   onMount(() => {
-    if ($page.url.pathname === '/') {
+    cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
+    if (page.url.pathname === '/') {
       cursor.set({ x: innerWidth / 2, y: innerHeight / 3 }); // initial positioning around hero window
     } else if (browser) {
       cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
@@ -127,30 +120,25 @@
     };
   });
 
-  run(() => {
-    if ($page.url.href) {
-      $isCommandActive = false
-      debugLog('Visiting new page: ' + $page.url.href)
-      handleMouseMove()
-    }
-  });
-  run(() => {
+  $effect.pre(() => {
     debugLog("Debug Mode", $debug ? "enabled" : "disabled");
   });
-  run(() => {
+
+  $effect(() => {
+    if (page.url.href) {
+      $isCommandActive = false
+      debugLog('Visiting new page: ' + page.url.href)
+      handleMouseMove()
+    }
     if ($mode) {
       document.documentElement.setAttribute("data-theme", $mode)
       debugLog('Theme was set to ' + $mode);
       resetColors();
       // handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
     }
-  });
-  run(() => {
-    console.log('browser', browser)
-  });
-  run(() => {
     debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`)
   });
+
   let isLightMode = $derived($mode === 'light') 
   let bgClass = $derived(isLightMode
     ? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
@@ -180,7 +168,7 @@
       onmousedown={() => setMaskSize(50)}
       onmouseup={() => setMaskSize(100)}
       class="absolute inset-0 top-20 pointer-events-none transition-[background-position] duration-100"
-      style="--tw-bg-opacity: 0.8; background-image: radial-gradient({$maskWidth}px {$maskHeight}px at var(--x) var(--y), transparent 0%, transparent {$innerRadius}px, rgba({isLightMode ? '255, 255, 255' : '0, 0, 0'}, var(--tw-bg-opacity)) {$outerRadius}px); --x: {$cursor.x}px; --y: {$cursor.y}px;">
+      style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode ? '255, 255, 255' : '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current.x}px; --y: {cursor.current.y}px;">
     </div>
     {@render children?.()}
 	</main>
