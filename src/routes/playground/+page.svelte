@@ -1,32 +1,51 @@
 <script lang="ts">
   import * as Card from "$lib/components/ui/card/index.js";
   import * as Carousel from "$lib/components/ui/carousel/index.js";
-	import Draggable from "$lib/components/Draggable.svelte";
   import Counter from "./Counter.svelte";
 	import Heading from "$lib/components/typography/Heading.svelte";
 	import List from "$lib/components/typography/List.svelte";
 	import Link from "$lib/components/typography/Link.svelte";
 	import { counterCount } from "$lib/stores/playground";
-  import { spring } from 'svelte/motion';
+  import { Spring } from 'svelte/motion';
 	import { onMount } from "svelte";
 
-  const cursor = spring({ x: 0, y: 0 }, {
+  const cursor = Spring.of(() => ({ x: 0, y: 0 }), {
 		stiffness: 0.05,
 		damping: 0.25,
     precision: 0.5
 	});
+
+  let cursorContainer = $state({ x: 0, y: 0, width: 0, height: 0 });
   function handleMouseMove(event?: MouseEvent) {
     if (event) {
       cursor.set({ x: event.screenX, y: event.screenY });
     }
   }
   
+  function handleResize() {
+    if (container) {
+      cursorContainer = {
+        x: container.offsetLeft,
+        y: container.offsetTop,
+        width: container.offsetWidth,
+        height: container.offsetHeight
+      }
+    }
+  }
+  $effect(() => {
+    if (container) {
+      handleResize();
+    }
+  })
   onMount(() => {
     document.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
     };
   })
+  let container: HTMLDivElement | null = null;
   const basis = 'basis-full md:basis-1/2 lg:basis-1/3'
 
 </script>
@@ -39,6 +58,29 @@
   }}
 >
   <Carousel.Content>
+    <Carousel.Item class="{basis} h-full">
+      <div class="p-2 sm:p-0.5 h-full">
+        <Card.Root class="min-h-[500px]">
+          <Card.Header>
+            <Card.Title>Cursor Tracking</Card.Title>
+          </Card.Header>
+          <Card.Content class="flex flex-col aspect-square border-2 border-bg rounded-lg m-2">
+            <div 
+              bind:this={container} 
+              class="flex items-center justify-center p-6 relative h-full w-full inset-0" 
+            >
+                <div 
+                class="absolute rounded-full bg-primary w-4 h-4" 
+                style="left: {Math.min(Math.max(cursor.current.x - cursorContainer.x, -16), cursorContainer.width)}px; 
+                     top: {Math.min(Math.max(cursor.current.y - cursorContainer.y * 5, 8), cursorContainer.height)}px">
+                </div>
+              x: {Math.round(cursor.current.x)}px <br>
+              y: {Math.round(cursor.current.y)}px
+            </div>
+          </Card.Content>
+        </Card.Root>
+      </div>
+    </Carousel.Item>
     <Carousel.Item class={basis}>
       <div class="p-2 sm:p-0.5">
         <Card.Root class="min-h-[500px]">
@@ -68,25 +110,6 @@
       </div>
     </Carousel.Item>
 
-    <Carousel.Item class={basis}>
-      <div class="p-2 sm:p-0.5">
-        <Card.Root class="min-h-[500px]">
-          <Card.Header>
-            <Card.Title>Draggable Container</Card.Title>
-            <Card.Description>
-              Precursor to the current "Desktop" on the <a href="/">home</a> page.
-              Uses <Link href="https://github.com/rozek/svelte-drag-and-drop-actions">svelte-drag-and-drop-actions</Link>
-            </Card.Description>
-          </Card.Header>
-          <Card.Content
-            class="flex aspect-square items-center justify-center p-6"
-          >
-            <Draggable />
-          </Card.Content>
-        </Card.Root>
-      </div>
-    </Carousel.Item>
-
     <Carousel.Item class="{basis} h-full">
       <div class="p-2 sm:p-0.5 h-full">
         <Card.Root class="min-h-[500px]">
@@ -97,23 +120,6 @@
             class="flex aspect-square items-center justify-center p-6"
           >
             <Counter count={$counterCount} />
-          </Card.Content>
-        </Card.Root>
-      </div>
-    </Carousel.Item>
-
-    <Carousel.Item class="{basis} h-full">
-      <div class="p-2 sm:p-0.5 h-full">
-        <Card.Root class="min-h-[500px]">
-          <Card.Header>
-            <Card.Title>Cursor Tracking</Card.Title>
-          </Card.Header>
-          <Card.Content
-            class="flex items-center justify-center p-6 relative h-80 w-full inset-0"
-          >
-            <div class="absolute rounded-full bg-primary w-4 h-4" style="left: {Math.round($cursor.x - 220)}px; top:{Math.round($cursor.y - 320)}px"></div>
-            x: {Math.round($cursor.x - 220)}px <br>
-            y: {Math.round($cursor.y - 320)}px
           </Card.Content>
         </Card.Root>
       </div>
