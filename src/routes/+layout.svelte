@@ -130,6 +130,9 @@
       debugLog('Visiting new page: ' + page.url.href)
       handleMouseMove()
     }
+  });
+
+  $effect(() => {
     if ($mode) {
       document.documentElement.setAttribute("data-theme", $mode)
       debugLog('Theme was set to ' + $mode);

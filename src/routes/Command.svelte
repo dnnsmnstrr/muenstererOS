@@ -54,7 +54,7 @@
 		modifiedColors,
 	} from '$lib/stores/app';
 	import Progress from '$lib/components/ui/progress/progress.svelte';
-	import { tweened } from 'svelte/motion';
+	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
 	import { capitalize, hexToHsl } from '$lib/helper';
@@ -70,7 +70,7 @@
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { links } from '$lib/config';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import docsearch from '@docsearch/js';
@@ -237,7 +237,7 @@
 		}
 		
     	const pagesWithSearchField = ['/redirects', '/playlists'] // immediately search on these pages
-		if (pagesWithSearchField.includes($page.url.pathname) && !isOverlayVisible && !['Enter', 'Tab', 'Escape'].includes(e.key)) {
+		if (pagesWithSearchField.includes(page.url.pathname) && !isOverlayVisible && !['Enter', 'Tab', 'Escape'].includes(e.key)) {
 			const input = document.querySelector('input');
 			if (input && input.focus) {
 				input.focus();
@@ -282,13 +282,17 @@
 		};
 	});
 
-	const loadingProgress = tweened(0, {
+	const loadingProgress = Tween.of(() => 0, {
 		duration: 1000,
 		easing: cubicInOut
 	});
 
-	run(() => {
-		$loadingProgress = loading ? 100 : 0;
+	$effect(() => {
+		loadingProgress.set(loading ? 100 : 0);
+	});
+
+	$effect(() => {
+		console.log($isCommandActive, query);
 	});
 
 	const ALIAS_SEPARATOR = '::';
@@ -376,7 +380,7 @@
 			{ name: 'Go Back', icon: ArrowLeft, action: () => window.history.back() },
 			{ name: 'Reload', icon: ArrowLeft, action: reloadPage }
 		]
-			.filter((link) => $page.url.pathname !== link.url)
+			.filter((link) => page.url.pathname !== link.url)
 			.map(enrichLink),
 		links: externalLinks,
 		system: [
@@ -478,7 +482,7 @@
 	</Command.List>
 	<Command.Loading class="h-1">
 		{#if loading}
-			<Progress value={$loadingProgress} class="h-1" />
+			<Progress value={loadingProgress.current} class="h-1" />
 		{/if}
 	</Command.Loading>
 </Command.Dialog>

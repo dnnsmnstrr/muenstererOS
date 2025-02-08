@@ -6,15 +6,10 @@
 		LayoutGrid,
 		Settings,
 		Signpost,
-		Twitter,
+		X,
 		ListMusic,
 		Gavel,
-
-		Scale,
-
-		TabletSmartphone
-
-
+		TabletSmartphone,
 	} from 'lucide-svelte';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import BatteryIndicator from '$lib/components/BatteryIndicator.svelte';
@@ -41,7 +36,7 @@
 			name: 'Social',
 			sub: [
 				{ name: 'Instagram', href: links.instagram, icon: Instagram },
-				{ name: 'Twitter', href: links.twitter, icon: Twitter },
+				{ name: 'X / Twitter', href: links.twitter, icon: X },
 				{ name: 'Mastodon', href: links.mastodon }
 			]
 		},
@@ -55,12 +50,12 @@
 <header class="flex justify-between gap-4">
 	<nav class="flex items-center sm:hidden">
 		<MobileMenu {bookmarks} />
-		<a href="/" class="ml-4">
+		<a href="/" class="ml-4" aria-label="Home">
 			<enhanced:img src="../../static/muenstererOS.png" alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 	</nav>
 	<nav class="hidden items-center sm:flex">
-		<a href="/">
+		<a href="/" aria-label="Home">
 			<enhanced:img src="../../static/muenstererOS.png" alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 		<Menu {bookmarks} />
