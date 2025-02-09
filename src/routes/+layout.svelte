@@ -155,7 +155,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<div class="w-full h-full flex flex-col flex-grow">
+<div class="w-full h-screen flex flex-col flex-grow">
   <div class="w-fixed w-full p-6 sm:px-16 print:hidden">
     <div class="sticky top-0 w-full h-full">
       <Header />
@@ -163,7 +163,7 @@
   </div>
 
 	<main
-    class="w-full h-full max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 {bgClass} [background-size:16px_16px]"
+    class="w-full h-max max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 {bgClass} [background-size:16px_16px]"
   >
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div 

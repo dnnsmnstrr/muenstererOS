@@ -144,7 +144,7 @@
 						maxX: width - DraggableX,
 						maxY: height - DraggableY
 					}}
-				/>
+				></div>
 			</Card.Root>
 		</div>
 	{/if}
