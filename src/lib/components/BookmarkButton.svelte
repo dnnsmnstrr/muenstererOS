@@ -4,16 +4,17 @@
 
 	interface Props {
 		bookmark: BookmarkItem;
+		onclick?: () => void;
 	}
 
-	let { bookmark }: Props = $props();
+	let { bookmark, ...rest }: Props = $props();
 </script>
 
 <Button
 	href={bookmark.href || '/' + (bookmark.name || '').toLowerCase()}
 	class="w-full justify-{bookmark.icon ? 'start' : 'center'}"
 	variant="secondary"
-	on:click
+	{...rest}
 >
     {#if bookmark.icon}
         <bookmark.icon class="mr-4 h-4 w-4" />

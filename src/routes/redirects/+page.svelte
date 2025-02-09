@@ -47,7 +47,7 @@
       </Table.Header>
       <Table.Body>
         {#each filteredRedirects as redirect}
-          <Table.Row on:click={() => handleRedirect(redirect)} class="cursor-pointer">
+          <Table.Row onclick={() => handleRedirect(redirect)} class="cursor-pointer">
             <Table.Cell class="font-medium">{redirect.name}</Table.Cell>
             <Table.Cell>{redirect.description || '-'}</Table.Cell>
             <Table.Cell>{redirect.aliases?.join(', ') || '-'}</Table.Cell>
