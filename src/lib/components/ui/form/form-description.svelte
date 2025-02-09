@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { Form as FormPrimitive } from "formsnap";
-	import { cn } from "$lib/utils";
-	import type { HTMLAttributes } from "svelte/elements";
+	import * as FormPrimitive from "formsnap";
+	import type { WithoutChild } from "bits-ui";
+	import { cn } from "$lib/utils.js";
 
-	type $$Props = HTMLAttributes<HTMLSpanElement>;
-	interface Props {
-		class?: string | undefined | null;
-		children?: import('svelte').Snippet;
-		[key: string]: any
-	}
-
-	let { class: className = undefined, children, ...rest }: Props = $props();
-	
+	let {
+		ref = $bindable(null),
+		class: className,
+		...restProps
+	}: WithoutChild<FormPrimitive.DescriptionProps> = $props();
 </script>
 
-<FormPrimitive.Description class={cn("text-sm text-muted-foreground", className)} {...rest}>
-	{@render children?.()}
-</FormPrimitive.Description>
+<FormPrimitive.Description
+	bind:ref
+	class={cn("text-muted-foreground text-sm", className)}
+	{...restProps}
+/>
