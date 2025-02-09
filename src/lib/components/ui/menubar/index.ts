@@ -3,6 +3,7 @@ import Root from "./menubar.svelte";
 import CheckboxItem from "./menubar-checkbox-item.svelte";
 import Content from "./menubar-content.svelte";
 import Item from "./menubar-item.svelte";
+import Link from "./menubar-link.svelte";
 import GroupHeading from "./menubar-group-heading.svelte";
 import RadioItem from "./menubar-radio-item.svelte";
 import Separator from "./menubar-separator.svelte";
@@ -21,6 +22,7 @@ export {
 	CheckboxItem,
 	Content,
 	Item,
+	Link,
 	GroupHeading,
 	RadioItem,
 	Separator,
@@ -37,6 +39,7 @@ export {
 	CheckboxItem as MenubarCheckboxItem,
 	Content as MenubarContent,
 	Item as MenubarItem,
+	Link as MenubarLink,
 	GroupHeading as MenubarGroupHeading,
 	RadioItem as MenubarRadioItem,
 	Separator as MenubarSeparator,
