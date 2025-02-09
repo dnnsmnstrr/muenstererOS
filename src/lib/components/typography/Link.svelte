@@ -6,14 +6,14 @@
   const typography = getContext<TypographyContext>('typography')
 
   interface Props {
-    href: string | undefined;
-    target?: HTMLAttributeAnchorTarget | null | undefined;
+    href?: string;
+    target?: HTMLAttributeAnchorTarget | null;
     children?: import('svelte').Snippet;
     [key: string]: any
   }
 
   let { href, target = $bindable(undefined), children, ...rest }: Props = $props();
-  export const text: string = ''
+
   if (typography?.externalLinks) {
     target = '_blank'
   }

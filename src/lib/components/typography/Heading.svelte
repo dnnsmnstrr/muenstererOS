@@ -3,18 +3,19 @@
   import { cn } from "$lib/utils";
   import { Button } from "$lib/components/ui/button"
   import slugify from "slugify";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { getContext } from "svelte";
 	import type { TypographyContext } from ".";
   const typography = getContext<TypographyContext>('typography')
-
   interface Props {
     class?: string | undefined;
     depth?: number;
     children?: import('svelte').Snippet;
+    node?: import('mdast').Link & { depth?: number };
   }
 
-  let { class: className = undefined, depth = 1, children }: Props = $props();
+  let { class: className = undefined, depth = 1, children, node }: Props = $props();
+  if (node?.depth) depth = node.depth;
   const levels = [
     'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-6',
     'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 mt-4 mb-2',
@@ -22,9 +23,9 @@
     'scroll-m-20 text-xl font-semibold tracking-tight my-2'
   ]
 
-  let data: HTMLHeadingElement = $state();
+  let data: HTMLHeadingElement | undefined = $state();
   let id = $derived(slugify(data?.innerText || data?.innerHTML.toString() || '', {remove: /[\/*+~.()'"!:@]/g}))
-  let isLinked = $derived($page.url.hash === '#' + id)
+  let isLinked = $derived(page.url.hash === '#' + id)
   
 </script>
 

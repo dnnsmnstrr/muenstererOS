@@ -32,7 +32,7 @@
 <div class="container overflow-y-scroll p-4 card">
   <Card.Root>
     <Card.Content class="pt-6">
-      <MdSvelte source={legalText} {renderers} />
+      <MdSvelte source={legalText} renderers={renderers} />
     </Card.Content>
   </Card.Root>
 </div>
