@@ -18,7 +18,6 @@
 
 <script lang="ts">
 	import { Heading } from '$lib/components/typography';
-
 	import Link from '$lib/components/typography/Link.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
@@ -29,7 +28,7 @@
 	import PlaylistCard from './PlaylistCard.svelte';
 	import TopArtists from './TopArtists.svelte';
 	import playlistData from './playlists.json';
-	import { Users, Info, X } from 'lucide-svelte';
+	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 
@@ -37,7 +36,6 @@
 
 	const allPlaylists = playlistData as PlaylistItem[];
 
-	const currentPlaylist = allPlaylists[0];
 	let seasonPlaylists = $state(allPlaylists.filter((playlist) => playlist.type === 'season'));
 	const aggregatedPlaylists = allPlaylists.filter((playlist) => playlist.type === 'aggregated');
 	const otherPlaylists = allPlaylists.filter((playlist) => playlist.type === 'theme');
@@ -122,7 +120,7 @@
 	let selectedPlaylistUri: string | null = $state(null);
 
 	let shuffleEmoji: string = $state('');
-	let shuffleInterval: number = $state();
+	let shuffleInterval: number | undefined = undefined;
 	let selectedPlaylist: PlaylistItem | null = null;
 
 	function getPlaylistEmojis() {
@@ -150,7 +148,7 @@
 				setTimeout(() => {
 					const url = SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
 					if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-						window.open(url, '_self');
+						window.open(url, '_self'); // cannot open new tab in iOS
 					} else {
 						window.open(url, '_blank', 'noopener,noreferrer');
 					}
@@ -181,7 +179,7 @@
 	>
 		<Dialog.Content
 			class="h-3/4 max-w-3xl overflow-hidden !rounded-3xl border-8 border-transparent bg-transparent p-0"
-			showClose={false}
+			showCloseButton={false}
 		>
 			{#if selectedPlaylistUri}
 				<iframe
@@ -206,7 +204,7 @@
 			}
 		}}
 	>
-		<Dialog.Content class="max-w-[120px]" showClose={false}>
+		<Dialog.Content class="max-w-[120px]">
 			<div class="flex min-h-[100px] items-center justify-center text-6xl">
 				{shuffleEmoji}
 			</div>
@@ -221,7 +219,7 @@
 				variant="outline"
 				size="icon"
 				class="shrink-0"
-				on:click={shuffleAndPick}
+				onclick={shuffleAndPick}
 			>
 				🎲
 			</Button>
@@ -317,7 +315,7 @@
 
 	{#if !filterQuery}
 		<div class="my-8 flex w-full justify-center">
-			<Button on:click={() => (showTopArtists = true)} variant="secondary">
+			<Button onclick={() => (showTopArtists = true)} variant="secondary">
 				<Users class="mr-2 w-4" />
 				Top Artists
 			</Button>

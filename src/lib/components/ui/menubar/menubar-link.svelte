@@ -33,6 +33,8 @@
 	>
 		{#if name}
 			<span>{name}</span>
+        {:else}
+            {@render children?.()}
 		{/if}
 	</MenubarPrimitive.Item>
 </a>

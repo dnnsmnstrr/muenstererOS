@@ -17,7 +17,7 @@
 	import CommandButton from '$lib/components/CommandButton.svelte';
 	import { links } from '$lib/config';
 	import MobileMenu from './MobileMenu.svelte';
-
+	import logo from '$lib/assets/muenstererOS.png';
 	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = [
 		[
 			{ name: 'Home', href: '/', icon: Home },
@@ -51,12 +51,12 @@
 	<nav class="flex items-center sm:hidden">
 		<MobileMenu {bookmarks} />
 		<a href="/" class="ml-4" aria-label="Home">
-			<enhanced:img src="../../static/muenstererOS.png" alt="muenstererOS" class="w-8 min-w-6" />
+			<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 	</nav>
 	<nav class="hidden items-center sm:flex">
 		<a href="/" aria-label="Home">
-			<enhanced:img src="../../static/muenstererOS.png" alt="muenstererOS" class="w-8 min-w-6" />
+			<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 		<Menu {bookmarks} />
 	</nav>

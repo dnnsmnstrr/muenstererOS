@@ -1,6 +1,7 @@
 <script module lang="ts">
 	type CommandData = {
 		name: string;
+		keywords?: string[];
 		value?: string;
 		icon?: ConstructorOfATypedSvelteComponent;
 		url?: string;
@@ -88,6 +89,8 @@
 		{ key: ['⌘', 'F'], description: 'Fullscreen' },
 		{ key: ['⌘', 'P'], description: 'Print' }
 	];
+
+
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
 		i: '/legal', // impressum
@@ -295,8 +298,7 @@
 		console.log($isCommandActive, query);
 	});
 
-	const ALIAS_SEPARATOR = '::';
-	const enrichLink = (link: CommandData & { aliases?: string }): CommandData => {
+	const enrichLink = (link: CommandData): CommandData => {
 		const action =
 			link.action ||
 			function () {
@@ -312,9 +314,6 @@
 				}
 			};
 		let value = link.value || link.name;
-		if (link.aliases) {
-			value += ALIAS_SEPARATOR + link.aliases;
-		}
 		return {
 			...link,
 			action,
@@ -325,11 +324,11 @@
 	const externalLinks: CommandData[] = [
 		{ name: 'GitHub', icon: Github, url: links.github },
 		{ name: 'Instagram', icon: Instagram, url: links.instagram },
-		{ name: 'Spotify', aliases: 'music playlists', icon: Music, url: links.spotify },
-		{ name: 'Telegram', aliases: 'messages chats', icon: Send, url: links.telegram },
-		{ name: 'LinkedIn', aliases: 'work professional', icon: Linkedin, url: links.linkedin },
+		{ name: 'Spotify', keywords: ['music', 'playlists'], icon: Music, url: links.spotify },
+		{ name: 'Telegram', keywords: ['messages', 'chats'], icon: Send, url: links.telegram },
+		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, url: links.linkedin },
 		{ name: 'Twitter / 𝕏', icon: Twitter, url: links.x },
-		{ name: 'CV', aliases: 'resume curriculum vitae', icon: ScrollText, url: links.cv }
+		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, url: links.cv }
 	].map(enrichLink);
 
 	function toggleDebug() {
@@ -362,14 +361,14 @@
 			{ name: 'Uses', icon: Monitor, url: '/uses' },
 			{
 				name: 'Search Zettelkasten',
-				aliases: 'search notes find information knowledge second brain',
+				keywords: ['notes', 'find', 'information', 'knowledge', 'second brain'],
 				icon: Search,
 				action: handleDocsearch
 			},
-			{ name: 'Settings', aliases: 'configuration setup', icon: Settings, url: '/settings' },
+			{ name: 'Settings', keywords: ['preferences'], icon: Settings, url: '/settings' },
 			{
 				name: 'Keyboard Shortcuts',
-				aliases: 'keyboard shortcuts help assistance hotkeys',
+				keywords: ['help', 'hotkeys'],
 				icon: Keyboard,
 				action: () => {
 					$showHelp = true;
@@ -416,7 +415,7 @@
 			</Command.Group>
 		{/each}
 		<Command.Group heading="Settings">
-			{#if !isMobile.any() && (!query || 'pick primary color pick background color'.includes(query))}
+			{#if !isMobile.any()}
 				<button
 					use:eyeDropperAction={{
 						onDone: (color) => {
@@ -435,7 +434,7 @@
 					}}
 					class="w-full"
 				>
-					<Command.Item>
+					<Command.Item keywords={['theme']}>
 						<Pipette class="mr-2" />
 						Pick primary color
 					</Command.Item>
@@ -458,14 +457,14 @@
 					}}
 					class="w-full"
 				>
-					<Command.Item>
+					<Command.Item keywords={['theme']}>
 						<Pipette class="mr-2" />
 						Pick background color
 					</Command.Item>
 				</button>
 			{/if}
 			{#if $modifiedColors}
-				<Command.Item onSelect={resetColors}>
+				<Command.Item onSelect={resetColors} keywords={['theme']}>
 					<Palette class="mr-2" />
 					Reset theme colors
 				</Command.Item>
@@ -473,22 +472,17 @@
 		</Command.Group>
 		<Command.Group heading="Fun">
 			<button use:confettiAction class="w-full">
-				<Command.Item value="confetti::party popper celebrate celebration">
+				<Command.Item value="confetti" keywords={['party', 'celebrate']}>
 					<PartyPopper class="mr-2" />
 					Confetti
 				</Command.Item>
 			</button>
 		</Command.Group>
 	</Command.List>
-	<Command.Loading class="h-1">
-		{#if loading}
-			<Progress value={loadingProgress.current} class="h-1" />
-		{/if}
-	</Command.Loading>
 </Command.Dialog>
 
 <Dialog.Root open={$showHelp} onOpenChange={(value) => ($showHelp = value)}>
-	<Dialog.Content showClose>
+	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Keyboard Shortcuts</Dialog.Title>
 			<Dialog.Description>
