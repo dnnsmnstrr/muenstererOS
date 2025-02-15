@@ -10,7 +10,6 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { Label } from '$lib/components/ui/label';
 	import { mode, setMode, resetMode } from 'mode-watcher';
 	import { debug, theme as themeStore } from '$lib/stores/app';
 	import { Bug, Check } from 'lucide-svelte';
@@ -41,7 +40,7 @@
 </script>
 
 <form>
-	<Form.Field {form} name="mode" class="flex justify-between">
+	<Form.Field {form} name="mode" class="flex flex-col sm:flex-row justify-between gap-2">
 		<Form.Control>
 			<div class="flex flex-col space-y-2">
 				<h2>Mode</h2>
@@ -61,8 +60,8 @@
 				</RadioGroup.Root>
 			</div>
 		</Form.Control>
-		<div class="grid grid-cols-3 gap-2">
-			<h2 class="col-span-3">Theme</h2>
+		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+			<h2 class="col-span-1 sm:col-span-2 md:col-span-3">Theme</h2>
 			{#each themes as theme (theme.name)}
 				{@const isActive = $themeStore === theme.name}
 				<Button
