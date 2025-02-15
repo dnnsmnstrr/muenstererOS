@@ -1,10 +1,18 @@
 import { browser } from '$app/environment';
 import { get, writable } from 'svelte/store';
-import { cssVarStore } from 'svelte-legos';
+import { cssVarStore } from '@sveltelegos-blue/svelte-legos';
 import { defaultColors } from '$lib/config';
 import { mode } from 'mode-watcher';
 
 let currentMode = get(mode);
+const DEFAULT_THEME = 'zinc';
+const storedTheme = browser ? window?.localStorage?.theme : DEFAULT_THEME;
+export const theme = writable(storedTheme || DEFAULT_THEME);
+theme.subscribe((value) => {
+  if (browser && window?.localStorage) {
+		window.localStorage.theme = String(value);
+	}
+})
 export const primaryColor = cssVarStore('--primary', {
 	initialValue: defaultColors[currentMode || 'dark'].primary
 });

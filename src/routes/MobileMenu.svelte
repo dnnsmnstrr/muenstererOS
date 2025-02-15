@@ -4,12 +4,16 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import BookmarkButton from '$lib/components/BookmarkButton.svelte';
-	import { WEBSITE_NAME, links } from '$lib/config';
+	import { WEBSITE_NAME } from '$lib/config';
 	import { MenuIcon } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 
-  export let bookmarks: Array<BookmarkItem | BookmarkItem[]>;
-  let open = false;
+	interface Props {
+		bookmarks: Array<BookmarkItem | BookmarkItem[]>;
+	}
+
+	let { bookmarks }: Props = $props();
+  let open = $state(false);
 </script>
 
 <Sheet.Root {open} onOpenChange={(value) => (open = value)}>
@@ -33,7 +37,7 @@
 								<ul>
 									<BookmarkButton
 										bookmark={bookmarkItem}
-										on:click={() => (open = false)}
+										onclick={() => (open = false)}
 									/>
 								</ul>
 							{/each}
@@ -45,12 +49,12 @@
 							{#each bookmark.sub as bookmarkItem}
 								<BookmarkButton
 									bookmark={bookmarkItem}
-									on:click={() => (open = false)}
+									onclick={() => (open = false)}
 								/>
 							{/each}
               <Separator />
 						{:else}
-							<BookmarkButton {bookmark} on:click={() => (open = false)} />
+							<BookmarkButton {bookmark} onclick={() => (open = false)} />
 						{/if}
 					{/each}
 				</div>

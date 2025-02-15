@@ -1,13 +1,19 @@
 <script lang="ts">
+	import { preventDefault, stopPropagation } from 'svelte/legacy';
+
 	import * as Card from '$lib/components/ui/card';
 	import { breakpoints } from '$lib/config';
-	import { capitalize } from '$lib/helper';
+	import { capitalize } from '$lib/utils/index';
 	import { Info } from 'lucide-svelte';
 	import { SPOTIFY_PLAYLIST_LINK, type PlaylistItem } from './+page.svelte';
 
-	export let playlist: PlaylistItem;
-	export let compact = false;
-	export let setSelectedPlaylistUri: (uri: string) => {};
+	interface Props {
+		playlist: PlaylistItem;
+		compact?: boolean;
+		setSelectedPlaylistUri: (uri: string) => {};
+	}
+
+	let { playlist = $bindable(), compact = false, setSelectedPlaylistUri }: Props = $props();
 </script>
 
 <Card.Root data-playlist-card class="group relative">
@@ -29,9 +35,9 @@
 							alt="Playlist GIF"
 							class="absolute inset-0 aspect-square w-full rounded object-cover pb-2 transition-opacity duration-300"
 							class:opacity-0={!playlist.isHovered}
-							on:mouseenter={() =>
+							onmouseenter={() =>
 								window.innerWidth >= breakpoints.sm && (playlist.isHovered = true)}
-							on:mouseleave={() =>
+							onmouseleave={() =>
 								window.innerWidth >= breakpoints.sm && (playlist.isHovered = false)}
 						/>
 					</div>
@@ -68,7 +74,7 @@
 	<button
 		class="absolute right-2 top-2 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
 		class:opacity-0={!playlist.isHovered && window?.innerWidth < breakpoints.sm}
-		on:click|preventDefault|stopPropagation={() => setSelectedPlaylistUri(playlist.uri)}
+		onclick={stopPropagation(preventDefault(() => setSelectedPlaylistUri(playlist.uri)))}
 	>
 		<Info class="h-4 w-4" />
 	</button>

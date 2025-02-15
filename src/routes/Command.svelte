@@ -1,6 +1,7 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	type CommandData = {
 		name: string;
+		keywords?: string[];
 		value?: string;
 		icon?: ConstructorOfATypedSvelteComponent;
 		url?: string;
@@ -49,33 +50,33 @@
 		backgroundColor,
 		resetColors,
 		showHelp,
-		modifiedColors,
+		modifiedColors
 	} from '$lib/stores/app';
-	import Progress from '$lib/components/ui/progress/progress.svelte';
-	import { tweened } from 'svelte/motion';
+	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
-	import { capitalize, hexToHsl } from '$lib/helper';
 	import {
+		capitalize,
+		hexToHsl,
 		isMobile,
 		reloadPage,
 		scrollToBottom,
 		scrollToTop,
 		toggleFullscreen
-	} from '$lib/browser';
-	import { confettiAction, eyeDropperAction } from 'svelte-legos';
+	} from '$lib/utils/index';
+	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { links } from '$lib/config';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 
 	let loading = false;
-	let query = '';
+	let query = $state('');
 	let lastKey = '';
 
 	const keyboardShortcuts = [
@@ -86,6 +87,7 @@
 		{ key: ['⌘', 'F'], description: 'Fullscreen' },
 		{ key: ['⌘', 'P'], description: 'Print' }
 	];
+
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
 		i: '/legal', // impressum
@@ -124,7 +126,7 @@
 		}
 
 		if (document.querySelector('.DocSearch-Modal')) {
-			console.log('DocSearch-Modal')
+			console.log('DocSearch-Modal');
 			return;
 		}
 
@@ -233,9 +235,13 @@
 		if (['Escape', '/'].includes(e.key) && isOverlayVisible) {
 			$showHelp = false;
 		}
-		
-    	const pagesWithSearchField = ['/redirects', '/playlists'] // immediately search on these pages
-		if (pagesWithSearchField.includes($page.url.pathname) && !isOverlayVisible && !['Enter', 'Tab', 'Escape'].includes(e.key)) {
+
+		const pagesWithSearchField = ['/redirects', '/playlists']; // immediately search on these pages
+		if (
+			pagesWithSearchField.includes(page.url.pathname) &&
+			!isOverlayVisible &&
+			!['Enter', 'Tab', 'Escape'].includes(e.key)
+		) {
 			const input = document.querySelector('input');
 			if (input && input.focus) {
 				input.focus();
@@ -280,15 +286,20 @@
 		};
 	});
 
-	const loadingProgress = tweened(0, {
+	const loadingProgress = Tween.of(() => 0, {
 		duration: 1000,
 		easing: cubicInOut
 	});
 
-	$: $loadingProgress = loading ? 100 : 0;
+	$effect(() => {
+		loadingProgress.set(loading ? 100 : 0);
+	});
 
-	const ALIAS_SEPARATOR = '::';
-	const enrichLink = (link: CommandData & { aliases?: string }): CommandData => {
+	$effect(() => {
+		console.log($isCommandActive, query);
+	});
+
+	const enrichLink = (link: CommandData): CommandData => {
 		const action =
 			link.action ||
 			function () {
@@ -304,9 +315,6 @@
 				}
 			};
 		let value = link.value || link.name;
-		if (link.aliases) {
-			value += ALIAS_SEPARATOR + link.aliases;
-		}
 		return {
 			...link,
 			action,
@@ -317,11 +325,11 @@
 	const externalLinks: CommandData[] = [
 		{ name: 'GitHub', icon: Github, url: links.github },
 		{ name: 'Instagram', icon: Instagram, url: links.instagram },
-		{ name: 'Spotify', aliases: 'music playlists', icon: Music, url: links.spotify },
-		{ name: 'Telegram', aliases: 'messages chats', icon: Send, url: links.telegram },
-		{ name: 'LinkedIn', aliases: 'work professional', icon: Linkedin, url: links.linkedin },
+		{ name: 'Spotify', keywords: ['music', 'playlists'], icon: Music, url: links.spotify },
+		{ name: 'Telegram', keywords: ['messages', 'chats'], icon: Send, url: links.telegram },
+		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, url: links.linkedin },
 		{ name: 'Twitter / 𝕏', icon: Twitter, url: links.x },
-		{ name: 'CV', aliases: 'resume curriculum vitae', icon: ScrollText, url: links.cv }
+		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, url: links.cv }
 	].map(enrichLink);
 
 	function toggleDebug() {
@@ -343,7 +351,7 @@
 			console.log('error', error);
 		}
 	}
-	$: commandConfig = {
+	let commandConfig = $derived({
 		navigation: [
 			{ name: 'Home', icon: Home, url: '/' },
 			{ name: 'About', icon: User, url: '/about' },
@@ -354,14 +362,14 @@
 			{ name: 'Uses', icon: Monitor, url: '/uses' },
 			{
 				name: 'Search Zettelkasten',
-				aliases: 'search notes find information knowledge second brain',
+				keywords: ['notes', 'find', 'information', 'knowledge', 'second brain'],
 				icon: Search,
 				action: handleDocsearch
 			},
-			{ name: 'Settings', aliases: 'configuration setup', icon: Settings, url: '/settings' },
+			{ name: 'Settings', keywords: ['preferences'], icon: Settings, url: '/settings' },
 			{
 				name: 'Keyboard Shortcuts',
-				aliases: 'keyboard shortcuts help assistance hotkeys',
+				keywords: ['help', 'hotkeys'],
 				icon: Keyboard,
 				action: () => {
 					$showHelp = true;
@@ -372,7 +380,7 @@
 			{ name: 'Go Back', icon: ArrowLeft, action: () => window.history.back() },
 			{ name: 'Reload', icon: ArrowLeft, action: reloadPage }
 		]
-			.filter((link) => $page.url.pathname !== link.url)
+			.filter((link) => page.url.pathname !== link.url)
 			.map(enrichLink),
 		links: externalLinks,
 		system: [
@@ -388,7 +396,7 @@
 				action: toggleDebug
 			}
 		]
-	} as Record<string, CommandData[]>;
+	} as Record<string, CommandData[]>);
 </script>
 
 <Command.Dialog bind:open={$isCommandActive}>
@@ -400,7 +408,7 @@
 				{#each commands as command}
 					<Command.Item onSelect={command.action} value={command.value}>
 						{#if command.icon}
-							<svelte:component this={command.icon} class="mr-2" />
+							<command.icon class="mr-2" />
 						{/if}
 						{command.name}
 					</Command.Item>
@@ -408,7 +416,7 @@
 			</Command.Group>
 		{/each}
 		<Command.Group heading="Settings">
-			{#if !isMobile.any() && (!query || 'pick primary color pick background color'.includes(query))}
+			{#if !isMobile.any()}
 				<button
 					use:eyeDropperAction={{
 						onDone: (color) => {
@@ -427,7 +435,7 @@
 					}}
 					class="w-full"
 				>
-					<Command.Item>
+					<Command.Item keywords={['theme']}>
 						<Pipette class="mr-2" />
 						Pick primary color
 					</Command.Item>
@@ -450,14 +458,14 @@
 					}}
 					class="w-full"
 				>
-					<Command.Item>
+					<Command.Item keywords={['theme']}>
 						<Pipette class="mr-2" />
 						Pick background color
 					</Command.Item>
 				</button>
 			{/if}
 			{#if $modifiedColors}
-				<Command.Item onSelect={resetColors}>
+				<Command.Item onSelect={resetColors} keywords={['theme']}>
 					<Palette class="mr-2" />
 					Reset theme colors
 				</Command.Item>
@@ -465,22 +473,17 @@
 		</Command.Group>
 		<Command.Group heading="Fun">
 			<button use:confettiAction class="w-full">
-				<Command.Item value="confetti::party popper celebrate celebration">
+				<Command.Item value="confetti" keywords={['party', 'celebrate']}>
 					<PartyPopper class="mr-2" />
 					Confetti
 				</Command.Item>
 			</button>
 		</Command.Group>
 	</Command.List>
-	<Command.Loading class="h-1">
-		{#if loading}
-			<Progress value={$loadingProgress} class="h-1" />
-		{/if}
-	</Command.Loading>
 </Command.Dialog>
 
 <Dialog.Root open={$showHelp} onOpenChange={(value) => ($showHelp = value)}>
-	<Dialog.Content showClose>
+	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Keyboard Shortcuts</Dialog.Title>
 			<Dialog.Description>
@@ -510,4 +513,4 @@
 	</Dialog.Content>
 </Dialog.Root>
 
-<div class="hidden" id="docsearch" />
+<div class="hidden" id="docsearch"></div>

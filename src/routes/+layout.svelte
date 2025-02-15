@@ -5,28 +5,34 @@
 	import Command from './Command.svelte';
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
-	import { page } from '$app/stores';
-	import { debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
+	import { page } from '$app/state';
+	import { theme, debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
 	import { onMount } from 'svelte';
-  import { spring } from 'svelte/motion';
-  import { tweened } from 'svelte/motion';
+  import { Spring, Tween } from 'svelte/motion';
+
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
+	import { cn } from '$lib/utils.js';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-  $: innerWidth = 0
-  $: innerHeight = 0
+  let { children }: Props = $props();
+  let innerWidth = $state(0);
+  let innerHeight = $state(0);
+  
 
-  const cursor = spring({ x: innerWidth / 2 || 0, y: innerHeight / 2 || 0 }, {
+  const cursor = Spring.of(() => ({ x: 0, y: 0 }), {
 		stiffness: 0.05,
 		damping: 0.25,
     precision: 0.5
 	});
 
-  let innerRadius = tweened(browser && $page.url.pathname !== '/' ? window?.innerWidth : 200, {
+  let innerRadius = Tween.of(() => browser && page.url.pathname !== '/' ? window?.innerWidth : 200, {
 		duration: 300,
 		easing: cubicOut
 	});
-  let outerRadius = tweened(browser && $page.url.pathname !== '/' ? window?.innerWidth : 300, {
+  let outerRadius = Tween.of(() => browser && page.url.pathname !== '/' ? window?.innerWidth : 300, {
 		duration: 300,
 		easing: cubicOut
 	});
@@ -35,11 +41,11 @@
     outerRadius.set(outer || inner * 2, { duration })
   }
   // mask
-  const maskWidth = tweened(300, {
+  const maskWidth = Tween.of(() => 300, {
 		duration: 300,
 		easing: cubicOut
 	});
-  const maskHeight = tweened(200, {
+  const maskHeight = Tween.of(() => 200, {
 		duration: 300,
 		easing: cubicOut
 	});
@@ -48,14 +54,10 @@
     maskHeight.set(y || x, { duration })
   }
 
-  
-  
   let timeout: number|undefined = undefined;
   function handleMouseMove(event?: MouseEvent & { timeout?: number, duration?: number }) {
-    // console.log(event)
-    
     clearTimeout(timeout)
-    switch ($page.url.pathname) {
+    switch (page.url.pathname) {
       case '/':
         if (event) {
           // focus on cursor
@@ -99,7 +101,8 @@
   }
 
   onMount(() => {
-    if ($page.url.pathname === '/') {
+    cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
+    if (page.url.pathname === '/') {
       cursor.set({ x: innerWidth / 2, y: innerHeight / 3 }); // initial positioning around hero window
     } else if (browser) {
       cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
@@ -118,28 +121,41 @@
     };
   });
 
-  $: if ($page.url.href) {
-    $isCommandActive = false
-    debugLog('Visiting new page: ' + $page.url.href)
-    handleMouseMove()
-  }
-  $: debugLog("Debug Mode", $debug ? "enabled" : "disabled");
-  $: if ($mode) {
-    document.documentElement.setAttribute("data-theme", $mode)
-    debugLog('Theme was set to ' + $mode);
-    resetColors();
-    // handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
-  }
-  $: console.log('browser', browser)
-  $: {
+  $effect.pre(() => {
+    debugLog("Debug Mode", $debug ? "enabled" : "disabled");
+  });
+
+  $effect(() => {
+    if (page.url.href) {
+      $isCommandActive = false
+      debugLog('Visiting new page: ' + page.url.href)
+      handleMouseMove()
+    }
+  });
+
+  $effect(() => {
+    if ($mode) {
+      document.documentElement.setAttribute("data-theme", $mode)
+      debugLog('Theme was set to ' + $mode);
+      resetColors();
+      // handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
+    }
     debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`)
-  }
-  $: isLightMode = $mode === 'light' 
-  $: bgClass = isLightMode
+  });
+
+  let isLightMode = $derived($mode === 'light') 
+  let bgClass = $derived(isLightMode
     ? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
-    : 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
+    : 'bg-[radial-gradient(#222222_1px,transparent_1px)]')
+
 
 </script>
+
+<svelte:head>
+	<style>
+    @import "/themes.css";
+  </style>
+</svelte:head>
 
 <ModeWatcher />
 <Toaster />
@@ -147,7 +163,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<div class="w-full h-full flex flex-col flex-grow">
+<div class="w-full h-screen flex flex-col flex-grow">
   <div class="w-fixed w-full p-6 sm:px-16 print:hidden">
     <div class="sticky top-0 w-full h-full">
       <Header />
@@ -155,17 +171,17 @@
   </div>
 
 	<main
-    class="w-full h-full max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 {bgClass} [background-size:16px_16px]"
+    class={cn("w-full h-max max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 [background-size:16px_16px]", bgClass, `theme-${$theme}`)}
   >
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div 
       role="region"
-      on:mousedown={() => setMaskSize(50)}
-      on:mouseup={() => setMaskSize(100)}
+      onmousedown={() => setMaskSize(50)}
+      onmouseup={() => setMaskSize(100)}
       class="absolute inset-0 top-20 pointer-events-none transition-[background-position] duration-100"
-      style="--tw-bg-opacity: 0.8; background-image: radial-gradient({$maskWidth}px {$maskHeight}px at var(--x) var(--y), transparent 0%, transparent {$innerRadius}px, rgba({isLightMode ? '255, 255, 255' : '0, 0, 0'}, var(--tw-bg-opacity)) {$outerRadius}px); --x: {$cursor.x}px; --y: {$cursor.y}px;">
+      style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode ? '255, 255, 255' : '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current.x}px; --y: {cursor.current.y}px;">
     </div>
-    <slot />
+    {@render children?.()}
 	</main>
 	<Footer />
 </div>

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	export type BookmarkItem = {
 		name: string;
 		href?: string;
@@ -16,26 +16,40 @@
 		printPage,
 		reloadPage,
 		toggleFullscreen
-	} from '$lib/browser';
+	} from '$lib/utils/index';
 	import { WEBSITE_NAME, links } from '$lib/config';
 	import { toggleMode } from 'mode-watcher';
 	import { showHelp } from '$lib/stores/app';
 
-	let showPicker = false;
-	export let bookmarks: Array<BookmarkItem | BookmarkItem[]> = [];
+	let showPicker = $state(false);
+	interface Props {
+		bookmarks?: Array<BookmarkItem | BookmarkItem[]>;
+	}
+
+	let { bookmarks = [] }: Props = $props();
 </script>
 
 <Menubar.Root class="rounded-none border-b border-none">
 	<Menubar.Menu>
 		<Menubar.Trigger class="font-bold">{WEBSITE_NAME}</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item href="/about">About {WEBSITE_NAME}</Menubar.Item>
-			<Menubar.Separator />
-			<Menubar.Item href="/settings">
-				Settings... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
+			<Menubar.Item>
+				{#snippet child({ props })}
+					<a href="/about" {...props}>
+						About
+					</a>
+				{/snippet}
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={closeWindow}>
+			<Menubar.Item>
+				{#snippet child({ props })}
+					<a href="/settings" {...props}>
+						Settings... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
+					</a>
+				{/snippet}
+			</Menubar.Item>
+			<Menubar.Separator />
+			<Menubar.Item onclick={closeWindow}>
 				Quit {WEBSITE_NAME}
 				<Menubar.Shortcut>⌘Q</Menubar.Shortcut>
 			</Menubar.Item>
@@ -45,14 +59,16 @@
 	<Menubar.Menu>
 		<Menubar.Trigger class="hidden lg:flex">File</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item href="/about" target="_blank">
-				New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
+			<Menubar.Item>
+				{#snippet child({ props })}
+					<a href="/about" target="_blank" {...props}>New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut></a>
+				{/snippet}
 			</Menubar.Item>
-			<Menubar.Item on:click={closeWindow}>
+			<Menubar.Item onclick={closeWindow}>
 				Close Window <Menubar.Shortcut>⌘W</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={printPage}>
+			<Menubar.Item onclick={printPage}>
 				Print... <Menubar.Shortcut>⌘P</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
@@ -78,14 +94,14 @@
 				Paste <Menubar.Shortcut>⌘V</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={() => document.execCommand('selectall')}>
+			<Menubar.Item onclick={() => document.execCommand('selectall')}>
 				Select All <Menubar.Shortcut>⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
 				Deselect All <Menubar.Shortcut>⇧⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={() => (showPicker = true)}>
+			<Menubar.Item onclick={() => (showPicker = true)}>
 				Emoji & Symbols{' '}
 				<Menubar.Shortcut>
 					<svg
@@ -111,16 +127,16 @@
 	<Menubar.Menu>
 		<Menubar.Trigger class="hidden md:flex">View</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item on:click={reloadPage}>
+			<Menubar.Item onclick={reloadPage}>
 				Reload <Menubar.Shortcut>⌘R</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item on:click={toggleFullscreen}
+			<Menubar.Item onclick={toggleFullscreen}
 				>{isBrowserInFullscreen() ? 'Exit' : 'Enter'} Full Screen <Menubar.Shortcut
 					>⌘F</Menubar.Shortcut
 				></Menubar.Item
 			>
-			<Menubar.Item on:click={toggleMode}>
+			<Menubar.Item onclick={toggleMode}>
 				Toggle Dark Mode <Menubar.Shortcut>^M</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
@@ -157,13 +173,13 @@
 	<Menubar.Menu>
 		<Menubar.Trigger>Help</Menubar.Trigger>
 		<Menubar.Content>
-			<Menubar.Item on:click={() => ($showHelp = !$showHelp)}>
+			<Menubar.Item onclick={() => ($showHelp = !$showHelp)}>
 				Keyboard Shortcuts <Menubar.Shortcut>?</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item href={links.mailto} target="_blank">
+			<Menubar.Link href={links.mailto} target="_blank">
 				Contact <Menubar.Shortcut>@</Menubar.Shortcut>
-			</Menubar.Item>
+			</Menubar.Link>
 		</Menubar.Content>
 	</Menubar.Menu>
 </Menubar.Root>

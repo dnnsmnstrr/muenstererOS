@@ -1,16 +1,18 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Table from '$lib/components/ui/table';
   import * as Card from "$lib/components/ui/card";
-	import { getRedirectURL, type Redirect } from '$lib/redirect';
+	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
 
-  export let data
+  let { data } = $props();
   function handleRedirect(redirect: Redirect) {
     const redirectUrl = getRedirectURL(redirect);
     window.open(redirectUrl, "_blank");
   }
-  let filterQuery = ''
+  let filterQuery = $state('')
   const searchFilter = (redirect: Redirect) => {
     if (!filterQuery) {
       return true
@@ -18,10 +20,12 @@
 
     return redirect.name.includes(filterQuery.toLowerCase()) || redirect.aliases?.some(alias => alias.includes(filterQuery.toLowerCase()))
   }
-  let filteredRedirects = data.redirects
-  $: if (filterQuery || data.redirects) {
-    filteredRedirects = data.redirects.filter(searchFilter); filterQuery
-  }
+  let filteredRedirects = $state(data.redirects)
+  run(() => {
+    if (filterQuery || data.redirects) {
+      filteredRedirects = data.redirects.filter(searchFilter); filterQuery
+    }
+  });
 </script>
 
 <div class="container">
@@ -43,7 +47,7 @@
       </Table.Header>
       <Table.Body>
         {#each filteredRedirects as redirect}
-          <Table.Row on:click={() => handleRedirect(redirect)} class="cursor-pointer">
+          <Table.Row onclick={() => handleRedirect(redirect)} class="cursor-pointer">
             <Table.Cell class="font-medium">{redirect.name}</Table.Cell>
             <Table.Cell>{redirect.description || '-'}</Table.Cell>
             <Table.Cell>{redirect.aliases?.join(', ') || '-'}</Table.Cell>

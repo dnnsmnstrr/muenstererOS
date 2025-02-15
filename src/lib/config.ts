@@ -1,4 +1,4 @@
-import { disemvowel } from "./helper";
+import { disemvowel } from "./utils/helper";
 
 export const FIRST_NAME = 'Dennis';
 export const LAST_NAME = 'Muensterer';

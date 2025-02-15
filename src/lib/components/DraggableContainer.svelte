@@ -1,10 +1,15 @@
-<script context="module">
+<script module>
   // import  DragDropTouch  from 'svelte-drag-drop-touch' // for mobile platforms
   import { asDraggable } from 'svelte-drag-and-drop-actions'
 </script>
 
-<script>
-  let DraggableX = 20, DraggableY = 20, DraggableWidth = 80, DraggableHeight = 30
+<script lang="ts">
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
+  let DraggableX = $state(20), DraggableY = $state(20), DraggableWidth = 80, DraggableHeight = 30
   let ArenaWidth = 400, ArenaHeight = 400
 
   function onDragMove (x,y, dx,dy) { DraggableX = x; DraggableY = y }
@@ -21,6 +26,6 @@ style="width:{ArenaWidth}px; height:{ArenaHeight}px;">
       onDragStart:{x:DraggableX,y:DraggableY}, onDragMove, onDragEnd
     }}
   >
-    <slot />
+    {@render children?.()}
   </div>
 </div>

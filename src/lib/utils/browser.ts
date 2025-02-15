@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
 import { debug, debugLog } from '$lib/stores/app';
 
+export const isBrowser = typeof document !== "undefined";
+
 export function closeWindow() {
   debugLog('Attempting to close window');
 	window.close();

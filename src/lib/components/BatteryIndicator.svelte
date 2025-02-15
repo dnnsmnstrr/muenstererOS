@@ -7,30 +7,31 @@
     BatteryCharging,
   } from "lucide-svelte";
   import * as Tooltip from "$lib/components/ui/tooltip";
-	import { battery } from "svelte-legos";
+	import { battery } from "@sveltelegos-blue/svelte-legos";
   const batteryInfo = battery();
-  $: (
-    {
+  let {
       charging,
       level
-    } = $batteryInfo
+    } = $derived($batteryInfo
   )
   debugLog('Battery Info:', $batteryInfo)
 </script>
 
-<Tooltip.Root>
-  <Tooltip.Trigger>
-    {#if charging}
-      <BatteryCharging />
-    {:else if level < 0.2}
-      <BatteryLow />
-    {:else if level < 0.6}
-      <BatteryMedium />
-    {:else}
-      <BatteryFull />
-    {/if}
-  </Tooltip.Trigger>
-  <Tooltip.Content>
-    <p>{level * 100}%</p>
-  </Tooltip.Content>
-</Tooltip.Root>
+<Tooltip.Provider>
+  <Tooltip.Root>
+    <Tooltip.Trigger>
+      {#if charging}
+        <BatteryCharging />
+      {:else if level < 0.2}
+        <BatteryLow />
+      {:else if level < 0.6}
+        <BatteryMedium />
+      {:else}
+        <BatteryFull />
+      {/if}
+    </Tooltip.Trigger>
+    <Tooltip.Content>
+      <p>{level * 100}%</p>
+    </Tooltip.Content>
+  </Tooltip.Root>
+</Tooltip.Provider>
