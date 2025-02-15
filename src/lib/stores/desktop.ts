@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { randomNumber } from '$lib/helper';
+import { randomNumber } from '$lib/utils/helper';
 import { writable } from 'svelte/store';
 import { debugLog } from './app';
 

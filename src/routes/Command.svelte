@@ -10,8 +10,6 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import {
 		Home,
 		User,
@@ -52,20 +50,20 @@
 		backgroundColor,
 		resetColors,
 		showHelp,
-		modifiedColors,
+		modifiedColors
 	} from '$lib/stores/app';
-	import Progress from '$lib/components/ui/progress/progress.svelte';
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
-	import { capitalize, hexToHsl } from '$lib/helper';
 	import {
+		capitalize,
+		hexToHsl,
 		isMobile,
 		reloadPage,
 		scrollToBottom,
 		scrollToTop,
 		toggleFullscreen
-	} from '$lib/browser';
+	} from '$lib/utils/index';
 	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
 	import confetti from 'canvas-confetti';
@@ -89,7 +87,6 @@
 		{ key: ['⌘', 'F'], description: 'Fullscreen' },
 		{ key: ['⌘', 'P'], description: 'Print' }
 	];
-
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
@@ -129,7 +126,7 @@
 		}
 
 		if (document.querySelector('.DocSearch-Modal')) {
-			console.log('DocSearch-Modal')
+			console.log('DocSearch-Modal');
 			return;
 		}
 
@@ -238,9 +235,13 @@
 		if (['Escape', '/'].includes(e.key) && isOverlayVisible) {
 			$showHelp = false;
 		}
-		
-    	const pagesWithSearchField = ['/redirects', '/playlists'] // immediately search on these pages
-		if (pagesWithSearchField.includes(page.url.pathname) && !isOverlayVisible && !['Enter', 'Tab', 'Escape'].includes(e.key)) {
+
+		const pagesWithSearchField = ['/redirects', '/playlists']; // immediately search on these pages
+		if (
+			pagesWithSearchField.includes(page.url.pathname) &&
+			!isOverlayVisible &&
+			!['Enter', 'Tab', 'Escape'].includes(e.key)
+		) {
 			const input = document.querySelector('input');
 			if (input && input.focus) {
 				input.focus();

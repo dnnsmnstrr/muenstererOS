@@ -6,7 +6,7 @@ import {
   USERNAME_SHORT,
   links
 } from '$lib/config'
-import type { Redirect } from './redirect'
+import type { Redirect } from './utils/redirect'
 
 // no url means the redirect will be built out of the default url and the name
 // name: the main string to match a redirect to

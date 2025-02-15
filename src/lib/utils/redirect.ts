@@ -1,4 +1,4 @@
-import { DEFAULT_URL } from "./config";
+import { DEFAULT_URL } from "../config";
 
 export type Redirect = {
   name: string;

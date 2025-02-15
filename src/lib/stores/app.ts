@@ -5,6 +5,8 @@ import { defaultColors } from '$lib/config';
 import { mode } from 'mode-watcher';
 
 let currentMode = get(mode);
+const DEFAULT_THEME = 'zinc';
+export const theme = writable(DEFAULT_THEME);
 export const primaryColor = cssVarStore('--primary', {
 	initialValue: defaultColors[currentMode || 'dark'].primary
 });

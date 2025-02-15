@@ -1,7 +1,7 @@
 <script>
 	import Loader from './../lib/components/Loader.svelte';
 	import { page } from '$app/stores';
-	import { getRedirect } from '$lib/redirect';
+	import { getRedirect } from '$lib/utils/index';
 	import { redirects } from '$lib/redirects';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';

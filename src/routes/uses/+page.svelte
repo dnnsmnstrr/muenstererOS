@@ -17,7 +17,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
-	import { capitalize } from '$lib/helper';
+	import { capitalize } from '$lib/utils/index';
 	import { RotateCcw } from 'lucide-svelte';
 	import SvgIcons from './icons';
 	import uses from './uses.json';;

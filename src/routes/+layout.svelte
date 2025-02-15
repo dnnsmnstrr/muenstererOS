@@ -6,12 +6,13 @@
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
 	import { page } from '$app/state';
-	import { debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
+	import { theme, debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
 	import { onMount } from 'svelte';
   import { Spring, Tween } from 'svelte/motion';
 
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
+	import { cn } from '$lib/utils.js';
   interface Props {
     children?: import('svelte').Snippet;
   }
@@ -147,7 +148,14 @@
     ? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
     : 'bg-[radial-gradient(#222222_1px,transparent_1px)]')
 
+
 </script>
+
+<svelte:head>
+	<style>
+    @import "/themes.css";
+  </style>
+</svelte:head>
 
 <ModeWatcher />
 <Toaster />
@@ -163,7 +171,7 @@
   </div>
 
 	<main
-    class="w-full h-max max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 {bgClass} [background-size:16px_16px]"
+    class={cn("w-full h-max max-h-screen flex-grow sm:px-16 pt-4 overflow-y-auto print:max-h-none inset-0 [background-size:16px_16px]", bgClass, `theme-${$theme}`)}
   >
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <div 

@@ -1,4 +1,4 @@
-import type { Redirect } from "$lib/redirect";
+import type { Redirect } from "$lib/utils/redirect";
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ fetch }) {

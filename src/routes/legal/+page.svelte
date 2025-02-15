@@ -8,7 +8,7 @@
   import * as Card from "$lib/components/ui/card";
 	import { setContext } from 'svelte';
 	import { page } from '$app/stores';
-	import { waitForElementToDisplay } from '$lib/browser';
+	import { waitForElementToDisplay } from '$lib/utils/browser';
 
   setContext<TypographyContext>('typography', {
     renderHeadingAnchors: true,

@@ -3,7 +3,7 @@
 
 	import * as Card from '$lib/components/ui/card';
 	import { breakpoints } from '$lib/config';
-	import { capitalize } from '$lib/helper';
+	import { capitalize } from '$lib/utils/index';
 	import { Info } from 'lucide-svelte';
 	import { SPOTIFY_PLAYLIST_LINK, type PlaylistItem } from './+page.svelte';
 

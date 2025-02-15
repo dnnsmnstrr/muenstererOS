@@ -5,7 +5,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Table from '$lib/components/ui/table';
   import * as Card from "$lib/components/ui/card";
-	import { getRedirectURL, type Redirect } from '$lib/redirect';
+	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
 
   let { data } = $props();
   function handleRedirect(redirect: Redirect) {

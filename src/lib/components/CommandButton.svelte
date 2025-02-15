@@ -4,7 +4,7 @@
   import {
     Search
   } from "lucide-svelte";
-	import { isAppleDevice } from '$lib/browser';
+	import { isAppleDevice } from '$lib/utils/index';
 </script>
 
 <p class="text-sm ">

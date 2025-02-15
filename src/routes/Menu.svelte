@@ -16,7 +16,7 @@
 		printPage,
 		reloadPage,
 		toggleFullscreen
-	} from '$lib/browser';
+	} from '$lib/utils/index';
 	import { WEBSITE_NAME, links } from '$lib/config';
 	import { toggleMode } from 'mode-watcher';
 	import { showHelp } from '$lib/stores/app';

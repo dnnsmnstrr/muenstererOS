@@ -12,13 +12,16 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import { Label } from '$lib/components/ui/label';
 	import { mode, setMode, resetMode } from 'mode-watcher';
-	import { debug } from '$lib/stores/app';
-	import { Bug } from 'lucide-svelte';
+	import { debug, theme as themeStore } from '$lib/stores/app';
+	import { Bug, Check } from 'lucide-svelte';
 	import { Separator } from '$lib/components/ui/separator';
 	import AnimatedToggle from '$lib/components/AnimatedToggle.svelte';
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { themes } from '$lib/utils/themes';
+	import { Button } from '$lib/components/ui/button';
+	import { cn } from '$lib/utils';
 
   let { data }: { data: { form?: SuperValidated<Infer<SettingsSchema>> } } =
     $props();
@@ -56,8 +59,32 @@
           </div>
         </RadioGroup.Root>
 		</Form.Control>
+		
 	</Form.Field>
 	<Separator class="my-6"/>
+	<div class="grid grid-cols-3 gap-2">
+		{#each themes as theme (theme.name)}
+			{@const isActive = $themeStore === theme.name}
+			<Button
+				variant="outline"
+				size="sm"
+				onclick={() => {
+					$themeStore = theme.name;
+				}}
+				class={cn("justify-start", isActive && "border-primary border-2")}
+				style="--theme-primary: hsl({theme.activeColor[$mode ?? 'dark']})"
+			>
+				<span
+					class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]"
+				>
+					{#if isActive}
+						<Check class="h-4 w-4 text-white" />
+					{/if}
+				</span>
+				{theme.label}
+			</Button>
+		{/each}
+	</div>
 	<Form.Field {form} name="debug">
     <Form.Control>
       <div class="flex flex-row items-start space-x-3 space-y-0">
