@@ -88,7 +88,7 @@
 						<p>{redirect.description}</p>
 					{/if}
 
-          <p class="pt-2 overflow-hidden overflow-x-auto font-mono text-sm text-gray-500">
+          <p class="pt-3 pb-1 overflow-hidden overflow-x-auto font-mono text-sm text-gray-500">
             {redirect.url || '/' + redirect.name.toLocaleLowerCase()}
           </p>
 				</div>
