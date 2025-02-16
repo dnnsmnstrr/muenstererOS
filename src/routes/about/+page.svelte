@@ -23,6 +23,9 @@
         This is page was created by <Button href={links.cv} size="sm" variant="outline" class="ml-1 mt-2">{OWNER_NAME}</Button>
         <br>
         <br>
+        Check out the <Link href="/log">Changelog</Link> to see how it has evolved over time.
+        <br>
+        <br>
   
         It is built with <Link href="https://kit.svelte.dev" target="_blank">SvelteKit</Link>
         and <Link href="https://www.shadcn-svelte.com/" target="_blank">shadcn-svelte</Link>. Hosting is provided by <Link href="https://vercel.com/">Vercel</Link>
