@@ -3,7 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import {
-    EMAIL
+    EMAIL,
+    links,
 } from '../../../lib/config'
 
 const DEFAULT_SIZE = 200;
@@ -16,11 +17,16 @@ export const GET: RequestHandler = async ({ url }) => {
     let modifier = '';
     let fileType = 'jpeg';
 
+    // external services
     if (url.searchParams.has('gravatar')) {
         const gravatarUrl = createGravatarUrl(EMAIL, url.searchParams.get('size') ? parseInt(url.searchParams.get('size')!) : DEFAULT_SIZE);
         throw redirect(302, gravatarUrl);
     }
+    if (url.searchParams.has('github')) {
+        throw redirect(302, links.github + '.png');
+    }
 
+    // local files
     if (url.search === '?square') {
         modifier = '-square';
     }
