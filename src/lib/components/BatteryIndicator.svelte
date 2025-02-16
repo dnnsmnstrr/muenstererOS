@@ -12,8 +12,7 @@
   let {
       charging,
       level
-    } = $derived($batteryInfo
-  )
+    } = $derived($batteryInfo)
   debugLog('Battery Info:', $batteryInfo)
 </script>
 
@@ -31,7 +30,7 @@
       {/if}
     </Tooltip.Trigger>
     <Tooltip.Content>
-      <p>{level * 100}%</p>
+      <p>{Math.round(level * 100)}%</p>
     </Tooltip.Content>
   </Tooltip.Root>
 </Tooltip.Provider>
