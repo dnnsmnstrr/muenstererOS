@@ -237,9 +237,9 @@ export const redirects: Redirect[] = [
 	// Work
 	{
 		name: 'work',
-		description: 'The website of the company I currently work at',
-		url: 'https://hpm.agency',
-		aliases: ['hpm', 'agency', '🏢']
+		description: 'Digital Agency I currently work at',
+		url: 'https://3st.de',
+		aliases: ['3st', 'dreist', 'agency', '🏢']
 	},
 	{
 		name: 'tesora',
