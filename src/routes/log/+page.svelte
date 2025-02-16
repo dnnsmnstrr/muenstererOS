@@ -1,46 +1,24 @@
 <script lang="ts">
 	import { Heading } from '$lib/components/typography';
-
+	import changes from './changes.json';
 	type ChangeLogEntry = {
 		date: string;
 		title: string;
 		description: string;
 	};
-
-	const changelog: ChangeLogEntry[] = [
-		{
-			date: '2025-02-15',
-			title: 'Migrated to Svelte 5',
-			description: 'The project was successfully migrated to Svelte 5 and the next version of shadcn-svelte.'
-		},
-        {
-			date: '2024-12-24',
-			title: 'Playlists',
-			description: 'Created a page for my Spotify playlists over the Chrismas holidays.'
-		},
-        {
-			date: '2024-06-16',
-			title: 'muensterer.tech',
-			description: 'Pointed my domain to this website.'
-		},
-        {
-			date: '2024-02-05',
-			title: 'Initial Version',
-			description: 'Created a new personal website with SvelteKit.'
-		}
-		// Add more entries here
-	];
+	const changelog: ChangeLogEntry[] = changes;
 </script>
 
 <svelte:head>
 	<title>Changelog</title>
 </svelte:head>
 
-<div class="container">
+<div class="container mx-auto p-4">
 	<Heading>Changelog</Heading>
-	<ul>
-		{#each changelog as entry}
-			<li class="mb-4">
+	<ul class="relative border-l border-foreground mt-8 ml-2">
+		{#each changelog as entry, i}
+			<li class="mb-10 ml-4 -translate-y-4 last:mb-0">
+				<div class="absolute w-3 h-3 bg-primary rounded-full -translate-x-[22px] translate-y-2"></div>
 				<h2 class="text-lg font-bold">{entry.title}</h2>
 				<p class="text-sm text-gray-500">{entry.date}</p>
 				<p>{entry.description}</p>
@@ -48,11 +26,3 @@
 		{/each}
 	</ul>
 </div>
-
-<style>
-	.container {
-		max-width: 800px;
-		margin: 0 auto;
-		padding: 1rem;
-	}
-</style>
