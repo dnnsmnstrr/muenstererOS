@@ -15,10 +15,11 @@
 
 	import { Heading } from '$lib/components/typography';
 	import * as Card from '$lib/components/ui/card';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Input } from '$lib/components/ui/input';
 	import * as Select from '$lib/components/ui/select';
 	import { capitalize } from '$lib/utils/index';
-	import { RotateCcw } from 'lucide-svelte';
+	import { RotateCcw, HelpCircle } from 'lucide-svelte';
 	import SvgIcons from './icons';
 	import uses from './uses.json';;
 
@@ -31,14 +32,14 @@
 	let filteredUses = $derived(uses.filter((item) => {
         const lowerCaseQuery = searchQuery.toLowerCase();
 		const matchesSearch =
-        item.name.toLowerCase().includes(lowerCaseQuery) ||
-        item.description?.toLowerCase().includes(lowerCaseQuery) ||
-        item.tags?.some((tag) => tag.includes(lowerCaseQuery));
-        
+			item.name.toLowerCase().includes(lowerCaseQuery) ||
+			item.description?.toLowerCase().includes(lowerCaseQuery) ||
+			item.tags?.some((tag) => tag.includes(lowerCaseQuery));
+
 		const matchesCategory = !selectedCategory || item.category === selectedCategory;
-        
+
 		const matchesTags = !selectedTag || item.tags?.includes(selectedTag);
-        
+
 		return matchesSearch && matchesCategory && matchesTags;
 	}));
     let filteredTags = $derived(allTags.filter(tag => {
@@ -70,14 +71,31 @@
 </svelte:head>
 
 <div class="container">
-	<Heading>Uses</Heading>
+	<div class="flex items-center mb-6">
+		<Heading class='mb-0'>Uses</Heading>
+		<Tooltip.Provider>
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<a class="ml-2 flex justify-center" href="https://uses.tech" target='_blank'>
+						<HelpCircle />
+					</a>
+				</Tooltip.Trigger>
+				<Tooltip.Content>
+					<p>A list of software and devices I use. Click for more info</p>
+				</Tooltip.Content>
+			</Tooltip.Root>
+		</Tooltip.Provider>
+	</div>
 
 	<div class="mb-8 space-y-4">
 		<div class="flex flex-col items-center gap-4 sm:flex-row">
 			<Input placeholder="Search..." type="search" bind:value={searchQuery} />
 
 			<Select.Root
-                selected={{value: selectedCategory, label: capitalize(selectedCategory || 'All Categories')}}
+				selected={{
+					value: selectedCategory,
+					label: capitalize(selectedCategory || 'All Categories')
+				}}
 				onSelectedChange={(selected) => (selectedCategory = String(selected?.value) || '')}
 			>
 				<Select.Trigger class="min-w-40">
@@ -131,7 +149,7 @@
         </div>
     {/if}
 
-	<div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+	<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 		{#each filteredUses as item}
 			<Card.Root>
 				<Card.Content class="pt-6 h-full flex flex-col justify-between">
@@ -162,17 +180,30 @@
                             {/if}
                         </div>
 
-                        {#if item.url}
-                            <a
-                                href={item.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="text-sm hover:underline"
-                            >
-                                Learn More →
-                            </a>
-                        {/if}
-                    </div>
+					<div>
+						<div class="-ml-2 mb-4 flex flex-wrap justify-between gap-2">
+							{#if item.tags}
+								<div class="flex flex-wrap gap-2">
+									{#each item.tags as tag}
+										<span class="rounded-full bg-primary/10 px-2 py-1 text-sm">
+											{capitalize(tag)}
+										</span>
+									{/each}
+								</div>
+							{/if}
+						</div>
+
+						{#if item.url}
+							<a
+								href={item.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="text-sm hover:underline"
+							>
+								Learn More →
+							</a>
+						{/if}
+					</div>
 				</Card.Content>
 			</Card.Root>
 		{/each}

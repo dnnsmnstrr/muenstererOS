@@ -72,6 +72,14 @@
         "image": "Github"
     },
     {
+        "name": "GitLab",
+        "description": "GitHub alternative for when the enshittification takes over",
+        "url": "https://gitlab.com",
+        "category": "services",
+        "tags": ["git", "web"],
+        "image": "Gitlab"
+    },
+    {
         "name": "JavaScript",
         "description": "My favorite programming language (especially with TypeScript)",
         "url": "https://www.javascript.com",
