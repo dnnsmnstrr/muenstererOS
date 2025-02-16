@@ -4,12 +4,11 @@
         "description": "I cannot live without this application",
         "url": "https://raycast.com",
         "category": "software",
-        "tags": ["productivity"],
-        "image": "Raycast"
+        "tags": ["productivity"]
     },
     {
         "name": "BetterTouchTool",
-        "description": "What can't be done with Raycast, I do with BetterTouchTool",
+        "description": "What can't be done with Raycast, I do with BTT",
         "url": "https://folivora.ai",
         "category": "software",
         "tags": ["productivity"],
@@ -20,32 +19,28 @@
         "description": "Music is Life!",
         "url": "https://www.spotify.com",
         "category": "software",
-        "tags": ["music"],
-        "image": "Spotify"
+        "tags": ["music"]
     },
     {
-        "name": "Arc Browser",
+        "name": "Arc",
         "description": "My current favorite browser",
         "url": "https://arc.net",
         "category": "software",
-        "tags": ["web"],
-        "image": "Arc"
+        "tags": ["web"]
     },
     {
         "name": "Obsidian",
         "description": "My digital brain",
         "url": "https://obsidian.md",
         "category": "software",
-        "tags": ["productivity"],
-        "image": "Obsidian"
+        "tags": ["productivity"]
     },
     {
         "name": "Bitwarden",
         "description": "Default password manager",
         "url": "https://bitwarden.com",
         "category": "software",
-        "tags": ["security", "productivity"],
-        "image": "Bitwarden"
+        "tags": ["security", "productivity"]
     },
     {
         "name": "Visual Studio Code",
@@ -68,44 +63,38 @@
         "description": "Star all the things!!!",
         "url": "https://github.com/dnnsmnstrr",
         "category": "development",
-        "tags": ["web"],
-        "image": "Github"
+        "tags": ["web"]
     },
     {
         "name": "GitLab",
-        "description": "GitHub alternative for when the enshittification takes over",
+        "description": "GitHub alternative",
         "url": "https://gitlab.com",
         "category": "services",
-        "tags": ["git", "web"],
-        "image": "Gitlab"
+        "tags": ["git", "web"]
     },
     {
         "name": "JavaScript",
         "description": "My favorite programming language (especially with TypeScript)",
-        "url": "https://www.javascript.com",
         "category": "development",
-        "tags": ["javascript"],
-        "image": "JS"
+        "tags": ["javascript"]
     },
     {
         "name": "SvelteKit",
         "description": "This website is built with Svelte and SvelteKit!",
         "url": "https://kit.svelte.dev",
         "category": "development",
-        "tags": ["javascript"],
-        "image": "SvelteKit"
+        "tags": ["javascript"]
     },
     {
         "name": "React",
         "description": "A JavaScript library for building user interfaces",
         "url": "https://reactjs.org",
         "category": "development",
-        "tags": ["javascript"],
-        "image": "React"
+        "tags": ["javascript"]
     },
     {
         "name": "iPhone 13 Mini",
-        "description": "The perfect size iPhone",
+        "description": "The perfect size iPhone!",
         "url": "https://support.apple.com/de-de/111873",
         "category": "hardware",
         "tags": ["apple", "smartphone"],
@@ -121,7 +110,7 @@
     },
     {
         "name": "AirTag",
-        "description": "A small Bluetooth tracking device from Apple",
+        "description": "So I always know where my keys are",
         "url": "https://www.apple.com/airtag/",
         "category": "hardware",
         "tags": ["apple", "smartphone"],
@@ -137,7 +126,7 @@
     },
     {
         "name": "Steam Deck",
-        "description": "A handheld gaming PC developed by Valve Corporation",
+        "description": "My main gaming device",
         "url": "https://www.steamdeck.com/en/deck",
         "category": "hardware",
         "tags": ["gaming"],
@@ -161,7 +150,7 @@
     },
     {
         "name": "Beats Studio Buds+",
-        "description": "Wireless earbuds with active noise cancellation",
+        "description": "I refuse to buy white AirPods",
         "url": "https://www.beatsbydre.com/earbuds/studio-buds-plus-wireless-noise-cancelling/MQLK3/transparent",
         "category": "hardware",
         "tags": ["music", "apple"],

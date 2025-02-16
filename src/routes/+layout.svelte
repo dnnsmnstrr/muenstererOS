@@ -13,6 +13,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
   interface Props {
     children?: import('svelte').Snippet;
   }
@@ -181,7 +182,9 @@
       class="absolute inset-0 top-20 pointer-events-none transition-[background-position] duration-100"
       style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode ? '255, 255, 255' : '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current.x}px; --y: {cursor.current.y}px;">
     </div>
-    {@render children?.()}
-	</main>
+    <Tooltip.Provider>
+      {@render children?.()}
+    </Tooltip.Provider>
+    </main>
 	<Footer />
 </div>
