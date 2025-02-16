@@ -52,6 +52,7 @@ export const descriptions = [
     { name: '🎧 Music enthusiast', href: links.spotify},
     { name: '📺 Watcher of Movies', href: links.imdb},
     { name: '🧡 Printer of Objects', href: links.printables},
+    { name: '🌟 Stargazer', href: links.github + '?tab=stars'},
 ];
 
 export const defaultColors = {
