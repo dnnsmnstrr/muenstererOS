@@ -58,6 +58,12 @@ const pages = [
         path: '/playlists',
         lastUpdated: '2025-01-31',
     },
+    {
+        name: 'Where',
+        content: 'Where I am',
+        path: '/where',
+        lastUpdated: '2025-02-20'
+    }
 ]
 
 const name = 'Dennis Muensterer';

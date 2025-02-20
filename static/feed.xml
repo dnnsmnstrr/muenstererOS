@@ -3,7 +3,7 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2025-02-20T21:09:17.704Z</updated>
+    <updated>2025-02-20T21:42:29.687Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
@@ -50,6 +50,17 @@
         <content type="html">
             <![CDATA[
                 <p>My favorite playlists</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Where</title>
+        <link href="https://muensterer.tech/where"/>
+        <id>https://muensterer.tech[object Object]</id>
+        <updated>2025-02-20</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Where I am</p>
             ]]>
         </content>
     </entry>
