@@ -4,6 +4,7 @@
 		href?: string;
 		sub?: BookmarkItem[];
 		icon?: ConstructorOfATypedSvelteComponent;
+		hidden?: boolean;
 	};
 </script>
 
@@ -159,7 +160,9 @@
 						<Menubar.SubTrigger>{bookmark.name}</Menubar.SubTrigger>
 						<Menubar.SubContent>
 							{#each bookmark.sub as bookmarkItem}
-								<Menubar.Link {...bookmarkItem} />
+								{#if !bookmarkItem.hidden}
+									<Menubar.Link {...bookmarkItem} />
+								{/if}
 							{/each}
 						</Menubar.SubContent>
 					</Menubar.Sub>

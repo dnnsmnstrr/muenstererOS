@@ -15,6 +15,7 @@
 	import { cn } from '$lib/utils.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { LayoutGrid, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
+	import type { BookmarkItem } from './Menu.svelte';
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -157,12 +158,12 @@
 			: 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
 	);
 
-	const pages = [
+	const pages: BookmarkItem[] = [
 		{ name: 'Uses', icon: TabletSmartphone },
 		{ name: 'Projects', icon: LayoutGrid },
 		{ name: 'Playlists', icon: ListMusic },
 		{ name: 'Redirects', icon: Signpost },
-    { name: 'Slashes', icon: Slash },
+    { name: 'Slashes', icon: Slash, hidden: true },
 	];
 </script>
 
