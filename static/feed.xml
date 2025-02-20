@@ -3,98 +3,53 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2025-02-20T20:44:34.023Z</updated>
+    <updated>2025-02-20T21:09:17.704Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
     <entry>
-        <title></title>
-        <link href="https://muensterer.tech/"/>
-        <id>https://muensterer.tech/</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
-        <content type="html">
-            <![CDATA[
-                <p></p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>about</title>
+        <title>About</title>
         <link href="https://muensterer.tech/about"/>
-        <id>https://muensterer.tech/about</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
+        <id>https://muensterer.tech[object Object]</id>
+        <updated>2025-01-01</updated>
         <content type="html">
             <![CDATA[
-                <p>about</p>
+                <p>The about page</p>
             ]]>
         </content>
     </entry>
     <entry>
-        <title>contact</title>
+        <title>Contact</title>
         <link href="https://muensterer.tech/contact"/>
-        <id>https://muensterer.tech/contact</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
+        <id>https://muensterer.tech[object Object]</id>
+        <updated>2025-01-01</updated>
         <content type="html">
             <![CDATA[
-                <p>contact</p>
+                <p>How to contact me</p>
             ]]>
         </content>
     </entry>
     <entry>
-        <title>settings</title>
-        <link href="https://muensterer.tech/settings"/>
-        <id>https://muensterer.tech/settings</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
-        <content type="html">
-            <![CDATA[
-                <p>settings</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>legal</title>
-        <link href="https://muensterer.tech/legal"/>
-        <id>https://muensterer.tech/legal</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
-        <content type="html">
-            <![CDATA[
-                <p>legal</p>
-            ]]>
-        </content>
-    </entry>
-    <!--  pages -->
-    <entry>
-        <title>uses</title>
+        <title>Uses</title>
         <link href="https://muensterer.tech/uses"/>
-        <id>https://muensterer.tech/uses</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
+        <id>https://muensterer.tech[object Object]</id>
+        <updated>2025-02-01</updated>
         <content type="html">
             <![CDATA[
-                <p>uses</p>
+                <p>The tools I use</p>
             ]]>
         </content>
     </entry>
     <entry>
-        <title>playlists</title>
+        <title>Playlists</title>
         <link href="https://muensterer.tech/playlists"/>
-        <id>https://muensterer.tech/playlists</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
+        <id>https://muensterer.tech[object Object]</id>
+        <updated>2025-01-31</updated>
         <content type="html">
             <![CDATA[
-                <p>playlists</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>projects</title>
-        <link href="https://muensterer.tech/projects"/>
-        <id>https://muensterer.tech/projects</id>
-        <updated>2025-02-20T20:44:34.024Z</updated>
-        <content type="html">
-            <![CDATA[
-                <p>projects</p>
+                <p>My favorite playlists</p>
             ]]>
         </content>
     </entry>

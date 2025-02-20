@@ -33,6 +33,33 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 fs.writeFileSync(path.join(__dirname, '..', 'static', 'sitemap.xml'), sitemap);
 console.log('Sitemap generated!');
 
+const pages = [
+    {
+        name: 'About',
+        content: 'The about page',
+        path: '/about',
+        lastUpdated: '2025-01-01',
+    },
+    {
+        name: 'Contact',
+        content: 'How to contact me',
+        path: '/contact',
+        lastUpdated: '2025-01-01',
+    },
+    {
+        name: 'Uses',
+        content: 'The tools I use',
+        path: '/uses',
+        lastUpdated: '2025-02-01',
+    },
+    {
+        name: 'Playlists',
+        content: 'My favorite playlists',
+        path: '/playlists',
+        lastUpdated: '2025-01-31',
+    },
+]
+
 const name = 'Dennis Muensterer';
 const feedAtom = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -44,18 +71,15 @@ const feedAtom = `<?xml version="1.0" encoding="utf-8"?>
     <author>
         <name>${name}</name>
     </author>
-    ${routes.map(route => route.startsWith('//') ? 
-        `
-    <!-- ${route.replace('//', '')} -->`
-    : `
+    ${pages.map(page => `
     <entry>
-        <title>${route.replace('/', '')}</title>
-        <link href="${baseUrl}${route}"/>
-        <id>${baseUrl}${route}</id>
-        <updated>${new Date().toISOString()}</updated>
+        <title>${page.name}</title>
+        <link href="${baseUrl}${page.path}"/>
+        <id>${baseUrl}${page}</id>
+        <updated>${page.lastUpdated || new Date().toISOString()}</updated>
         <content type="html">
             <![CDATA[
-                <p>${route.replace('/', '')}</p>
+                <p>${page.content}</p>
             ]]>
         </content>
     </entry>`).join('')}
