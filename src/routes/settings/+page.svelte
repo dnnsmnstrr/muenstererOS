@@ -7,7 +7,7 @@
 <div class="container">
   <Heading>Settings</Heading>
 
-  <Card.Root>
+  <Card.Root class="mb-40 max-w-screen-sm">
     <Card.Header>
       <Card.Title>
         Look & Feel

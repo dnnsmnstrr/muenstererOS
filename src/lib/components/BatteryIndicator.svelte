@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { debugLog } from "$lib/stores/app";
-  import {
-    BatteryLow,
-    BatteryMedium,
-    BatteryFull,
-    BatteryCharging,
-  } from "lucide-svelte";
+  import { debugLog } from "$lib/stores/app";
   import * as Tooltip from "$lib/components/ui/tooltip";
 	import { battery } from "@sveltelegos-blue/svelte-legos";
+	import BatteryCharging from "./icons/battery-charging.svelte";
+  import BatteryLow from './icons/battery-low.svelte';
+	import BatteryMedium from "./icons/battery-medium.svelte";
+	import BatteryFull from "./icons/battery-full.svelte";
   const batteryInfo = battery();
   let {
       charging,

@@ -22,7 +22,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 
-  let { data }: { data: { form?: SuperValidated<Infer<SettingsSchema>> } } =
+  let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } =
     $props();
 	const form = superForm(data?.form || { debug: false, mode: 'system'}, {
 		validators: zodClient(settingsSchema)
@@ -60,8 +60,8 @@
 				</RadioGroup.Root>
 			</div>
 		</Form.Control>
-		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-			<h2 class="col-span-1 sm:col-span-2 md:col-span-3">Theme</h2>
+		<div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+			<h2 class="col-span-2 md:col-span-3 -mt-2">Theme</h2>
 			{#each themes as theme (theme.name)}
 				{@const isActive = $themeStore === theme.name}
 				<Button
@@ -70,7 +70,7 @@
 					onclick={() => {
 						$themeStore = theme.name;
 					}}
-					class={cn("justify-start", isActive && "border-primary border-2")}
+					class={cn("justify-start truncate", isActive && "border-primary border-2")}
 					style="--theme-primary: hsl({theme.activeColor[$mode ?? 'dark']})"
 				>
 					<span
