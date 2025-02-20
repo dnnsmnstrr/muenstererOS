@@ -324,5 +324,6 @@ export const redirects: Redirect[] = [
 		url: 'github/api/edit/master/pages/api/redirect/redirects.js',
 		aliases: ['↪️', '↩️', '🔃', 'edit-redirect']
 	}, //link to these redirects
+	{ name: 'feed', url: '/feed.xml', aliases: ['rss', '📰', 'atom', 'subscribe'] },
 	{ name: 'help', aliases: ['?', 'available', 'urls', 'list', '🆘', '❔', '❓'] }
 ];
