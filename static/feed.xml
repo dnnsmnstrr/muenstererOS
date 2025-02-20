@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Dennis Muensterer</title>
+    <link href="https://muensterer.tech/feed.xml" rel="self"/>
+    <link href="https://muensterer.tech"/>
+    <updated>2025-02-20T20:44:34.023Z</updated>
+    <id>https://muensterer.tech/</id>
+    <author>
+        <name>Dennis Muensterer</name>
+    </author>
+    
+    <entry>
+        <title></title>
+        <link href="https://muensterer.tech/"/>
+        <id>https://muensterer.tech/</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p></p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>about</title>
+        <link href="https://muensterer.tech/about"/>
+        <id>https://muensterer.tech/about</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>about</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>contact</title>
+        <link href="https://muensterer.tech/contact"/>
+        <id>https://muensterer.tech/contact</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>contact</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>settings</title>
+        <link href="https://muensterer.tech/settings"/>
+        <id>https://muensterer.tech/settings</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>settings</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>legal</title>
+        <link href="https://muensterer.tech/legal"/>
+        <id>https://muensterer.tech/legal</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>legal</p>
+            ]]>
+        </content>
+    </entry>
+    <!--  pages -->
+    <entry>
+        <title>uses</title>
+        <link href="https://muensterer.tech/uses"/>
+        <id>https://muensterer.tech/uses</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>uses</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>playlists</title>
+        <link href="https://muensterer.tech/playlists"/>
+        <id>https://muensterer.tech/playlists</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>playlists</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>projects</title>
+        <link href="https://muensterer.tech/projects"/>
+        <id>https://muensterer.tech/projects</id>
+        <updated>2025-02-20T20:44:34.024Z</updated>
+        <content type="html">
+            <![CDATA[
+                <p>projects</p>
+            ]]>
+        </content>
+    </entry>
+</feed>
