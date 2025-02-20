@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    
+    <url>
+        <loc>https://muensterer.tech/</loc>
+    </url>
+    <url>
+        <loc>https://muensterer.tech/about</loc>
+    </url>
+    <url>
+        <loc>https://muensterer.tech/contact</loc>
+    </url>
+    <url>
+        <loc>https://muensterer.tech/settings</loc>
+    </url>
+    <url>
+        <loc>https://muensterer.tech/legal</loc>
+    </url>
+    <!--  pages -->
+    <url>
+        <loc>https://muensterer.tech/uses</loc>
+    </url>
+    <url>
+        <loc>https://muensterer.tech/playlists</loc>
+    </url>
+    <url>
+        <loc>https://muensterer.tech/projects</loc>
+    </url>
+</urlset>

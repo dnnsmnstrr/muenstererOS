@@ -295,10 +295,6 @@
 		loadingProgress.set(loading ? 100 : 0);
 	});
 
-	$effect(() => {
-		console.log($isCommandActive, query);
-	});
-
 	const enrichLink = (link: CommandData): CommandData => {
 		const action =
 			link.action ||

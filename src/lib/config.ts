@@ -38,6 +38,7 @@ export const links = {
 	reddit: 'https://www.reddit.com/user/themissing_link',
 	routinehub: 'https://routinehub.co/user/' + USERNAME_SHORT,
 	imdb: 'https://www.imdb.com/user/ur31201407',
+	email: EMAIL,
 	mailto: 'mailto:' + EMAIL,
     cv: "https://cv.muensterer.tech"
 } as const;
