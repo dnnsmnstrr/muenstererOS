@@ -13,7 +13,7 @@
 	}
 
 	let { bookmarks }: Props = $props();
-  let open = $state(false);
+	let open = $state(false);
 </script>
 
 <Sheet.Root {open} onOpenChange={(value) => (open = value)}>
@@ -35,24 +35,20 @@
 						{#if Array.isArray(bookmark)}
 							{#each bookmark as bookmarkItem}
 								<ul>
-									<BookmarkButton
-										bookmark={bookmarkItem}
-										onclick={() => (open = false)}
-									/>
+									<BookmarkButton bookmark={bookmarkItem} onclick={() => (open = false)} />
 								</ul>
 							{/each}
-              {#if index < bookmarks.length - 1}
-                <Separator />
-              {/if}
+							{#if index < bookmarks.length - 1}
+								<Separator />
+							{/if}
 						{:else if bookmark.sub}
 							<Heading depth={4}>{bookmark.name}</Heading>
 							{#each bookmark.sub as bookmarkItem}
-								<BookmarkButton
-									bookmark={bookmarkItem}
-									onclick={() => (open = false)}
-								/>
+								{#if !bookmarkItem.hidden}
+									<BookmarkButton bookmark={bookmarkItem} onclick={() => (open = false)} />
+								{/if}
 							{/each}
-              <Separator />
+							<Separator />
 						{:else}
 							<BookmarkButton {bookmark} onclick={() => (open = false)} />
 						{/if}
