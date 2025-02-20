@@ -27,5 +27,5 @@
         <span class="text-xs text-gray-500">(roughly)</span>
     </Heading>
 
-    <Card class="h-96" id="map" />
+    <Card class="h-96 z-0" id="map" />
 </div>

@@ -74,7 +74,14 @@
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
+	import type { BookmarkItem } from './Menu.svelte';
 
+	interface Props {
+		pages?: BookmarkItem[];
+	}
+
+	let { pages = [] }: Props = $props();
+	
 	let loading = false;
 	let query = $state('');
 	let lastKey = '';
@@ -299,10 +306,13 @@
 		const action =
 			link.action ||
 			function () {
+				// if (!link.url && !link.name) {
+				// 	return debugLog('Cannot open link for ' + link.name);
+				// }
+				debugLog(`Opening link to ${link.name}${link.url ? ' at ' + link.url : ''}`);
 				if (!link.url) {
-					return debugLog('Cannot open link for ' + link.name);
+					return goto(link.name.toLowerCase());
 				}
-				debugLog(`Opening link to ${link.name} (${link.url})`);
 				if (link.url.startsWith('/')) {
 					goto(link.url);
 					// window.location.href = link.url
@@ -328,6 +338,8 @@
 		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, url: links.cv }
 	].map(enrichLink);
 
+	const enrichedPages = pages.map(enrichLink);
+	console.log(enrichedPages)
 	function toggleDebug() {
 		$debug = !$debug;
 		$isCommandActive = false;
@@ -351,11 +363,7 @@
 		navigation: [
 			{ name: 'Home', icon: Home, url: '/' },
 			{ name: 'About', icon: User, url: '/about' },
-			{ name: 'Playground', icon: Shapes, url: '/playground' },
-			{ name: 'Redirects', icon: Signpost, url: '/redirects' },
-			{ name: 'Projects', icon: LayoutGrid, url: '/projects' },
-			{ name: 'Playlists', icon: ListMusic, url: '/playlists' },
-			{ name: 'Uses', icon: Monitor, url: '/uses' },
+			...pages,
 			{
 				name: 'Search Zettelkasten',
 				keywords: ['notes', 'find', 'information', 'knowledge', 'second brain'],
@@ -376,8 +384,11 @@
 			{ name: 'Go Back', icon: ArrowLeft, action: () => window.history.back() },
 			{ name: 'Reload', icon: ArrowLeft, action: reloadPage }
 		]
-			.filter((link) => page.url.pathname !== link.url)
-			.map(enrichLink),
+		.map(enrichLink)
+		.filter((link) => {
+			// remove current page from navigation
+			return page.url.pathname !== link.url;
+		}),
 		links: externalLinks,
 		system: [
 			{

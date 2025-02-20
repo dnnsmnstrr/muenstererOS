@@ -18,6 +18,13 @@
 	import { links } from '$lib/config';
 	import MobileMenu from './MobileMenu.svelte';
 	import logo from '$lib/assets/muenstererOS.png';
+
+
+	interface Props {
+		pages?: BookmarkItem[];
+	}
+
+	let { pages = [] }: Props = $props();
 	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = [
 		[
 			{ name: 'Home', href: '/', icon: Home },
@@ -25,12 +32,7 @@
 		],
 		{
 			name: 'Pages',
-			sub: [
-				{ name: 'Uses', icon: TabletSmartphone },
-				{ name: 'Projects', icon: LayoutGrid },
-				{ name: 'Playlists', icon: ListMusic },
-				{ name: 'Redirects', icon: Signpost }
-			]
+			sub: pages
 		},
 		{
 			name: 'Social',
