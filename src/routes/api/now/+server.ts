@@ -12,7 +12,7 @@ export async function GET() {
         }
 
         const data = await response.json();
-        return json(data);
+        return json({ ...data, gistId, gistUrl });
     } catch (error) {
         return json({ error }, { status: 500 });
     }
