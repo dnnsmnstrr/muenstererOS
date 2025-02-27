@@ -5,7 +5,6 @@
 
     let { data }: PageProps = $props();
     let { nowData } = data;
-    console.log(nowData)
 </script>
 
 <div class="container">
@@ -15,13 +14,37 @@
 
     <Card>
         <p>
-            {#if nowData}
-                {#each Object.entries(nowData) as [key, value]}
-                    <strong>{key}:</strong> {value}<br>
-                {/each}
-            {:else}
-                Loading...
-            {/if}
+            <strong>Status:</strong> {nowData.status}
         </p>
+        <p>
+            <strong>Location:</strong> {nowData.location}
+        </p>
+        <p>
+            <strong>Playlist:</strong> <a href={`https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">{nowData.playlist.name}</a>
+        </p>
+        <div>
+            <strong>Activities:</strong>
+            <ul>
+                {#each nowData.activities as activity}
+                    <li>{activity}</li>
+                {/each}
+            </ul>
+        </div>
+        <div>
+            <strong>Plans:</strong>
+            <ul>
+                {#each nowData.plans as plan}
+                    <li>{plan}</li>
+                {/each}
+            </ul>
+        </div>
+        <div>
+            <strong>Projects:</strong>
+            <ul>
+                {#each nowData.projects as project}
+                    <li>{@html project}</li>
+                {/each}
+            </ul>
+        </div>
     </Card>
 </div>
