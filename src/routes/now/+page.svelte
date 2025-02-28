@@ -29,24 +29,26 @@
         </Link>
 	</Heading>
 
-	<div class="grid grid-cols-12 gap-4 grid-rows-8 sm:grid-rows-6 md:grid-rows-3">
+	<div class="grid grid-cols-12 gap-4 grid-rows-5 md:grid-rows-3">
 		<Card class="p-4 col-start-1 row-start-1 col-span-12 sm:col-span-8 row-span-1">
 			<Heading depth={2} class="text-xl mb-4">
-				<InfoIcon class="inline-block mr-2" /> Status
+				<InfoIcon class="inline-block mr-2 mb-1" /> Status
 			</Heading>
 			<MdSvelte source={nowData.status} {renderers} />
 		</Card>
 
 		<Card class="p-4 col-span-6 sm:col-span-4 lg:col-span-3 lg:col-start-6 row-start-2 row-span-1">
 			<Heading depth={2} class="text-xl mb-4">
-				<MapPin class="inline-block mr-2" /> Location
+				<MapPin class="inline-block mr-2" /> 
+				<Link href="/where">Location</Link>
 			</Heading>
 			<p>{nowData.location}</p> 
 		</Card>
 
 		<Card class="p-4 col-span-6 sm:col-span-4 row-span-1 lg:row-span-2 lg:row-start-1">
 			<Heading depth={2} class="text-xl mb-2">
-				<Music class="inline-block mr-2 mb-1" /> Playlist
+				<Music class="inline-block mr-2" /> 
+				<Link href="/playlists">Playlist</Link>
 			</Heading>
 			<div class="space-y-2 flex flex-col items-center">
 				{#if playlistImage}
@@ -76,7 +78,8 @@
 			class="p-4 col-start-1 row-start-4 sm:row-start-3 lg:row-start-2 col-span-12 lg:col-span-5 row-span-2"
 		>
 			<Heading depth={2} class="text-xl mb-4 flex items-center">
-				<Code class="inline-block mr-2" /> Projects
+				<Code class="inline-block mr-2" /> 
+				<Link href="/projects">Projects</Link>
 			</Heading>
 			<MdSvelte source={projects} {renderers} />
 		</Card>
