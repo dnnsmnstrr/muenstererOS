@@ -12,8 +12,10 @@
     [key: string]: any
   }
 
-  let { href, target = $bindable(undefined), children, ...rest }: Props = $props();
-
+  let { href, target = $bindable(undefined), node, children, ...rest }: Props = $props();
+  if (node && node.url) {
+    href = node.url
+  }
   if (typography?.externalLinks) {
     target = '_blank'
   }

@@ -6,16 +6,20 @@
 	import { USERNAME_SHORT } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
 	import playlists from '../playlists/playlists.json';
+	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
+	import { renderers } from "$lib/components/typography";
 
 	let { data }: PageProps = $props();
 	let { nowData } = data;
 
 	let currentPlaylist = playlists.find(p => p.uri === nowData.playlist.uri);
 	let playlistImage = currentPlaylist?.imageUrl || (currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
+	let projects = '- ' + nowData.projects.join('\n- ')
+	let plans = '- ' + nowData.plans.join('\n- ')
 </script>
 
 <div class="container mx-auto p-4">
-	<Heading class="flex w-full justify-between text-3xl mb-4">
+	<Heading class="flex w-full justify-between items-center text-3xl mb-8">
 		What I'm doing now
         <Link 
             href="https://gist.github.com/{USERNAME_SHORT}/{nowData.gistId}" 
@@ -25,22 +29,22 @@
         </Link>
 	</Heading>
 
-	<div class="grid grid-cols-7 md:grid-cols-10 lg:grid-cols-12 gap-4 grid-rows-4">
-		<Card class="p-4 col-start-1 row-start-1 col-span-8 row-span-1">
+	<div class="grid grid-cols-12 gap-4 grid-rows-8 sm:grid-rows-6 md:grid-rows-3">
+		<Card class="p-4 col-start-1 row-start-1 col-span-12 sm:col-span-8 row-span-1">
 			<Heading depth={2} class="text-xl mb-4">
 				<InfoIcon class="inline-block mr-2" /> Status
 			</Heading>
-			<p>{nowData.status}</p> 
+			<MdSvelte source={nowData.status} {renderers} />
 		</Card>
 
-		<Card class="p-4 col-span-3 row-start-2 row-span-1">
+		<Card class="p-4 col-span-6 sm:col-span-4 lg:col-span-3 lg:col-start-6 row-start-2 row-span-1">
 			<Heading depth={2} class="text-xl mb-4">
 				<MapPin class="inline-block mr-2" /> Location
 			</Heading>
 			<p>{nowData.location}</p> 
 		</Card>
 
-		<Card class="p-4 col-span-4 row-span-2">
+		<Card class="p-4 col-span-6 sm:col-span-4 row-span-1 lg:row-span-2 lg:row-start-1">
 			<Heading depth={2} class="text-xl mb-2">
 				<Music class="inline-block mr-2 mb-1" /> Playlist
 			</Heading>
@@ -61,42 +65,20 @@
 			</div>
 		</Card>
 
-		<!-- Activities section - offset to the right -->
-		{#if nowData?.activities?.length}
-			<Card class="p-4 col-span-3 col-start-2">
-				<Heading depth={2} class="text-xl mb-4 flex items-center">
-					<Activity class="inline-block mr-2" /> Activities
-				</Heading>
-				<ul class="space-y-2 list-inside">
-					{#each nowData.activities as activity}
-						<li class="pl-4">{activity}</li>
-					{/each}
-				</ul>
-			</Card>
-		{/if}
-
-		<!-- Plans section - full width -->
-		<Card class="p-4 col-span-7 row-span-1">
+		<Card class="p-4 col-span-12 sm:col-span-8 lg:col-start-6 row-span-1 sm:row-span-1">
 			<Heading depth={2} class="text-xl mb-4 flex items-center">
 				<Calendar class="inline-block mr-2" /> Plans
 			</Heading>
-			<ul class="space-y-2 list-inside">
-				{#each nowData.plans as plan}
-					<li class="pl-4">{plan}</li>
-				{/each}
-			</ul>
+			<MdSvelte source={plans} {renderers} />
 		</Card>
 
-		<!-- Projects section - offset to the left -->
-		<Card class="p-4 col-start-1 row-start-2 col-span-5 row-span-2">
+		<Card 
+			class="p-4 col-start-1 row-start-4 sm:row-start-3 lg:row-start-2 col-span-12 lg:col-span-5 row-span-2"
+		>
 			<Heading depth={2} class="text-xl mb-4 flex items-center">
 				<Code class="inline-block mr-2" /> Projects
 			</Heading>
-			<ul class="space-y-2 list-inside">
-				{#each nowData.projects as project}
-					<li class="pl-4">{@html project}</li>
-				{/each}
-			</ul>
+			<MdSvelte source={projects} {renderers} />
 		</Card>
 	</div>
 </div>

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { MdSvelte } from '@jazzymcjazz/mdsvelte';
   import legalText from "./impressum.md?raw";
 	import { renderers } from "$lib/components/typography";
@@ -15,7 +13,7 @@
     externalLinks: true,
   })
 
-  run(() => {
+  $effect(() => {
     if ($page.url.hash) {
       const anchorId = $page.url.hash
       waitForElementToDisplay(anchorId, (anchor) => {
