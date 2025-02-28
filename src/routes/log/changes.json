@@ -1,5 +1,10 @@
 [
 	{
+		"date": "2025-02-28",
+		"title": "Now Page",
+		"description": "Added a now page that loads data from a GitHub Gist"
+	},
+	{
 		"date": "2025-02-15",
 		"title": "Migration to Svelte 5",
 		"description": "Migrated to Svelte 5 and the next version of shadcn-svelte."

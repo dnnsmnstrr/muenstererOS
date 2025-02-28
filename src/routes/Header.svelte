@@ -28,7 +28,7 @@
 	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = [
 		[
 			{ name: 'Home', href: '/', icon: Home },
-			{ name: 'About', icon: FileQuestion },
+			// { name: 'About', icon: FileQuestion },
 		],
 		{
 			name: 'Pages',

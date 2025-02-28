@@ -14,7 +14,7 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { LayoutGrid, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
+	import { Info, LayoutGrid, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -159,11 +159,12 @@
 	);
 
 	const pages: BookmarkItem[] = [
+		{ name: 'Now', icon: Info },
 		{ name: 'Uses', icon: TabletSmartphone },
 		{ name: 'Projects', icon: LayoutGrid },
 		{ name: 'Playlists', icon: ListMusic },
 		{ name: 'Redirects', icon: Signpost },
-    { name: 'Slashes', icon: Slash, hidden: true },
+    	{ name: 'Slashes', icon: Slash, hidden: true },
 	];
 </script>
 
