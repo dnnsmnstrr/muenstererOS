@@ -3,16 +3,71 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2025-02-20T21:42:29.687Z</updated>
+    <updated>2025-03-02T09:39:28.497Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
     <entry>
+        <title>Now Page</title>
+        <link href="https://muensterer.tech/now"/>
+        <id>0-now</id>
+        <updated>2025-02-28</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Added a now page that loads data from a GitHub Gist</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Migration to Svelte 5</title>
+        <link href="https://muensterer.tech/"/>
+        <id>2-root</id>
+        <updated>2025-02-15</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Migrated to Svelte 5 and the next version of shadcn-svelte.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Playlists</title>
+        <link href="https://muensterer.tech/playlists"/>
+        <id>1-playlists</id>
+        <updated>2024-12-24</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Created a page for my Spotify playlists.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>muensterer.tech</title>
+        <link href="https://muensterer.tech/"/>
+        <id>1-root</id>
+        <updated>2024-06-16</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Moved my website to this domain</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Initial Version</title>
+        <link href="https://muensterer.tech/"/>
+        <id>0-root</id>
+        <updated>2024-02-05</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Created a new personal website with SvelteKit.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>About</title>
         <link href="https://muensterer.tech/about"/>
-        <id>https://muensterer.tech[object Object]</id>
+        <id>0-about</id>
         <updated>2025-01-01</updated>
         <content type="html">
             <![CDATA[
@@ -23,7 +78,7 @@
     <entry>
         <title>Contact</title>
         <link href="https://muensterer.tech/contact"/>
-        <id>https://muensterer.tech[object Object]</id>
+        <id>0-contact</id>
         <updated>2025-01-01</updated>
         <content type="html">
             <![CDATA[
@@ -34,7 +89,7 @@
     <entry>
         <title>Uses</title>
         <link href="https://muensterer.tech/uses"/>
-        <id>https://muensterer.tech[object Object]</id>
+        <id>0-uses</id>
         <updated>2025-02-01</updated>
         <content type="html">
             <![CDATA[
@@ -45,18 +100,18 @@
     <entry>
         <title>Playlists</title>
         <link href="https://muensterer.tech/playlists"/>
-        <id>https://muensterer.tech[object Object]</id>
+        <id>0-playlists</id>
         <updated>2025-01-31</updated>
         <content type="html">
             <![CDATA[
-                <p>My favorite playlists</p>
+                <p>My playlists</p>
             ]]>
         </content>
     </entry>
     <entry>
         <title>Where</title>
         <link href="https://muensterer.tech/where"/>
-        <id>https://muensterer.tech[object Object]</id>
+        <id>0-where</id>
         <updated>2025-02-20</updated>
         <content type="html">
             <![CDATA[

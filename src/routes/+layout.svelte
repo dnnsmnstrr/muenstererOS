@@ -14,7 +14,7 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
+	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -165,6 +165,7 @@
 		{ name: 'Playlists', icon: ListMusic },
 		{ name: 'Redirects', icon: Signpost },
     	{ name: 'Slashes', icon: Slash, hidden: true },
+    	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
 	];
 </script>
 

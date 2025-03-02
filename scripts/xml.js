@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const changes = JSON.parse(fs.readFileSync(path.join(__dirname, 'changes.json'), 'utf-8'));
 
 const baseUrl = 'https://muensterer.tech'; 
 
@@ -38,35 +39,58 @@ const pages = [
         name: 'About',
         content: 'The about page',
         path: '/about',
-        lastUpdated: '2025-01-01',
+        date: '2025-01-01',
     },
     {
         name: 'Contact',
         content: 'How to contact me',
         path: '/contact',
-        lastUpdated: '2025-01-01',
+        date: '2025-01-01',
     },
     {
         name: 'Uses',
         content: 'The tools I use',
         path: '/uses',
-        lastUpdated: '2025-02-01',
+        date: '2025-02-01',
     },
     {
         name: 'Playlists',
-        content: 'My favorite playlists',
+        content: 'My playlists',
         path: '/playlists',
-        lastUpdated: '2025-01-31',
+        date: '2025-01-31',
     },
     {
         name: 'Where',
         content: 'Where I am',
         path: '/where',
-        lastUpdated: '2025-02-20'
+        date: '2025-02-20'
     }
 ]
 
 const name = 'Dennis Muensterer';
+const idCounter = {
+    root: 0,
+}
+function generateFeedItem(item) {
+    const idCount = idCounter[item.path || 'root'] || 0;
+    if (!idCounter[item.path || 'root']) idCounter[item.path || 'root'] = 0;
+    idCounter[item.path || 'root'] = idCount + 1;
+    const id = item.path ? `${idCount}-${item.path.replace('/', '')}` : `${idCount}-root`;
+    return `
+    <entry>
+        <title>${item.title || item.name}</title>
+        <link href="${baseUrl}${item.path || '/'}"/>
+        <id>${id}</id>
+        <updated>${item.date || new Date().toISOString()}</updated>
+        <content type="html">
+            <![CDATA[
+                <p>${item.content || item.description}</p>
+            ]]>
+        </content>
+    </entry>`;
+}
+const pagesFeed = pages.reverse().map(generateFeedItem).reverse().join('');
+const changesFeed = changes.reverse().map(generateFeedItem).reverse().join('');
 const feedAtom = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>${name}</title>
@@ -77,18 +101,7 @@ const feedAtom = `<?xml version="1.0" encoding="utf-8"?>
     <author>
         <name>${name}</name>
     </author>
-    ${pages.map(page => `
-    <entry>
-        <title>${page.name}</title>
-        <link href="${baseUrl}${page.path}"/>
-        <id>${baseUrl}${page}</id>
-        <updated>${page.lastUpdated || new Date().toISOString()}</updated>
-        <content type="html">
-            <![CDATA[
-                <p>${page.content}</p>
-            ]]>
-        </content>
-    </entry>`).join('')}
+    ${changesFeed}${pagesFeed}
 </feed>`;
 fs.writeFileSync(path.join(__dirname, '..', 'static', 'feed.xml'), feedAtom);
 console.log('Feed generated!');

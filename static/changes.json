@@ -2,6 +2,7 @@
 	{
 		"date": "2025-02-28",
 		"title": "Now Page",
+		"path": "/now",
 		"description": "Added a now page that loads data from a GitHub Gist"
 	},
 	{
@@ -12,12 +13,13 @@
 	{
 		"date": "2024-12-24",
 		"title": "Playlists",
-		"description": "Created a page for my Spotify playlists over the Chrismas holidays."
+		"path": "/playlists",
+		"description": "Created a page for my Spotify playlists."
 	},
 	{
 		"date": "2024-06-16",
 		"title": "muensterer.tech",
-		"description": "Pointed my domain to this website."
+		"description": "Moved my website to this domain"
 	},
 	{
 		"date": "2024-02-05",

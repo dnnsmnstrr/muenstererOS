@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Heading } from '$lib/components/typography';
-	import changes from './changes.json';
+	import changes from '../../../static/changes.json?raw';
 	type ChangeLogEntry = {
 		date: string;
 		title: string;
 		description: string;
 	};
-	const changelog: ChangeLogEntry[] = changes;
+	const changelog = JSON.parse(changes) as ChangeLogEntry[];
 </script>
 
 <svelte:head>

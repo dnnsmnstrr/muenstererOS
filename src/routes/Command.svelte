@@ -4,7 +4,7 @@
 		keywords?: string[];
 		value?: string;
 		icon?: ConstructorOfATypedSvelteComponent;
-		url?: string;
+		href?: string;
 		action?: () => void;
 	};
 </script>
@@ -303,43 +303,42 @@
 	});
 
 	const enrichLink = (link: CommandData): CommandData => {
+		let href = link.href || '';
+		if (!link.href && !link.action) {
+			href = '/' + link.name.toLowerCase();
+		}
 		const action =
 			link.action ||
 			function () {
-				// if (!link.url && !link.name) {
-				// 	return debugLog('Cannot open link for ' + link.name);
-				// }
-				debugLog(`Opening link to ${link.name}${link.url ? ' at ' + link.url : ''}`);
-				if (!link.url) {
+				debugLog(`Opening link to ${link.name}${href ? ' at ' + href : ''}`);
+				if (!href && !href) {
 					return goto(link.name.toLowerCase());
 				}
-				if (link.url.startsWith('/')) {
-					goto(link.url);
-					// window.location.href = link.url
+				if (href && href.startsWith('/')) {
+					goto(href);
 				} else {
-					window.open(link.url);
+					window.open(href);
 				}
 			};
 		let value = link.value || link.name;
 		return {
 			...link,
+			href,
 			action,
 			value
 		};
 	};
 
 	const externalLinks: CommandData[] = [
-		{ name: 'GitHub', icon: Github, url: links.github },
-		{ name: 'Instagram', icon: Instagram, url: links.instagram },
-		{ name: 'Spotify', keywords: ['music', 'playlists'], icon: Music, url: links.spotify },
-		{ name: 'Telegram', keywords: ['messages', 'chats'], icon: Send, url: links.telegram },
-		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, url: links.linkedin },
-		{ name: 'Twitter / 𝕏', icon: Twitter, url: links.x },
-		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, url: links.cv }
+		{ name: 'GitHub', icon: Github, href: links.github },
+		{ name: 'Instagram', icon: Instagram, href: links.instagram },
+		{ name: 'Spotify', keywords: ['music', 'playlists'], icon: Music, href: links.spotify },
+		{ name: 'Telegram', keywords: ['messages', 'chats'], icon: Send, href: links.telegram },
+		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, href: links.linkedin },
+		{ name: 'Twitter / 𝕏', icon: Twitter, href: links.x },
+		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, href: links.cv }
 	].map(enrichLink);
 
-	const enrichedPages = pages.map(enrichLink);
-	console.log(enrichedPages)
 	function toggleDebug() {
 		$debug = !$debug;
 		$isCommandActive = false;
@@ -361,8 +360,8 @@
 	}
 	let commandConfig = $derived({
 		navigation: [
-			{ name: 'Home', icon: Home, url: '/' },
-			{ name: 'About', icon: User, url: '/about' },
+			{ name: 'Home', icon: Home, href: '/' },
+			{ name: 'About', icon: User, href: '/about' },
 			...pages,
 			{
 				name: 'Search Zettelkasten',
@@ -370,7 +369,7 @@
 				icon: Search,
 				action: handleDocsearch
 			},
-			{ name: 'Settings', keywords: ['preferences'], icon: Settings, url: '/settings' },
+			{ name: 'Settings', keywords: ['preferences'], icon: Settings, href: '/settings' },
 			{
 				name: 'Keyboard Shortcuts',
 				keywords: ['help', 'hotkeys'],
@@ -387,7 +386,7 @@
 		.map(enrichLink)
 		.filter((link) => {
 			// remove current page from navigation
-			return page.url.pathname !== link.url;
+			return page.url.pathname !== link.href;
 		}),
 		links: externalLinks,
 		system: [
