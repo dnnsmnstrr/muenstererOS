@@ -93,12 +93,11 @@
         "tags": ["javascript"]
     },
     {
-        "name": "iPhone 13 Mini",
-        "description": "The perfect size iPhone!",
-        "url": "https://support.apple.com/de-de/111873",
+        "name": "iPhone 16e",
+        "url": "https://www.apple.com/de/iphone-16e/",
         "category": "hardware",
         "tags": ["apple", "smartphone"],
-        "image": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111872_iphone13-mini-colors-480.png"
+        "image": "https://www.apple.com/v/iphone-16e/a/images/specs/finish_iphone__du3svf61btyu_large_2x.jpg"
     },
     {
         "name": "Apple Watch Series 6",
