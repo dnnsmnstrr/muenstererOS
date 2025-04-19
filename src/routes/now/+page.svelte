@@ -12,6 +12,7 @@
 	let { data }: PageProps = $props();
 	let { nowData } = data;
 
+	console.log(nowData)
 	let currentPlaylist = playlists.find(p => p.uri === nowData.playlist.uri);
 	let playlistImage = currentPlaylist?.imageUrl || (currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
 	let projects = '- ' + nowData.projects.join('\n- ')
@@ -22,10 +23,14 @@
 	<Heading class="flex w-full justify-between items-center text-3xl mb-8">
 		What I'm doing now
         <Link 
-            href="https://gist.github.com/{USERNAME_SHORT}/{nowData.gistId}" 
+            href={nowData.gistUrl}
             class="text-sm font-normal block mt-2"
         >
-            Data Source
+            Last updated: {new Date(nowData.updatedAt).toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit',
+			})}
         </Link>
 	</Heading>
 

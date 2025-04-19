@@ -2,17 +2,21 @@ import { disemvowel } from "./utils/helper";
 
 export const FIRST_NAME = 'Dennis';
 export const LAST_NAME = 'Muensterer';
+export const NOW_GIST_ID = 'f18bfa6e4f02dc480426d05cf7adff79';
+export const EMAIL_PROVIDER = 'gmail';
+export const CURRENT_DOMAIN = 'muensterer.tech';
+export const API_URL = 'https://dnnsmnstrr.vercel.app';
+export const DEFAULT_URL = 'https://dnnsmnstrr.github.io';
+
+// Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);
 export const OWNER_NAME = FIRST_NAME + ' ' + LAST_NAME;
 export const WEBSITE_NAME = LAST_NAME.toLowerCase() + 'OS';
-export const USERNAME = 'dennismuensterer';
-export const EMAIL_PROVIDER = 'gmail';
+export const USERNAME = FIRST_NAME.toLowerCase() + LAST_NAME.toLowerCase();
 export const EMAIL = `${USERNAME}@${EMAIL_PROVIDER}.com`;
 export const USERNAME_LONG = USERNAME;
 export const USERNAME_SHORT = disemvowel(USERNAME_LONG);
-export const API_URL = 'https://dnnsmnstrr.vercel.app';
-export const DEFAULT_URL = 'https://dnnsmnstrr.github.io';
-export const CURRENT_DOMAIN = 'muensterer.tech';
+
 export const TITLE_SEPARATOR = ' | ';
 export const PAGE_TITLE_SUFFIX = TITLE_SEPARATOR + WEBSITE_NAME;
 
