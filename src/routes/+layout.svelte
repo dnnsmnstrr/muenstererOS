@@ -16,7 +16,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
-	import { PAGE_TITLE_PREFIX } from '$lib/config';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
 
 	interface Props {
@@ -176,7 +176,7 @@
 	<style>
 		@import '/themes.css';
 	</style>
-	<title>{`${PAGE_TITLE_PREFIX}${page.url.pathname === '/' ? 'Home' : capitalize(page.url.pathname.replace('/',''))}`}</title>
+	<title>{page.url.pathname === '/' ? 'Home' : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <ModeWatcher />

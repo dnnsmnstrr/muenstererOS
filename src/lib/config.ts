@@ -14,7 +14,7 @@ export const API_URL = 'https://dnnsmnstrr.vercel.app';
 export const DEFAULT_URL = 'https://dnnsmnstrr.github.io';
 export const CURRENT_DOMAIN = 'muensterer.tech';
 export const TITLE_SEPARATOR = ' | ';
-export const PAGE_TITLE_PREFIX = WEBSITE_NAME + TITLE_SEPARATOR;
+export const PAGE_TITLE_SUFFIX = TITLE_SEPARATOR + WEBSITE_NAME;
 
 export const links = {
 	yat: 'https://y.at/🤖💻📱⌚🎧',
