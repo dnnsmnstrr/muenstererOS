@@ -7,86 +7,166 @@
 	import Link from '$lib/components/typography/Link.svelte';
 	import playlists from '../playlists/playlists.json';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
-	import { renderers } from "$lib/components/typography";
+	import { renderers } from '$lib/components/typography';
 
+	import {
+		Root as Dialog,
+		Trigger as DialogTrigger,
+		Content as DialogContent,
+		Close as DialogClose
+	} from '$lib/components/ui/dialog';
+	import * as Tooltip from "$lib/components/ui/tooltip";
+	import { Button } from '$lib/components/ui/button';
+	
 	let { data }: PageProps = $props();
-	let { nowData } = data;
+	
+	let nowData = $state(data.nowData);
+	let showModal = $state(false);
+	let currentPlaylist = playlists.find((p) => p.uri === nowData.playlist.uri);
+	let playlistImage =
+	currentPlaylist?.imageUrl ||
+	(currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
+	let projects = $state('')
+	let plans = $state('')
+	let versionPositions = $state([]);
+	$effect(() => {
+		projects = '- ' + nowData.projects.join('\n- ');
+		plans = '- ' + nowData.plans.join('\n- ');
+		if (nowData.versions.length > 1) {
+			const timestamps = nowData.versions.map((v) => new Date(v.timestamp).getTime());
+			const minTime = Math.min(...timestamps);
+			const maxTime = Math.max(...timestamps);
+			const padding = 2;
+			versionPositions = timestamps.map((t) => {
+				const position = ((t - minTime) / (maxTime - minTime)) * 100;
+				return Math.min(100 - padding, Math.max(padding, position));
+			});
+		}
+	});
 
-	console.log(nowData)
-	let currentPlaylist = playlists.find(p => p.uri === nowData.playlist.uri);
-	let playlistImage = currentPlaylist?.imageUrl || (currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
-	let projects = '- ' + nowData.projects.join('\n- ')
-	let plans = '- ' + nowData.plans.join('\n- ')
+	async function loadVersion(url: string) {
+		const response = await fetch(url);
+		if (!response.ok) {
+			throw new Error('Failed to load version');
+		}
+		const apiData = await response.json();
+		const gistData = JSON.parse(apiData.files['now.json'].content);
+		console.log(apiData, gistData)
+		nowData = {
+			...gistData,
+			updatedAt: new Date(apiData.updated_at).toISOString(),
+			versions: nowData.versions
+		};
+		return gistData;
+
+	}
+
 </script>
 
 <div class="container mx-auto p-4">
-	<Heading class="flex w-full justify-between items-center text-3xl mb-8">
+	<Heading class="mb-8 flex w-full items-center justify-between text-3xl">
 		What I'm doing now
-        <Link 
-            href={nowData.gistUrl}
-            class="text-sm font-normal block mt-2"
-        >
-            Last updated: {new Date(nowData.updatedAt).toLocaleDateString('en-US', {
+		<Link
+			href="https://gist.github.com/{USERNAME_SHORT}/{nowData.gistId}"
+			class="mt-2 block text-sm font-normal"
+		>
+			Last updated: {new Date(nowData.updatedAt).toLocaleDateString('en-US', {
 				year: 'numeric',
 				month: '2-digit',
-				day: '2-digit',
+				day: '2-digit'
 			})}
-        </Link>
+		</Link>
 	</Heading>
 
-	<div class="grid grid-cols-12 gap-4 grid-rows-5 md:grid-rows-3">
-		<Card class="p-4 col-start-1 row-start-1 col-span-12 sm:col-span-8 row-span-1">
-			<Heading depth={2} class="text-xl mb-4">
-				<InfoIcon class="inline-block mr-2 mb-1" /> Status
+	<div class="grid grid-cols-12 grid-rows-5 gap-4 md:grid-rows-3">
+		<Card class="col-span-12 col-start-1 row-span-1 row-start-1 p-4 sm:col-span-8">
+			<Heading depth={2} class="mb-4 text-xl">
+				<InfoIcon class="mb-1 mr-2 inline-block" /> Status
 			</Heading>
 			<MdSvelte source={nowData.status} {renderers} />
 		</Card>
 
-		<Card class="p-4 col-span-6 sm:col-span-4 lg:col-span-3 lg:col-start-6 row-start-2 row-span-1">
-			<Heading depth={2} class="text-xl mb-4">
-				<MapPin class="inline-block mr-2" /> 
+		<Card class="col-span-6 row-span-1 row-start-2 p-4 sm:col-span-4 lg:col-span-3 lg:col-start-6">
+			<Heading depth={2} class="mb-4 text-xl">
+				<MapPin class="mr-2 inline-block" />
 				<Link href="/where">Location</Link>
 			</Heading>
-			<p>{nowData.location}</p> 
+			<p>{nowData.location}</p>
 		</Card>
 
-		<Card class="p-4 col-span-6 sm:col-span-4 row-span-1 lg:row-span-2 lg:row-start-1">
-			<Heading depth={2} class="text-xl mb-2">
-				<Music class="inline-block mr-2" /> 
+		<Card class="col-span-6 row-span-1 p-4 sm:col-span-4 lg:row-span-2 lg:row-start-1">
+			<Heading depth={2} class="mb-2 text-xl">
+				<Music class="mr-2 inline-block" />
 				<Link href="/playlists">Playlist</Link>
 			</Heading>
-			<div class="space-y-2 flex flex-col items-center">
+			<div class="flex flex-col items-center space-y-2">
 				{#if playlistImage}
 					<img
 						src={playlistImage}
 						alt="Playlist cover"
-						class="w-full aspect-square object-cover rounded-md"
+						class="aspect-square w-full rounded-md object-cover"
 					/>
 				{/if}
-				<Link
-					href={`https://open.spotify.com/playlist/${nowData.playlist.uri}`} 
-					target="_blank" 
-				>
+				<Link href={`https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">
 					{nowData.playlist.name}
 				</Link>
 			</div>
 		</Card>
 
-		<Card class="p-4 col-span-12 sm:col-span-8 lg:col-start-6 row-span-1 sm:row-span-1">
-			<Heading depth={2} class="text-xl mb-4 flex items-center">
-				<Calendar class="inline-block mr-2" /> Plans
+		<Card class="col-span-12 row-span-1 p-4 sm:col-span-8 sm:row-span-1 lg:col-start-6">
+			<Heading depth={2} class="mb-4 flex items-center text-xl">
+				<Calendar class="mr-2 inline-block" /> Plans
 			</Heading>
 			<MdSvelte source={plans} {renderers} />
 		</Card>
 
-		<Card 
-			class="p-4 col-start-1 row-start-4 sm:row-start-3 lg:row-start-2 col-span-12 lg:col-span-5 row-span-2"
+		<Card
+			class="col-span-12 col-start-1 row-span-2 row-start-4 p-4 sm:row-start-3 lg:col-span-5 lg:row-start-2"
 		>
-			<Heading depth={2} class="text-xl mb-4 flex items-center">
-				<Code class="inline-block mr-2" /> 
+			<Heading depth={2} class="mb-4 flex items-center text-xl">
+				<Code class="mr-2 inline-block" />
 				<Link href="/projects">Projects</Link>
 			</Heading>
 			<MdSvelte source={projects} {renderers} />
 		</Card>
+	</div>
+
+	<!-- Versions Button -->
+	<div class="mt-8 text-center">
+		<Dialog bind:open={showModal}>
+			<DialogTrigger>
+				<Button variant="secondary">Versions</Button>
+			</DialogTrigger>
+			<DialogContent class="w-11/12 max-w-2xl p-6">
+				<h2 class="mb-4 text-2xl font-bold">Version History</h2>
+				<div class="relative h-4 w-full rounded bg-gray-200 dark:bg-gray-700">
+					{#each nowData.versions as version, index}
+						<Tooltip.Root>
+							<Tooltip.Trigger
+								class="absolute h-full w-1 rounded bg-accent"
+								style="left: {versionPositions[index]}%"
+								
+							>
+								<button
+									aria-label="Version marker"
+									class="absolute left-1/2 h-4 w-1"
+									onclick={() => {
+										loadVersion(version.url)
+										showModal = false
+									}}
+								></button>
+							</Tooltip.Trigger>
+							<Tooltip.Content side="bottom">
+								{new Date(version.timestamp).toLocaleDateString('en-US', {
+									year: 'numeric',
+									month: '2-digit',
+									day: '2-digit'
+								})}
+							</Tooltip.Content>
+						</Tooltip.Root>
+					{/each}
+				</div>
+			</DialogContent>
+		</Dialog>
 	</div>
 </div>
