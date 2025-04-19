@@ -159,10 +159,6 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Playlists</title>
-</svelte:head>
-
 <div class="container">
 	<Dialog.Root open={showTopArtists} onOpenChange={(value) => (showTopArtists = value)}>
 		<Dialog.Content>

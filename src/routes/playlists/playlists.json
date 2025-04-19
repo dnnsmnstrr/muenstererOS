@@ -1,5 +1,15 @@
 [
 	{
+		"title": "One Wish",
+		"emoji": "🧞‍♂️",
+		"type": "season",
+		"season": "spring",
+		"year": 2025,
+		"uri": "4AAwWiZEhda2oL86uMBhkC",
+		"imageId": "ab67706c0000da84ae422b06fbe1375d89b78d27",
+		"gif": "https://media2.giphy.com/media/2t1xQwwvkcFYFkxQDI/giphy.gif"
+	},
+	{
 		"title": "Warten",
 		"emoji": "⌛",
 		"type": "season",

@@ -25,7 +25,6 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
 	<meta name="description" content={WEBSITE_NAME + ' Desktop'} />
 </svelte:head>
 

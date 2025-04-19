@@ -59,9 +59,6 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Projects</title>
-</svelte:head>
 
 <div class="container">
 	<Heading>My Projects</Heading>

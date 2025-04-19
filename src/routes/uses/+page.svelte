@@ -89,7 +89,6 @@
 </script>
 
 <svelte:head>
-	<title>Uses</title>
 	<meta name="description" content="Tech I use" />
 </svelte:head>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Heading } from '$lib/components/typography';
+	import { PAGE_TITLE_PREFIX } from '$lib/config';
 	import changes from '../../../static/changes.json?raw';
 	type ChangeLogEntry = {
 		date: string;
@@ -10,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>Changelog</title>
+	<title>{PAGE_TITLE_PREFIX}Changelog</title>
 </svelte:head>
 
 <div class="container mx-auto p-4">
