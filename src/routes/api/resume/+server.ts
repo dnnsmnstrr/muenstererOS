@@ -1,5 +1,4 @@
 import { RESUME_GIST_ID } from '$lib/config';
-import { json } from '@sveltejs/kit';
 
 export async function GET({ url }) {
     const gistApiUrl = `https://api.github.com/gists/${RESUME_GIST_ID}`;
@@ -27,8 +26,31 @@ export async function GET({ url }) {
             result = { ...result, versions };
         }
 
-        return json(result);
+        return new Response(JSON.stringify(result), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*', // Allow all origins
+                'Access-Control-Allow-Methods': 'GET, OPTIONS', // Allowed methods
+                'Access-Control-Allow-Headers': 'Content-Type', // Allowed headers
+            }
+        });
     } catch (error) {
-        return json({ error: error.message }, { status: 500 });
+        return new Response(JSON.stringify({ error: error.message }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*', // Allow all origins
+            }
+        });
     }
+}
+
+export async function OPTIONS() {
+    return new Response(null, {
+        headers: {
+            'Access-Control-Allow-Origin': '*', // Allow all origins
+            'Access-Control-Allow-Methods': 'GET, OPTIONS', // Allowed methods
+            'Access-Control-Allow-Headers': 'Content-Type', // Allowed headers
+        }
+    });
 }
