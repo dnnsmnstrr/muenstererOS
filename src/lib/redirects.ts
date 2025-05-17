@@ -96,6 +96,17 @@ export const redirects: Redirect[] = [
 		url: links.bereal,
 		aliases: ['real', '⏰']
 	},
+	// me on the web
+	{
+		name: 'sitelet',
+		url: 'https://sitelet.co/muensterer',
+		aliases: ['badge'],
+	},
+	{
+		name: 'making',
+		url: links.makerer,
+		aliases: ['makerer', 'make', 'maker', 'makermonday', '🛠️']
+	},
 	{
 		name: 'zettelkasten',
 		aliases: ['z', 'n', 'zk', 'zettel', 'notes', 'slipbox', 'knowlege', '📔', '📓', '🗃️']
@@ -116,14 +127,14 @@ export const redirects: Redirect[] = [
 		aliases: ['d', 'df', 'setup', 'dot', 'config', '⚙️']
 	},
 	{
-		name: 'making',
-		url: links.makerer,
-		aliases: ['makerer', 'make', 'maker', 'makermonday', '🛠️']
-	},
-	{
 		name: 'printables',
 		url: links.printables,
     	aliases: ['print', 'models', '3dprint', 'prusa']
+	},
+	{
+		name: 'kickstarter',
+		url: links.kickstarter,
+		aliases: ['ks', 'crowdfunding', 'backed']
 	},
 	{
 		name: 'tiktok',
@@ -134,11 +145,6 @@ export const redirects: Redirect[] = [
 		name: 'paypal',
 		url: links.paypal,
 		aliases: ['p', 'pp', 'pay', 'donate', 'sendmoney', 'wheremymoneyat', '💰', '💸', '🫰']
-	},
-	{
-		name: 'kickstarter',
-		url: links.kickstarter,
-		aliases: ['ks', 'crowdfunding', 'backed']
 	},
 	{
 		name: 'imdb',
@@ -240,18 +246,6 @@ export const redirects: Redirect[] = [
 		description: 'Digital Agency I currently work at',
 		url: 'https://3st.de',
 		aliases: ['3st', 'dreist', 'agency', '🏢']
-	},
-	{
-		name: 'tesora',
-		description: 'an app I helped build',
-		aliases: ['tes', '💎'],
-		url: 'https://tesora.app/'
-	},
-	{
-		name: 'voteos',
-		description: 'a blockchain voting platform',
-		url: 'https://voteos.com',
-		aliases: ['voe', 'vote', '🗳️']
 	},
 	{
 		name: 'it-talents',
