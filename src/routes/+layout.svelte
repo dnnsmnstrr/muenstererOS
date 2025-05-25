@@ -14,7 +14,7 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone } from 'lucide-svelte';
+	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Webhook } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
@@ -169,6 +169,7 @@
 		{ name: 'Redirects', icon: Signpost },
     	{ name: 'Slashes', icon: Slash, hidden: true },
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
+    	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
 	];
 </script>
 
