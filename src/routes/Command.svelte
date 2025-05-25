@@ -36,7 +36,8 @@
 		Github,
 		LayoutGrid,
 		ListMusic,
-		Monitor
+		Monitor,
+		Link
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -420,6 +421,14 @@
 						{command.name}
 					</Command.Item>
 				{/each}
+				{#if group === 'links'}
+					{#each Object.entries(links).map(([name, href]) => enrichLink({ name, href })) as command}
+						<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
+							<Link class="mr-2" />
+							{capitalize(command.name)}
+						</Command.Item>
+					{/each}
+				{/if}
 			</Command.Group>
 		{/each}
 		<Command.Group heading="Settings">
