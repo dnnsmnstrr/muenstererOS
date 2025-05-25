@@ -66,6 +66,7 @@
 	} from '$lib/utils/index';
 	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
+	import { computeCommandScore } from "bits-ui";
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
@@ -330,12 +331,12 @@
 	};
 
 	const externalLinks: CommandData[] = [
-		{ name: 'GitHub', icon: Github, href: links.github },
-		{ name: 'Instagram', icon: Instagram, href: links.instagram },
+		{ name: 'GitHub', keywords: ['code'], icon: Github, href: links.github },
+		{ name: 'Instagram', keywords: ['meta'], icon: Instagram, href: links.instagram },
 		{ name: 'Spotify', keywords: ['music', 'playlists'], icon: Music, href: links.spotify },
 		{ name: 'Telegram', keywords: ['messages', 'chats'], icon: Send, href: links.telegram },
 		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, href: links.linkedin },
-		{ name: 'Twitter / 𝕏', icon: Twitter, href: links.x },
+		{ name: 'Twitter / 𝕏', keywords: ['X'], icon: Twitter, href: links.x },
 		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, href: links.cv }
 	].map(enrichLink);
 
@@ -412,7 +413,7 @@
 		{#each Object.entries(commandConfig) as [group, commands]}
 			<Command.Group heading={capitalize(group)}>
 				{#each commands as command}
-					<Command.Item onSelect={command.action} value={command.value}>
+					<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
 						{#if command.icon}
 							<command.icon class="mr-2" />
 						{/if}
