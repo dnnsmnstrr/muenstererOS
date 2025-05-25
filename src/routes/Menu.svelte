@@ -152,7 +152,9 @@
 						<Menubar.Separator />
 					{/if}
 					{#each bookmark as bookmarkItem}
-						<Menubar.Link {...bookmarkItem} />
+						{#if !bookmarkItem.hidden}
+							<Menubar.Link {...bookmarkItem} />
+						{/if}
 					{/each}
 				{:else if bookmark.sub}
 					<Menubar.Separator />
@@ -166,7 +168,7 @@
 							{/each}
 						</Menubar.SubContent>
 					</Menubar.Sub>
-				{:else}
+				{:else if !bookmark.hidden}
 					<Menubar.Link {...bookmark} />
 				{/if}
 			{/each}

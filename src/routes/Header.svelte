@@ -43,7 +43,7 @@
 			]
 		},
 		[
-			{ name: 'Settings', icon: Settings },
+			{ name: 'Settings', icon: Settings, hidden: true },
 			{ name: 'Legal', href: '/legal', icon: Gavel },
 		],
 	];
