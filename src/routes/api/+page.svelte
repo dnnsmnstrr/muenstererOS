@@ -1,17 +1,22 @@
 <script lang="ts">
-	// List your API endpoints and example requests here
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from "$lib/components/ui/card";
+
 	const endpoints = [
+		{
+			name: 'JSON Resume',
+			method: 'GET',
+			url: '/api/resume',
+		},
 		{
 			name: 'Now Data',
 			method: 'GET',
 			url: '/api/now',
-			example: null
 		},
         {
             name: 'Redirects',
             method: 'GET',
             url: '/api/redirects',
-            example: null
         }
 	];
 
@@ -28,9 +33,7 @@
 		try {
 			const res = await fetch(endpoint.url, {
 				method: endpoint.method,
-				headers: { 'Content-Type': 'application/json' },
-				body: endpoint.example ? JSON.stringify(endpoint.example) : undefined
-			});
+				headers: { 'Content-Type': 'application/json' },			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
 			response = await res.json();
 		} catch (e) {
@@ -42,34 +45,34 @@
 
 <div class="container mx-auto max-w-2xl p-4">
 	<h1 class="text-2xl font-bold mb-4">API</h1>
-	<div class="mb-4">
-		<label for="endpoint-select" class="block mb-2 font-semibold">Select endpoint:</label>
-		<select id="endpoint-select" bind:value={selected} class="border rounded px-2 py-1 w-full">
-			{#each endpoints as ep, i}
-				<option value={i}>{ep.method} {ep.url}</option>
-			{/each}
-		</select>
-	</div>
-	{#if endpoints[selected].example}
-		<div class="mb-4">
-			<label for="example-request-body" class="block mb-2 font-semibold">Example request body:</label>
-			<pre id="example-request-body" class="bg-gray-100 rounded p-2 text-sm">{JSON.stringify(endpoints[selected].example, null, 2)}</pre>
+	<div class="mb-4 flex items-end gap-2">
+		<div class="flex-1">
+			<label for="endpoint-select" class="block mb-2 font-semibold">Select endpoint to test the output:</label>
+			<select id="endpoint-select" bind:value={selected} class="border rounded px-2 py-1 w-full h-9">
+				{#each endpoints as ep, i}
+					<option value={i}>{ep.method} {ep.url}</option>
+				{/each}
+			</select>
 		</div>
-	{/if}
-	<button
-		class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-		on:click={callEndpoint}
-		disabled={loading}
-	>
-		{loading ? 'Loading...' : 'Call Endpoint'}
-	</button>
+		<Button 
+			onclick={callEndpoint} 
+			disabled={loading} 
+			size="sm"
+			class="w-32"
+		>
+			{loading ? 'Loading...' : 'Call Endpoint'}
+		</Button>
+	</div>
+	
 	{#if error}
 		<div class="mt-4 text-red-600">Error: {error}</div>
 	{/if}
 	{#if response}
-		<div class="mt-4 overflow-x-auto max-h-96">
-			<label for="api-response" class="block mb-2 font-semibold">Response:</label>
-			<pre id="api-response" class="rounded p-2 text-sm">{JSON.stringify(response, null, 2)}</pre>
-		</div>
+		<Card.Root class="mt-4 overflow-x-auto max-h-96">
+			<Card.Content>
+				<label for="api-response" class="block mb-2 font-semibold">Response:</label>
+				<pre id="api-response" class="rounded-lg text-sm overflow-auto"><code>{JSON.stringify(response, null, 2)}</code></pre>
+			</Card.Content>
+		</Card.Root>
 	{/if}
 </div>
