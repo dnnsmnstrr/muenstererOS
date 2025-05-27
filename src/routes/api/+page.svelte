@@ -2,22 +2,28 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from "$lib/components/ui/card";
 
-	const endpoints = [
+	interface Endpoint {
+		name: string,
+		url: string,
+		method?: string
+	}
+	const endpoints: Endpoint[]= [
 		{
 			name: 'JSON Resume',
-			method: 'GET',
 			url: '/api/resume',
 		},
 		{
 			name: 'Now Data',
-			method: 'GET',
 			url: '/api/now',
 		},
         {
             name: 'Redirects',
-            method: 'GET',
             url: '/api/redirects',
-        }
+        },
+		{
+			name: 'Playlists',
+			url: '/api/playlists'
+		}
 	];
 
 	let selected = 0;
@@ -32,7 +38,7 @@
 		response = null;
 		try {
 			const res = await fetch(endpoint.url, {
-				method: endpoint.method,
+				method: endpoint.method || 'GET',
 				headers: { 'Content-Type': 'application/json' },			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
 			response = await res.json();
@@ -50,7 +56,7 @@
 			<label for="endpoint-select" class="block mb-2 font-semibold">Select endpoint to test the output:</label>
 			<select id="endpoint-select" bind:value={selected} class="border rounded px-2 py-1 w-full h-9">
 				{#each endpoints as ep, i}
-					<option value={i}>{ep.method} {ep.url}</option>
+					<option value={i}>{ep?.method} || 'GET' {ep.url}</option>
 				{/each}
 			</select>
 		</div>
