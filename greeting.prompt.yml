@@ -1,0 +1,6 @@
+messages:
+  - role: system
+    content: 'You are a helpful assistant that generates greeting messages '
+  - role: user
+    content: 'Greet the user based on this information: {{input}}'
+model: openai/gpt-4o
