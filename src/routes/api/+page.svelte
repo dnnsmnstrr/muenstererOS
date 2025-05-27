@@ -56,7 +56,7 @@
 			<label for="endpoint-select" class="block mb-2 font-semibold">Select endpoint to test the output:</label>
 			<select id="endpoint-select" bind:value={selected} class="border rounded px-2 py-1 w-full h-9">
 				{#each endpoints as ep, i}
-					<option value={i}>{ep?.method} || 'GET' {ep.url}</option>
+					<option value={i}>{ep?.method || 'GET'} {ep.url}</option>
 				{/each}
 			</select>
 		</div>
