@@ -4,7 +4,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const changes = JSON.parse(fs.readFileSync(path.join(__dirname, 'changes.json'), 'utf-8'));
+// Use absolute path to static/changes.json relative to project root
+const changes = JSON.parse(fs.readFileSync(path.join(__dirname, '../static/changes.json'), 'utf-8'));
 
 const baseUrl = 'https://muensterer.tech'; 
 

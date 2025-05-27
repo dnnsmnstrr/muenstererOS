@@ -3,12 +3,23 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2025-03-02T09:39:28.497Z</updated>
+    <updated>2025-05-27T22:27:19.842Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
+    <entry>
+        <title>API Docs</title>
+        <link href="https://muensterer.tech/api"/>
+        <id>0-api</id>
+        <updated>2025-05-28</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Added an api page to test the public endpoints used internally by the website</p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Now Page</title>
         <link href="https://muensterer.tech/now"/>

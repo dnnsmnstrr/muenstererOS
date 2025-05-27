@@ -5,13 +5,12 @@
 		"path": "/api",
 		"description": "Added an api page to test the public endpoints used internally by the website"
 	},
-	
 	{
 		"date": "2025-02-28",
 		"title": "Now Page",
 		"path": "/now",
 		"description": "Added a now page that loads data from a GitHub Gist"
-	}
+	},
 	{
 		"date": "2025-02-15",
 		"title": "Migration to Svelte 5",
