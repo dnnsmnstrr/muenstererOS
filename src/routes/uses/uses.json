@@ -22,9 +22,9 @@
         "tags": ["music"]
     },
     {
-        "name": "Arc",
-        "description": "My current favorite browser",
-        "url": "https://arc.net",
+        "name": "Zen",
+        "description": "My current browser (RIP Arc)",
+        "url": "https://zen-browser.app/",
         "category": "software",
         "tags": ["web"]
     },
