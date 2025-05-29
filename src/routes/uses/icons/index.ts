@@ -9,6 +9,7 @@ import React from './react.svg';
 import Spotify from './spotify.svg';
 import SvelteKit from './sveltekit.svg';
 import VSCode from './vscode.svg';
+import Zen from './zen.svg';
 
 const icons: Record<string, string> = {
     Arc,
@@ -21,7 +22,8 @@ const icons: Record<string, string> = {
     React,
     Spotify,
     SvelteKit,
-    VSCode
+    VSCode,
+    Zen,
 }
 
 export default icons
