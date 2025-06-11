@@ -98,6 +98,12 @@ export const redirects: Redirect[] = [
 	},
 	// me on the web
 	{
+		name: 'indieweb',
+		url: 'https://indieweb.org/User:Muensterer.tech',
+		description: 'My page on the indieweb wiki',
+		aliases: ['indie', 'wiki', '🌐']
+	},
+	{
 		name: 'sitelet',
 		url: 'https://sitelet.co/muensterer',
 		aliases: ['badge'],
@@ -220,6 +226,12 @@ export const redirects: Redirect[] = [
 		aliases: ['oil', 'grandma']
 	},
 	{ name: 'linus', url: 'https://linus3d.de/', aliases: ['cousin', 'linus3d'] },
+	{
+		name: 'andrea',
+		url: 'https://www.kraichgauer-oelmuehle.de/',
+		description: 'My aunt\'s oil business',
+		aliases: ['oel', 'aunt']
+	},
 	{
 		name: 'wishlist',
 		url: 'https://www.amazon.de/hz/wishlist/ls/1Y2URDXEYY1JO',
