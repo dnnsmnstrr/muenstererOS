@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy';
+	import { onDestroy } from 'svelte';
 
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Table from '$lib/components/ui/table';
 	import * as Card from '$lib/components/ui/card';
 	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 
 	let { data } = $props();
 	function handleRedirect(redirect: Redirect) {
@@ -30,17 +33,100 @@
 			filterQuery;
 		}
 	});
+
+	function getRandomRedirect() {
+		if (!filteredRedirects.length) return null;
+		return filteredRedirects[Math.floor(Math.random() * filteredRedirects.length)];
+	}
+
+	function handleRandomRedirect() {
+		const redirect = getRandomRedirect();
+		if (redirect) {
+			const redirectUrl = getRedirectURL(redirect);
+			window.open(redirectUrl, '_blank');
+		}
+	}
+
+	let shuffleEmoji: string = $state('🎲');
+	let shuffleInterval: number | undefined;
+
+	// Get emoji list from the redirects data
+	function isEmoji(str?: string): boolean {
+		if (!str) return false;
+		const emojiRegex = /^(?:\p{Emoji}|\s)+$/u;
+		return emojiRegex.test(str);
+	}
+	const emojiList: string[] = Array.from(
+		new Set(
+			data.redirects
+				.flatMap((r) => r.aliases)
+				.filter(isEmoji)
+		)
+	);
+
+	function shuffleAndPick() {
+		const emojis = emojiList;
+		shuffleEmoji = '🎲';
+		let count = 0;
+		
+		shuffleInterval = window.setInterval(() => {
+			count++;
+			const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+			if (randomEmoji && randomEmoji.length < 3) {
+				shuffleEmoji = randomEmoji;
+			} else {
+				shuffleEmoji = '🎲'; // Fallback if emoji too long
+			}
+			// shuffleEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+			
+			if (count > 10) {
+				clearInterval(shuffleInterval);
+				const redirect = getRandomRedirect();
+				if (redirect && redirect.aliases?.some(isEmoji)) {
+					// Pick the first emoji alias
+					const firstEmoji = redirect.aliases.find(isEmoji);
+					shuffleEmoji = firstEmoji || '🎲';
+				}
+				setTimeout(() => {
+					if (redirect) {
+						const url = getRedirectURL(redirect);
+						if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+							window.open(url, '_self');
+						} else {
+							window.open(url, '_blank', 'noopener,noreferrer');
+						}
+					}
+					shuffleEmoji = '🎲';
+				}, 500);
+			}
+		}, 100);
+	}
+
+	onDestroy(() => {
+		if (shuffleInterval) clearInterval(shuffleInterval);
+	});
 </script>
 
 <div class="container">
 	<div class="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 		<Heading class="mb-0">Redirects</Heading>
-		<Input
-			placeholder="Type to search..."
-			type="search"
-			class="w-full text-base sm:w-52"
-			bind:value={filterQuery}
-		/>
+		<div class="flex w-full gap-2 sm:w-auto">
+			<Button
+				title="I'm feeling lucky"
+				variant="outline"
+				size="icon"
+				class="shrink-0"
+				onclick={shuffleAndPick}
+			>
+				{shuffleEmoji}
+			</Button>
+			<Input
+				placeholder="Type to search..."
+				type="search"
+				class="w-full text-base sm:w-52"
+				bind:value={filterQuery}
+			/>
+		</div>
 	</div>
 
 	<Card.Root class="hidden max-h-[75vh] overflow-scroll sm:block">

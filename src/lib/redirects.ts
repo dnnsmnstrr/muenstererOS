@@ -96,6 +96,12 @@ export const redirects: Redirect[] = [
 		url: links.bereal,
 		aliases: ['real', '⏰']
 	},
+	{
+		name: 'strava',
+		url: 'https://strava.app.link/7NnNESkK7Tb',
+		description: 'Trying to get back into running',
+		aliases: ['run', 'running', '🏃‍♂️']
+	},
 	// me on the web
 	{
 		name: 'indieweb',
@@ -324,7 +330,7 @@ export const redirects: Redirect[] = [
 	{ name: 'playlists', url: 'universe/playlists' }, //extend existing redirects
 	{ name: 'shuffle', url: 'random', aliases: ['feelinglucky', '🔀', '🎲', 'roll'] },
 	{ name: 'google', url: 'https://www.google.com/search?q=Dennis+Muensterer' },
-	{ name: 'admin', url: 'https://youareanidiot.cc/', aliases: ['wp-admin', 'idiot'] },
+	{ name: 'admin', url: 'https://youareanidiot.cc/', aliases: ['wp-admin', 'idiot', 'user'] },
 	{
 		name: 'insult',
 		url: 'contact?Subject=Fuck%20You%21',
