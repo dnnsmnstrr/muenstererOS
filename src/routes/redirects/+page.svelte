@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
 	import { onDestroy } from 'svelte';
-
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import { Input } from '$lib/components/ui/input';
 	import * as Table from '$lib/components/ui/table';
 	import * as Card from '$lib/components/ui/card';
 	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import * as Dialog from '$lib/components/ui/dialog';
 
 	let { data } = $props();
 	function handleRedirect(redirect: Redirect) {
@@ -39,14 +36,6 @@
 		return filteredRedirects[Math.floor(Math.random() * filteredRedirects.length)];
 	}
 
-	function handleRandomRedirect() {
-		const redirect = getRandomRedirect();
-		if (redirect) {
-			const redirectUrl = getRedirectURL(redirect);
-			window.open(redirectUrl, '_blank');
-		}
-	}
-
 	let shuffleEmoji: string = $state('🎲');
 	let shuffleInterval: number | undefined;
 
@@ -60,7 +49,7 @@
 		new Set(
 			data.redirects
 				.flatMap((r) => r.aliases)
-				.filter(isEmoji)
+				.filter((alias): alias is string => !!alias && isEmoji(alias))
 		)
 	);
 
