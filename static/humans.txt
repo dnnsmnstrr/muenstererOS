@@ -1,19 +1,17 @@
 
-                                
-    /* TEAM */
+    /* muensterer.tech */
                             
     Developer: Dennis Muensterer                       
-    Site: dennismuensterer@gmail.com
+    Location: Mainz, Germany				
+    Contact: dennismuensterer@gmail.com
     Twitter: @dnnsmnstrr                     
-    Location: Mainz, Germany
-						
-    /* THANKS */						
-    Paula, Felix
                                 
     /* SITE */
     Language: English                
-    Standards: node.js, svelte, typescript, vite                         
+    Standards: svelte, typescript, vite                         
     Components: shadcn-svelte, lucide-icons
     Hosting: Vercel, Github
     IDE: VSCode, Cursor
                                 
+    /* THANKS */						
+    Paula, Felix
