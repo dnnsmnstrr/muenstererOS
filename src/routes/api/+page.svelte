@@ -9,6 +9,10 @@
 	}
 	const endpoints: Endpoint[]= [
 		{
+			name: 'Dennis',
+			url: '/api/dennis',
+		},
+		{
 			name: 'JSON Resume',
 			url: '/api/resume',
 		},

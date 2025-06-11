@@ -21,6 +21,15 @@ export const USERNAME_SHORT = disemvowel(USERNAME_LONG);
 export const TITLE_SEPARATOR = ' | ';
 export const PAGE_TITLE_SUFFIX = TITLE_SEPARATOR + WEBSITE_NAME;
 
+export const BIRTHDATE = '1997-06-16'; // YYYY-MM-DD format
+export const user = {
+	name: OWNER_NAME,
+	email: EMAIL,
+	website: CURRENT_DOMAIN,
+	username: USERNAME_SHORT,
+	birthdate: BIRTHDATE,
+}
+
 export const links = {
 	yat: 'https://y.at/🤖💻📱⌚🎧',
 	spotify: 'https://open.spotify.com/user/' + USERNAME_LONG,
