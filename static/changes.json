@@ -1,5 +1,11 @@
 [
 	{
+		"date": "2025-06-11",
+		"title": "humans.txt",
+		"description": "Was inspired by the humans.txt project, so I added one to my website. More information can be found at https://humanstxt.org.",
+		"path": "/humans.txt"
+	},
+	{
 		"date": "2025-05-28",
 		"title": "API Docs",
 		"path": "/api",

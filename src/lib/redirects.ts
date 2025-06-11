@@ -299,6 +299,12 @@ export const redirects: Redirect[] = [
 		aliases: ['info', 'stats', 'personal-data', 'ℹ️', 'ℹ']
 	},
 	{
+		name: 'humans.txt',
+		description: 'a file with information about this website (more info at https://humanstxt.org/)',
+		url: 'humans.txt',
+		aliases: ['humans', 'human', 'humanstxt']
+	},
+	{
 		name: 'edit-info',
 		url: 'github/api/edit/master/pages/api/dennis.js',
 		aliases: ['edit-information']
