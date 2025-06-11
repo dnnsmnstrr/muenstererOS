@@ -20,7 +20,8 @@
 
 		return (
 			redirect.name.includes(filterQuery.toLowerCase()) ||
-			redirect.aliases?.some((alias) => alias.includes(filterQuery.toLowerCase()))
+			redirect.aliases?.some((alias) => alias.includes(filterQuery.toLowerCase())) ||
+			redirect.url?.includes(filterQuery.toLowerCase())
 		);
 	};
 	let filteredRedirects = $state(data.redirects);
@@ -134,7 +135,19 @@
 			</Table.Header>
 			<Table.Body>
 				{#each filteredRedirects as redirect}
-					<Table.Row onclick={() => handleRedirect(redirect)} class="cursor-pointer">
+					<Table.Row
+						tabindex={0}
+						role="button"
+						aria-label={`Open redirect ${redirect.name}`}
+						onclick={() => handleRedirect(redirect)}
+						onkeydown={(e) => {
+							if (e.key === 'Enter' || e.key === ' ') {
+								e.preventDefault();
+								handleRedirect(redirect);
+							}
+						}}
+						class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+					>
 						<Table.Cell class="font-medium">{redirect.name}</Table.Cell>
 						<Table.Cell>{redirect.description || '-'}</Table.Cell>
 						<Table.Cell>{redirect.aliases?.join(', ') || '-'}</Table.Cell>
@@ -149,7 +162,19 @@
 
 	<div class="block sm:hidden">
 		{#each filteredRedirects as redirect}
-			<Card.Root class="mb-4 cursor-pointer" onclick={() => handleRedirect(redirect)}>
+			<Card.Root
+				tabindex="0"
+				role="button"
+				aria-label={`Open redirect ${redirect.name}`}
+				class="mb-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+				onclick={() => handleRedirect(redirect)}
+				on:keydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						handleRedirect(redirect);
+					}
+				}}
+			>
 				<div class="p-4">
 					<h2 class="text-lg font-bold flex flex-wrap items-center gap-2">
 						{redirect.name}
