@@ -95,6 +95,28 @@
 	onDestroy(() => {
 		if (shuffleInterval) clearInterval(shuffleInterval);
 	});
+
+	function isAbsoluteUrl(url?: string): boolean {
+		if (!url) return false;
+		return /^(https?:)?\/\//.test(url) || url.startsWith('//');
+	}
+
+	function getFaviconUrl(url?: string): string | null {
+		if (!url) return null;
+		try {
+			const u = new URL(url);
+			return `${u.protocol}//${u.hostname}/favicon.ico`;
+			return `https://www.google.com/s2/favicons?sz=32&domain=${u.hostname}`;
+		} catch {
+			return null;
+		}
+	}
+function handleFaviconError(event: Event) {
+	const target = event.target as HTMLImageElement;
+	target.onerror = null;
+	target.src =
+		"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='30'>🌐</text></svg>";
+}
 </script>
 
 <div class="container">
@@ -148,7 +170,27 @@
 						}}
 						class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
 					>
-						<Table.Cell class="font-medium">{redirect.name}</Table.Cell>
+						<Table.Cell class="font-medium flex items-center gap-2">
+							{#if isAbsoluteUrl(redirect.url)}
+								<img
+									src={getFaviconUrl(redirect.url)}
+									alt="favicon"
+									width="16"
+									height="16"
+									style="vertical-align: middle"
+									onerror={handleFaviconError}
+								/>
+							{:else}
+								<img
+									src="/muenstererOS.png"
+									alt="local favicon"
+									width="16"
+									height="16"
+									style="vertical-align: middle"
+								/>
+							{/if}
+							{redirect.name}
+						</Table.Cell>
 						<Table.Cell>{redirect.description || '-'}</Table.Cell>
 						<Table.Cell>{redirect.aliases?.join(', ') || '-'}</Table.Cell>
 						<Table.Cell class="text-right"
@@ -163,12 +205,12 @@
 	<div class="block sm:hidden">
 		{#each filteredRedirects as redirect}
 			<Card.Root
-				tabindex="0"
+				tabindex={0}
 				role="button"
 				aria-label={`Open redirect ${redirect.name}`}
 				class="mb-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
 				onclick={() => handleRedirect(redirect)}
-				on:keydown={(e) => {
+				onkeydown={(e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
 						handleRedirect(redirect);
@@ -177,6 +219,24 @@
 			>
 				<div class="p-4">
 					<h2 class="text-lg font-bold flex flex-wrap items-center gap-2">
+						{#if isAbsoluteUrl(redirect.url)}
+							<img
+								src={getFaviconUrl(redirect.url)}
+								alt="favicon"
+								width="16"
+								height="16"
+								style="vertical-align: middle"
+								onerror={handleFaviconError}
+							/>
+						{:else}
+							<img
+								src="/favicon.ico"
+								alt="local favicon"
+								width="16"
+								height="16"
+								style="vertical-align: middle"
+							/>
+						{/if}
 						{redirect.name}
 						{#if redirect.aliases && redirect.aliases.length}
 							{#each redirect.aliases as alias}
