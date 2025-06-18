@@ -1,0 +1,17 @@
+
+    /* muensterer.tech */
+                            
+    Developer: Dennis Muensterer                       
+    Location: Mainz, Germany				
+    Contact: dennismuensterer@gmail.com
+    Twitter: @dnnsmnstrr                     
+                                
+    /* SITE */
+    Language: English                
+    Standards: svelte, typescript, vite                         
+    Components: shadcn-svelte, lucide-icons
+    Hosting: Vercel, Github
+    IDE: VSCode, Cursor
+                                
+    /* THANKS */						
+    Paula, Felix

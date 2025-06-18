@@ -9,6 +9,7 @@
 <Tabs.Root class="absolute bottom-16 left-[50%] z-50 origin-center -translate-x-1/2">
 	<Tabs.List class="min-h-16">
 		<Tabs.Link
+			rel="me"
 			href={links.github}
 			class={linkStyle}
 			value="account"
@@ -17,6 +18,7 @@
 			GitHub
 		</Tabs.Link>
 		<Tabs.Link
+			rel="me"
 			href={links.linkedin}
 			class={linkStyle}
 			value="account"
@@ -25,6 +27,7 @@
 			LinkedIn
 		</Tabs.Link>
         <Tabs.Link
+			rel="me"
 			href={links.instagram}
 			class={linkStyle}
 			value="account"

@@ -184,6 +184,13 @@
 		// meta
 		if (e.metaKey || e.ctrlKey) {
 			switch (e.key) {
+				case '.':
+					if (e.shiftKey) {
+						toggleDebug();
+					} else {
+						$isCommandActive = !$isCommandActive;
+					}
+					break;
 				case ',':
 					goto('/settings');
 					break;

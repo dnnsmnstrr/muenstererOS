@@ -1,6 +1,5 @@
 # muenstererOS
 
-
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
@@ -28,6 +27,21 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
+
+### Changelog
+
+After making a major change, add an entry to [changes.json](./static/changes.json) in this format:
+
+```json
+{
+    "date": "yyyy-MM-dd",
+    "title": "Name of Change",
+    "description": "Short description of what was changed.",
+    "path": "/path-to-page"
+},
+```
+
+Save the file and run `npm run xml` to generate the updated feed.
 
 ## APIs
 

@@ -96,7 +96,19 @@ export const redirects: Redirect[] = [
 		url: links.bereal,
 		aliases: ['real', '⏰']
 	},
+	{
+		name: 'strava',
+		url: 'https://strava.app.link/7NnNESkK7Tb',
+		description: 'Trying to get back into running',
+		aliases: ['run', 'running', '🏃‍♂️']
+	},
 	// me on the web
+	{
+		name: 'indieweb',
+		url: 'https://indieweb.org/User:Muensterer.tech',
+		description: 'My page on the indieweb wiki',
+		aliases: ['indie', 'wiki', '🌐']
+	},
 	{
 		name: 'sitelet',
 		url: 'https://sitelet.co/muensterer',
@@ -221,6 +233,12 @@ export const redirects: Redirect[] = [
 	},
 	{ name: 'linus', url: 'https://linus3d.de/', aliases: ['cousin', 'linus3d'] },
 	{
+		name: 'andrea',
+		url: 'https://www.kraichgauer-oelmuehle.de/',
+		description: 'My aunt\'s oil business',
+		aliases: ['oel', 'aunt']
+	},
+	{
 		name: 'wishlist',
 		url: 'https://www.amazon.de/hz/wishlist/ls/1Y2URDXEYY1JO',
 		aliases: ['wish', 'gift', 'birthday', '🎂', '🎁']
@@ -299,6 +317,12 @@ export const redirects: Redirect[] = [
 		aliases: ['info', 'stats', 'personal-data', 'ℹ️', 'ℹ']
 	},
 	{
+		name: 'humans.txt',
+		description: 'a file with information about this website (more info at https://humanstxt.org/)',
+		url: 'humans.txt',
+		aliases: ['humans', 'human', 'humanstxt']
+	},
+	{
 		name: 'edit-info',
 		url: 'github/api/edit/master/pages/api/dennis.js',
 		aliases: ['edit-information']
@@ -306,7 +330,7 @@ export const redirects: Redirect[] = [
 	{ name: 'playlists', url: 'universe/playlists' }, //extend existing redirects
 	{ name: 'shuffle', url: 'random', aliases: ['feelinglucky', '🔀', '🎲', 'roll'] },
 	{ name: 'google', url: 'https://www.google.com/search?q=Dennis+Muensterer' },
-	{ name: 'admin', url: 'https://youareanidiot.cc/', aliases: ['wp-admin', 'idiot'] },
+	{ name: 'admin', url: 'https://youareanidiot.cc/', aliases: ['wp-admin', 'idiot', 'user'] },
 	{
 		name: 'insult',
 		url: 'contact?Subject=Fuck%20You%21',
