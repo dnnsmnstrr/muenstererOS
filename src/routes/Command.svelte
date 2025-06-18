@@ -67,7 +67,6 @@
 	} from '$lib/utils/index';
 	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
-	import { computeCommandScore } from "bits-ui";
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
