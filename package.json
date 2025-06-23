@@ -7,6 +7,7 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"start": "vite dev",
 		"test": "vitest",
 		"xml": "node scripts/xml.js",
 		"lint": "prettier --check .",
