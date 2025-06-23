@@ -58,7 +58,7 @@
 <div class="flex items-center">
     <span class="mr-2 hidden sm:block">{prompt}</span>
     <input
-        class={cn('block bg-transparent outline-none', className)}
+        class={cn('block bg-transparent outline-none text-base', className)}
         type="text"
         bind:value={inputValue}
         oninput={handleInput}
