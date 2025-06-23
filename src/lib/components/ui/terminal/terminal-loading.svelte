@@ -15,9 +15,12 @@
 		delay = 0,
 		loadingMessage,
 		completeMessage,
+		completeDelay = 0,
+		oncomplete = () => {},
+
 		duration = 1000,
 		class: className
-	}: TerminalLoadingProps = $props();
+	}: TerminalLoadingProps & { oncomplete: () => void, completeDelay: number } = $props();
 
 	let playAnimation = $state(false);
 	let animationSpeed = $state(1);
@@ -34,6 +37,9 @@
 		timeout = setTimeout(() => {
 			complete = true;
 			animation.onComplete?.();
+			setTimeout(() => {
+				oncomplete();
+			}, completeDelay);
 		}, duration / animationSpeed);
 	};
 

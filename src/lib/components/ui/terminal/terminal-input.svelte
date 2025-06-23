@@ -4,21 +4,23 @@
 
 <script lang="ts">
 	import { cn } from '$lib/utils/utils';
-	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { useAnimation } from './terminal.svelte.js';
 	import type { TerminalAnimationProps } from './types';
 	import { typewriter } from '$lib/actions/typewriter.svelte';
 
-	const dispatch = createEventDispatcher();
-
 	// Add placeholder and onSubmit as props
 	let {
 		placeholder = "Type your command...",
-		onSubmit,
-		children,
+        prompt = "$",
+		onsubmit,
 		delay = 0,
 		class: className
-	}: TerminalAnimationProps & { placeholder?: string; onSubmit?: (value: string) => void } = $props();
+	}: TerminalAnimationProps & { 
+        placeholder?: string; 
+        prompt?: string;
+        onsubmit?: (value: string) => void;
+    } = $props();
 
 	let playAnimation = $state(false);
 	let animationSpeed = $state(1);
@@ -33,9 +35,9 @@
 
 	onMount(() => {
 		inputEl && inputEl.focus();
+        // automatic focussing is handled in Command.svelte
 	});
 
-	onDestroy(() => animation.dispose());
 	onDestroy(() => animation.dispose());
 
 	function handleInput(e: Event) {
@@ -44,34 +46,36 @@
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-        inputEl && inputEl.focus();
+		inputEl && inputEl.focus();
 		if (e.key === 'Enter') {
-			onSubmit?.(inputValue);
-			dispatch('submit', inputValue);
+			onsubmit?.(inputValue);
 			inputValue = '';
-
-        }
-    }
+		}
+	}
 </script>
 
-<input
-	class={cn('block bg-transparent outline-none', className)}
-	type="text"
-	{placeholder}
-	bind:value={inputValue}
-	oninput={handleInput}
-	onkeydown={handleKeydown}
-	disabled={playAnimation}
-	bind:this={inputEl}
-/>
+
+<div class="flex items-center">
+    <span class="mr-2 hidden sm:block">{prompt}</span>
+    <input
+        class={cn('block bg-transparent outline-none', className)}
+        type="text"
+        bind:value={inputValue}
+        oninput={handleInput}
+        onkeydown={handleKeydown}
+        disabled={playAnimation}
+        bind:this={inputEl}
+        placeholder={placeholder}
+    />
+</div>
 {#if playAnimation}
-	<span
-		class={cn('block', className)}
-		transition:typewriter={{
-			speed: animationSpeed * 2,
-			onComplete: () => animation.onComplete?.()
-		}}
-	>
-		{inputValue}
-	</span>
+    <span
+        class={cn('block', className)}
+        transition:typewriter={{
+            speed: animationSpeed * 2,
+            onComplete: () => animation.onComplete?.()
+        }}
+    >
+        {inputValue}
+    </span>
 {/if}

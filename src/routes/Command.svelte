@@ -102,8 +102,10 @@
 		l: '/legal',
 		p: '/projects',
 		h: '/', // home
+		n: '/now',
 		r: '/redirects',
 		s: '/settings',
+		t: '/terminal',
 		u: '/uses'
 	};
 	const konamiCode = [
@@ -231,9 +233,6 @@
 				case 'b':
 					scrollToBottom();
 					break;
-				case 't':
-					scrollToTop();
-					break;
 				default:
 					if (gotoShortcuts[e.key]) {
 						goto(gotoShortcuts[e.key]);
@@ -251,7 +250,7 @@
 			$showHelp = false;
 		}
 
-		const pagesWithSearchField = ['/redirects', '/playlists']; // immediately search on these pages
+		const pagesWithSearchField = ['/redirects', '/playlists', '/terminal']; // immediately search on these pages
 		if (
 			pagesWithSearchField.includes(page.url.pathname) &&
 			!isOverlayVisible &&
