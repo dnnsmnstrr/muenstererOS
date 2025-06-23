@@ -1,22 +1,21 @@
 <script>
-  import { isCommandActive } from '$lib/stores/app';
-  import { Button } from "$lib/components/ui/button";
-  import {
-    Search
-  } from "lucide-svelte";
+	import { isCommandActive } from '$lib/stores/app';
+	import { Button } from '$lib/components/ui/button';
+	import { Search } from 'lucide-svelte';
 	import { isAppleDevice } from '$lib/utils/index';
+	import { Kbd } from '$lib/components/ui/kbd';
 </script>
 
-<p class="text-sm ">
-  <Button variant="outline" onclick={() => $isCommandActive = !$isCommandActive} class="flex items-center gap-2">
-    <Search />
-    <kbd
-      class="hidden sm:inline-flex pointer-events-none h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
-    >
-      <span class="text-xs">{isAppleDevice() ? '⌘' : '^'}</span>
-      <span class="pb-0.5"> 
-        K
-      </span>
-    </kbd>
-  </Button>
+<p class="text-sm">
+	<Button
+		variant="outline"
+		onclick={() => ($isCommandActive = !$isCommandActive)}
+		class="flex items-center gap-2"
+	>
+		<Search />
+		<Kbd class="hidden sm:inline-flex bg-muted h-6">
+			<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
+      <span class="text-xs pb-0.5"> K </span>
+		</Kbd>
+	</Button>
 </p>
