@@ -1,5 +1,11 @@
 [
 	{
+		"date": "2025-06-23",
+		"title": "Terminal",
+		"description": "Built an interactive terminal with https://www.shadcn-svelte-extras.com/",
+		"path": "/terminal"
+	},
+	{
 		"date": "2025-06-11",
 		"title": "humans.txt",
 		"description": "Was inspired by the humans.txt project, so I added one to my website. More information can be found at https://humanstxt.org.",
