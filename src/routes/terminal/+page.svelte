@@ -4,13 +4,16 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
+    import { tick } from 'svelte';
 
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Terminal from '$lib/components/ui/terminal';
+	import { debugLog } from '$lib/stores/app';
 
 	const pageTitle = 'Terminal';
 	const pageDescription = 'A command line interface for the muenstererOS website.';
 	const lines = $state<Line[]>([]);
+    let linesContainer: HTMLDivElement | null = null;
     let currentDirectory = $state<string>('~');
 	let isIntroComplete = $state(false);
 
@@ -39,7 +42,7 @@
         { name: 'secrets', path: '.secrets' },
     ];
 
-	function handleInput(value: string) {
+	async function handleInput(value: string) {
 		lines.push({ value, type: 'input' });
         const [rootCommand, ...args] = value.split(' ');
 		switch (rootCommand.toLowerCase()) {
@@ -133,8 +136,14 @@
 			default:
 				lines.push({ value: `Unknown command: ${value}`, type: 'output' });
 		}
-		console.log('Command submitted:', value);
-	}
+		debugLog('Command submitted:', value);
+
+        if (linesContainer) {
+            await tick();
+            linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
+        }
+
+    }
 </script>
 
 <svelte:head>
@@ -144,32 +153,32 @@
 
 <div class="container">
 	<Heading>{pageTitle}</Heading>
-	<Terminal.Root class="max-w-2xl" delay={100}>
-		{#if !isIntroComplete}
-			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
-				{#snippet loadingMessage()}
-					init muenstererOS
-				{/snippet}
-				{#snippet completeMessage()}
-					<span class="text-green-500"> ✔ CLI ready </span>
-				{/snippet}
-			</Terminal.Loading>
-		{:else}
-			<div class="mb-1 flex flex-col gap-1">
-				{#each lines as line}
-					<span>
-						{#if line.type === 'input'}
-							&gt;
-						{/if}
-						{line.value}
-					</span>
-				{/each}
-			</div>
-			<Terminal.Input
-				placeholder="Type your command..."
-				prompt="muenstererOS %"
-				onsubmit={handleInput}
-			/>
-		{/if}
-	</Terminal.Root>
+    <Terminal.Root class="max-w-2xl" delay={100}>
+        {#if !isIntroComplete}
+            <Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
+                {#snippet loadingMessage()}
+                    init muenstererOS
+                {/snippet}
+                {#snippet completeMessage()}
+                    <span class="text-green-500"> ✔ CLI ready </span>
+                {/snippet}
+            </Terminal.Loading>
+        {:else}
+            <div class="mb-1 flex flex-col gap-1 max-h-40 md:max-h-80 overflow-y-auto" bind:this={linesContainer}>
+                {#each lines as line}
+                    <span>
+                        {#if line.type === 'input'}
+                            &gt;
+                        {/if}
+                        {line.value}
+                    </span>
+                {/each}
+            </div>
+            <Terminal.Input
+                placeholder="Type your command..."
+                prompt="muenstererOS %"
+                onsubmit={handleInput}
+            />
+        {/if}
+    </Terminal.Root>
 </div>
