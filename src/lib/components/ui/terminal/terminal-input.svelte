@@ -11,11 +11,13 @@
 		class: className,
 		placeholder = 'Type your command...',
 		onsubmit,
+        ontabcompletion,
         prompt = '$',
 	}: TerminalAnimationProps & {
 		placeholder?: string;
         prompt?: string;
 		onsubmit?: (value: string) => void;
+        ontabcompletion?: (value: string) => string[];
 	} = $props();
 
 	let inputEl: HTMLInputElement;
@@ -38,6 +40,16 @@
 			onsubmit?.(inputValue);
 			inputValue = '';
 		}
+        else if (e.key === 'Tab') {
+            e.preventDefault();
+            const completions = ontabcompletion?.(inputValue);
+            if (completions && completions.length > 0) {
+                inputValue = inputValue.split(' ')[0] + ' ' + completions[0];
+            }
+        }
+        else if (e.key === 'Escape') {
+            inputValue = '';
+        }
 	}
 </script>
 

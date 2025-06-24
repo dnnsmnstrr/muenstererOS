@@ -13,11 +13,12 @@
 	const pageTitle = 'Terminal';
 	const pageDescription = 'A command line interface for the muenstererOS website.';
 	const lines = $state<Line[]>([]);
-    let linesContainer: HTMLDivElement | null = null;
+    let linesContainer = $state<HTMLDivElement | null>(null);
     let currentDirectory = $state<string>('~');
 	let isIntroComplete = $state(false);
 
-    const docs = {
+    type CommandName = 'goto' | 'help' | 'clear';
+    const docs: Record<CommandName, { description: string; usage: string; example: string }> = {
         goto: {
             description: 'Navigate to a specific page on the website.',
             usage: 'goto <path>',
@@ -37,18 +38,26 @@
 
     const directories = [
         { name: 'home', path: '~', children: ['documents', 'downloads'] },
-        { name: 'documents', path: '~/documents' },
-        { name: 'downloads', path: '~/downloads' },
+        { name: 'documents', path: '~/documents', files: ['readme.txt'] },
+        { name: 'downloads', path: '~/downloads', files: ['not_a_virus.exe', 'image.png'] },
         { name: 'secrets', path: '.secrets' },
     ];
 
+    function parseInput(value: string): { command: string; args: string[] } {
+        const parts = value.trim().split(/\s+/);
+        const command = parts[0].toLowerCase();
+        const args = parts.slice(1);
+        return { command, args };
+    }
+
 	async function handleInput(value: string) {
 		lines.push({ value, type: 'input' });
-        const [rootCommand, ...args] = value.split(' ');
-		switch (rootCommand.toLowerCase()) {
+        const { command, args } = parseInput(value);
+		switch (command.toLowerCase()) {
 			case 'help':
                 if (args.length > 0) {
-                    const manual = docs[args[0].toLowerCase() || 'help'];
+                    const cmd = (args[0]?.toLowerCase() ?? 'help') as CommandName;
+                    const manual = docs[cmd];
                     if (manual) {
                         lines.push({ value: `Command: ${args[0]}`, type: 'output' });
                         lines.push({ value: `Description: ${manual.description}`, type: 'output' });
@@ -107,14 +116,16 @@
                 goto('/');
                 break;
             case 'ls':
-                if (currentDirectory === '~') {
-                    lines.push({ value: 'documents/', type: 'output' });
-                    lines.push({ value: 'downloads/', type: 'output' });
-                } else if (currentDirectory === '~/documents') {
-                    lines.push({ value: 'readme.txt', type: 'output' });
-                } else if (currentDirectory === '~/downloads') {
-                    lines.push({ value: 'not_a_virus.exe', type: 'output' });
-                    lines.push({ value: 'image.png', type: 'output' });
+                if ('~' === currentDirectory) {
+                    const homeDir = directories.find(d => d.path === '~');
+                    homeDir?.children?.forEach(child => {
+                        lines.push({ value: child, type: 'output' });
+                    });
+                } else if (['~/documents', '~/downloads'].includes(currentDirectory)) {
+                    const files = directories.find(d => d.path === currentDirectory)?.files || [];
+                    files.forEach(file => {
+                        lines.push({ value: file, type: 'output' });
+                    });
                 } else if (currentDirectory === '.secrets') {
                     lines.push({ value: '[hidden]', type: 'output' });
                 } else {
@@ -143,6 +154,22 @@
             linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
         }
 
+    }
+
+
+    function handleCommandCompletion(value: string): string[] {
+        const { command, args } = parseInput(value);
+        switch (command) {
+            case 'goto':
+            case 'cd':
+                return directories.map(dir => dir.name).filter(name => name.startsWith(args[0] || ''));
+            case 'cat':
+                return ['readme.txt', 'not_a_virus.exe'].filter(file => file.startsWith(args[0] || ''));
+            case 'help':
+                return Object.keys(docs).filter(cmd => cmd.startsWith(args[0] || ''));
+        }
+        return [];
+        
     }
 </script>
 
@@ -178,6 +205,7 @@
                 placeholder="Type your command..."
                 prompt="muenstererOS %"
                 onsubmit={handleInput}
+                ontabcompletion={handleCommandCompletion}
             />
         {/if}
     </Terminal.Root>
