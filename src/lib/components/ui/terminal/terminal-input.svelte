@@ -2,7 +2,6 @@
 	import { cn } from '$lib/utils/utils';
 	import { onMount } from 'svelte';
 	import type { TerminalAnimationProps } from './types';
-	import { on } from 'svelte/events';
 
 	let {
 		class: className,
@@ -10,9 +9,11 @@
 		onsubmit,
         onkeydown,
         prompt = '$',
+        autofocus = true
 	}: TerminalAnimationProps & {
 		placeholder?: string;
         prompt?: string;
+        autofocus?: boolean;
 		onsubmit?: (value: string) => void;
         onkeydown?: (event: KeyboardEvent, callback: (value: string) => void) => void;
 	} = $props();
@@ -22,7 +23,7 @@
 
 
     onMount(() => {
-		inputEl && inputEl.focus();
+		autofocus && inputEl && inputEl.focus();
         // automatic focussing is handled in Command.svelte
 	});
 
@@ -47,9 +48,11 @@
 </script>
 
 <div class="flex items-center">
-	<span class="mr-2 hidden sm:block">{prompt}</span>
+	<span class="mr-2 hidden sm:block whitespace-nowrap">{prompt}</span>
+	<!-- svelte-ignore a11y_autofocus -->
 	<input
-		class={cn('block bg-transparent text-base outline-none', className)}
+        autofocus
+		class={cn('flex bg-transparent text-base outline-none w-full', className)}
 		type="text"
 		bind:value={inputValue}
 		oninput={handleInput}

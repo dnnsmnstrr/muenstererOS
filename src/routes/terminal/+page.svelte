@@ -55,6 +55,10 @@
         return { command, args };
     }
 
+    const commands = [
+        'help', 'clear', 'about', 'hi', 'hey', 'hello', 'goto', 'rm', 'cd', 'pwd',
+        'bye', 'exit', 'goodbye', 'ls', 'cat', 'echo', 'date', 'time', 'curl'
+    ];
 	async function handleSubmit(value: string) {
         // Add to command history if not empty and not duplicate of last
         if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
@@ -155,6 +159,41 @@
                     lines.push({ value: `File '${args[0]}' not found.`, type: 'output' });
                 }
                 break;
+            case 'echo':
+                if (args.length === 0) {
+                    lines.push({ value: 'Please provide a message to echo.', type: 'output' });
+                } else {
+                    lines.push({ value: args.join(' '), type: 'output' });
+                }
+                break;
+            case 'date':
+                const now = new Date();
+                lines.push({ value: now.toLocaleString(), type: 'output' });
+                break;
+            case 'time':
+                const time = new Date();
+                lines.push({ value: time.toLocaleTimeString(), type: 'output' });
+                break;
+            case 'curl':
+                if (args.length === 0) {
+                    lines.push({ value: 'Please provide a URL to fetch.', type: 'output' });
+                } else {
+                    // Allow absolute (http/https) and relative (/api/...) URLs
+                    const urlPattern = /^(https?:\/\/[\w.-]+(:[0-9]+)?(\/[\w.-]*)*\/?|\/api\/[\w./-]*)$/;
+                    if (!urlPattern.test(args[0])) {
+                        lines.push({ value: `Invalid URL: ${args[0]}`, type: 'output' });
+                        return;
+                    }
+                    const response = await fetch(args[0]);
+                    if (!response.ok) {
+                        lines.push({ value: `Error fetching ${args[0]}: ${response.statusText}`, type: 'output' });
+                        return;
+                    }
+                    const data = await response.text();
+                    lines.push({ value: data, type: 'output' });
+
+                }
+                break;
 			default:
 				lines.push({ value: `Unknown command: ${value}`, type: 'output' });
 		}
@@ -170,28 +209,9 @@
         event: KeyboardEvent,
         setInput: (value: string) => void,
     ) {
-        if (commandHistory.length > 0) {
-            if (event.key === 'ArrowUp') {
-                if (historyIndex === null) {
-                    historyIndex = commandHistory.length - 1;
-                } else if (historyIndex > 0) {
-                    historyIndex--;
-                }
-                setInput(commandHistory[historyIndex]);
-                event.preventDefault();
-                return;
-            } else if (event.key === 'ArrowDown') {
-                if (historyIndex === null) return;
-                if (historyIndex < commandHistory.length - 1) {
-                    historyIndex++;
-                    setInput(commandHistory[historyIndex]);
-                } else {
-                    historyIndex = null;
-                    setInput('');
-                }
-                event.preventDefault();
-                return;
-            }
+        if (commandHistory.length > 0 && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+            handleHistoryNavigation(event, setInput);
+            return;
         }
 
         // Tab completion
@@ -199,15 +219,14 @@
             event.preventDefault();
             const currentValue = event.target instanceof HTMLInputElement ? event.target.value : '';
             const completions = handleCommandCompletion(currentValue);
-            if (completions.length === 1) {
-                // Single match: autocomplete
-                setInput(
-                    currentValue.replace(/(\S+)$/, completions[0])
-                );
-            } else if (completions.length > 1) {
-                // Multiple matches: show options in terminal
-                lines.push({ value: completions.join('    '), type: 'output' });
-            }
+            setInput(currentValue.replace(/(\S+)$/, completions[0]));
+            // if (completions.length === 1) {
+            //     // Single match: autocomplete
+            //     setInput(currentValue.replace(/(\S+)$/, completions[0]));
+            // } else if (completions.length > 1) {
+            //     // Multiple matches: show options in terminal
+            //     lines.push({ value: completions.join('    '), type: 'output' });
+            // }
         }
         if (event.ctrlKey && event.key.toLowerCase() === 'c') {
             setInput(''); // Clear input on Ctrl+C
@@ -249,8 +268,16 @@
                 return directories.map(dir => dir.name).filter(name => name.startsWith(args[0] || ''));
             case 'cat':
                 return ['readme.txt', 'not_a_virus.exe'].filter(file => file.startsWith(args[0] || ''));
+            case 'curl':
+                return ['/api/dennis', '/api/playlists', '/api/redirects', '/api/now'].filter(url => url.startsWith(args[0] || 'curl'));
             case 'help':
                 return Object.keys(docs).filter(cmd => cmd.startsWith(args[0] || ''));
+            default:
+                // For any other command, return an empty array
+                const commandCompletions = commands.filter(cmd => cmd.startsWith(command));
+                if (commandCompletions.length > 0) {
+                    return commandCompletions;
+                }
         }
         return [];
         
@@ -275,7 +302,7 @@
                 {/snippet}
             </Terminal.Loading>
         {:else}
-            <div class="mb-1 flex flex-col gap-1 max-h-40 md:max-h-80 overflow-y-auto" bind:this={linesContainer}>
+            <div class="mb-1 flex flex-col gap-1 max-h-40 md:max-h-80 overflow-y-auto overflow-x-clip" bind:this={linesContainer}>
                 {#each lines as line}
                     <span>
                         {#if line.type === 'input'}
