@@ -1,23 +1,20 @@
-<!--
-	Installed from @ieedan/shadcn-svelte-extras
--->
-
 <script lang="ts">
 	import { cn } from '$lib/utils/utils';
 	import { onMount } from 'svelte';
 	import type { TerminalAnimationProps } from './types';
+	import { on } from 'svelte/events';
 
 	let {
 		class: className,
 		placeholder = 'Type your command...',
 		onsubmit,
-        ontabcompletion,
+        onkeydown,
         prompt = '$',
 	}: TerminalAnimationProps & {
 		placeholder?: string;
         prompt?: string;
 		onsubmit?: (value: string) => void;
-        ontabcompletion?: (value: string) => string[];
+        onkeydown?: (event: KeyboardEvent, callback: (value: string) => void) => void;
 	} = $props();
 
 	let inputEl: HTMLInputElement;
@@ -40,15 +37,11 @@
 			onsubmit?.(inputValue);
 			inputValue = '';
 		}
-        else if (e.key === 'Tab') {
-            e.preventDefault();
-            const completions = ontabcompletion?.(inputValue);
-            if (completions && completions.length > 0) {
-                inputValue = inputValue.split(' ')[0] + ' ' + completions[0];
-            }
-        }
         else if (e.key === 'Escape') {
             inputValue = '';
+        }
+        else {
+            onkeydown?.(e, (newValue: string) => inputValue = newValue);
         }
 	}
 </script>

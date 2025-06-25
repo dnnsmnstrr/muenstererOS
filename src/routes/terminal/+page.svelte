@@ -9,6 +9,7 @@
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Terminal from '$lib/components/ui/terminal';
 	import { debugLog } from '$lib/stores/app';
+	import { set } from 'zod';
 
 	const pageTitle = 'Terminal';
 	const pageDescription = 'A command line interface for the muenstererOS website.';
@@ -16,6 +17,10 @@
     let linesContainer = $state<HTMLDivElement | null>(null);
     let currentDirectory = $state<string>('~');
 	let isIntroComplete = $state(false);
+
+    // Command history state
+    let commandHistory = $state<string[]>([]);
+    let historyIndex = $state<number | null>(null);
 
     type CommandName = 'goto' | 'help' | 'clear';
     const docs: Record<CommandName, { description: string; usage: string; example: string }> = {
@@ -50,8 +55,14 @@
         return { command, args };
     }
 
-	async function handleInput(value: string) {
-		lines.push({ value, type: 'input' });
+	async function handleSubmit(value: string) {
+        // Add to command history if not empty and not duplicate of last
+        if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
+            commandHistory.push(value);
+        }
+        historyIndex = null;
+
+        lines.push({ value, type: 'input' });
         const { command, args } = parseInput(value);
 		switch (command.toLowerCase()) {
 			case 'help':
@@ -153,9 +164,82 @@
             await tick();
             linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
         }
-
     }
 
+    function handleKeyDown(
+        event: KeyboardEvent,
+        setInput: (value: string) => void,
+    ) {
+        if (commandHistory.length > 0) {
+            if (event.key === 'ArrowUp') {
+                if (historyIndex === null) {
+                    historyIndex = commandHistory.length - 1;
+                } else if (historyIndex > 0) {
+                    historyIndex--;
+                }
+                setInput(commandHistory[historyIndex]);
+                event.preventDefault();
+                return;
+            } else if (event.key === 'ArrowDown') {
+                if (historyIndex === null) return;
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    setInput(commandHistory[historyIndex]);
+                } else {
+                    historyIndex = null;
+                    setInput('');
+                }
+                event.preventDefault();
+                return;
+            }
+        }
+
+        // Tab completion
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            const currentValue = event.target instanceof HTMLInputElement ? event.target.value : '';
+            const completions = handleCommandCompletion(currentValue);
+            if (completions.length === 1) {
+                // Single match: autocomplete
+                setInput(
+                    currentValue.replace(/(\S+)$/, completions[0])
+                );
+            } else if (completions.length > 1) {
+                // Multiple matches: show options in terminal
+                lines.push({ value: completions.join('    '), type: 'output' });
+            }
+        }
+        if (event.ctrlKey && event.key.toLowerCase() === 'c') {
+            setInput(''); // Clear input on Ctrl+C
+            event.preventDefault();
+            return;
+        }
+    }
+
+    // Handle up/down arrow for command history navigation
+    function handleHistoryNavigation(event: KeyboardEvent, setInput: (v: string) => void) {
+        if (commandHistory.length === 0) return;
+
+        if (event.key === 'ArrowUp') {
+            if (historyIndex === null) {
+                historyIndex = commandHistory.length - 1;
+            } else if (historyIndex > 0) {
+                historyIndex--;
+            }
+            setInput(commandHistory[historyIndex]);
+            event.preventDefault();
+        } else if (event.key === 'ArrowDown') {
+            if (historyIndex === null) return;
+            if (historyIndex < commandHistory.length - 1) {
+                historyIndex++;
+                setInput(commandHistory[historyIndex]);
+            } else {
+                historyIndex = null;
+                setInput('');
+            }
+            event.preventDefault();
+        }
+    }
 
     function handleCommandCompletion(value: string): string[] {
         const { command, args } = parseInput(value);
@@ -204,8 +288,8 @@
             <Terminal.Input
                 placeholder="Type your command..."
                 prompt="muenstererOS %"
-                onsubmit={handleInput}
-                ontabcompletion={handleCommandCompletion}
+                onsubmit={handleSubmit}
+                onkeydown={handleKeyDown}
             />
         {/if}
     </Terminal.Root>
