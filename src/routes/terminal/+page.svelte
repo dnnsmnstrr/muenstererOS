@@ -5,11 +5,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
     import { tick } from 'svelte';
+    import { onMount } from 'svelte';
 
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Terminal from '$lib/components/ui/terminal';
 	import { debugLog } from '$lib/stores/app';
-	import { set } from 'zod';
+	import { endpoints } from '../api/+page.svelte';
 
 	const pageTitle = 'Terminal';
 	const pageDescription = 'A command line interface for the muenstererOS website.';
@@ -21,6 +22,27 @@
     // Command history state
     let commandHistory = $state<string[]>([]);
     let historyIndex = $state<number | null>(null);
+
+    const HISTORY_KEY = 'terminalCommandHistory';
+    function saveHistory(historyData: string[] = commandHistory) {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(historyData));
+    }
+
+    // Load command history from localStorage on mount
+    onMount(() => {
+        const stored = localStorage.getItem(HISTORY_KEY);
+        if (stored) {
+            try {
+                commandHistory = JSON.parse(stored);
+            } catch {
+                commandHistory = [];
+            }
+        }
+    });
+
+    $effect(() => {
+        if (commandHistory) saveHistory();
+    });
 
     type CommandName = 'goto' | 'help' | 'clear';
     const docs: Record<CommandName, { description: string; usage: string; example: string }> = {
@@ -174,6 +196,28 @@
                 const time = new Date();
                 lines.push({ value: time.toLocaleTimeString(), type: 'output' });
                 break;
+            case 'history':
+                if (commandHistory.length === 0) {
+                    lines.push({ value: 'No command history available.', type: 'output' });
+                } else if (args.length > 0) {
+                    if (args.includes('--clear') || args.includes('-c')) {
+                        commandHistory = [];
+                        lines.push({ value: 'Command history cleared.', type: 'output' });
+                        return;
+                    }
+                    const index = parseInt(args[0], 10) - 1;
+                    if (isNaN(index) || index < 0 || index >= commandHistory.length) {
+                        lines.push({ value: `Invalid history index: ${args[0]}`, type: 'output' });
+                    } else {
+                        lines.push({ value: `Command at index ${index + 1}: ${commandHistory[index]}`, type: 'output' });
+                    }
+                } else {
+                    lines.push({ value: 'Command History:', type: 'output' });
+                    commandHistory.forEach((cmd, index) => {
+                        lines.push({ value: `${index + 1}: ${cmd}`, type: 'output' });
+                    });
+                }
+                break;
             case 'curl':
                 if (args.length === 0) {
                     lines.push({ value: 'Please provide a URL to fetch.', type: 'output' });
@@ -191,7 +235,6 @@
                     }
                     const data = await response.text();
                     lines.push({ value: data, type: 'output' });
-
                 }
                 break;
 			default:
@@ -205,7 +248,7 @@
         }
     }
 
-    function handleKeyDown(
+    async function handleKeyDown(
         event: KeyboardEvent,
         setInput: (value: string) => void,
     ) {
@@ -218,15 +261,22 @@
         if (event.key === 'Tab') {
             event.preventDefault();
             const currentValue = event.target instanceof HTMLInputElement ? event.target.value : '';
-            const completions = handleCommandCompletion(currentValue);
-            setInput(currentValue.replace(/(\S+)$/, completions[0]));
-            // if (completions.length === 1) {
-            //     // Single match: autocomplete
-            //     setInput(currentValue.replace(/(\S+)$/, completions[0]));
-            // } else if (completions.length > 1) {
-            //     // Multiple matches: show options in terminal
-            //     lines.push({ value: completions.join('    '), type: 'output' });
-            // }
+            const { command, args } = parseInput(currentValue);
+            const completions = handleCommandCompletion(command, args[args.length - 1] || '');
+            if (completions.length >= 1 && args.length > 0) {
+                // Single match: autocomplete
+                const newInput = currentValue.replace(/(\S+)$/, completions[0]);
+                const isSingleCommand = newInput.split(' ').length === 1;
+                setInput(newInput + (isSingleCommand ? ' ' : ''));
+
+            } else if (completions.length > 1 && !args.length) {
+                // Multiple matches: output options in terminal
+                lines.push({ value: completions.join(' '), type: 'output' });
+                if (linesContainer) {
+                    await tick();
+                    linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
+                }
+            }
         }
         if (event.ctrlKey && event.key.toLowerCase() === 'c') {
             setInput(''); // Clear input on Ctrl+C
@@ -260,20 +310,18 @@
         }
     }
 
-    function handleCommandCompletion(value: string): string[] {
-        const { command, args } = parseInput(value);
+    function handleCommandCompletion(command: string, query: string): string[] {
         switch (command) {
             case 'goto':
             case 'cd':
-                return directories.map(dir => dir.name).filter(name => name.startsWith(args[0] || ''));
+                return directories.map(dir => dir.name).filter(name => name.startsWith(query || ''));
             case 'cat':
-                return ['readme.txt', 'not_a_virus.exe'].filter(file => file.startsWith(args[0] || ''));
+                return ['readme.txt', 'not_a_virus.exe'].filter(file => file.startsWith(query || ''));
             case 'curl':
-                return ['/api/dennis', '/api/playlists', '/api/redirects', '/api/now'].filter(url => url.startsWith(args[0] || 'curl'));
+                return endpoints.map(endpoint => endpoint.url).filter(url => url.startsWith(query || ''));
             case 'help':
-                return Object.keys(docs).filter(cmd => cmd.startsWith(args[0] || ''));
+                return Object.keys(docs).filter(cmd => cmd.startsWith(query || ''));
             default:
-                // For any other command, return an empty array
                 const commandCompletions = commands.filter(cmd => cmd.startsWith(command));
                 if (commandCompletions.length > 0) {
                     return commandCompletions;
@@ -291,33 +339,36 @@
 
 <div class="container">
 	<Heading>{pageTitle}</Heading>
-    <Terminal.Root class="max-w-2xl" delay={100}>
-        {#if !isIntroComplete}
-            <Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
-                {#snippet loadingMessage()}
-                    init muenstererOS
-                {/snippet}
-                {#snippet completeMessage()}
-                    <span class="text-green-500"> ✔ CLI ready </span>
-                {/snippet}
-            </Terminal.Loading>
-        {:else}
-            <div class="mb-1 flex flex-col gap-1 max-h-40 md:max-h-80 overflow-y-auto overflow-x-clip" bind:this={linesContainer}>
-                {#each lines as line}
-                    <span>
-                        {#if line.type === 'input'}
-                            &gt;
-                        {/if}
-                        {line.value}
-                    </span>
-                {/each}
-            </div>
-            <Terminal.Input
-                placeholder="Type your command..."
-                prompt="muenstererOS %"
-                onsubmit={handleSubmit}
-                onkeydown={handleKeyDown}
-            />
-        {/if}
-    </Terminal.Root>
+	<Terminal.Root class="max-w-2xl" delay={100}>
+		{#if !isIntroComplete}
+			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
+				{#snippet loadingMessage()}
+					init muenstererOS
+				{/snippet}
+				{#snippet completeMessage()}
+					<span class="text-green-500"> ✔ CLI ready </span>
+				{/snippet}
+			</Terminal.Loading>
+		{:else}
+			<div
+				class="mb-1 flex max-h-40 flex-col gap-1 overflow-y-auto overflow-x-clip md:max-h-80"
+				bind:this={linesContainer}
+			>
+				{#each lines as line}
+					<span>
+						{#if line.type === 'input'}
+							&gt;
+						{/if}
+						{line.value}
+					</span>
+				{/each}
+			</div>
+			<Terminal.Input
+				placeholder="Type your command..."
+				prompt="muenstererOS %"
+				onsubmit={handleSubmit}
+				onkeydown={handleKeyDown}
+			/>
+		{/if}
+	</Terminal.Root>
 </div>
