@@ -1,0 +1,67 @@
+[
+	{
+		"title": "Terminal",
+		"path": "/terminal",
+		"date": "2025-06-23"
+	},
+	{
+		"title": "API Docs",
+		"path": "/api",
+		"date": "2025-05-28"
+	},
+	{
+		"title": "Now Page",
+		"path": "/now",
+		"date": "2025-02-28"
+	},
+	{
+		"title": "Uses",
+		"path": "/uses",
+		"date": "2025-02-01"
+	},
+	{
+		"title": "Playlists",
+		"path": "/playlists",
+		"date": "2025-02-01"
+	},
+	{
+		"title": "Projects",
+		"path": "/projects",
+		"date": "2025-02-01"
+	},
+	{
+		"name": "Where",
+		"path": "/where",
+		"date": "2025-02-20"
+	},
+	{
+		"title": "Now",
+		"path": "/now",
+		"date": "2025-01-01"
+	},
+	{
+		"title": "Legal Notice",
+		"path": "/legal",
+		"date": "2025-01-01"
+	},
+	{
+		"title": "Settings",
+		"path": "/settings",
+		"date": "2025-01-01"
+	},
+	{
+		"title": "Contact",
+        "path": "/contact",
+        "date": "2025-01-01"
+    },
+	{
+		"title": "About",
+		"path": "/about",
+		"date": "2025-01-01"
+	},
+	{
+		"title": "Home",
+		"path": "/",
+		"date": "2024-02-05"
+	}
+]

@@ -3,7 +3,7 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2025-06-23T19:45:04.395Z</updated>
+    <updated>2025-06-26T19:13:38.762Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
@@ -67,7 +67,7 @@
     <entry>
         <title>Playlists</title>
         <link href="https://muensterer.tech/playlists"/>
-        <id>1-playlists</id>
+        <id>0-playlists</id>
         <updated>2024-12-24</updated>
         <content type="html">
             <![CDATA[
@@ -94,61 +94,6 @@
         <content type="html">
             <![CDATA[
                 <p>Created a new personal website with SvelteKit.</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>About</title>
-        <link href="https://muensterer.tech/about"/>
-        <id>0-about</id>
-        <updated>2025-01-01</updated>
-        <content type="html">
-            <![CDATA[
-                <p>The about page</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Contact</title>
-        <link href="https://muensterer.tech/contact"/>
-        <id>0-contact</id>
-        <updated>2025-01-01</updated>
-        <content type="html">
-            <![CDATA[
-                <p>How to contact me</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Uses</title>
-        <link href="https://muensterer.tech/uses"/>
-        <id>0-uses</id>
-        <updated>2025-02-01</updated>
-        <content type="html">
-            <![CDATA[
-                <p>The tools I use</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Playlists</title>
-        <link href="https://muensterer.tech/playlists"/>
-        <id>0-playlists</id>
-        <updated>2025-01-31</updated>
-        <content type="html">
-            <![CDATA[
-                <p>My playlists</p>
-            ]]>
-        </content>
-    </entry>
-    <entry>
-        <title>Where</title>
-        <link href="https://muensterer.tech/where"/>
-        <id>0-where</id>
-        <updated>2025-02-20</updated>
-        <content type="html">
-            <![CDATA[
-                <p>Where I am</p>
             ]]>
         </content>
     </entry>
