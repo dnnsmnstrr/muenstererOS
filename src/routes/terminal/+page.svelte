@@ -20,6 +20,13 @@
 	import * as Terminal from '$lib/components/ui/terminal';
 	import { debugLog } from '$lib/stores/app';
 	import { endpoints } from '../api/+page.svelte';
+	import pagesData from '../../../static/pages.json?raw';
+    type Page = {
+		date: string;
+		title: string;
+		path?: string;
+	};
+	const pages = JSON.parse(pagesData) as Page[];
 
 	const pageTitle = 'Terminal';
 	const pageDescription = 'A command line interface for the muenstererOS website.';
@@ -125,7 +132,14 @@
             usage: 'goto <path>',
             example: 'goto settings',
             callback: async ({ args }) => {
-                goto('/' + args.join('/'));
+                const path = args.join('/');
+                if (path.startsWith('/')) {
+                    goto(path);
+                } else if (path.startsWith('http://') || path.startsWith('https://')) {
+                    window.open(path, '_blank');
+                } else {
+                    goto('/' + path);
+                }
             }
         },
         {
@@ -408,6 +422,8 @@
     function handleCommandCompletion(command: string, query: string): string[] {
         switch (command) {
             case 'goto':
+                return pages.map(page => page.path || page.title.toLocaleLowerCase()).filter(page => page.startsWith(query.toLowerCase()))
+                    
             case 'cd':
                 return directories.map(dir => dir.name).filter(name => name.startsWith(query || ''));
             case 'cat':
