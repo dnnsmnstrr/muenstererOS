@@ -1,5 +1,4 @@
 <script>
-	import { assets } from '$app/paths';
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import Link from '$lib/components/typography/Link.svelte';
 	import List from '$lib/components/typography/List.svelte';
