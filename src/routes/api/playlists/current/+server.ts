@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import playlists from '../../../playlists/playlists.json';
+import playlists from '../../../../../static/data/playlists.json';
 
 export async function GET() {
   const firstPlaylist = playlists[0];

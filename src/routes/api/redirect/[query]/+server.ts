@@ -4,5 +4,5 @@ import { getRedirect } from '$lib/utils/redirect';
 
 export async function GET({ params }) {
   const foundRedirect = getRedirect(params.query, redirects)
-  throw redirect(302, foundRedirect)
+  throw redirect(302, String(foundRedirect))
 }

@@ -250,7 +250,7 @@
 			$showHelp = false;
 		}
 
-		const pagesWithSearchField = ['/redirects', '/playlists', '/terminal']; // immediately search on these pages
+		const pagesWithSearchField = ['/redirects', '/uses', '/playlists', '/terminal']; // immediately search on these pages
 		if (
 			pagesWithSearchField.includes(page.url.pathname) &&
 			!isOverlayVisible &&

@@ -24,7 +24,11 @@
 		{
 			name: 'Playlists',
 			url: '/api/playlists'
-		}
+		},
+		{
+			name: 'Uses',
+			url: '/api/uses'
+		},	
 	];
 </script>
 
@@ -83,11 +87,11 @@
 		<div class="mt-4 text-red-600">Error: {error}</div>
 	{/if}
 	{#if response}
-		<Card.Root class="mt-4 max-h-96 overflow-x-auto">
+		<Card.Root class="mt-4 max-h-96">
 			<Card.Content>
 				<label for="api-response" class="mb-2 block font-semibold">Response:</label>
-				<pre id="api-response" class="overflow-auto rounded-lg text-sm">
-					<code>{JSON.stringify(response, null, 2)}</code>
+				<pre id="api-response" class="max-h-80 overflow-auto rounded-lg text-sm">
+					<code>{'\n'}{JSON.stringify(response, null, 2)}</code>
 				</pre>
 			</Card.Content>
 		</Card.Root>

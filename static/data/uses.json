@@ -1,199 +1,199 @@
 [
-    {
-        "name": "Raycast",
-        "description": "I cannot live without this application",
-        "url": "https://www.raycast.com/?via=dnnsmnstrr",
-        "category": "software",
-        "tags": ["productivity"]
-    },
-    {
-        "name": "Zen",
-        "description": "My current browser (RIP Arc)",
-        "url": "https://zen-browser.app/",
-        "category": "software",
-        "tags": ["web"]
-    },
-    {
-        "name": "Spotify",
-        "description": "Music is Life!",
-        "url": "https://www.spotify.com",
-        "category": "software",
-        "tags": ["music"]
-    },
-    {
-        "name": "Visual Studio Code",
-        "description": "This is where I do my coding",
-        "url": "https://code.visualstudio.com",
-        "category": "software",
-        "tags": ["javascript"],
-        "image": "VSCode"
-    },
-    {
-        "name": "BetterTouchTool",
-        "description": "What can't be done with Raycast, I do with BTT",
-        "url": "https://folivora.ai",
-        "category": "software",
-        "tags": ["productivity"],
-        "image": "https://folivora.ai/folivora/static/media/btticon.2c242d7e7f0d295fab7d.png"
-    },
-    {
-        "name": "Obsidian",
-        "description": "My digital brain",
-        "url": "https://obsidian.md",
-        "category": "software",
-        "tags": ["productivity"]
-    },
-    {
-        "name": "Bitwarden",
-        "description": "Default password manager",
-        "url": "https://bitwarden.com",
-        "category": "software",
-        "tags": ["security", "productivity"]
-    },
-    {
-        "name": "Xcode",
-        "description": "Need this to build apps",
-        "url": "https://developer.apple.com/xcode/",
-        "category": "software",
-        "tags": ["apple"],
-        "image": "https://developer.apple.com/assets/elements/icons/xcode-12/xcode-12-96x96_2x.png"
-    },
-    {
-        "name": "GitHub",
-        "description": "Star all the things!!!",
-        "url": "https://github.com/dnnsmnstrr",
-        "category": "development",
-        "tags": ["web"]
-    },
-    {
-        "name": "GitLab",
-        "description": "GitHub alternative",
-        "url": "https://gitlab.com",
-        "category": "services",
-        "tags": ["git", "web"]
-    },
-    {
-        "name": "JavaScript",
-        "description": "My favorite programming language (especially with TypeScript)",
-        "category": "development",
-        "tags": ["javascript"]
-    },
-    {
-        "name": "SvelteKit",
-        "description": "This website is built with Svelte and SvelteKit!",
-        "url": "https://kit.svelte.dev",
-        "category": "development",
-        "tags": ["javascript"]
-    },
-    {
-        "name": "React",
-        "description": "A JavaScript library for building user interfaces",
-        "url": "https://reactjs.org",
-        "category": "development",
-        "tags": ["javascript"]
-    },
-    {
-        "name": "iPhone 16e",
-        "url": "https://www.apple.com/de/iphone-16e/",
-        "description": "Wish I could still be using my 13 mini...",
-        "category": "hardware",
-        "tags": ["apple", "smartphone"],
-        "image": "https://www.apple.com/v/iphone-16e/a/images/overview/product-stories/camera/lens_hw__cskrtmilk38m_large_2x.png"
-    },
-    {
-        "name": "Apple Watch Series 6",
-        "description": "My daily companion for activity tracking and notifications",
-        "url": "https://support.apple.com/de-de/111918",
-        "category": "hardware",
-        "tags": ["apple"],
-        "image": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111918_sp826-apple-watch-series6-580.png"
-    },
-    {
-        "name": "AirTag",
-        "description": "So I always know where my keys are",
-        "url": "https://www.apple.com/airtag/",
-        "category": "hardware",
-        "tags": ["apple", "smartphone", "accessories"],
-        "image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airtag-single-select-202104?wid=532&hei=582&fmt=png-alpha&.v=1617761671000"
-    },
-    {
-        "name": "M3 MacBook Air",
-        "description": "A lightweight and powerful laptop for everyday tasks",
-        "url": "https://www.apple.com/macbook-air/",
-        "category": "hardware",
-        "tags": ["apple", "computer"],
-        "image": "https://www.apple.com/v/macbook-air/s/images/overview/routers/compare_mba_13_15__caznvrb61zyu_large_2x.png"
-    },
-    {
-        "name": "Steam Deck",
-        "description": "My main gaming device",
-        "url": "https://www.steamdeck.com/en/deck",
-        "category": "hardware",
-        "tags": ["gaming"],
-        "image": "https://cdn.cloudflare.steamstatic.com/steamdeck/images/deck/deck_top.png"
-    },
-    {
-        "name": "Stream Deck",
-        "description": "Mainly used in combination with BetterTouchTool",
-        "url": "https://www.elgato.com/en/gaming/stream-deck",
-        "category": "hardware",
-        "tags": ["gaming", "accessories"],
-        "image": "https://res.cloudinary.com/elgato-pwa/image/upload/q_auto,f_auto/v1710142076/legacy/organismCard/okjaup05hlxslkgzph9k.png"
-    },
-    {
-        "name": "Logitech MX Series",
-        "description": "I use the vertical mice, MX Keys Mini & MX Master 3s",
-        "url": "https://www.logitech.com/en-us/mx/master-series.html",
-        "category": "hardware",
-        "tags": ["computer", "accessories"],
-        "image": "https://resource.logitech.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/keyboards/mx-keys-mini/gallery/us/mx-keys-mini-top-black-us.png"
-    },
-    {
-        "name": "Beats Studio Buds+",
-        "description": "I refuse to buy white AirPods",
-        "url": "https://www.beatsbydre.com/earbuds/studio-buds-plus-wireless-noise-cancelling/MQLK3/transparent",
-        "category": "hardware",
-        "tags": ["music", "apple", "accessories"],
-        "image": "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/studio-buds-plus/pdp/studiobudsplus-pdp-p13.png.large.2x.png"
-    },
-    {
-        "name": "Creality CR6-SE",
-        "description": "A 3D printer I got through Kickstarter. Have two of them now.",
-        "url": "https://www.creality.com/products/cr-6-se-3d-printer",
-        "category": "hardware",
-        "tags": ["making"],
-        "image": "https://img.staticdj.com/a79612e3276075fcc067c7a4cfe07d5e_1024x.jpg"
-    },
-    {
-        "name": "Dremel 3000",
-        "description": "You spin me right round, baby, right round",
-        "url": "https://www.dremel.com/de/de/p/dremel-3000-f0133000ju",
-        "category": "hardware",
-        "tags": ["making"],
-        "image": "https://www.dremel.com/imagestorage/de-de/dremel-3000-9356-hires-png-rgb-oneux-8095_w_233_h_233.png"
-    },
-    {
-        "name": "Home Assistant Yellow",
-        "description": "My smart home server running on a Raspberry Pi CM4",
-        "url": "https://www.home-assistant.io/yellow/",
-        "category": "hardware",
-        "tags": ["homelab"],
-        "image": "https://www.home-assistant.io/images/yellow/yellow_hero.jpg"
-    },
-    {
-        "name": "UGREEN NASync DXP4800Plus",
-        "description": "My NAS for Backups and Data Storage",
-        "url": "https://de.ugreen.com/pages/ugreen-nasync-series",
-        "category": "hardware",
-        "tags": ["homelab"],
-        "image": "https://de.ugreen.com/cdn/shop/files/ugreen-nasync-dxp4800-plus-715786-940519.png"
-    },
-    {
-        "name": "JetKVM",
-        "description": "A tiny KVM in my tiny server rack",
-        "url": "https://jetkvm.com/",
-        "category": "hardware",
-        "tags": ["homelab"],
-        "image": "https://jetkvm.com/jetkvm-device-still3.png"
-    }
+	{
+		"name": "Raycast",
+		"description": "Can't live without it!",
+		"url": "https://www.raycast.com/?via=dnnsmnstrr",
+		"category": "software",
+		"tags": ["productivity"]
+	},
+	{
+		"name": "Zen",
+		"description": "My current browser (RIP Arc)",
+		"url": "https://zen-browser.app/",
+		"category": "software",
+		"tags": ["web"]
+	},
+	{
+		"name": "Spotify",
+		"description": "Music is Life 🎶",
+		"url": "https://www.spotify.com",
+		"category": "software",
+		"tags": ["music"]
+	},
+	{
+		"name": "Visual Studio Code",
+		"description": "Where I do my coding",
+		"url": "https://code.visualstudio.com",
+		"category": "software",
+		"tags": ["javascript"],
+		"image": "VSCode"
+	},
+	{
+		"name": "BetterTouchTool",
+		"description": "What can't be done with Raycast, I do with BTT",
+		"url": "https://folivora.ai",
+		"category": "software",
+		"tags": ["productivity"],
+		"image": "https://folivora.ai/folivora/static/media/btticon.2c242d7e7f0d295fab7d.png"
+	},
+	{
+		"name": "Obsidian",
+		"description": "IDE for my digital brain",
+		"url": "https://obsidian.md",
+		"category": "software",
+		"tags": ["productivity"]
+	},
+	{
+		"name": "Bitwarden",
+		"description": "Default password manager",
+		"url": "https://bitwarden.com",
+		"category": "software",
+		"tags": ["security", "productivity"]
+	},
+	{
+		"name": "Xcode",
+		"description": "Need this to build apps",
+		"url": "https://developer.apple.com/xcode/",
+		"category": "software",
+		"tags": ["apple"],
+		"image": "https://developer.apple.com/assets/elements/icons/xcode-12/xcode-12-96x96_2x.png"
+	},
+	{
+		"name": "GitHub",
+		"description": "Star all the things!!!",
+		"url": "https://github.com/dnnsmnstrr",
+		"category": "development",
+		"tags": ["web"]
+	},
+	{
+		"name": "GitLab",
+		"description": "GitHub alternative",
+		"url": "https://gitlab.com",
+		"category": "services",
+		"tags": ["git", "web"]
+	},
+	{
+		"name": "JavaScript",
+		"description": "My favorite programming language (especially with TypeScript)",
+		"category": "development",
+		"tags": ["javascript"]
+	},
+	{
+		"name": "SvelteKit",
+		"description": "This website is built with Svelte and SvelteKit!",
+		"url": "https://kit.svelte.dev",
+		"category": "development",
+		"tags": ["javascript"]
+	},
+	{
+		"name": "React",
+		"description": "A JavaScript library for building user interfaces",
+		"url": "https://reactjs.org",
+		"category": "development",
+		"tags": ["javascript"]
+	},
+	{
+		"name": "iPhone 16e",
+		"url": "https://www.apple.com/de/iphone-16e/",
+		"description": "Wish I could still be using my 13 mini...",
+		"category": "hardware",
+		"tags": ["apple", "smartphone"],
+		"image": "https://www.apple.com/v/iphone-16e/a/images/overview/product-stories/camera/lens_hw__cskrtmilk38m_large_2x.png"
+	},
+	{
+		"name": "Apple Watch Series 6",
+		"description": "Replacing this with a Pebble soon™",
+		"url": "https://support.apple.com/de-de/111918",
+		"category": "hardware",
+		"tags": ["apple"],
+		"image": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111918_sp826-apple-watch-series6-580.png"
+	},
+	{
+		"name": "AirTag",
+		"description": "So I always know where my keys are...",
+		"url": "https://www.apple.com/airtag/",
+		"category": "hardware",
+		"tags": ["apple", "smartphone", "accessories"],
+		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airtag-single-select-202104?wid=532&hei=582&fmt=png-alpha&.v=1617761671000"
+	},
+	{
+		"name": "M3 MacBook Air",
+		"description": "A lightweight and powerful laptop for everyday tasks",
+		"url": "https://www.apple.com/macbook-air/",
+		"category": "hardware",
+		"tags": ["apple", "computer"],
+		"image": "https://www.apple.com/v/macbook-air/s/images/overview/routers/compare_mba_13_15__caznvrb61zyu_large_2x.png"
+	},
+	{
+		"name": "Steam Deck",
+		"description": "My main gaming device",
+		"url": "https://www.steamdeck.com/en/deck",
+		"category": "hardware",
+		"tags": ["gaming"],
+		"image": "https://cdn.cloudflare.steamstatic.com/steamdeck/images/deck/deck_top.png"
+	},
+	{
+		"name": "Stream Deck",
+		"description": "Used in combination with BetterTouchTool",
+		"url": "https://www.elgato.com/en/gaming/stream-deck",
+		"category": "hardware",
+		"tags": ["gaming", "accessories"],
+		"image": "https://res.cloudinary.com/elgato-pwa/image/upload/q_auto,f_auto/v1710142076/legacy/organismCard/okjaup05hlxslkgzph9k.png"
+	},
+	{
+		"name": "Logitech MX Series",
+		"description": "Vertical mice, MX Keys & MX Master 3s",
+		"url": "https://www.logitech.com/en-us/mx/master-series.html",
+		"category": "hardware",
+		"tags": ["computer", "accessories"],
+		"image": "https://resource.logitech.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/keyboards/mx-keys-mini/gallery/us/mx-keys-mini-top-black-us.png"
+	},
+	{
+		"name": "Beats Studio Buds+",
+		"description": "I refuse to buy white AirPods",
+		"url": "https://www.beatsbydre.com/earbuds/studio-buds-plus-wireless-noise-cancelling/MQLK3/transparent",
+		"category": "hardware",
+		"tags": ["music", "apple", "accessories"],
+		"image": "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/studio-buds-plus/pdp/studiobudsplus-pdp-p13.png.large.2x.png"
+	},
+	{
+		"name": "Creality CR6-SE",
+		"description": "3D printer I got through Kickstarter. Have two of them now.",
+		"url": "https://www.creality.com/products/cr-6-se-3d-printer",
+		"category": "hardware",
+		"tags": ["making"],
+		"image": "https://img.staticdj.com/a79612e3276075fcc067c7a4cfe07d5e_1024x.jpg"
+	},
+	{
+		"name": "Dremel 3000",
+		"description": "You spin me right round, baby, right round",
+		"url": "https://www.dremel.com/de/de/p/dremel-3000-f0133000ju",
+		"category": "hardware",
+		"tags": ["making"],
+		"image": "https://www.dremel.com/imagestorage/de-de/dremel-3000-9356-hires-png-rgb-oneux-8095_w_233_h_233.png"
+	},
+	{
+		"name": "Home Assistant Yellow",
+		"description": "My smart home server running on a Raspberry Pi CM4",
+		"url": "https://www.home-assistant.io/yellow/",
+		"category": "hardware",
+		"tags": ["homelab"],
+		"image": "https://www.home-assistant.io/images/yellow/yellow_hero.jpg"
+	},
+	{
+		"name": "UGREEN NASync DXP4800Plus",
+		"description": "My NAS for Backups and Data Storage",
+		"url": "https://de.ugreen.com/pages/ugreen-nasync-series",
+		"category": "hardware",
+		"tags": ["homelab"],
+		"image": "https://de.ugreen.com/cdn/shop/files/ugreen-nasync-dxp4800-plus-715786-940519.png"
+	},
+	{
+		"name": "JetKVM",
+		"description": "A tiny KVM in my tiny server rack",
+		"url": "https://jetkvm.com/",
+		"category": "hardware",
+		"tags": ["homelab"],
+		"image": "https://jetkvm.com/jetkvm-device-still3.png"
+	}
 ]

@@ -20,7 +20,7 @@
 	import * as Terminal from '$lib/components/ui/terminal';
 	import { debugLog } from '$lib/stores/app';
 	import { endpoints } from '../api/+page.svelte';
-	import pagesData from '../../../static/pages.json?raw';
+	import pagesData from '../../../static/data/pages.json?raw';
     type Page = {
 		date: string;
 		title: string;
