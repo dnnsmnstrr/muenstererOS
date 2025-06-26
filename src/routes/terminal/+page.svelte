@@ -1,5 +1,14 @@
 <script lang="ts" module>
 	type Line = { value: string; type?: 'input' | 'output' };
+    type TerminalCommand = {
+        name: string;
+        description: string;
+        usage: string;
+        example?: string;
+        aliases?: string[];
+        hidden?: boolean;
+        callback: (args: { args: string[]; lines: Line[] }) => Promise<void>;
+    };
 </script>
 
 <script lang="ts">
@@ -44,25 +53,6 @@
         if (commandHistory) saveHistory();
     });
 
-    type CommandName = 'goto' | 'help' | 'clear';
-    const docs: Record<CommandName, { description: string; usage: string; example: string }> = {
-        goto: {
-            description: 'Navigate to a specific page on the website.',
-            usage: 'goto <path>',
-            example: 'goto settings'
-        },
-        help: {
-            description: 'Display help information for commands.',
-            usage: 'help [command]',
-            example: 'help goto'
-        },
-        clear: {
-            description: 'Clear the terminal output.',
-            usage: 'clear',
-            example: 'clear'
-        },
-    }
-
     const directories = [
         { name: 'home', path: '~', children: ['documents', 'downloads'] },
         { name: 'documents', path: '~/documents', files: ['readme.txt'] },
@@ -77,56 +67,82 @@
         return { command, args };
     }
 
-    const commands = [
-        'help', 'clear', 'about', 'hi', 'hey', 'hello', 'goto', 'rm', 'cd', 'pwd',
-        'bye', 'exit', 'goodbye', 'ls', 'cat', 'echo', 'date', 'time', 'curl'
-    ];
-	async function handleSubmit(value: string) {
-        // Add to command history if not empty and not duplicate of last
-        if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
-            commandHistory.push(value);
-        }
-        historyIndex = null;
-
-        lines.push({ value, type: 'input' });
-        const { command, args } = parseInput(value);
-		switch (command.toLowerCase()) {
-			case 'help':
+    const commands: TerminalCommand[] = [
+        {
+            name: 'help',
+            description: 'Display help information for commands.',
+            usage: 'help [command]',
+            example: 'help goto',
+            callback: async ({ args, lines }) => {
                 if (args.length > 0) {
-                    const cmd = (args[0]?.toLowerCase() ?? 'help') as CommandName;
-                    const manual = docs[cmd];
-                    if (manual) {
-                        lines.push({ value: `Command: ${args[0]}`, type: 'output' });
-                        lines.push({ value: `Description: ${manual.description}`, type: 'output' });
-                        lines.push({ value: `Usage: ${manual.usage}`, type: 'output' });
-                        lines.push({ value: `Example: ${manual.example}`, type: 'output' });
+                    const cmd = args[0]?.toLowerCase();
+                    const found = commands.find(c => c.name === cmd);
+                    if (found) {
+                        lines.push({ value: `Command: ${found.name}`, type: 'output' });
+                        lines.push({ value: `Description: ${found.description}`, type: 'output' });
+                        lines.push({ value: `Usage: ${found.usage}`, type: 'output' });
+                        if (found.example) {
+                            lines.push({ value: `Example: ${found.example}`, type: 'output' });
+                        }
                     } else {
                         lines.push({ value: `No manual entry for '${args[0]}'.`, type: 'output' });
                     }
                 } else {
-                    lines.push({ value: 'Available commands: help, clear, about, goto', type: 'output' });
+                    lines.push({ value: 'Available commands: ' + commands.map(c => c.name).join(', '), type: 'output' });
                 }
-				break;
-			case 'clear':
-				lines.length = 0; // Clear the terminal
-				break;
-			case 'about':
-				lines.push({ value: 'This is ' + pageDescription.toLocaleLowerCase(), type: 'output' });
-				break;
-            case 'hi':
-            case 'hey':
-			case 'hello':
-				const greetings = ['Hello!', 'Hi there!', 'Greetings!', 'Salutations!', 'Howdy!', 'Hey!'];
-				const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-				lines.push({ value: randomGreeting, type: 'output' });
-				break;
-            case 'goto':
+            }
+        },
+        {
+            name: 'clear',
+            description: 'Clear the terminal output.',
+            usage: 'clear',
+            callback: async ({ lines }) => {
+                lines.length = 0;
+            }
+        },
+        {
+            name: 'about',
+            description: 'Show information about the terminal.',
+            usage: 'about',
+            callback: async ({ lines }) => {
+                lines.push({ value: 'This is a command line interface for the muenstererOS website.', type: 'output' });
+            }
+        },
+        {
+            name: 'hello',
+            description: 'Say hello.',
+            aliases: ['hello', 'hey', 'hi'],
+            usage: 'hello',
+            callback: async ({ lines }) => {
+                const greetings = ['Hello!', 'Hi there!', 'Greetings!', 'Salutations!', 'Howdy!', 'Hey!', 'What\'s up?', 'Welcome!'];
+                const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+                lines.push({ value: randomGreeting, type: 'output' });
+            }
+        },
+        {
+            name: 'goto',
+            description: 'Navigate to a specific page on the website.',
+            usage: 'goto <path>',
+            example: 'goto settings',
+            callback: async ({ args }) => {
                 goto('/' + args.join('/'));
-                break;
-            case 'rm':
+            }
+        },
+        {
+            name: 'rm',
+            description: 'Warn about removing files.',
+            usage: 'rm <file>',
+            example: 'rm not_a_virus.exe',
+            callback: async ({ lines }) => {
                 lines.push({ value: 'Careful now!', type: 'output' });
-                break;
-            case 'cd':
+            }
+        },
+        {
+            name: 'cd',
+            description: 'Change directory.',
+            usage: 'cd <directory>',
+            example: 'cd documents',
+            callback: async ({ args, lines }) => {
                 if (args.length === 0) {
                     lines.push({ value: 'Please specify a directory to change into.', type: 'output' });
                 } else {
@@ -142,17 +158,42 @@
                     }
                     lines.push({ value: `Changing directory to ${args.join(' ')}`, type: 'output' });
                 }
-                break;
-            case 'pwd':
+            }
+        },
+        {
+            name: 'pwd',
+            description: 'Print working directory.',
+            usage: 'pwd',
+            callback: async ({ lines }) => {
                 lines.push({ value: currentDirectory, type: 'output' });
-                break;
-            case 'bye':
-            case 'exit':
-            case 'goodbye':
+            }
+        },
+        {
+            name: 'bye',
+            description: 'Exit the terminal.',
+            usage: 'bye',
+            example: 'bye',
+            callback: async ({ lines }) => {
                 lines.push({ value: 'Goodbye! See you next time!', type: 'output' });
                 goto('/');
-                break;
-            case 'ls':
+            }
+        },
+        {
+            name: 'exit',
+            description: 'Exit the terminal.',
+            aliases: ['quit', 'bye', 'goodbye'],
+            usage: 'exit',
+            callback: async ({ lines }) => {
+                lines.push({ value: 'Goodbye! See you next time!', type: 'output' });
+                goto('/');
+            }
+        },
+        {
+            name: 'ls',
+            description: 'List files and directories.',
+            usage: 'ls',
+            example: 'ls',
+            callback: async ({ lines }) => {
                 if ('~' === currentDirectory) {
                     const homeDir = directories.find(d => d.path === '~');
                     homeDir?.children?.forEach(child => {
@@ -168,8 +209,14 @@
                 } else {
                     lines.push({ value: `No such directory: ${currentDirectory}`, type: 'output' });
                 }
-                break;
-            case 'cat':
+            }
+        },
+        {
+            name: 'cat',
+            description: 'Read a file.',
+            usage: 'cat <file>',
+            example: 'cat readme.txt',
+            callback: async ({ args, lines }) => {
                 if (args.length === 0) {
                     lines.push({ value: 'Please specify a file to read.', type: 'output' });
                 } else if (args[0] === 'readme.txt') {
@@ -180,23 +227,47 @@
                 } else {
                     lines.push({ value: `File '${args[0]}' not found.`, type: 'output' });
                 }
-                break;
-            case 'echo':
+            }
+        },
+        {
+            name: 'echo',
+            description: 'Echo a message.',
+            usage: 'echo <message>',
+            example: 'echo Hello world!',
+            callback: async ({ args, lines }) => {
                 if (args.length === 0) {
                     lines.push({ value: 'Please provide a message to echo.', type: 'output' });
                 } else {
                     lines.push({ value: args.join(' '), type: 'output' });
                 }
-                break;
-            case 'date':
+            }
+        },
+        {
+            name: 'date',
+            description: 'Show the current date and time.',
+            usage: 'date',
+            example: 'date',
+            callback: async ({ lines }) => {
                 const now = new Date();
                 lines.push({ value: now.toLocaleString(), type: 'output' });
-                break;
-            case 'time':
+            }
+        },
+        {
+            name: 'time',
+            description: 'Show the current time.',
+            usage: 'time',
+            example: 'time',
+            callback: async ({ lines }) => {
                 const time = new Date();
                 lines.push({ value: time.toLocaleTimeString(), type: 'output' });
-                break;
-            case 'history':
+            }
+        },
+        {
+            name: 'history',
+            description: 'Show command history.',
+            usage: 'history',
+            example: 'history',
+            callback: async ({ args, lines }) => {
                 if (commandHistory.length === 0) {
                     lines.push({ value: 'No command history available.', type: 'output' });
                 } else if (args.length > 0) {
@@ -217,12 +288,17 @@
                         lines.push({ value: `${index + 1}: ${cmd}`, type: 'output' });
                     });
                 }
-                break;
-            case 'curl':
+            }
+        },
+        {
+            name: 'curl',
+            description: 'Fetch a URL.',
+            usage: 'curl <url>',
+            example: 'curl /api/hello',
+            callback: async ({ args, lines }) => {
                 if (args.length === 0) {
                     lines.push({ value: 'Please provide a URL to fetch.', type: 'output' });
                 } else {
-                    // Allow absolute (http/https) and relative (/api/...) URLs
                     const urlPattern = /^(https?:\/\/[\w.-]+(:[0-9]+)?(\/[\w.-]*)*\/?|\/api\/[\w./-]*)$/;
                     if (!urlPattern.test(args[0])) {
                         lines.push({ value: `Invalid URL: ${args[0]}`, type: 'output' });
@@ -236,10 +312,29 @@
                     const data = await response.text();
                     lines.push({ value: data, type: 'output' });
                 }
-                break;
-			default:
-				lines.push({ value: `Unknown command: ${value}`, type: 'output' });
-		}
+            }
+        }
+    ];
+
+	async function handleSubmit(value: string) {
+        // Add to command history if not empty and not duplicate of last
+        if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
+            commandHistory.push(value);
+        }
+        historyIndex = null;
+
+        lines.push({ value, type: 'input' });
+        const { command, args } = parseInput(value);
+        const foundCommand = commands.find(c => c.name === command || (c.aliases && c.aliases.includes(command)));
+        if (foundCommand) {
+            try {
+                await foundCommand.callback({ args, lines });
+            } catch (error) {
+                lines.push({ value: `Error executing command '${command}': ${error}`, type: 'output' });
+            }
+        } else {
+            lines.push({ value: `Unknown command: ${command}`, type: 'output' });
+        }
 		debugLog('Command submitted:', value);
 
         if (linesContainer) {
@@ -320,7 +415,13 @@
             case 'curl':
                 return endpoints.map(endpoint => endpoint.url).filter(url => url.startsWith(query || ''));
             case 'help':
-                return Object.keys(docs).filter(cmd => cmd.startsWith(query || ''));
+                return commands
+                    .filter(cmd => !cmd.hidden)
+                    .map(cmd => cmd.name)
+                    .filter(name => name.startsWith(query || ''));
+            
+
+            
             default:
                 const commandCompletions = commands.filter(cmd => cmd.startsWith(command));
                 if (commandCompletions.length > 0) {
