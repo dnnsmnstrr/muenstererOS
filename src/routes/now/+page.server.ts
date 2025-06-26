@@ -1,3 +1,5 @@
+import { NOW_GIST_ID } from '$lib/config.js';
+
 export async function load({ fetch }) {
     const response = await fetch('/api/now');
     if (!response.ok) {
@@ -5,6 +7,7 @@ export async function load({ fetch }) {
     }
     const nowData = await response.json();
     return {
-        nowData
+        nowData,
+        gistId: NOW_GIST_ID
     };
 }

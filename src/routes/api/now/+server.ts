@@ -15,10 +15,10 @@ export async function GET() {
         // console.log(apiData)
         const gistData = JSON.parse(apiData.files['now.json'].content);
         const updatedAt = apiData.updated_at;
-        const versions = apiData.history.map((item) => ({
-            version: item.version,
-            url: item.url,
+        const versions = apiData.history.map((item: any) => ({
+            ...item,
             timestamp: item.committed_at,
+            changes: item.change_status?.total,
         }));
         // console.log(versions)
         return json({ ...gistData, updatedAt, gistUrl: apiData.html_url, versions });

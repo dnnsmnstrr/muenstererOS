@@ -7,6 +7,7 @@ const __dirname = dirname(__filename);
 
 const llmsTxt = fs.readFileSync(path.join(__dirname, '../static/llms.txt'), 'utf-8');
 
+// https://llmstxt.org/llmstxt-js.html
 function parseLLMsTxt(txt) {
 	function parseLinks(links) {
 		const linkPat = /-\s*\[(?<title>[^\]]+)\]\((?<url>[^\)]+)\)(?::\s*(?<desc>.*?))?$/gm;

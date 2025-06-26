@@ -1,34 +1,26 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui/card';
 	import Heading from '$lib/components/typography/Heading.svelte';
-	import { MapPin, Music, Activity, Calendar, Code, InfoIcon } from 'lucide-svelte';
+	import { MapPin, Music, Calendar, Code, InfoIcon, Pencil, RotateCcw } from 'lucide-svelte';
 	import type { PageProps } from './$types';
-	import { USERNAME_SHORT } from '$lib/config';
+	import { NOW_GIST_ID, USERNAME_SHORT } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
 	import playlists from '../playlists/playlists.json';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
 	import { renderers } from '$lib/components/typography';
-
-	import {
-		Root as Dialog,
-		Trigger as DialogTrigger,
-		Content as DialogContent,
-		Close as DialogClose
-	} from '$lib/components/ui/dialog';
-	import * as Tooltip from "$lib/components/ui/tooltip";
-	import { Button } from '$lib/components/ui/button';
 	import Versions from './Versions.svelte';
-	
+	import Button from '$lib/components/ui/button/button.svelte';
+
 	let { data }: PageProps = $props();
-	
+
 	let nowData = $state(data.nowData);
-	let showModal = $state(false);
+	let showingVersion = $state(false);
 	let currentPlaylist = playlists.find((p) => p.uri === nowData.playlist.uri);
 	let playlistImage =
-	currentPlaylist?.imageUrl ||
-	(currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
-	let projects = $state('')
-	let plans = $state('')
+		currentPlaylist?.imageUrl ||
+		(currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
+	let projects = $state('');
+	let plans = $state('');
 	let versionPositions = $state([]);
 	$effect(() => {
 		projects = '- ' + nowData.projects.join('\n- ');
@@ -45,38 +37,57 @@
 		}
 	});
 
-	async function loadVersion(url: string) {
+	async function loadVersion(url: string, timestamp?: string) {
 		const response = await fetch(url);
 		if (!response.ok) {
 			throw new Error('Failed to load version');
 		}
 		const apiData = await response.json();
 		const gistData = JSON.parse(apiData.files['now.json'].content);
-		console.log(apiData, gistData)
 		nowData = {
 			...gistData,
-			updatedAt: new Date(apiData.updated_at).toISOString(),
-			versions: nowData.versions
+			updatedAt: gistData.updatedAt || timestamp || new Date(apiData.updated_at).toISOString(),
+			versions: nowData.versions,
+			url: apiData.url
 		};
+		showingVersion = true;
 		return gistData;
-
 	}
-
 </script>
 
 <div class="container mx-auto p-4">
 	<Heading class="mb-8 flex w-full items-center justify-between text-3xl">
 		What I'm doing now
-		<Link
-			href="https://gist.github.com/{USERNAME_SHORT}/{nowData.gistId}"
-			class="mt-2 block text-sm font-normal"
-		>
-			Last updated: {new Date(nowData.updatedAt).toLocaleDateString('en-US', {
-				year: 'numeric',
-				month: '2-digit',
-				day: '2-digit'
-			})}
-		</Link>
+		<div class="flex items-center">
+			<Link
+				href={nowData.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
+				class="block text-sm font-normal"
+			>
+				{#if showingVersion}
+					Version from:
+				{:else}
+					Last updated:
+				{/if}
+				{new Date(nowData.updatedAt).toLocaleDateString('en-US', {
+					year: 'numeric',
+					month: '2-digit',
+					day: '2-digit'
+				})}
+			</Link>
+			{#if showingVersion}
+				<Button
+					class="ml-4"
+					variant="outline"
+					onclick={() => {
+						nowData = data.nowData
+						showingVersion = false;
+					}}
+				>
+					<RotateCcw class="h-5 w-5" />
+				</Button>
+			{/if}
+		</div>
+
 	</Heading>
 
 	<div class="grid grid-cols-12 grid-rows-5 gap-4 md:grid-rows-3">
@@ -100,18 +111,22 @@
 				<Music class="mr-2 inline-block" />
 				<Link href="/playlists">Playlist</Link>
 			</Heading>
-			<div class="flex flex-col items-center space-y-2">
-				{#if playlistImage}
-					<img
-						src={playlistImage}
-						alt="Playlist cover"
-						class="aspect-square w-full rounded-md object-cover"
-					/>
-				{/if}
-				<Link href={`https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">
-					{nowData.playlist.name}
-				</Link>
-			</div>
+			{#if nowData.playlist}
+				<div class="flex flex-col items-center space-y-2">
+					{#if playlistImage}
+						<img
+							src={playlistImage}
+							alt="Playlist cover"
+							class="aspect-square w-full rounded-md object-cover"
+						/>
+					{/if}
+					<Link href={`https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">
+						{nowData.playlist.name}
+					</Link>
+				</div>
+			{:else}
+				<p class="text-muted-foreground">No playlist available</p>
+			{/if}
 		</Card>
 
 		<Card class="col-span-12 row-span-1 p-4 sm:col-span-8 sm:row-span-1 lg:col-start-6">
@@ -132,12 +147,11 @@
 		</Card>
 	</div>
 
-	<!-- Versions Button -->
-	<div class="mt-8 text-center">
-		<Versions
-			versions={nowData.versions}
-			versionPositions={versionPositions}
-			loadVersion={loadVersion}
-		/>
+	<div class="mt-4 flex items-center justify-center gap-2">
+		<Versions versions={nowData.versions} {versionPositions} {loadVersion} />
+		<Button class="" variant="ghost" aria-label="Edit">
+			<Pencil class="h-5 w-5" />
+			<span>Edit latest </span>
+		</Button>
 	</div>
 </div>
