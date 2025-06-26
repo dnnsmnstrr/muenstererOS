@@ -1,0 +1,57 @@
+{
+  "title": "muenstererOS",
+  "summary": "A personal website for Dennis Muensterer (@dnnsmnstrr)",
+  "info": "The muenstererOS application is built with SvelteKit and hosted on Vercel.\nIts design is inspired by operating systems like macOS, using shadcn-svelte components\nto recreate elements like the menu bar, dock, draggable windows and a command bar / launcher.",
+  "sections": {
+    "Pages": [
+      {
+        "title": "Redirects",
+        "url": "https://muensterer.tech/redirects",
+        "desc": "A list of redirects to websites and accounts related to Dennis. Many of them have aliases that can be matched as fallbacks on the 404 page or queried via API (/api/redirects). For example `/ig` will redirect to `https://www.instagram.com/dnnsmnstrr/`, while `/instagram` or `/insta` will do the same."
+      },
+      {
+        "title": "Playlists",
+        "url": "https://muensterer.tech/playlists",
+        "desc": "Selection of Spotify playlists curated by Dennis. He has created a playlist for each season since 2017 and there are also various playlists for different themes, such as sleep, coding or workouts."
+      },
+      {
+        "title": "Now",
+        "url": "https://muensterer.tech/now",
+        "desc": "An overview of what Dennis is currently doing, updated semi-regularly. "
+      },
+      {
+        "title": "Uses",
+        "url": "https://muensterer.tech/uses",
+        "desc": "The current tech and gadget stack being used by Dennis. It can be filtered by hardware/software and other tags."
+      }
+    ],
+    "API": [
+      {
+        "title": "/api/redirects",
+        "url": "https://muensterer.tech/api/redirects",
+        "desc": "A list of redirects with a name, optional description, url and a list of aliases. All of type string (or string array)"
+      },
+      {
+        "title": "/api/playlists",
+        "url": "https://muensterer.tech/api/playlists",
+        "desc": "Playlist-Objects include a title, an emoji, year and uri. They can be of type season or theme, with the former including a season field with either spring, summer, autumn or winter. There is also an imageUrl and an optional gif link."
+      },
+      {
+        "title": "/api/now",
+        "url": "https://muensterer.tech/api/now",
+        "desc": "Now data is pulled from a GitHub gist"
+      },
+      {
+        "title": "/api/dennis",
+        "url": "https://muensterer.tech/api/dennis",
+        "desc": "Stats such as age, height, weight and contact information"
+      },
+      {
+        "title": "/api/resume",
+        "url": "https://muensterer.tech/api/resume",
+        "desc": "Data source for a CV in [JSON Resume](https://jsonresume.org/) format. The resulting website is available at [cv.muensterer.tech](https://cv.muensterer.tech)"
+      }
+    ],
+    "Zettelkasten": []
+  }
+}

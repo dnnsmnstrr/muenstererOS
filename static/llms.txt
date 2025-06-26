@@ -1,0 +1,39 @@
+# muenstererOS
+
+> A personal website for Dennis Muensterer (@dnnsmnstrr)
+
+The muenstererOS application is built with SvelteKit and hosted on Vercel.
+Its design is inspired by operating systems like macOS, using shadcn-svelte components
+to recreate elements like the menu bar, dock, draggable windows and a command bar / launcher.
+
+
+## Pages
+
+- [Redirects](https://muensterer.tech/redirects):
+A list of redirects to websites and accounts related to Dennis. Many of them have aliases that can be matched as fallbacks on the 404 page or queried via API (/api/redirects). For example `/ig` will redirect to `https://www.instagram.com/dnnsmnstrr/`, while `/instagram` or `/insta` will do the same.
+- [Playlists](https://muensterer.tech/playlists): 
+Selection of Spotify playlists curated by Dennis. He has created a playlist for each season since 2017 and there are also various playlists for different themes, such as sleep, coding or workouts.
+- [Now](https://muensterer.tech/now): 
+An overview of what Dennis is currently doing, updated semi-regularly. 
+- [Uses](https://muensterer.tech/uses): 
+The current tech and gadget stack being used by Dennis. It can be filtered by hardware/software and other tags.
+
+## API
+
+Most of the data displayed on the website is available via JSON as a GET-request to the corresponding API-endpoint:
+
+- [/api/redirects](https://muensterer.tech/api/redirects): A list of redirects with a name, optional description, url and a list of aliases. All of type string (or string array)
+- [/api/playlists](https://muensterer.tech/api/playlists): Playlist-Objects include a title, an emoji, year and uri. They can be of type season or theme, with the former including a season field with either spring, summer, autumn or winter. There is also an imageUrl and an optional gif link.
+- [/api/now](https://muensterer.tech/api/now): Now data is pulled from a GitHub gist
+
+There are also some more endpoints with information about Dennis:
+- [/api/dennis](https://muensterer.tech/api/dennis): Stats such as age, height, weight and contact information
+- [/api/resume](https://muensterer.tech/api/resume): Data source for a CV in [JSON Resume](https://jsonresume.org/) format. The resulting website is available at [cv.muensterer.tech](https://cv.muensterer.tech)
+
+
+## Zettelkasten
+
+Dennis shares his personal notes publicly as a so-called Zettelkasten.
+They are stored as Markdown files in a [GitHub repo](https://github.com/dnnsmnstrr/zettelkasten).
+A web-version is hosted on [GitHub Pages](https://dnnsmnstrr.github.io/zettelkasten/), with an alternate backup version available on [GitLab Pages](https://dnnsmnstrr.gitlab.io/zettelkasten/).
+The former is built with [Neuron](https://neuron.zettel.page/), while the latter is generated using [Dendron](https://dendron.so/).
