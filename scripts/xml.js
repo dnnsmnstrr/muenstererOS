@@ -5,8 +5,9 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const pages = JSON.parse(fs.readFileSync(path.join(__dirname, '../static/pages.json'), 'utf-8')); // { title, path, date }
-const changes = JSON.parse(fs.readFileSync(path.join(__dirname, '../static/changes.json'), 'utf-8')); // { name, description, path, date }
+const dataPath = '../static/data/';
+const pages = JSON.parse(fs.readFileSync(path.join(__dirname, dataPath + 'pages.json'), 'utf-8')); // { title, path, date }
+const changes = JSON.parse(fs.readFileSync(path.join(__dirname, dataPath + 'changes.json'), 'utf-8')); // { name, description, path, date }
 
 const baseUrl = 'https://muensterer.tech'; 
 

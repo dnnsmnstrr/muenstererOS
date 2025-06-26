@@ -1,12 +1,13 @@
 import {
-  API_URL,
-  CURRENT_DOMAIN,
-  DEFAULT_URL,
-  USERNAME,
-  USERNAME_SHORT,
-  links
-} from '$lib/config'
-import type { Redirect } from './utils/redirect'
+	API_URL,
+	CURRENT_DOMAIN,
+	DEFAULT_URL,
+	NOW_GIST_ID,
+	USERNAME,
+	USERNAME_SHORT,
+	links
+} from '$lib/config';
+import type { Redirect } from './utils/redirect';
 
 // no url means the redirect will be built out of the default url and the name
 // name: the main string to match a redirect to
@@ -112,7 +113,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'sitelet',
 		url: 'https://sitelet.co/muensterer',
-		aliases: ['badge'],
+		aliases: ['badge']
 	},
 	{
 		name: 'making',
@@ -141,7 +142,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'printables',
 		url: links.printables,
-    	aliases: ['print', 'models', '3dprint', 'prusa']
+		aliases: ['print', 'models', '3dprint', 'prusa']
 	},
 	{
 		name: 'kickstarter',
@@ -170,9 +171,9 @@ export const redirects: Redirect[] = [
 	},
 	{ name: 'discord', url: 'https://discord.gg/CrB72mXEzN' },
 	{
-	  name: 'raycast',
-	  url: 'https://raycast.com/?via=' + USERNAME_SHORT,
-	  aliases: ['ray', 'launcher', 'spotlight', '🔍', '🔎']
+		name: 'raycast',
+		url: 'https://raycast.com/?via=' + USERNAME_SHORT,
+		aliases: ['ray', 'launcher', 'spotlight', '🔍', '🔎']
 	},
 	// Projects
 	{
@@ -204,7 +205,11 @@ export const redirects: Redirect[] = [
 		url: 'https://y.at/robot.laptop.phone.watch.headphone',
 		aliases: ['emoji', '🤖💻📱⌚🎧']
 	},
-  	{ name: 'sherrit', url: 'https://sherr.it/9jxNdPCzff2Iwsk', aliases: ['rollingsquare', 'aircard']},
+	{
+		name: 'sherrit',
+		url: 'https://sherr.it/9jxNdPCzff2Iwsk',
+		aliases: ['rollingsquare', 'aircard']
+	},
 	{ name: 'vet', url: 'https://vet.domains/muensterer.vet', aliases: ['vechain'] },
 	{
 		name: 'stickers',
@@ -235,7 +240,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'andrea',
 		url: 'https://www.kraichgauer-oelmuehle.de/',
-		description: 'My aunt\'s oil business',
+		description: "My aunt's oil business",
 		aliases: ['oel', 'aunt']
 	},
 	{
@@ -249,6 +254,21 @@ export const redirects: Redirect[] = [
 		description: "A page with information about what I'm up to at the moment",
 		aliases: ['currently', 'atm', 'doing', 'update'],
 		url: 'zettelkasten/now'
+	},
+	{
+		name: 'now-data',
+		description: 'The data source for my now page',
+		url: 'https://gist.github.com/dnnsmnstrr/' + NOW_GIST_ID
+	},
+	{
+		name: 'edit-now',
+		description: 'Quick link to edit the now page data',
+		url: 'https://gist.github.com/dnnsmnstrr/' + NOW_GIST_ID + '/edit'
+	},
+	{
+		name: 'nownownow',
+		description: "A page with information about what I'm up to at the moment",
+		url: 'https://nownownow.com/p/xPQ6'
 	},
 	{ name: 'uses', description: 'a list of tech I use', url: 'zettelkasten/uses' }, // https://uses.tech/
 	{ name: 'defaults', description: 'my app defaults', url: 'zettelkasten/defaults' }, // https://defaults.rknight.me/

@@ -21,7 +21,7 @@
 			technologies: ['SvelteKit', 'shadcn-svelte'],
 			githubUrl: 'https://github.com/dnnsmnstrr/muenstererOS',
 			webUrl: 'https://muensterer.tech',
-			image: '/muenstererOS.png'
+			image: '/images/muenstererOS.png'
 		},
 		{
 			title: 'Progressions',

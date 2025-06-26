@@ -57,7 +57,7 @@
 		</Card.Content>
 		<Card.Footer class="justify-between">
 			<Button variant="link" href="/humans.txt" class="mb-4">
-				<img src="/humanstxt.png" alt="" />
+				<img src="/images/humanstxt.png" alt="" />
 			</Button>
 		</Card.Footer>
 	</Card.Root>

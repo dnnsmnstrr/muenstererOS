@@ -182,7 +182,7 @@ function handleFaviconError(event: Event) {
 								/>
 							{:else}
 								<img
-									src="/muenstererOS.png"
+									src="/images/muenstererOS.png"
 									alt="local favicon"
 									width="16"
 									height="16"
