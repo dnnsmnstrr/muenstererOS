@@ -1,5 +1,15 @@
 [
 	{
+		"title": "Summer Nights",
+		"type": "season",
+		"season": "summer",
+		"year": 2025,
+		"emoji": "🌌",
+		"uri": "7kT7V7djIYgu67CGf1vQ7P",
+		"imageUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c025ebd753b5ef33c46e75a8c",
+		"gif": "https://media3.giphy.com/media/Qx4ltILRcYzHK50B9R/giphy.gif"
+	},
+	{
 		"title": "One Wish",
 		"emoji": "🧞‍♂️",
 		"type": "season",
@@ -65,7 +75,7 @@
 		"season": "autumn",
 		"year": 2023,
 		"emoji": "🌧️",
-		"uri": "2BamYUcYazuRqudq38MX8Q",
+		"uri": "2uL3x2SDjeumqANdztCI4A",
 		"imageId": "ab67706c0000da8482bdfe8492e17ebe3277359f",
 		"gif": "https://media4.giphy.com/media/G3lxvBMhGu53y/giphy.webp"
 	},

@@ -5,7 +5,7 @@
 	import type { PageProps } from './$types';
 	import { NOW_GIST_ID, USERNAME_SHORT } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
-	import playlists from '../playlists/playlists.json';
+	import playlists from '../../../static/data/playlists.json';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
 	import { renderers } from '$lib/components/typography';
 	import Versions from './Versions.svelte';

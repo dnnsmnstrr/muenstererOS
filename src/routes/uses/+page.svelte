@@ -23,7 +23,7 @@
 	import { capitalize } from '$lib/utils/index';
 	import { RotateCcw, HelpCircle } from 'lucide-svelte';
 	import SvgIcons from './icons';
-	import uses from './uses.json';
+	import uses from '../../../static/data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
 
 	let searchQuery = $state('');
