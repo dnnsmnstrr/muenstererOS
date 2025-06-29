@@ -36,7 +36,7 @@
 		uses.filter((item) => {
 			const lowerCaseQuery = searchQuery.toLowerCase();
 			const matchesSearch =
-				item.name.toLowerCase().includes(lowerCaseQuery) ||
+				item.title.toLowerCase().includes(lowerCaseQuery) ||
 				item.description?.toLowerCase().includes(lowerCaseQuery) ||
 				item.tags?.some((tag) => tag.includes(lowerCaseQuery));
 
@@ -56,7 +56,7 @@
 					(item) =>
 						item.tags?.includes(tag) &&
 						(item.tags?.some((tag) => tag.includes(lowerCaseQuery)) ||
-							item.name.includes(lowerCaseQuery) ||
+							item.title.includes(lowerCaseQuery) ||
 							item.description?.includes(lowerCaseQuery))
 				);
 			const matchesCategory =
@@ -180,15 +180,15 @@
 				<Card.Content class="flex h-full flex-col justify-between pt-6">
 					<div>
 						<img
-							src={item.image && item.image.includes('http') ? item.image : SvgIcons[item.image || item.name]}
-							alt={item.name}
+							src={item.image && item.image.includes('http') ? item.image : SvgIcons[item.image || item.title]}
+							alt={item.title}
 							class="mb-4 h-48 w-full rounded-t-lg object-contain"
 						/>
 						<h2 class="mb-2 flex items-center text-xl font-semibold">
 							{#if item.url}
-								<a class="hover:underline" href={item.url}>{item.name}</a>
+								<a class="hover:underline" href={item.url}>{item.title}</a>
 							{:else}
-								{item.name}
+								{item.title}
 							{/if}
 						</h2>
 						{#if item.description}
