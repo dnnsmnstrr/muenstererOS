@@ -1,4 +1,6 @@
 import { json, error } from '@sveltejs/kit';
+import { searchData, sortData } from '$lib/utils/api';
+import type { DataItem } from '$lib/utils/api';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -21,7 +23,7 @@ export async function GET({ params, url }) {
 
     // Sorting parameters
     const sortKey = url.searchParams.get('sortBy');
-    const sortDir = url.searchParams.get('dir')?.toLowerCase() === 'desc' ? 'desc' : 'asc';
+    const sortDir = url.searchParams.get('direction')?.toLowerCase() === 'desc' ? 'desc' : 'asc';
 
     let filteredData = data;
 
@@ -29,10 +31,13 @@ export async function GET({ params, url }) {
     if (search && Array.isArray(filteredData)) {
       filteredData = searchData(filteredData, search, ['title', 'description'])
     }
-
     // Sorting
     if (sortKey && Array.isArray(filteredData)) {
-      filteredData = sortData(filteredData, sortKey as keyof DataItem, sortDir)
+      // Only sort if the key exists on the first item (or fallback to string)
+      const key = sortKey as keyof DataItem;
+      if (filteredData.length > 0 && key in filteredData[0]) {
+        filteredData = sortData(filteredData, key, sortDir);
+      }
     }
 
     if (!Array.isArray(filteredData)) {

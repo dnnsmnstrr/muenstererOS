@@ -1,4 +1,4 @@
-type DataItem = {
+export type DataItem = {
 	title?: string;
 	description?: string;
 	date?: string;
@@ -7,7 +7,7 @@ type DataItem = {
 
 type SortDirection = 'asc' | 'desc';
 
-function sortData(items: DataItem[], key: keyof DataItem, direction: SortDirection = 'asc') {
+export function sortData(items: DataItem[], key: keyof DataItem, direction: SortDirection = 'asc') {
 	const filteredItems = items.slice().sort((a, b) => {
 		const aValue = a[key];
 		const bValue = b[key];
@@ -45,13 +45,23 @@ function sortData(items: DataItem[], key: keyof DataItem, direction: SortDirecti
 	return filteredItems;
 }
 
-function searchData(
-	items: DataItem[],
+export function searchData<T extends Record<string, any> = DataItem>(
+	items: T[],
 	query: string,
-	searchKeys: (keyof DataItem)[] = ['title', 'description']
+	searchKeys: (keyof T)[] = ['title', 'description'] as (keyof T)[]
 ) {
+	const lowerQuery = String(query).toLowerCase();
 	const searchedItems = items.filter((item) =>
-		searchKeys.some((key) => item && item[key] && String(item[key]).toLowerCase().includes(query))
+		searchKeys.some((key) => {
+            if (!item[key]) return false
+			const value = item[key];
+			if (Array.isArray(value)) {
+				return (value as Array<string | number | boolean>).some((v: string | number | boolean) =>
+					String(v).toLowerCase().includes(lowerQuery)
+				);
+			}
+			return value && String(value).toLowerCase().includes(lowerQuery);
+		})
 	);
 	return searchedItems;
 }
