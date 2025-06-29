@@ -11,7 +11,7 @@ npm run dev
 npm run dev -- --open
 ```
 
-Env:
+Env variables for Algolia Zettelkasten search:
 
 ```
 PUBLIC_ALGOLIA_API_ID=
@@ -30,7 +30,7 @@ You can preview the production build with `npm run preview`.
 
 ### Changelog
 
-After making a major change, add an entry to [changes.json](./static/changes.json) in this format:
+After making a major change, add an entry to [changes.json](./static/data/changes.json) in this format:
 
 ```json
 {
@@ -42,9 +42,3 @@ After making a major change, add an entry to [changes.json](./static/changes.jso
 ```
 
 Save the file and run `npm run xml` to generate the updated feed.
-
-## APIs
-
-- https://techy-api.vercel.app/
-- https://corporatebs-generator.sameerkumar.website/
-- https://api.websitecarbon.com/site?url=muensterer.tech
