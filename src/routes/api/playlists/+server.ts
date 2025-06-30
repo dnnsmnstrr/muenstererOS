@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import playlists from '../../../../static/data/playlists.json';
+import { searchData } from '$lib/utils/api';
 
 export async function GET({ url }) {
 	const type = url.searchParams.get('type');
@@ -12,11 +13,7 @@ export async function GET({ url }) {
 	}
 
 	if (search) {
-		filtered = filtered.filter(
-			(item: any) =>
-				(item.title && item.title.toLowerCase().includes(search)) ||
-				(item.emoji && item.emoji.toLowerCase().includes(search))
-		);
+		filtered = searchData(filtered, search, ['title', 'description', 'emoji', 'season'])
 	}
 
 	return json(filtered);
