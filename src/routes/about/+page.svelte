@@ -51,6 +51,7 @@
 					<li>
 						<Link href="https://www.npmjs.com/package/svelte-typewriter">Svelte Typewriter</Link>
 					</li>
+					<li><Link href="https://www.shadcn-svelte-extras.com/">Shadcn Svelte Extras</Link></li>
 				</List>
 			</ScrollArea>
 		</Card.Content>

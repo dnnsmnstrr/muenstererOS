@@ -7,7 +7,7 @@
 		types?: string[];
 	}
 
-	const defaultJsonOptions = ['search', 'sortBy', 'direction', 'page', 'limit']
+	const defaultJsonOptions = ['search', 'sortBy', 'direction', 'page', 'limit'];
 	export const endpoints: Endpoint[] = [
 		{
 			name: 'Dennis',
@@ -54,11 +54,13 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
+	import * as Tabs from '$lib/components/ui/tabs';
 	import { Input } from '$lib/components/ui/input';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { ChevronDown } from 'lucide-svelte';
-	import { Select, SelectItem } from '$lib/components/ui/select';
+	import { Label } from '$lib/components/ui/label/index.js';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
+	import JsonView from '$lib/components/JsonView.svelte';
 
 	let selected = 0;
 	let response: any = null;
@@ -70,7 +72,7 @@
 	function buildUrl(baseUrl: string, params: Record<string, string>): string {
 		const url = new URL(baseUrl, window.location.origin);
 		Object.entries(params).forEach(([key, value]) => {
-			const trimmedValue = typeof value === 'string' ? value.trim() : value
+			const trimmedValue = typeof value === 'string' ? value.trim() : value;
 			if (trimmedValue) {
 				url.searchParams.set(key, trimmedValue);
 			}
@@ -106,7 +108,6 @@
 		clearParams();
 		callEndpoint();
 	}
-
 </script>
 
 <div class="container mx-auto max-w-2xl p-4">
@@ -124,7 +125,7 @@
 
 	{#if currentEndpoint.options && currentEndpoint.options.length > 0}
 		<Card.Root class="mb-4">
-			<Collapsible.Root bind:open={paramsOpen} >
+			<Collapsible.Root bind:open={paramsOpen}>
 				<Card.Header class="p-0">
 					<Collapsible.Trigger class="p-0">
 						<Button
@@ -148,40 +149,44 @@
 										{#if option === 'direction'}
 											<span class="text-xs text-muted-foreground">(asc/desc)</span>
 										{:else if option === 'type' && currentEndpoint?.types}
-											<span class="text-xs text-muted-foreground">({currentEndpoint?.types?.join(', ') || ''})</span>
+											<span class="text-xs text-muted-foreground"
+												>({currentEndpoint?.types?.join(', ') || ''})</span
+											>
 										{:else if option === 'page' || option === 'limit'}
 											<span class="text-xs text-muted-foreground">(number)</span>
 										{/if}
 									</label>
 									{#if option === 'type' && currentEndpoint.types}
-										<CustomSelect 
+										<CustomSelect
 											name="Direction"
-											value={queryParams[option]} 
+											value={queryParams[option]}
 											emptyItem="-"
-											placeholder={"select " + option}
-											options={currentEndpoint.types.map(type => ({ label: type, value: type }))} 
-											onValueChange={(value) => queryParams[option] = value}
+											placeholder={'select ' + option}
+											options={currentEndpoint.types.map((type) => ({ label: type, value: type }))}
+											onValueChange={(value) => (queryParams[option] = value)}
 										/>
 									{:else if option === 'direction'}
-										<CustomSelect 
+										<CustomSelect
 											name="Direction"
-											value={queryParams[option]} 
+											value={queryParams[option]}
 											options={[
-												{ value: '', label: '-' }, 
-												{ value: 'asc', label: 'Ascending' }, 
+												{ value: '', label: '-' },
+												{ value: 'asc', label: 'Ascending' },
 												{ value: 'desc', label: 'Descending' }
-											]} 
-											onValueChange={(value) => queryParams[option] = value}
+											]}
+											onValueChange={(value) => (queryParams[option] = value)}
 										/>
 									{:else}
-										 <Input
-											 id={option}
-											 bind:value={queryParams[option]}
-											 type={option === 'page' || option === 'limit' ? 'number' : 'text'}
-											 onkeydown={(e) => { if (e.key === 'Enter') callEndpoint(); }}
-											 placeholder={option}
-											 class="w-full"
-										 />
+										<Input
+											id={option}
+											bind:value={queryParams[option]}
+											type={option === 'page' || option === 'limit' ? 'number' : 'text'}
+											onkeydown={(e) => {
+												if (e.key === 'Enter') callEndpoint();
+											}}
+											placeholder={option}
+											class="w-full"
+										/>
 									{/if}
 								</div>
 							{/each}
@@ -206,12 +211,24 @@
 	{/if}
 	{#if response}
 		<Card.Root class="mt-4 max-h-96">
-			<Card.Content>
-				<label for="api-response" class="mb-2 block font-semibold">Response:</label>
-				<pre id="api-response" class="max-h-80 overflow-auto rounded-lg text-sm">
-					<code>{'\n'}{JSON.stringify(response, null, 2)}</code>
-				</pre>
-			</Card.Content>
+			<Tabs.Root value="response">
+				<Tabs.List class="flex">
+					<Tabs.Trigger value="response">Response</Tabs.Trigger>
+					<Tabs.Trigger value="json">JSON Viewer</Tabs.Trigger>
+				</Tabs.List>
+				<Tabs.Content value="response">
+					<Card.Content class="max-h-80 overflow-auto rounded-lg text-sm">
+						<pre>
+							<code>{'\n'}{JSON.stringify(response, null, 2)}</code>
+						</pre>
+					</Card.Content>
+				</Tabs.Content>
+				<Tabs.Content value="json">
+					<Card.Content class="max-h-80 overflow-auto pb-4">
+						<JsonView data={response} />
+					</Card.Content>
+				</Tabs.Content>
+			</Tabs.Root>
 		</Card.Root>
 	{/if}
 </div>
