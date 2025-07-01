@@ -2,7 +2,7 @@
   "name": "muenstererOS",
   "short_name": "mOS",
   "start_url": ".",
-  "scope": ".",
+  "scope": "https://muensterer.tech/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
