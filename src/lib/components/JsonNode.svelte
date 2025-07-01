@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Binary, Braces, Brackets, Calendar, CaseLower, SquareMinus, SquarePlus } from 'lucide-svelte';
+	import { get } from 'svelte/store';
+	import { Binary, Braces, Brackets, Calendar, CaseLower, Link, SquareMinus, SquarePlus } from 'lucide-svelte';
 	import * as TreeView from '$lib/components/ui/tree-view';
 	import JsonNode from './JsonNode.svelte';
 
@@ -19,8 +20,14 @@
 		return val && typeof val === 'object' && !Array.isArray(val);
 	}
 
+    function getValueType(val: any): string {
+        if (isObject(val)) return 'object';
+        if (Array.isArray(val)) return 'array';
+        if (typeof val === 'string' && /^https?:\/\/\S+$/i.test(val)) return 'url';
+        return typeof val;
+    }
 	let valueType = $derived(
-		isObject(value) ? 'object' : Array.isArray(value) ? 'array' : typeof value
+		getValueType(value)
 	);
 </script>
 
@@ -38,12 +45,15 @@
 		{/each}
 	</TreeView.Folder>
 {:else}
-	<TreeView.File name={`${key}: ${value}`}>
+	<TreeView.File name={`${key}: ${value}`} href={valueType === 'url' ? value : undefined}>
+        >
 		{#snippet icon()}
 			{#if valueType === 'object'}
 				<Braces class="size-3" />
 			{:else if valueType === 'array'}
 				<Brackets class="size-3" />
+            {:else if valueType === 'url'}
+				<Link class="size-3" />
 			{:else if valueType === 'number'}
 				<Binary class="size-3" />
             {:else if valueType === 'string' && !isNaN(Date.parse(value))}
