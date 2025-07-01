@@ -1,17 +1,36 @@
 import { browser } from '$app/environment';
-import { debug, debugLog } from '$lib/stores/app';
+import { debugLog } from '$lib/stores/app';
 
-export const isBrowser = typeof document !== "undefined";
+export const isBrowser = typeof document !== 'undefined';
+
+
+export function updateMetaThemeColor(color: string = '#000000') {
+	if (!browser || !document) return;
+	let metaThemeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
+	if (!metaThemeColor) {
+		metaThemeColor = document.createElement('meta');
+		metaThemeColor.name = 'theme-color';
+		document.head.appendChild(metaThemeColor);
+	}
+	metaThemeColor.setAttribute('content', color);
+	let appleStatusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]') as HTMLMetaElement;
+	if (!appleStatusBar) {
+		appleStatusBar = document.createElement('meta');
+		appleStatusBar.name = 'apple-mobile-web-app-status-bar-style';
+		document.head.appendChild(appleStatusBar);
+	}
+	appleStatusBar.setAttribute('content', color === '#000000' ? 'black-translucent' : 'default');
+}
 
 export function closeWindow() {
-  debugLog('Attempting to close window');
+	debugLog('Attempting to close window');
 	window.close();
 }
 
 export function isBrowserInFullscreen() {
-  const isFullscreen = document.fullscreenElement
-  // debugLog(`Browser is ${isFullscreen ? 'not' : ''} in fullscreen mode`)
-	return isFullscreen
+	const isFullscreen = document.fullscreenElement;
+	// debugLog(`Browser is ${isFullscreen ? 'not' : ''} in fullscreen mode`)
+	return isFullscreen;
 }
 
 export function toggleFullscreen() {
@@ -30,20 +49,20 @@ export function toggleFullscreen() {
 }
 
 export function printPage() {
-  debugLog('Opening print dialog');
-  setTimeout(() => {
-    // give the menu a moment to close
-    window.print();
-  }, 10);
+	debugLog('Opening print dialog');
+	setTimeout(() => {
+		// give the menu a moment to close
+		window.print();
+	}, 10);
 }
 
 export function reloadPage() {
-  debugLog('Reloading page');
-  window.location.reload();
+	debugLog('Reloading page');
+	window.location.reload();
 }
 
 export function bookmark(title: string, url: string) {
-  debugLog('Bookmarking', title, url);
+	debugLog('Bookmarking', title, url);
 	if (window?.sidebar) {
 		// Firefox
 		window.sidebar.addPanel(title, url, '');
@@ -61,22 +80,25 @@ export function bookmark(title: string, url: string) {
 }
 
 function getPlatform() {
-    if (!browser) {
-      return 'unknown';
-    }
-    // 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
-    if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
-        return navigator.userAgentData.platform;
-    }
-    // Deprecated but still works for most of the browser
-    if (typeof navigator.platform !== 'undefined') {
-        if (typeof navigator.userAgent !== 'undefined' && /android/.test(navigator.userAgent.toLowerCase())) {
-            // android device’s navigator.platform is often set as 'linux', so let’s use userAgent for them
-            return 'android';
-        }
-        return navigator.platform;
-    }
-    return 'unknown';
+	if (!browser) {
+		return 'unknown';
+	}
+	// 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
+	if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+		return navigator.userAgentData.platform;
+	}
+	// Deprecated but still works for most of the browser
+	if (typeof navigator.platform !== 'undefined') {
+		if (
+			typeof navigator.userAgent !== 'undefined' &&
+			/android/.test(navigator.userAgent.toLowerCase())
+		) {
+			// android device’s navigator.platform is often set as 'linux', so let’s use userAgent for them
+			return 'android';
+		}
+		return navigator.platform;
+	}
+	return 'unknown';
 }
 
 export const isMobile = {
@@ -96,9 +118,9 @@ export const isMobile = {
 		return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
 	},
 	any: function () {
-    if (!browser) {
-      return false;
-    }
+		if (!browser) {
+			return false;
+		}
 		return (
 			isMobile.Android() ||
 			isMobile.BlackBerry() ||
@@ -110,10 +132,10 @@ export const isMobile = {
 };
 
 export function isAppleDevice() {
-  let platform = getPlatform().toLowerCase();
-  let isOSX = /mac/.test(platform);
-  let isIOS = ['iphone', 'ipad', 'ipod'].indexOf(platform) >= 0;
-  return isOSX || isIOS; // Apple device (desktop or iOS)
+	let platform = getPlatform().toLowerCase();
+	let isOSX = /mac/.test(platform);
+	let isIOS = ['iphone', 'ipad', 'ipod'].indexOf(platform) >= 0;
+	return isOSX || isIOS; // Apple device (desktop or iOS)
 }
 
 export function waitForElementToDisplay<T extends Element = Element>(
@@ -138,15 +160,15 @@ export function waitForElementToDisplay<T extends Element = Element>(
 }
 
 export const scrollToTop = (selector = 'main') => {
-  debugLog('scrolling to top');
-  const element = document.querySelector(selector)
-  if (element) {
-    element.scrollTop = 0;
-  }
-}
+	debugLog('scrolling to top');
+	const element = document.querySelector(selector);
+	if (element) {
+		element.scrollTop = 0;
+	}
+};
 
 export const scrollToBottom = (selector = 'main') => {
-  debugLog('scrolling to bottom');
+	debugLog('scrolling to bottom');
 	const element = document.querySelector(selector);
 	if (element) {
 		element.scrollTop = element.scrollHeight;

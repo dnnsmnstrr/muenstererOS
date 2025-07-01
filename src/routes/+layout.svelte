@@ -12,7 +12,7 @@
 
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
-	import { cn } from '$lib/utils.js';
+	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';

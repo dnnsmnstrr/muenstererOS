@@ -3,16 +3,22 @@ import { get, writable } from 'svelte/store';
 import { cssVarStore } from '@sveltelegos-blue/svelte-legos';
 import { defaultColors } from '$lib/config';
 import { mode } from 'mode-watcher';
+import { updateMetaThemeColor } from '$lib/utils/browser';
 
 let currentMode = get(mode);
 const DEFAULT_THEME = 'zinc';
 const storedTheme = browser ? window?.localStorage?.theme : DEFAULT_THEME;
 export const theme = writable(storedTheme || DEFAULT_THEME);
+
 theme.subscribe((value) => {
   if (browser && window?.localStorage) {
 		window.localStorage.theme = String(value);
 	}
 })
+mode.subscribe((value) => {
+  updateMetaThemeColor(value === 'dark' ? '#000000' : '#ffffff');
+});
+
 export const primaryColor = cssVarStore('--primary', {
 	initialValue: defaultColors[currentMode || 'dark'].primary
 });
@@ -43,6 +49,7 @@ debug.subscribe((value) => {
 })
 
 export function debugLog(...args: any[]) {
+  if (!browser) return;
   const isDebugActive = get(debug)
   if (isDebugActive && browser) {
     console.log(...args);
