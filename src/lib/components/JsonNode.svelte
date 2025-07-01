@@ -32,7 +32,7 @@
 </script>
 
 {#if isObject(value) || Array.isArray(value)}
-	<TreeView.Folder name={key + (value.title ? ` (${value.title})` : '')} bind:open>
+	<TreeView.Folder name={key + (value.title || value.name ? ` (${value.title || value.name})` : '')} bind:open>
 		{#snippet icon()}
 			{#if open}
 				<SquareMinus class="size-4" />
