@@ -23,7 +23,7 @@
 </script>
 
 <Dialog.Root bind:open {...restProps}>
-	<Dialog.Content class="overflow-hidden p-0 -translate-y-80 sm:-translate-y-40 shadow-lg" {portalProps}>
+	<Dialog.Content class="overflow-hidden p-0 -translate-y-60 sm:-translate-y-40 shadow-lg" {portalProps}>
 		<Command
 			class="[&_[data-command-group]:not([hidden])_~[data-command-group]]:pt-0 [&_[data-command-group]]:px-2 [&_[data-command-input-wrapper]_svg]:h-5 [&_[data-command-input-wrapper]_svg]:w-5 [&_[data-command-input]]:h-12 [&_[data-command-item]]:px-2 [&_[data-command-item]]:py-3 [&_[data-command-item]_svg]:h-5 [&_[data-command-item]_svg]:w-5"
 			{...restProps}
