@@ -14,7 +14,6 @@
 		type?: string;
 	} = $props();
 	let open = $state(false);
-    console.log(key, value, type);
     
 	function isObject(val: any) {
 		return val && typeof val === 'object' && !Array.isArray(val);
