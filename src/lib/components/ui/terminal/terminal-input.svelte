@@ -52,6 +52,7 @@
 	<!-- svelte-ignore a11y_autofocus -->
 	<input
         autofocus
+		autocapitalize="off" 
 		class={cn('flex bg-transparent text-base outline-none w-full', className)}
 		type="text"
 		bind:value={inputValue}
