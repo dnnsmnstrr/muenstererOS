@@ -57,7 +57,7 @@ export async function GET({ params, url }) {
       totalPages: Math.ceil(filteredData.length / limit),
       items: paginated
     });
-  } catch (err) {
-    throw error(404, `Data file not found for slug: ${slug}`);
+  } catch (err: any) {
+    throw error(404, `Data file not found for slug: ${slug}, Error: ${err.message}`);
   }
 }
