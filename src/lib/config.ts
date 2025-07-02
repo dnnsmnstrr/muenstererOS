@@ -25,7 +25,7 @@ export const BIRTHDATE = '1997-06-16'; // YYYY-MM-DD format
 export const user = {
 	name: OWNER_NAME,
 	email: EMAIL,
-	website: CURRENT_DOMAIN,
+	website: 'https://' + CURRENT_DOMAIN,
 	username: USERNAME_SHORT,
 	birthdate: BIRTHDATE,
 }
