@@ -56,6 +56,41 @@
 		if (!browser) return;
 
 		try {
+			// Configure Monaco Environment for web workers
+			(window as any).MonacoEnvironment = {
+				getWorker: function (workerId: string, label: string) {
+					// Use a more compatible worker setup for Vite
+					const createWorker = (workerPath: string) => {
+						const blob = new Blob([`
+							self.MonacoEnvironment = {
+								baseUrl: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/'
+							};
+							importScripts('https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/base/worker/workerMain.js');
+						`], { type: 'application/javascript' });
+						
+						return new Worker(URL.createObjectURL(blob));
+					};
+
+					switch (label) {
+						case 'json':
+							return createWorker('json.worker');
+						case 'css':
+						case 'scss':
+						case 'less':
+							return createWorker('css.worker');
+						case 'html':
+						case 'handlebars':
+						case 'razor':
+							return createWorker('html.worker');
+						case 'typescript':
+						case 'javascript':
+							return createWorker('ts.worker');
+						default:
+							return createWorker('editor.worker');
+					}
+				}
+			};
+
 			// Dynamically import Monaco to avoid SSR issues
 			monaco = await import('monaco-editor');
 			
@@ -114,8 +149,32 @@
 							kind: monaco.languages.CompletionItemKind.Keyword,
 							insertText: 'null',
 							range
+						},
+						{
+							label: '$schema',
+							kind: monaco.languages.CompletionItemKind.Property,
+							insertText: '"$schema": "${1:https://json.schemastore.org/package.json}"',
+							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+							documentation: 'JSON Schema URL for validation and IntelliSense',
+							range
 						}
 					];
+					
+					// Add common schema URL suggestions when typing $schema value
+					const lineContent = model.getLineContent(position.lineNumber);
+					const beforeCursor = lineContent.substring(0, position.column - 1);
+					if (beforeCursor.includes('"$schema"') && beforeCursor.includes(':')) {
+						const commonSchemas = getCommonSchemaUrls();
+						const schemaSuggestions = commonSchemas.map(schema => ({
+							label: schema.name,
+							kind: monaco.languages.CompletionItemKind.Value,
+							insertText: `"${schema.url}"`,
+							documentation: schema.description,
+							range
+						}));
+						suggestions.push(...schemaSuggestions);
+					}
+					
 					return { suggestions };
 				}
 			});
@@ -238,25 +297,36 @@
 			});
 
 			// Add JSON schema validation for common JSON structures
+			// Start with a basic schema that allows any valid JSON
+			const basicJsonSchema = {
+				type: ['object', 'array', 'string', 'number', 'boolean', 'null'],
+				properties: {},
+				additionalProperties: true,
+				items: {
+					type: ['object', 'array', 'string', 'number', 'boolean', 'null']
+				}
+			};
+
 			const jsonSchemas = [
 				{
-					uri: 'http://json-schema.org/draft-07/schema',
+					uri: 'http://json-schema.org/draft-07/schema#basic',
 					fileMatch: ['*'],
-					schema: {
-						type: 'object',
-						properties: {},
-						additionalProperties: true
-					}
+					schema: basicJsonSchema
 				}
 			];
 
 			monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-				...monaco.languages.json.jsonDefaults.diagnosticsOptions,
-				schemas: jsonSchemas
+				validate: true,
+				allowComments: false,
+				schemas: jsonSchemas,
+				enableSchemaRequest: true,
+				schemaValidation: 'error',
+				schemaRequest: 'warning'
 			});
 
 			// Listen for value changes and auto-validate
 			let validationTimeout: number;
+			let schemaTimeout: number;
 			editor.onDidChangeModelContent(() => {
 				value = editor?.getValue() || '';
 				
@@ -265,11 +335,21 @@
 				validationTimeout = setTimeout(() => {
 					validateJson();
 				}, 500);
+				
+				// Auto-detect schema after content changes (less frequent)
+				clearTimeout(schemaTimeout);
+				schemaTimeout = setTimeout(() => {
+					autoDetectSchema();
+				}, 2000);
 			});
 
 			// Format JSON on initial load
 			if (language === 'json') {
 				formatJson();
+				// Auto-detect schema on initial load
+				setTimeout(() => {
+					autoDetectSchema();
+				}, 100);
 			}
 
 			isEditorReady = true;
@@ -368,6 +448,11 @@
 		if (editor) {
 			editor.setValue(newValue);
 			value = newValue; // Update the bound value
+			
+			// Auto-detect schema for the new content
+			setTimeout(() => {
+				autoDetectSchema();
+			}, 100);
 		}
 	}
 
@@ -431,7 +516,7 @@
 	export function enableJsonSchema(schema: any, uri?: string) {
 		if (!monaco) return;
 		
-		const schemaUri = uri || 'http://json-schema.org/draft-07/schema';
+		const schemaUri = uri || `http://json-schema.org/draft-07/schema#${Date.now()}`;
 		const jsonSchemas = [{
 			uri: schemaUri,
 			fileMatch: ['*'],
@@ -439,9 +524,378 @@
 		}];
 
 		monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-			...monaco.languages.json.jsonDefaults.diagnosticsOptions,
-			schemas: jsonSchemas
+			validate: true,
+			allowComments: false,
+			schemas: jsonSchemas,
+			enableSchemaRequest: true,
+			schemaValidation: 'error',
+			schemaRequest: 'warning'
 		});
+		
+		// Force re-validation after schema change
+		setTimeout(() => {
+			validateJson();
+		}, 100);
+	}
+
+	// Add common JSON schemas for different data types
+	export function setCommonSchema(schemaType: 'gist' | 'config' | 'package' | 'tsconfig' | 'custom', customSchema?: any) {
+		const schemas = {
+			gist: {
+				type: 'object',
+				properties: {
+					id: { type: 'string' },
+					description: { type: 'string' },
+					public: { type: 'boolean' },
+					files: {
+						type: 'object',
+						patternProperties: {
+							'.*': {
+								type: 'object',
+								properties: {
+									filename: { type: 'string' },
+									content: { type: 'string' },
+									raw_url: { type: 'string' }
+								},
+								required: ['filename', 'content']
+							}
+						}
+					},
+					created_at: { type: 'string', format: 'date-time' },
+					updated_at: { type: 'string', format: 'date-time' }
+				},
+				required: ['id', 'files']
+			},
+			config: {
+				type: 'object',
+				properties: {
+					name: { type: 'string' },
+					version: { type: 'string' },
+					description: { type: 'string' },
+					settings: {
+						type: 'object',
+						properties: {
+							theme: { type: 'string', enum: ['light', 'dark', 'auto'] },
+							language: { type: 'string' },
+							autoSave: { type: 'boolean' }
+						}
+					}
+				},
+				required: ['name', 'version']
+			},
+			package: {
+				type: 'object',
+				properties: {
+					name: { type: 'string' },
+					version: { type: 'string' },
+					description: { type: 'string' },
+					main: { type: 'string' },
+					scripts: {
+						type: 'object',
+						patternProperties: {
+							'.*': { type: 'string' }
+						}
+					},
+					dependencies: {
+						type: 'object',
+						patternProperties: {
+							'.*': { type: 'string' }
+						}
+					},
+					devDependencies: {
+						type: 'object',
+						patternProperties: {
+							'.*': { type: 'string' }
+						}
+					},
+					keywords: {
+						type: 'array',
+						items: { type: 'string' }
+					},
+					author: { type: 'string' },
+					license: { type: 'string' }
+				},
+				required: ['name', 'version']
+			},
+			tsconfig: {
+				type: 'object',
+				properties: {
+					compilerOptions: {
+						type: 'object',
+						properties: {
+							target: { type: 'string', enum: ['es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'] },
+							module: { type: 'string', enum: ['commonjs', 'amd', 'umd', 'system', 'es6', 'es2015', 'esnext'] },
+							lib: { type: 'array', items: { type: 'string' } },
+							outDir: { type: 'string' },
+							rootDir: { type: 'string' },
+							strict: { type: 'boolean' },
+							esModuleInterop: { type: 'boolean' },
+							skipLibCheck: { type: 'boolean' },
+							forceConsistentCasingInFileNames: { type: 'boolean' }
+						}
+					},
+					include: { type: 'array', items: { type: 'string' } },
+					exclude: { type: 'array', items: { type: 'string' } }
+				}
+			},
+			custom: customSchema || {
+				type: 'object',
+				properties: {},
+				additionalProperties: true
+			}
+		};
+
+		enableJsonSchema(schemas[schemaType], `http://json-schema.org/${schemaType}-schema`);
+	}
+
+	// Auto-detect schema based on JSON content
+	export function autoDetectSchema() {
+		if (!editor) return;
+		
+		try {
+			const content = editor.getValue();
+			const parsed = JSON.parse(content);
+			
+			// First check for explicit $schema property
+			if (parsed.$schema && typeof parsed.$schema === 'string') {
+				const schemaUrl = parsed.$schema;
+				
+				// Try to fetch and apply the schema from the URL
+				fetchSchemaFromUrl(schemaUrl);
+				return 'schema-url';
+			}
+			
+			// Check for package.json
+			if (parsed.name && parsed.version && (parsed.dependencies || parsed.devDependencies || parsed.scripts)) {
+				setCommonSchema('package');
+				return 'package';
+			}
+			
+			// Check for tsconfig.json
+			if (parsed.compilerOptions) {
+				setCommonSchema('tsconfig');
+				return 'tsconfig';
+			}
+			
+			// Check for GitHub gist structure
+			if (parsed.id && parsed.files && typeof parsed.files === 'object') {
+				setCommonSchema('gist');
+				return 'gist';
+			}
+			
+			// Check for config-like structure
+			if (parsed.name && parsed.version && parsed.settings) {
+				setCommonSchema('config');
+				return 'config';
+			}
+			
+			// Default to custom schema
+			setCommonSchema('custom');
+			return 'custom';
+		} catch (error) {
+			// If JSON is invalid, use basic schema
+			return null;
+		}
+	}
+
+	// Fetch schema from URL and apply it
+	async function fetchSchemaFromUrl(schemaUrl: string) {
+		try {
+			// Handle common schema URLs
+			const knownSchemas = getKnownSchemaUrls();
+			
+			// Check if it's a known schema URL
+			const knownSchema = knownSchemas.find(s => s.url === schemaUrl || s.aliases?.includes(schemaUrl));
+			if (knownSchema) {
+				if (knownSchema.type === 'common') {
+					setCommonSchema(knownSchema.schema as any);
+				} else {
+					enableJsonSchema(knownSchema.schema, schemaUrl);
+				}
+				return;
+			}
+			
+			// Try to fetch the schema from the URL
+			const response = await fetch(schemaUrl);
+			if (response.ok) {
+				const schema = await response.json();
+				enableJsonSchema(schema, schemaUrl);
+			} else {
+				console.warn(`Failed to fetch schema from ${schemaUrl}: ${response.status}`);
+				// Fall back to basic schema detection
+				setCommonSchema('custom');
+			}
+		} catch (error) {
+			console.warn(`Error fetching schema from ${schemaUrl}:`, error);
+			// Fall back to basic schema detection
+			setCommonSchema('custom');
+		}
+	}
+
+	// Get known schema URLs with their corresponding schemas
+	function getKnownSchemaUrls() {
+		return [
+			{
+				url: 'https://json.schemastore.org/package.json',
+				aliases: ['http://json.schemastore.org/package.json', 'https://json.schemastore.org/package'],
+				type: 'common',
+				schema: 'package'
+			},
+			{
+				url: 'https://json.schemastore.org/tsconfig.json',
+				aliases: ['http://json.schemastore.org/tsconfig.json', 'https://json.schemastore.org/tsconfig'],
+				type: 'common',
+				schema: 'tsconfig'
+			},
+			{
+				url: 'https://json.schemastore.org/eslintrc.json',
+				aliases: ['http://json.schemastore.org/eslintrc.json'],
+				type: 'schema',
+				schema: {
+					type: 'object',
+					properties: {
+						env: {
+							type: 'object',
+							properties: {
+								browser: { type: 'boolean' },
+								node: { type: 'boolean' },
+								es6: { type: 'boolean' },
+								jest: { type: 'boolean' }
+							}
+						},
+						extends: {
+							oneOf: [
+								{ type: 'string' },
+								{ type: 'array', items: { type: 'string' } }
+							]
+						},
+						rules: {
+							type: 'object',
+							patternProperties: {
+								'.*': {
+									oneOf: [
+										{ type: 'string', enum: ['off', 'warn', 'error'] },
+										{ type: 'number', enum: [0, 1, 2] },
+										{ type: 'array', minItems: 1, maxItems: 2 }
+									]
+								}
+							}
+						},
+						parser: { type: 'string' },
+						parserOptions: {
+							type: 'object',
+							properties: {
+								ecmaVersion: { type: 'number' },
+								sourceType: { type: 'string', enum: ['script', 'module'] }
+							}
+						}
+					}
+				}
+			},
+			{
+				url: 'https://json.schemastore.org/prettierrc.json',
+				aliases: ['http://json.schemastore.org/prettierrc.json'],
+				type: 'schema',
+				schema: {
+					type: 'object',
+					properties: {
+						printWidth: { type: 'number' },
+						tabWidth: { type: 'number' },
+						useTabs: { type: 'boolean' },
+						semi: { type: 'boolean' },
+						singleQuote: { type: 'boolean' },
+						quoteProps: { type: 'string', enum: ['as-needed', 'consistent', 'preserve'] },
+						trailingComma: { type: 'string', enum: ['none', 'es5', 'all'] },
+						bracketSpacing: { type: 'boolean' },
+						arrowParens: { type: 'string', enum: ['avoid', 'always'] }
+					}
+				}
+			},
+			{
+				url: 'http://json-schema.org/draft-07/schema#',
+				aliases: ['https://json-schema.org/draft-07/schema#'],
+				type: 'schema',
+				schema: {
+					type: 'object',
+					properties: {
+						$schema: { type: 'string' },
+						$id: { type: 'string' },
+						title: { type: 'string' },
+						description: { type: 'string' },
+						type: {
+							oneOf: [
+								{ type: 'string' },
+								{ type: 'array', items: { type: 'string' } }
+							]
+						},
+						properties: { type: 'object' },
+						required: { type: 'array', items: { type: 'string' } },
+						additionalProperties: { type: 'boolean' }
+					}
+				}
+			}
+		];
+	}
+
+	// Add $schema property to JSON
+	export function addSchemaProperty(schemaUrl: string) {
+		if (!editor) return false;
+		
+		try {
+			const content = editor.getValue();
+			const parsed = JSON.parse(content);
+			
+			// Add $schema property at the beginning
+			const newObj = {
+				$schema: schemaUrl,
+				...parsed
+			};
+			
+			const formatted = JSON.stringify(newObj, null, 2);
+			editor.setValue(formatted);
+			value = formatted;
+			
+			// Auto-detect schema after adding the property
+			setTimeout(() => {
+				autoDetectSchema();
+			}, 100);
+			
+			return true;
+		} catch (error) {
+			console.warn('Failed to add $schema property:', error);
+			return false;
+		}
+	}
+
+	// Get common schema URLs for easy reference
+	export function getCommonSchemaUrls() {
+		return [
+			{
+				name: 'Package.json',
+				url: 'https://json.schemastore.org/package.json',
+				description: 'NPM package.json schema'
+			},
+			{
+				name: 'TSConfig.json',
+				url: 'https://json.schemastore.org/tsconfig.json',
+				description: 'TypeScript configuration schema'
+			},
+			{
+				name: 'ESLint Config',
+				url: 'https://json.schemastore.org/eslintrc.json',
+				description: 'ESLint configuration schema'
+			},
+			{
+				name: 'Prettier Config',
+				url: 'https://json.schemastore.org/prettierrc.json',
+				description: 'Prettier configuration schema'
+			},
+			{
+				name: 'JSON Schema Draft 07',
+				url: 'http://json-schema.org/draft-07/schema#',
+				description: 'JSON Schema meta-schema'
+			}
+		];
 	}
 
 	// Update editor when external value changes
