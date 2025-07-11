@@ -11,7 +11,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { NOW_GIST_ID, RESUME_GIST_ID } from '$lib/config';
 	import { GitHubGistAPI } from '$lib/utils/github-api';
-	import { Settings } from 'lucide-svelte';
+	import { BadgeHelp, Delete, Save, Settings } from 'lucide-svelte';
 	import { Heading } from '$lib/components/typography';
 
 	// State management
@@ -266,18 +266,16 @@
 						</div>
 						<div class="flex gap-2">
 							<Button onclick={saveTokenToStorage} variant="outline" size="sm" class="flex-1">
+                                <Save class="h-4 w-4 mr-1" />
 								Save
 							</Button>
 							<Button onclick={validateToken} variant="outline" size="sm" disabled={!githubToken || isValidatingToken} class="flex-1">
-								{isValidatingToken ? 'Validating...' : 'Validate'}
+                                <BadgeHelp class="h-4 w-4 mr-1" />
+								Validate
 							</Button>
 							<Button onclick={clearToken} variant="outline" size="sm" class="flex-1">
+                                <Delete class="h-4 w-4 mr-1" />
 								Clear
-							</Button>
-						</div>
-						<div class="flex justify-end pt-2">
-							<Button onclick={() => showTokenModal = false} variant="ghost" size="sm">
-								Close
 							</Button>
 						</div>
 					</div>

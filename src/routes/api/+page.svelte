@@ -58,7 +58,6 @@
 	import { Input } from '$lib/components/ui/input';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { ChevronDown } from 'lucide-svelte';
-	import { Label } from '$lib/components/ui/label/index.js';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import JsonView from '$lib/components/JsonView.svelte';
 	import { Heading } from '$lib/components/typography';
