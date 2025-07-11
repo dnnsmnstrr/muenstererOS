@@ -57,6 +57,7 @@
 		"@jazzymcjazz/mdsvelte": "^0.3.3",
 		"@sveltelegos-blue/svelte-legos": "^0.2.0",
 		"leaflet": "^1.9.4",
+		"monaco-editor": "^0.52.2",
 		"slugify": "^1.6.6",
 		"svelte-drag-and-drop-actions": "^1.0.1",
 		"svelte-drag-drop-touch": "^0.1.9",
