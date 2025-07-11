@@ -363,6 +363,25 @@
 						<Button onclick={resetEditor} variant="outline" size="sm">
 							Reset
 						</Button>
+						<!-- Theme Selector -->
+						<select 
+							onchange={(e) => {
+								const target = e.target as HTMLSelectElement;
+								if (target) {
+									jsonEditor?.setTheme(target.value);
+								}
+							}}
+							class="flex h-8 rounded-md border border-input bg-background px-2 text-xs ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+						>
+							<option value="json-dark">JSON Dark</option>
+							<option value="json-light">JSON Light</option>
+							<option value="vs-dark">VS Dark</option>
+							<option value="vs">VS Light</option>
+							<option value="Monokai">Monokai</option>
+							<option value="GitHub">GitHub</option>
+							<option value="Solarized-dark">Solarized Dark</option>
+							<option value="Dracula">Dracula</option>
+						</select>
 						<Button 
 							onclick={saveGist} 
 							disabled={isSaving || !githubToken || !gistInfo}
@@ -384,6 +403,21 @@
 						detectIndentation: false
 					}}
 				/>
+				
+				<!-- JSON Validation Status -->
+				<div class="mt-2 text-xs text-muted-foreground">
+					{#if jsonEditor}
+						{@const validation = jsonEditor.validateJson()}
+						{#if validation.valid}
+							<span class="text-green-600">✓ Valid JSON</span>
+						{:else}
+							<span class="text-red-600">✗ Invalid JSON: {validation.error}</span>
+							{#if validation.line && validation.column}
+								<span class="ml-2">Line {validation.line}, Column {validation.column}</span>
+							{/if}
+						{/if}
+					{/if}
+				</div>
 			</CardContent>
 		</Card>
 	{/if}

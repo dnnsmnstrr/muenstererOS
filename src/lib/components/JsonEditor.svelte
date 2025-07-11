@@ -47,12 +47,53 @@
 				enableSchemaRequest: true
 			});
 
+			// Define custom color themes for better JSON syntax highlighting
+			monaco.editor.defineTheme('json-dark', {
+				base: 'vs-dark',
+				inherit: true,
+				rules: [
+					{ token: 'string.key.json', foreground: '9CDCFE', fontStyle: 'bold' },
+					{ token: 'string.value.json', foreground: 'CE9178' },
+					{ token: 'number.json', foreground: 'B5CEA8', fontStyle: 'bold' },
+					{ token: 'keyword.json', foreground: '569CD6', fontStyle: 'bold' },
+					{ token: 'delimiter.bracket.json', foreground: 'FFD700', fontStyle: 'bold' },
+					{ token: 'delimiter.array.json', foreground: 'FFD700', fontStyle: 'bold' }
+				],
+				colors: {
+					'editorBracketMatch.background': '#FFD70080',
+					'editorBracketMatch.border': '#FFD700'
+				}
+			});
+
+			monaco.editor.defineTheme('json-light', {
+				base: 'vs',
+				inherit: true,
+				rules: [
+					{ token: 'string.key.json', foreground: '0451A5', fontStyle: 'bold' },
+					{ token: 'string.value.json', foreground: 'A31515' },
+					{ token: 'number.json', foreground: '098658', fontStyle: 'bold' },
+					{ token: 'keyword.json', foreground: '0000FF', fontStyle: 'bold' },
+					{ token: 'delimiter.bracket.json', foreground: 'FF8C00', fontStyle: 'bold' },
+					{ token: 'delimiter.array.json', foreground: 'FF8C00', fontStyle: 'bold' }
+				],
+				colors: {
+					'editorBracketMatch.background': '#FFD70080',
+					'editorBracketMatch.border': '#FF8C00'
+				}
+			});
+
 			// Create the editor
+			const currentTheme = $mode === 'dark' ? 'json-dark' : 'json-light';
 			editor = monaco.editor.create(container, {
 				value,
 				language,
-				theme,
-				...defaultOptions
+				theme: currentTheme,
+				...defaultOptions,
+				// Essential JSON features
+				bracketPairColorization: { enabled: true },
+				matchBrackets: 'always',
+				foldingHighlight: true,
+				showFoldingControls: 'mouseover'
 			});
 
 			// Listen for value changes
@@ -153,7 +194,7 @@
 	// Update theme when mode changes
 	$effect(() => {
 		if (editor && monaco) {
-			const newTheme = $mode === 'dark' ? 'vs-dark' : 'vs';
+			const newTheme = $mode === 'dark' ? 'json-dark' : 'json-light';
 			monaco.editor.setTheme(newTheme);
 		}
 	});
@@ -166,12 +207,29 @@
 ></div>
 
 <style>
-	/* Ensure Monaco Editor styles are properly scoped */
+	/* Monaco Editor styles */
 	:global(.monaco-editor) {
-		font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+		font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'SF Mono', monospace !important;
 	}
 	
 	:global(.monaco-editor .margin) {
 		background: transparent !important;
+	}
+	
+	/* JSON syntax highlighting enhancements */
+	:global(.monaco-editor .bracket-highlighting-0),
+	:global(.monaco-editor .bracket-highlighting-1),
+	:global(.monaco-editor .bracket-highlighting-2),
+	:global(.monaco-editor .bracket-highlighting-3),
+	:global(.monaco-editor .bracket-highlighting-4),
+	:global(.monaco-editor .bracket-highlighting-5) {
+		font-weight: bold;
+	}
+	
+	/* Improved bracket matching */
+	:global(.monaco-editor .bracket-match) {
+		background: rgba(255, 215, 0, 0.3) !important;
+		border: 1px solid rgba(255, 215, 0, 0.8);
+		border-radius: 2px;
 	}
 </style>
