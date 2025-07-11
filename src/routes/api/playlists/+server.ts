@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import playlists from '../../../../static/data/playlists.json';
+import playlists from '../../../data/playlists.json';
 import { searchData } from '$lib/utils/api';
 
 export async function GET({ url }) {

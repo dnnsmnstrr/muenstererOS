@@ -30,7 +30,7 @@ You can preview the production build with `npm run preview`.
 
 ### Changelog
 
-After making a major change, add an entry to [changes.json](./static/data/changes.json) in this format:
+After making a major change, add an entry to [changes.json](./src/data/changes.json) in this format:
 
 ```json
 {

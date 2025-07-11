@@ -67,7 +67,7 @@
 	let loading = false;
 	let error: string | null = null;
 	let queryParams: Record<string, string> = {};
-	let paramsOpen = true;
+	let paramsOpen = false;
 
 	function buildUrl(baseUrl: string, params: Record<string, string>): string {
 		const url = new URL(baseUrl, window.location.origin);

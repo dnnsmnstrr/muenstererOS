@@ -3,16 +3,24 @@ import { searchData, sortData } from '$lib/utils/api';
 import type { DataItem } from '$lib/utils/api';
 import fs from 'fs/promises';
 import path from 'path';
+import playlists from '../../../data/playlists.json';
+import changes from '../../../data/changes.json';
+import pages from '../../../data/pages.json';
+import uses from '../../../data/uses.json';
 
+const dataMap: Record<string, any> = {
+  playlists,
+  changes,
+  pages,
+  uses
+};
 const DEFAULT_LIMIT = 50;
 
 export async function GET({ params, url }) {
   const { slug } = params;
-  const dataPath = path.resolve('static/data', `${slug}.json`);
-
+  
   try {
-    const file = await fs.readFile(dataPath, 'utf-8');
-    const data = JSON.parse(file);
+    const data = dataMap[slug];
 
     // Pagination parameters
     const page = parseInt(url.searchParams.get('page') || '1', 10);

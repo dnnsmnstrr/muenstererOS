@@ -44,7 +44,7 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 #### Routing Structure
 - File-based routing with SvelteKit conventions
 - API routes in `src/routes/api/`
-- Static data served from `static/data/`
+- JSON data in `src/data/`
 - Dynamic pages use server-side data loading patterns
 
 ### Key Features

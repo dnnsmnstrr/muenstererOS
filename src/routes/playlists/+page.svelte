@@ -27,7 +27,7 @@
 	import { breakpoints, links } from '$lib/config';
 	import PlaylistCard from './PlaylistCard.svelte';
 	import TopArtists from './TopArtists.svelte';
-	import playlistData from '../../../static/data/playlists.json';
+	import playlistData from '../../data/playlists.json';
 	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 

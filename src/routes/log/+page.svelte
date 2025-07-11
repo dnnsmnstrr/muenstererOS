@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Heading } from '$lib/components/typography';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
-	import changes from '../../../static/data/changes.json?raw';
+	import changes from '../../data/changes.json?raw';
 	type ChangeLogEntry = {
 		date: string;
 		title: string;

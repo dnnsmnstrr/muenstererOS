@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import playlists from '../../../../static/data/playlists.json';
+import playlists from '../../../data/playlists.json';
 
 export function load() {
     console.log('current', !playlists)

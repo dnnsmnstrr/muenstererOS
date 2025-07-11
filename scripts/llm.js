@@ -31,5 +31,5 @@ function parseLLMsTxt(txt) {
 
 const llmsData = parseLLMsTxt(llmsTxt);
 const llmsJson = JSON.stringify(llmsData, null, 2);
-fs.writeFileSync(path.join(__dirname, '../static/data/llms.json'), llmsJson);
+fs.writeFileSync(path.join(__dirname, '../src/data/llms.json'), llmsJson);
 console.log(`LLMs data parsed and saved to static/llms.json`);
