@@ -14,7 +14,7 @@
 
 	// State management
 	let githubToken = $state('');
-	let selectedGist = $state('');
+	let selectedGist = $state(NOW_GIST_ID); // Default to first known gist
 	let gistData = $state('{}');
 	let gistInfo = $state<any>(null);
 	let isLoading = $state(false);
@@ -36,12 +36,21 @@
 	let customFilename = $state('');
 
 	onMount(() => {
-		// Load saved token from localStorage
+		// Load saved token and last gist selection from localStorage
 		if (browser) {
 			const savedToken = localStorage.getItem('github_admin_token');
+			const savedGistId = localStorage.getItem('github_admin_last_gist');
+			
+			// Restore last gist selection if available
+			if (savedGistId) {
+				selectedGist = savedGistId;
+			}
+			
 			if (savedToken) {
 				githubToken = savedToken;
 				validateToken(); // Validate the loaded token
+				// Auto-load the selected gist if token is available
+				loadGist();
 			}
 		}
 	});
@@ -86,6 +95,11 @@
 		if (!gistId || !filename) {
 			toast.error('Please select a gist and specify a filename');
 			return;
+		}
+
+		// Save the current gist selection to localStorage
+		if (browser) {
+			localStorage.setItem('github_admin_last_gist', selectedGist);
 		}
 
 		isLoading = true;
