@@ -17,6 +17,7 @@
 	let selectedGist = $state(NOW_GIST_ID); // Default to first known gist
 	let gistData = $state('{}');
 	let gistInfo = $state<any>(null);
+	let gistHistory = $state<any[]>([]);
 	let isLoading = $state(false);
 	let isSaving = $state(false);
 	let isValidatingToken = $state(false);
@@ -110,7 +111,13 @@
 			const api = new GitHubGistAPI(githubToken);
 			const data = await api.fetchGist(gistId);
 			gistInfo = data;
-
+            
+			// Use history from the gist response if available
+			gistHistory = data.history || [];
+            if (gistHistory && gistHistory.length === 30) {
+                const fullHistory = await api.fetchGistHistory(gistId);
+                gistHistory = fullHistory || gistHistory;
+            }
 			if (!data.files[filename]) {
 				throw new Error(`File "${filename}" not found in gist`);
 			}
@@ -280,7 +287,7 @@
 				<CardTitle class="text-lg">Gist Information</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
 					<div>
 						<Label class="text-xs uppercase text-muted-foreground">Description</Label>
 						<p>{gistInfo.description || 'No description'}</p>
@@ -292,6 +299,10 @@
 					<div>
 						<Label class="text-xs uppercase text-muted-foreground">Public</Label>
 						<p>{gistInfo.public ? 'Yes' : 'No'}</p>
+					</div>
+					<div>
+						<Label class="text-xs uppercase text-muted-foreground">Versions</Label>
+						<p>{gistHistory.length > 0 ? gistHistory.length : 'N/A'}</p>
 					</div>
 				</div>
 				<div class="mt-4">

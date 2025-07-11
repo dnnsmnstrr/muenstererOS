@@ -68,6 +68,52 @@ export class GitHubGistAPI {
 		return response.json();
 	}
 
+
+	/**
+	 * Fetch gist history/revisions
+	 */
+	async fetchGistHistory(gistId: string): Promise<Array<{
+		version: string;
+		committed_at: string;
+		change_status: {
+			total: number;
+			additions: number;
+			deletions: number;
+		};
+	}>> {
+		let page = 1;
+		const perPage = 100;
+		let allCommits: Array<{
+			version: string;
+			committed_at: string;
+			change_status: {
+				total: number;
+				additions: number;
+				deletions: number;
+			};
+		}> = [];
+
+		while (true) {
+			const response = await fetch(`${this.baseUrl}/${gistId}/commits?per_page=${perPage}&page=${page}`, {
+				headers: this.headers
+			});
+
+			if (!response.ok) {
+				const errorText = await response.text();
+				throw new Error(`GitHub API error: ${response.status} ${response.statusText}\n${errorText}`);
+			}
+
+			const commits = await response.json();
+			if (!Array.isArray(commits) || commits.length === 0) break;
+
+			allCommits = allCommits.concat(commits);
+			if (commits.length < perPage) break;
+			page++;
+		}
+
+		return allCommits;
+	}
+
 	/**
 	 * Update a gist
 	 */
