@@ -102,6 +102,9 @@
 			localStorage.setItem('github_admin_last_gist', selectedGist);
 		}
 
+		// Clear current content to show loading state
+		gistData = '{}';
+
 		isLoading = true;
 		try {
 			const api = new GitHubGistAPI(githubToken);
@@ -119,13 +122,14 @@
 			if (validation.valid && validation.formatted) {
 				gistData = validation.formatted;
 			} else {
-				// If it's not valid JSON, just use the raw content
+                // If it's not valid JSON, just use the raw content
 				gistData = content;
 				if (!validation.valid) {
-					toast.warning(`Content is not valid JSON: ${validation.error}`);
+                    toast.warning(`Content is not valid JSON: ${validation.error}`);
 				}
 			}
-
+            
+            jsonEditor?.setValue(gistData);
 			toast.success('Gist loaded successfully');
 		} catch (error) {
 			console.error('Error loading gist:', error);
@@ -177,8 +181,12 @@
 	}
 
 	function formatJson() {
-		jsonEditor?.formatJson();
-		toast.success('JSON formatted');
+		const success = jsonEditor?.formatJson();
+		if (success) {
+			toast.success('JSON formatted');
+		} else {
+			toast.error('Failed to format JSON - invalid syntax');
+		}
 	}
 
 	function resetEditor() {
@@ -186,7 +194,9 @@
 			const filename = selectedGist === '' ? customFilename : 
 				knownGists.find(g => g.id === selectedGist)?.filename || '';
 			const originalContent = gistInfo.files[filename]?.content || '{}';
-			gistData = originalContent;
+			
+			// Use setValue to properly update the editor
+			jsonEditor?.setValue(originalContent);
 			toast.success('Editor reset to original content');
 		}
 	}
@@ -198,10 +208,12 @@
 
 <div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
-		<div>
-            <Heading>Gist Admin</Heading>
-		</div>
-		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
+		<Heading>Gist Admin</Heading>
+		<AdminSettings 
+            bind:githubToken 
+            bind:tokenValidation 
+            bind:isValidatingToken 
+        />
 	</div>
 
 	<!-- Gist Selection Section -->

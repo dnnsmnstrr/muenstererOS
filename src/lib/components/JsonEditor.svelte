@@ -16,6 +16,7 @@
 	let container: HTMLDivElement;
 	let editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 	let monaco: typeof Monaco | null = null;
+	let isEditorReady = $state(false);
 
 	const defaultOptions: Monaco.editor.IStandaloneEditorConstructionOptions = {
 		automaticLayout: true,
@@ -64,17 +65,22 @@
 				formatJson();
 			}
 
+			isEditorReady = true;
+
 		} catch (error) {
 			console.error('Failed to load Monaco Editor:', error);
 		}
+	});
 
+	// Cleanup on destroy
+	$effect(() => {
 		return () => {
 			editor?.dispose();
 		};
 	});
 
 	export function formatJson() {
-		if (!editor || !monaco) return;
+		if (!editor || !monaco) return false;
 		
 		try {
 			const currentValue = editor.getValue();
@@ -82,8 +88,11 @@
 			const formatted = JSON.stringify(parsed, null, 2);
 			
 			editor.setValue(formatted);
+			value = formatted; // Update the bound value
+			return true;
 		} catch (error) {
 			console.warn('Invalid JSON - cannot format:', error);
+			return false;
 		}
 	}
 
@@ -108,13 +117,36 @@
 	export function setValue(newValue: string) {
 		if (editor) {
 			editor.setValue(newValue);
+			value = newValue; // Update the bound value
 		}
+	}
+
+	export function refresh() {
+		if (editor && isEditorReady && value !== undefined) {
+			editor.setValue(value);
+		}
+	}
+
+	export function focus() {
+		editor?.focus();
 	}
 
 	// Update editor when external value changes
 	$effect(() => {
-		if (editor && editor.getValue() !== value) {
-			editor.setValue(value);
+		if (editor && isEditorReady && value !== undefined && value !== null) {
+			const currentEditorValue = editor.getValue();
+			if (currentEditorValue !== value) {
+				// Preserve cursor position when updating
+				const position = editor.getPosition();
+				editor.setValue(value);
+				if (position) {
+					// Only restore position if it's valid for the new content
+					const model = editor.getModel();
+					if (model && position.lineNumber <= model.getLineCount()) {
+						editor.setPosition(position);
+					}
+				}
+			}
 		}
 	});
 
