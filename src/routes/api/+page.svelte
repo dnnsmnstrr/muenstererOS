@@ -61,6 +61,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import JsonView from '$lib/components/JsonView.svelte';
+	import { Heading } from '$lib/components/typography';
 
 	let selected = 0;
 	let response: any = null;
@@ -111,7 +112,7 @@
 </script>
 
 <div class="container mx-auto max-w-2xl p-4">
-	<h1 class="mb-4 text-2xl font-bold">API</h1>
+	<Heading>API</Heading>
 	<div class="mb-4">
 		<label for="endpoint-select" class="mb-2 block font-semibold">
 			Select endpoint to test the output:

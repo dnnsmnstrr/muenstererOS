@@ -12,6 +12,7 @@
 	import { NOW_GIST_ID, RESUME_GIST_ID } from '$lib/config';
 	import { GitHubGistAPI } from '$lib/utils/github-api';
 	import { Settings } from 'lucide-svelte';
+	import { Heading } from '$lib/components/typography';
 
 	// State management
 	let githubToken = $state('');
@@ -199,14 +200,13 @@
 </script>
 
 <svelte:head>
-	<title>Admin - GitHub Gist Editor</title>
+	<title>muenstererOS - Admin</title>
 </svelte:head>
 
-<div class="container mx-auto p-6 max-w-6xl space-y-6">
+<div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
 		<div>
-			<h1 class="text-3xl font-bold">GitHub Gist Admin</h1>
-			<p class="text-muted-foreground">Edit GitHub Gists with syntax highlighting and validation</p>
+            <Heading>Gist Admin</Heading>
 		</div>
 		<div class="flex items-center gap-2">
 			<Badge variant="outline" class="text-xs">
