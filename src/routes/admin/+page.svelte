@@ -7,6 +7,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import * as Collapsible from '$lib/components/ui/collapsible';
+	import { ChevronDown } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { NOW_GIST_ID, RESUME_GIST_ID } from '$lib/config';
 	import { GitHubGistAPI } from '$lib/utils/github-api';
@@ -22,6 +24,8 @@
 	let isSaving = $state(false);
 	let isValidatingToken = $state(false);
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
+	let gistSelectionOpen = $state(true);
+	let gistInfoOpen = $state(false);
 	
 	let jsonEditor = $state<JsonEditor | null>(null);
 
@@ -225,96 +229,124 @@
 
 	<!-- Gist Selection Section -->
 	<Card>
-		<CardHeader>
-			<CardTitle class="text-lg">Select Gist</CardTitle>
-		</CardHeader>
-		<CardContent class="space-y-4">
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-				<div class="space-y-2">
-					<Label>Gist</Label>
-					<select 
-						bind:value={selectedGist}
-						class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+		<Collapsible.Root bind:open={gistSelectionOpen}>
+			<CardHeader class="p-0">
+				<Collapsible.Trigger class="p-0">
+					<Button
+						variant="ghost"
+						class="w-full justify-between p-6 font-semibold hover:bg-transparent"
 					>
-						{#each knownGists as gist}
-							<option value={gist.id}>{gist.name}</option>
-						{/each}
-					</select>
-				</div>
+						Select Gist
+						<ChevronDown
+							class="h-4 w-4 transition-transform duration-200 {gistSelectionOpen ? 'rotate-180' : ''}"
+						/>
+					</Button>
+				</Collapsible.Trigger>
+			</CardHeader>
+			<Collapsible.Content>
+				<CardContent class="space-y-4">
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+						<div class="space-y-2">
+							<Label>Gist</Label>
+							<select 
+								bind:value={selectedGist}
+								class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+							>
+								{#each knownGists as gist}
+									<option value={gist.id}>{gist.name}</option>
+								{/each}
+							</select>
+						</div>
 
-				{#if selectedGist === ''}
-					<div class="space-y-2">
-						<Label for="customGistId">Custom Gist ID</Label>
-						<Input
-							id="customGistId"
-							placeholder="f18bfa6e4f02dc480426d05cf7adff79"
-							bind:value={customGistId}
-						/>
+						{#if selectedGist === ''}
+							<div class="space-y-2">
+								<Label for="customGistId">Custom Gist ID</Label>
+								<Input
+									id="customGistId"
+									placeholder="f18bfa6e4f02dc480426d05cf7adff79"
+									bind:value={customGistId}
+								/>
+							</div>
+							<div class="space-y-2">
+								<Label for="customFilename">Filename</Label>
+								<Input
+									id="customFilename"
+									placeholder="data.json"
+									bind:value={customFilename}
+								/>
+							</div>
+						{:else}
+							<div class="space-y-2">
+								<Label>Filename</Label>
+								<Input 
+									value={knownGists.find(g => g.id === selectedGist)?.filename || ''} 
+									disabled 
+								/>
+							</div>
+							<div class="space-y-2">
+								<Label>Gist ID</Label>
+								<Input value={selectedGist} disabled />
+							</div>
+						{/if}
 					</div>
-					<div class="space-y-2">
-						<Label for="customFilename">Filename</Label>
-						<Input
-							id="customFilename"
-							placeholder="data.json"
-							bind:value={customFilename}
-						/>
-					</div>
-				{:else}
-					<div class="space-y-2">
-						<Label>Filename</Label>
-						<Input 
-							value={knownGists.find(g => g.id === selectedGist)?.filename || ''} 
-							disabled 
-						/>
-					</div>
-					<div class="space-y-2">
-						<Label>Gist ID</Label>
-						<Input value={selectedGist} disabled />
-					</div>
-				{/if}
-			</div>
 
-			<Button onclick={loadGist} disabled={isLoading || !githubToken} class="w-full">
-				{isLoading ? 'Loading...' : 'Load Gist'}
-			</Button>
-		</CardContent>
+					<Button onclick={loadGist} disabled={isLoading || !githubToken} class="w-full">
+						{isLoading ? 'Loading...' : 'Load Gist'}
+					</Button>
+				</CardContent>
+			</Collapsible.Content>
+		</Collapsible.Root>
 	</Card>
 
 	<!-- Gist Info Display -->
 	{#if gistInfo}
 		<Card>
-			<CardHeader>
-				<CardTitle class="text-lg">Gist Information</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-					<div>
-						<Label class="text-xs uppercase text-muted-foreground">Description</Label>
-						<p>{gistInfo.description || 'No description'}</p>
-					</div>
-					<div>
-						<Label class="text-xs uppercase text-muted-foreground">Last Updated</Label>
-						<p>{new Date(gistInfo.updated_at).toLocaleString()}</p>
-					</div>
-					<div>
-						<Label class="text-xs uppercase text-muted-foreground">Public</Label>
-						<p>{gistInfo.public ? 'Yes' : 'No'}</p>
-					</div>
-					<div>
-						<Label class="text-xs uppercase text-muted-foreground">Versions</Label>
-						<p>{gistHistory.length > 0 ? gistHistory.length : 'N/A'}</p>
-					</div>
-				</div>
-				<div class="mt-4">
-					<a 
-						href={gistInfo.html_url} 
-						target="_blank" 
-						class="text-sm text-blue-600 hover:underline"
-					>
-						View on GitHub ↗
-					</a>
-				</div>
-			</CardContent>
+			<Collapsible.Root bind:open={gistInfoOpen}>
+				<CardHeader class="p-0">
+					<Collapsible.Trigger class="p-0">
+						<Button
+							variant="ghost"
+							class="w-full justify-between p-6 font-semibold hover:bg-transparent"
+						>
+							Gist Information
+							<ChevronDown
+								class="h-4 w-4 transition-transform duration-200 {gistInfoOpen ? 'rotate-180' : ''}"
+							/>
+						</Button>
+					</Collapsible.Trigger>
+				</CardHeader>
+				<Collapsible.Content>
+					<CardContent>
+						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+							<div>
+								<Label class="text-xs uppercase text-muted-foreground">Description</Label>
+								<p>{gistInfo.description || 'No description'}</p>
+							</div>
+							<div>
+								<Label class="text-xs uppercase text-muted-foreground">Last Updated</Label>
+								<p>{new Date(gistInfo.updated_at).toLocaleString()}</p>
+							</div>
+							<div>
+								<Label class="text-xs uppercase text-muted-foreground">Public</Label>
+								<p>{gistInfo.public ? 'Yes' : 'No'}</p>
+							</div>
+							<div>
+								<Label class="text-xs uppercase text-muted-foreground">Versions</Label>
+								<p>{gistHistory.length > 0 ? gistHistory.length : 'N/A'}</p>
+							</div>
+						</div>
+						<div class="mt-4">
+							<a 
+								href={gistInfo.html_url} 
+								target="_blank" 
+								class="text-sm text-blue-600 hover:underline"
+							>
+								View on GitHub ↗
+							</a>
+						</div>
+					</CardContent>
+				</Collapsible.Content>
+			</Collapsible.Root>
 		</Card>
 	{/if}
 
