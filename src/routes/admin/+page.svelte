@@ -2,16 +2,14 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
+	import AdminSettings from './AdminSettings.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-	import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '$lib/components/ui/dialog';
 	import { toast } from 'svelte-sonner';
-	import { Badge } from '$lib/components/ui/badge';
 	import { NOW_GIST_ID, RESUME_GIST_ID } from '$lib/config';
 	import { GitHubGistAPI } from '$lib/utils/github-api';
-	import { BadgeHelp, Delete, Save, Settings } from 'lucide-svelte';
 	import { Heading } from '$lib/components/typography';
 
 	// State management
@@ -23,7 +21,6 @@
 	let isSaving = $state(false);
 	let isValidatingToken = $state(false);
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
-	let showTokenModal = $state(false);
 	
 	let jsonEditor = $state<JsonEditor | null>(null);
 
@@ -48,14 +45,6 @@
 			}
 		}
 	});
-
-	function saveTokenToStorage() {
-		if (browser && githubToken) {
-			localStorage.setItem('github_admin_token', githubToken);
-			toast.success('Token saved locally');
-			validateToken(); // Validate token after saving
-		}
-	}
 
 	async function validateToken() {
 		if (!githubToken) {
@@ -82,16 +71,6 @@
 		} finally {
 			isValidatingToken = false;
 		}
-	}
-
-	function clearToken() {
-		githubToken = '';
-		tokenValidation = null;
-		if (browser) {
-			localStorage.removeItem('github_admin_token');
-		}
-		toast.success('Token cleared');
-		showTokenModal = false; // Close modal after clearing
 	}
 
 	async function loadGist() {
@@ -208,80 +187,7 @@
 		<div>
             <Heading>Gist Admin</Heading>
 		</div>
-		<div class="flex items-center gap-2">
-			<Badge variant="outline" class="text-xs">
-				{#if isValidatingToken}
-					Validating...
-				{:else if tokenValidation}
-					{tokenValidation.valid ? '✓ Valid Token' : '✗ Invalid Token'}
-				{:else}
-					{githubToken ? 'Token Set' : 'No Token'}
-				{/if}
-			</Badge>
-			
-			<Dialog bind:open={showTokenModal}>
-				<DialogTrigger>
-					<Button variant="outline" size="sm">
-						<Settings class="h-4 w-4 mr-1" />
-						Settings
-					</Button>
-				</DialogTrigger>
-				<DialogContent class="sm:max-w-md">
-					<DialogHeader>
-						<DialogTitle>GitHub Access Token</DialogTitle>
-					</DialogHeader>
-					<div class="space-y-4">
-						<div class="space-y-2">
-							<Label for="token">Personal Access Token</Label>
-							<div class="flex gap-2">
-								<Input
-									id="token"
-									type="password"
-									placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-									bind:value={githubToken}
-									class="flex-1"
-								/>
-							</div>
-							<p class="text-xs text-muted-foreground">
-								Token needs 'gist' scope. <a 
-									href="https://github.com/settings/tokens/new?scopes=gist" 
-									target="_blank" 
-									class="underline hover:text-foreground"
-								>
-									Create one here
-								</a>
-							</p>
-							{#if tokenValidation && !tokenValidation.valid}
-								<p class="text-xs text-red-600">
-									❌ {tokenValidation.error}
-								</p>
-							{:else if tokenValidation && tokenValidation.valid}
-								<p class="text-xs text-green-600">
-									✅ Token is valid and has required permissions
-									{#if tokenValidation.scopes}
-										<br>Scopes: {tokenValidation.scopes.join(', ')}
-									{/if}
-								</p>
-							{/if}
-						</div>
-						<div class="flex gap-2">
-							<Button onclick={saveTokenToStorage} variant="outline" size="sm" class="flex-1">
-                                <Save class="h-4 w-4 mr-1" />
-								Save
-							</Button>
-							<Button onclick={validateToken} variant="outline" size="sm" disabled={!githubToken || isValidatingToken} class="flex-1">
-                                <BadgeHelp class="h-4 w-4 mr-1" />
-								Validate
-							</Button>
-							<Button onclick={clearToken} variant="outline" size="sm" class="flex-1">
-                                <Delete class="h-4 w-4 mr-1" />
-								Clear
-							</Button>
-						</div>
-					</div>
-				</DialogContent>
-			</Dialog>
-		</div>
+		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
 
 	<!-- Gist Selection Section -->
