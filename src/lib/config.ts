@@ -77,6 +77,11 @@ export const gists = {
 		id: '5e46653e313bbd440a4286bafc4c1b6a',
 		name: 'Events',
 		filename: 'events.json'
+	},
+	songs: {
+		id: '2fc6578c2a8d7375af8cfd1be3131711',
+		name: 'Songs',
+		filename: 'songs.json'
 	}
 };
 

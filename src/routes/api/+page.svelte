@@ -65,6 +65,9 @@
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import JsonView from '$lib/components/JsonView.svelte';
 	import { Heading } from '$lib/components/typography';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	let selected = 0;
 	let response: any = null;
@@ -107,10 +110,43 @@
 		queryParams = {};
 	}
 
+	function updateUrlParams() {
+		if (!browser) return;
+		const url = new URL(window.location.href);
+		url.searchParams.set('endpoint', selected.toString());
+		goto(url.toString(), { replaceState: true, noScroll: true });
+	}
+
+	function initializeFromUrl() {
+		if (!browser) return;
+		const endpointParam = page.url.searchParams.get('endpoint');
+		if (endpointParam) {
+			const endpointIndex = parseInt(endpointParam, 10);
+			if (endpointIndex >= 0 && endpointIndex < endpoints.length) {
+				selected = endpointIndex;
+				return true; // Indicates that selection was updated from URL
+			}
+		}
+		return false; // No URL parameter found
+	}
+
+	let initialized = false;
+
+	// Initialize from URL on component mount
+	$: if (browser && !initialized) {
+		const fromUrl = initializeFromUrl();
+		initialized = true;
+		if (!fromUrl) {
+			// If no URL param, call endpoint with default selection
+			callEndpoint();
+		}
+	}
+
 	$: currentEndpoint = endpoints[selected];
-	$: if (selected !== undefined) {
+	$: if (selected !== undefined && initialized) {
 		clearParams();
 		callEndpoint();
+		updateUrlParams();
 	}
 </script>
 
@@ -120,7 +156,11 @@
 		<label for="endpoint-select" class="mb-2 block font-semibold">
 			Select endpoint to test the output:
 		</label>
-		<select id="endpoint-select" bind:value={selected} class="h-9 w-full rounded border px-2 py-1">
+		<select 
+			id="endpoint-select" 
+			bind:value={selected} 
+			class="h-9 w-full rounded border px-2 py-1"
+		>
 			{#each endpoints as ep, i}
 				<option value={i}>{ep?.method || 'GET'} {ep.url}</option>
 			{/each}

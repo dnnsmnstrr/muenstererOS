@@ -422,8 +422,7 @@
     function handleCommandCompletion(command: string, query: string): string[] {
         switch (command) {
             case 'goto':
-                return pages.map(page => page.path || page.title.toLocaleLowerCase()).filter(page => page.startsWith(query.toLowerCase()))
-                    
+                return pages.map(page => page.path || page.title.toLocaleLowerCase()).filter(page => page.startsWith(query.toLowerCase()))  
             case 'cd':
                 return directories.map(dir => dir.name).filter(name => name.startsWith(query || ''));
             case 'cat':
@@ -435,13 +434,10 @@
                     .filter(cmd => !cmd.hidden)
                     .map(cmd => cmd.name)
                     .filter(name => name.startsWith(query || ''));
-            
-
-            
             default:
-                const commandCompletions = commands.filter(cmd => cmd.startsWith(command));
+                const commandCompletions = commands.filter(cmd => cmd.name.startsWith(command));
                 if (commandCompletions.length > 0) {
-                    return commandCompletions;
+                    return commandCompletions.map(cmd => cmd.name);
                 }
         }
         return [];
