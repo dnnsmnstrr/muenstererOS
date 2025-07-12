@@ -128,7 +128,10 @@
 			((e.metaKey && e.altKey) || (e.ctrlKey && e.altKey)) &&
 			(e.code === 'KeyI' || e.key.toLowerCase() === 'i')
 		) return; // Allow dev tools to open (Cmd+Opt+I on Mac, Ctrl+Alt+I on Windows)
-
+		const allowedHotkeys = ['r'];
+		if (allowedHotkeys.includes(e.key) && (e.metaKey || e.ctrlKey)) {
+			return;
+		}
 		
 		const ignoredKeys = ['Dead', 'Backspace', 'c', 'v', 'a', 'i'];
 		if (!ignoredKeys.includes(e.key) && (e.ctrlKey || e.metaKey || e.metaKey)) {
