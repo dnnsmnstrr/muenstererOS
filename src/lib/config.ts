@@ -59,6 +59,24 @@ export const links = {
     cv: "https://cv.muensterer.tech"
 } as const;
 
+export const gists = {
+	now: {
+		id: NOW_GIST_ID,
+		name: 'Now Data',
+		filename: 'now.json'
+	},
+	resume: {
+		id: RESUME_GIST_ID,
+		name: 'Resume Data',
+		filename: 'resume.json'
+	},
+	events: {
+		id: '5e46653e313bbd440a4286bafc4c1b6a',
+		name: 'Events',
+		filename: 'events.json'
+	}
+};
+
 export const descriptions = [
     { name: '🤖💻📱⌚🎧', href: links.yat },
 	{ name: '💻 Software Developer', href: links.cv },

@@ -11,13 +11,13 @@
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { ChevronDown, Save } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import { NOW_GIST_ID, RESUME_GIST_ID } from '$lib/config';
+	import { gists  } from '$lib/config';
 	import { GitHubGistAPI } from '$lib/utils/github-api';
 	import { Heading } from '$lib/components/typography';
 
 	// State management
 	let githubToken = $state('');
-	let selectedGist = $state(NOW_GIST_ID); // Default to first known gist
+	let selectedGist = $state(gists.now.id);
 	let gistData = $state('{}');
 	let gistInfo = $state<any>(null);
 	let gistHistory = $state<any[]>([]);
@@ -33,8 +33,7 @@
 
 	// Predefined gists
 	const knownGists = [
-		{ id: NOW_GIST_ID, name: 'Now Data', filename: 'now.json' },
-		{ id: RESUME_GIST_ID, name: 'Resume Data', filename: 'resume.json' },
+		...Object.values(gists),
 		{ id: '', name: 'Custom Gist...', filename: '' }
 	];
 
