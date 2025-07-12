@@ -49,10 +49,6 @@
 		{ value: 'json-light', label: 'JSON Light' },
 		{ value: 'vs-dark', label: 'VS Dark' },
 		{ value: 'vs', label: 'VS Light' },
-		{ value: 'Monokai', label: 'Monokai' },
-		{ value: 'GitHub', label: 'GitHub' },
-		{ value: 'Solarized-dark', label: 'Solarized Dark' },
-		{ value: 'Dracula', label: 'Dracula' }
 	];
 
 	onMount(() => {
