@@ -123,20 +123,25 @@
 	let konamiIndex = 0;
 
 	function handleKeydown(e: KeyboardEvent) {
-		if ($debug) {
-			console.log(e);
-		}
-		const ignoredKeys = ['Dead', 'Backspace', 'c', 'v', 'a'];
-		if (!ignoredKeys.includes(e.key) && (e.ctrlKey || e.metaKey)) {
+		if ($debug) console.log(e);
+		if (
+			((e.metaKey && e.altKey) || (e.ctrlKey && e.altKey)) &&
+			(e.code === 'KeyI' || e.key.toLowerCase() === 'i')
+		) return; // Allow dev tools to open (Cmd+Opt+I on Mac, Ctrl+Alt+I on Windows)
+
+		
+		const ignoredKeys = ['Dead', 'Backspace', 'c', 'v', 'a', 'i'];
+		if (!ignoredKeys.includes(e.key) && (e.ctrlKey || e.metaKey || e.metaKey)) {
 			debugLog('Preventing default behavior for key: ' + e.key);
 			e.preventDefault();
 		}
 		if (e.key !== 'Escape' && e.key !== '/') {
+			// fix modals conflicting
 			e.stopImmediatePropagation();
 		}
 
 		if (document.querySelector('.DocSearch-Modal')) {
-			console.log('DocSearch-Modal');
+			console.log('DocSearch-Modal is open, ignoring keydown event');
 			return;
 		}
 
@@ -194,7 +199,7 @@
 					}
 					break;
 				case ',':
-					goto('/settings');
+					goto(e.shiftKey ? '/admin' : '/settings');
 					break;
 				case 'f':
 					toggleFullscreen();
@@ -204,9 +209,6 @@
 					break;
 				case 'm':
 					toggleMode();
-					break;
-				case 'r':
-					reloadPage();
 					break;
 				default:
 					break;
