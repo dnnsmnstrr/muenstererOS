@@ -27,7 +27,7 @@
   {href}
   {target}
   {...rest}
-  class={cn("font-medium text-primary underline underline-offset-4 flex items-center gap-1 transition-opacity hover:opacity-80", rest.class)}
+  class={cn("font-medium text-primary underline underline-offset-4 inline-flex items-center gap-1 transition-opacity hover:opacity-80", rest.class)}
 >
   {@render children?.()}
   {#if (target === '_blank' && !typography?.externalLinks) || showIcon}
