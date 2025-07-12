@@ -1,5 +1,10 @@
 [
 	{
+		"title": "Timeline",
+		"path": "/timeline",
+		"date": "2025-07-12"
+	},
+	{
 		"title": "Terminal",
 		"path": "/terminal",
 		"date": "2025-06-23"

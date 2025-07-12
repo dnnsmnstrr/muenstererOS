@@ -47,7 +47,11 @@
 		{
 			name: 'JSON Resume',
 			url: '/api/resume'
-		}
+		},
+		{
+			name: 'Events',
+			url: '/api/events',
+		},
 	];
 </script>
 

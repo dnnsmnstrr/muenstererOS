@@ -1,5 +1,6 @@
 // string
-export const capitalize = (string: string) => (string && string[0].toUpperCase() + string.slice(1)) || '';
+export const capitalize = (string: string) =>
+	(string && string[0].toUpperCase() + string.slice(1)) || '';
 
 export function disemvowel(str: string) {
 	var strArr = str.split('');
@@ -16,6 +17,66 @@ export function disemvowel(str: string) {
 export const randomNumber = (min = 0, max = 100) => {
 	return Math.round(Math.random() * (max - min)) + min;
 };
+
+// date
+export function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric'
+	});
+}
+
+export function formatTime(dateString: string): string {
+	const date = new Date(dateString);
+	return date.toLocaleTimeString('en-US', {
+		hour: '2-digit',
+		minute: '2-digit'
+	});
+}
+
+export function formatDateTime(dateString: string): string {
+	const date = new Date(dateString);
+	return date.toLocaleString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+		hour12: true
+	});
+}	
+
+export function formatDuration(milliseconds: number): string {
+	const seconds = Math.floor((milliseconds / 1000) % 60);
+	const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
+	const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+	const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+	const weeks = Math.floor(days / 7);
+	const months = Math.floor(weeks / 4);
+	const years = Math.floor(weeks / 52);
+	const remainingWeeks = weeks % 52;
+	const halfYear = remainingWeeks >= 26 ? 0.5 : 0;
+	const threeQuarterYear = remainingWeeks >= 39 ? 0.75 : 0;
+	if (years > 0) {
+		const partialYear = halfYear + threeQuarterYear;
+		return `${years + partialYear}y`;
+	}
+	if (months > 0) {
+		return `${months}mo`;
+	}
+	if (weeks > 0) {
+		return `${weeks}w`;
+	}
+	let duration = '';
+
+	if (days > 0) duration += `${days}d `;
+	if (hours > 0) duration += `${hours}h `;
+	if (minutes > 0) duration += `${minutes}m `;
+	if (seconds > 0 || duration === '') duration += `${seconds}s`;
+	return duration.trim();
+}
 
 // color
 export function hexToHsl(hex: string): string {
@@ -59,5 +120,5 @@ export function hexToHsl(hex: string): string {
 	// Convert hue to degrees
 	hue *= 60;
 
-	return `${Math.round(hue)} ${Math.round(saturation * 100)}% ${Math.round(lightness * 100)}%`
+	return `${Math.round(hue)} ${Math.round(saturation * 100)}% ${Math.round(lightness * 100)}%`;
 }

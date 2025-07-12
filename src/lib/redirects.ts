@@ -321,7 +321,8 @@ export const redirects: Redirect[] = [
 		aliases: ['next-cv']
 	},
 	{ name: 'edit-cv', url: 'https://github.com/dnnsmnstrr/cv/blob/main/src/data/resume-data.tsx' },
-	{ name: 'life', aliases: ['timeline', '📅'] },
+	{ name: 'timeline', description: 'Interactive timeline of events in my life', aliases: ['events', '📅'] },
+	{ name: 'life', description: 'My life in weeks', aliases: ['weeks', 'biography'] },
 	// meta
 	{
 		name: 'status',

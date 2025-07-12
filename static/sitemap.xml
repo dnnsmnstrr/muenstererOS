@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
         <url>
+            <loc>https://muensterer.tech/timeline</loc>
+            <lastmod>2025-07-12</lastmod>
+        </url>
+    
+        <url>
             <loc>https://muensterer.tech/terminal</loc>
             <lastmod>2025-06-23</lastmod>
         </url>
@@ -17,6 +22,11 @@
         </url>
     
         <url>
+            <loc>https://muensterer.tech/where</loc>
+            <lastmod>2025-02-20</lastmod>
+        </url>
+    
+        <url>
             <loc>https://muensterer.tech/uses</loc>
             <lastmod>2025-02-01</lastmod>
         </url>
@@ -29,16 +39,6 @@
         <url>
             <loc>https://muensterer.tech/projects</loc>
             <lastmod>2025-02-01</lastmod>
-        </url>
-    
-        <url>
-            <loc>https://muensterer.tech/where</loc>
-            <lastmod>2025-02-20</lastmod>
-        </url>
-    
-        <url>
-            <loc>https://muensterer.tech/now</loc>
-            <lastmod>2025-01-01</lastmod>
         </url>
     
         <url>
