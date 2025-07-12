@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { size } from '@floating-ui/dom';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
@@ -28,6 +27,7 @@
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
 	let gistSelectionOpen = $state(true);
 	let gistInfoOpen = $state(false);
+	let jsonViewerOpen = $state(false);
 
 	let jsonEditor = $state<JsonEditor | null>(null);
 
@@ -378,9 +378,9 @@
 	{#if gistData !== '{}'}
 		<Card>
 			<CardHeader>
-				<CardTitle class="flex flex-col items-center justify-between text-lg sm:flex-row gap-2">
-					<div class="flex gap-2 justify-between w-full sm:w-auto items-center">
-                        <span class="font-semibold">Editor</span>
+				<CardTitle class="flex flex-col items-center justify-between gap-2 text-lg sm:flex-row">
+					<div class="flex w-full items-center justify-between gap-2 sm:w-auto">
+						<span class="font-semibold">Editor</span>
 						<CustomSelect
 							class="w-[130px]"
 							value={selectedTheme}
@@ -390,7 +390,7 @@
 							onValueChange={onThemeChange}
 						/>
 					</div>
-					<div class="flex gap-2 justify-between w-full sm:w-auto">
+					<div class="flex w-full justify-between gap-2 sm:w-auto">
 						<div class="flex items-center gap-2">
 							<Button onclick={formatJson} variant="outline">Format</Button>
 							<Button onclick={resetEditor} variant="outline">Reset</Button>
@@ -406,7 +406,7 @@
 				<JsonEditor
 					bind:this={jsonEditor}
 					bind:value={gistData}
-					height="500px"
+					height="70vh"
 					options={{
 						tabSize: 2,
 						insertSpaces: true,
