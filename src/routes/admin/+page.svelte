@@ -249,7 +249,7 @@
 
 <div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
-		<Heading>Gist Admin</Heading>
+		<Heading class="mb-0">Gist Admin</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
 

@@ -69,7 +69,7 @@
 </script>
 
 <div class="flex items-center gap-2">
-	<Badge variant="outline" class="text-xs">
+	<Badge variant="outline" class="text-xs hidden sm:inline-flex">
 		{#if isValidatingToken}
 			Validating...
 		{:else if tokenValidation}
@@ -99,6 +99,10 @@
 							type="password"
 							placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
 							bind:value={githubToken}
+                            onsubmit={(e) => {
+                                e.preventDefault();
+                                saveTokenToStorage();
+                            }}
 							class="flex-1"
 						/>
 					</div>
