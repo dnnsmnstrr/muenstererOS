@@ -26,8 +26,11 @@ export const user = {
 	name: OWNER_NAME,
 	email: EMAIL,
 	website: 'https://' + CURRENT_DOMAIN,
+	givenName: FIRST_NAME,
+	familyName: LAST_NAME,
 	username: USERNAME_SHORT,
-	birthdate: BIRTHDATE,
+	birthDate: BIRTHDATE,
+	occupation: 'Software Developer',
 }
 
 export const links = {
@@ -79,7 +82,7 @@ export const gists = {
 
 export const descriptions = [
     { name: '🤖💻📱⌚🎧', href: links.yat },
-	{ name: '💻 Software Developer', href: links.cv },
+	{ name: '💻 ' + user.occupation, href: links.cv },
 	{ name: '🤖 Builder of Things', href: links.makerer },
 	'📱 Coder of Apps',
 	'🍕 Pizza lover',

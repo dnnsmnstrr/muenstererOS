@@ -12,7 +12,6 @@ export async function GET() {
         }
 
         const apiData = await response.json();
-        // console.log(apiData)
         const gistData = JSON.parse(apiData.files[gists.events.filename].content);
         const updatedAt = apiData.updated_at;
         const versions = apiData.history.map((item: any) => ({
@@ -20,7 +19,7 @@ export async function GET() {
             timestamp: item.committed_at,
             changes: item.change_status?.total,
         }));
-        // console.log(versions)
+
         return json({ ...gistData, updatedAt, gistUrl: apiData.html_url, versions });
     } catch (error) {
         return json({ error }, { status: 500 });
