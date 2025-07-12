@@ -44,8 +44,11 @@
 		{/each}
 	</TreeView.Folder>
 {:else}
-	<TreeView.File name={`${key}: ${value}`} href={valueType === 'url' ? value : undefined}>
-        >
+	<TreeView.File 
+		name={`${key}: ${value}`} 
+		href={valueType === 'url' ? value : undefined}
+		class="whitespace-nowrap"
+	>
 		{#snippet icon()}
 			{#if valueType === 'object'}
 				<Braces class="size-3" />

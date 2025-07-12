@@ -11,11 +11,13 @@
 </script>
 
 <button {type} class={cn('flex place-items-center gap-1 pl-[3px]', className)} {...rest}>
-	{#if icon}
-		{@render icon({ name })}
-	{:else}
-		<FileIcon class="size-4" />
-	{/if}
+	<span>
+		{#if icon}
+			{@render icon({ name })}
+		{:else}
+			<FileIcon class="size-4" />
+		{/if}
+	</span>
 	{#if href}
 		<a href={href} class="hover:underline">
 			<span>{name}</span>
