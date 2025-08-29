@@ -278,6 +278,36 @@ export const redirects: Redirect[] = [
 		url: 'https://stackshare.io/' + USERNAME_SHORT + '/my-stack',
 		aliases: ['mystack', 'techstack']
 	},
+	{
+		name: 'opn',
+		url: 'https://opn.bio/@dnnsmnstrr',
+		description: 'A bio page generated from json data in my .opn repo',
+		aliases: ['bio']
+	},
+	{
+		name: 'edit-opn',
+		url: 'https://github.com/dnnsmnstrr/.opn/edit/main/bio.json',
+		aliases: ['bio.json', 'opn.json']
+	},
+	// Websites
+	{
+		name: 'digitalplat',
+		url: 'https://mnstrr.qzz.io/',
+		description: 'A free domain from DigitalPlat',
+		aliases: ['qzz', 'plat', 'dp']
+	},
+	{
+		name: 'uberspace',
+		url: 'https://mnstrr.uber.space/',
+		description: 'My personal asteroid',
+		aliases: ['uber', 'space', '🚀']
+	},
+	{
+		name: 'edit-uberspace',
+		url: 'github/uberspace/edit/main/src/index.html',
+		description: 'A single HTML webpage hosted on uberspace',
+		aliases: ['uberpage']
+	},
 	// Work
 	{
 		name: 'work',
@@ -300,17 +330,6 @@ export const redirects: Redirect[] = [
 		name: 'slides',
 		url: 'https://slides.com/' + USERNAME,
 		aliases: ['presentation', 'slide', 'present', '📈', '🪧']
-	},
-	{
-		name: 'opn',
-		url: 'https://opn.bio/@dnnsmnstrr',
-		description: 'A bio page generated from json data in my .opn repo',
-		aliases: ['bio']
-	},
-	{
-		name: 'edit-opn',
-		url: 'https://github.com/dnnsmnstrr/.opn/edit/main/bio.json',
-		aliases: ['bio.json', 'opn.json']
 	},
 	// CV pages
 	{
@@ -371,7 +390,7 @@ export const redirects: Redirect[] = [
 	{ name: 'edit', url: 'github/dnnsmnstrr.github.io', aliases: ['✏️', '🖊️'] }, //shortcut to website repo
 	{
 		name: 'edit-redirects',
-		url: 'github/api/edit/master/pages/api/redirect/redirects.js',
+		url: 'github/muenstererOS/edit/master/src/lib/redirects.ts',
 		aliases: ['↪️', '↩️', '🔃', 'edit-redirect']
 	}, //link to these redirects
 	{ name: 'feed', url: '/feed.xml', aliases: ['rss', '📰', 'atom', 'subscribe'] },
