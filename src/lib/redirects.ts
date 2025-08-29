@@ -301,6 +301,17 @@ export const redirects: Redirect[] = [
 		url: 'https://slides.com/' + USERNAME,
 		aliases: ['presentation', 'slide', 'present', '📈', '🪧']
 	},
+	{
+		name: 'opn',
+		url: 'https://opn.bio/@dnnsmnstrr',
+		description: 'A bio page generated from json data in my .opn repo',
+		aliases: ['bio']
+	},
+	{
+		name: 'edit-opn',
+		url: 'https://github.com/dnnsmnstrr/.opn/edit/main/bio.json',
+		aliases: ['bio.json', 'opn.json']
+	},
 	// CV pages
 	{
 		name: 'resume',
