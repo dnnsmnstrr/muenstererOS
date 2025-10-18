@@ -2,20 +2,27 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
-	import AdminSettings from './AdminSettings.svelte';
+	import CustomSelect from '$lib/components/CustomSelect.svelte';
+	import AdminSettings from '../AdminSettings.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import { Save } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import { gists } from '$lib/config';
+	import { gists  } from '$lib/config';
 	import { GitHubGistAPI, type GistData } from '$lib/utils/github-api';
 	import { Heading } from '$lib/components/typography';
-	import GistEditor from './GistEditor.svelte';
-	import GistInfo from './GistInfo.svelte';
-	import GistSelection from './GistSelection.svelte';
+	import type { PageProps } from './$types';
+	import GistInfo from '../GistInfo.svelte';
+	import GistEditor from '../GistEditor.svelte';
+	import { capitalize } from '$lib/utils/helper';
+
+	let { data }: PageProps = $props();
 
 	// State management
 	let githubToken = $state('');
-	let selectedGist = $state(gists.now.id);
+	let selectedGist = $state(gists[data.file || 'now'].id);
 	let gistData = $state('{}');
-	let gistInfo = $state<GistData>(null);
+	let gistInfo = $state<GistData>();
 	let fullGistHistory = $state<any[]>([]);
 	let isLoading = $state(false);
 	let isSaving = $state(false);
@@ -28,7 +35,10 @@
 	let jsonEditor = $state<JsonEditor | null>(null);
 
 	// Predefined gists
-	const knownGists = [...Object.values(gists), { id: '', name: 'Custom Gist...', filename: '' }];
+	const knownGists = [
+		...Object.values(gists),
+		{ id: '', name: 'Custom Gist...', filename: '' }
+	];
 
 	// Custom gist fields for when user selects "Custom Gist..."
 	let customGistId = $state('');
@@ -40,7 +50,7 @@
 		{ value: 'json-dark', label: 'JSON Dark' },
 		{ value: 'json-light', label: 'JSON Light' },
 		{ value: 'vs-dark', label: 'VS Dark' },
-		{ value: 'vs', label: 'VS Light' }
+		{ value: 'vs', label: 'VS Light' },
 	];
 
 	onMount(() => {
@@ -50,9 +60,9 @@
 			const savedGistId = localStorage.getItem('github_admin_last_gist');
 
 			// Restore last gist selection if available
-			if (savedGistId) {
-				selectedGist = savedGistId;
-			}
+			// if (savedGistId) {
+			// 	selectedGist = savedGistId;
+			// }
 
 			if (savedToken) {
 				githubToken = savedToken;
@@ -224,11 +234,6 @@
 			toast.success('Editor reset to original content');
 		}
 	}
-
-	function onThemeChange(value: string) {
-		selectedTheme = value;
-		jsonEditor?.setTheme(value);
-	}
 </script>
 
 <svelte:head>
@@ -237,27 +242,15 @@
 
 <div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
-		<Heading class="mb-0">Gist Admin</Heading>
+		<Heading class="mb-0">{capitalize(data.file || 'Gist')} Admin</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
 
-	<!-- Gist Selection Section -->
-	<GistSelection 
-		bind:open={gistSelectionOpen} 
-		bind:selectedGist
-		bind:customGistId
-		bind:customFilename
-		availableGists={knownGists} 
-		onLoadGist={loadGist}
-		loading={isLoading}
-	/>
 
-	<!-- Gist Info Display -->
 	{#if gistInfo}
 		<GistInfo {gistInfo} history={fullGistHistory} bind:isOpen={gistInfoOpen} />
 	{/if}
 
-	<!-- JSON Editor -->
 	{#if gistData !== '{}'}
 		<GistEditor
 			bind:gistData
