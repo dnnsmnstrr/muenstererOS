@@ -1,5 +1,23 @@
 [
 	{
+		"title": "404s & Heartbreaks",
+		"type": "hidden",
+		"season": "winter",
+		"year": "2025",
+		"emoji": "⚠️",
+		"uri": "7DGwSWe6AFV9rANwBRdf3h",
+		"imageUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c5ade9d9f0581cb897835e679"
+	},
+	{
+		"title": "Jellyfish",
+		"type": "season",
+		"season": "autumn",
+		"year": 2025,
+		"emoji": "🪼",
+		"uri": "7LRqVBNnbOnUUU6a3Xfzat",
+		"imageUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c94e9e7767df713b8523f9860"
+	},
+	{
 		"title": "Summer Nights",
 		"type": "season",
 		"season": "summer",

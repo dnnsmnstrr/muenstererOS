@@ -14,6 +14,7 @@
 	let { data }: PageProps = $props();
 
 	let nowData = $state(data.nowData);
+
 	let showingVersion = $state(false);
 	let currentPlaylist = playlists.find((p) => p.uri === nowData.playlist.uri);
 	let playlistImage =
@@ -24,7 +25,7 @@
 	let versionPositions = $state([]);
 	$effect(() => {
 		projects = '- ' + nowData.projects.join('\n- ');
-		plans = '- ' + nowData.plans.join('\n- ');
+		plans = nowData.plans.length ? '- ' + nowData.plans.join('\n- ') : '';
 		if (nowData.versions.length > 1) {
 			const timestamps = nowData.versions.map((v) => new Date(v.timestamp).getTime());
 			const minTime = Math.min(...timestamps);
@@ -79,7 +80,7 @@
 					class="ml-4"
 					variant="outline"
 					onclick={() => {
-						nowData = data.nowData
+						nowData = data.nowData;
 						showingVersion = false;
 					}}
 				>
@@ -87,7 +88,6 @@
 				</Button>
 			{/if}
 		</div>
-
 	</Heading>
 
 	<div class="grid grid-cols-12 grid-rows-5 gap-4 md:grid-rows-3">
@@ -149,7 +149,7 @@
 
 	<div class="mt-4 flex items-center justify-center gap-2">
 		<Versions versions={nowData.versions} {versionPositions} {loadVersion} />
-		<Button class="" variant="ghost" aria-label="Edit">
+		<Button class="" variant="ghost" aria-label="Edit" href="/admin/now">
 			<Pencil class="h-5 w-5" />
 			<span>Edit latest </span>
 		</Button>
