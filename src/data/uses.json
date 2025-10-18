@@ -101,12 +101,29 @@
 		"image": "https://www.apple.com/v/iphone-16e/a/images/overview/product-stories/camera/lens_hw__cskrtmilk38m_large_2x.png"
 	},
 	{
+		"title": "M3 MacBook Air",
+		"description": "A lightweight and powerful laptop for everyday tasks",
+		"url": "https://www.apple.com/macbook-air/",
+		"category": "hardware",
+		"tags": ["apple", "computer"],
+		"image": "https://www.apple.com/v/macbook-air/s/images/overview/routers/compare_mba_13_15__caznvrb61zyu_large_2x.png"
+	},
+	{
 		"title": "Apple Watch Series 6",
 		"description": "Replacing this with a Pebble soon™",
 		"url": "https://support.apple.com/de-de/111918",
 		"category": "hardware",
 		"tags": ["apple"],
-		"image": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111918_sp826-apple-watch-series6-580.png"
+		"image": "images/devices/applewatch.png"
+	},
+	{
+		"title": "AirPods Pro 3",
+		"description": "Finally caved accepted they will always be white...",
+		"date": "2025-10-02",
+		"url": "https://www.apple.com/airpods-pro/",
+		"category": "hardware",
+		"tags": ["music", "apple", "accessories"],
+		"image": "https://www.apple.com/v/airpods-pro/q/images/overview/battery/case__b87ou7jna9de_medium_2x.png"
 	},
 	{
 		"title": "AirTag",
@@ -117,20 +134,12 @@
 		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airtag-single-select-202104?wid=532&hei=582&fmt=png-alpha&.v=1617761671000"
 	},
 	{
-		"title": "M3 MacBook Air",
-		"description": "A lightweight and powerful laptop for everyday tasks",
-		"url": "https://www.apple.com/macbook-air/",
-		"category": "hardware",
-		"tags": ["apple", "computer"],
-		"image": "https://www.apple.com/v/macbook-air/s/images/overview/routers/compare_mba_13_15__caznvrb61zyu_large_2x.png"
-	},
-	{
 		"title": "Steam Deck",
 		"description": "My main gaming device",
 		"url": "https://www.steamdeck.com/en/deck",
 		"category": "hardware",
 		"tags": ["gaming"],
-		"image": "https://cdn.cloudflare.steamstatic.com/steamdeck/images/deck/deck_top.png"
+		"image": "images/devices/steamdeck.png"
 	},
 	{
 		"title": "Stream Deck",
@@ -149,20 +158,20 @@
 		"image": "https://resource.logitech.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/keyboards/mx-keys-mini/gallery/us/mx-keys-mini-top-black-us.png"
 	},
 	{
-		"title": "Beats Studio Buds+",
-		"description": "I refuse to buy white AirPods",
-		"url": "https://www.beatsbydre.com/earbuds/studio-buds-plus-wireless-noise-cancelling/MQLK3/transparent",
-		"category": "hardware",
-		"tags": ["music", "apple", "accessories"],
-		"image": "https://www.beatsbydre.com/content/dam/beats/web/product/earbuds/studio-buds-plus/pdp/studiobudsplus-pdp-p13.png.large.2x.png"
-	},
-	{
 		"title": "Creality CR6-SE",
 		"description": "3D printer I got through Kickstarter. Have two of them now.",
 		"url": "https://www.creality.com/products/cr-6-se-3d-printer",
 		"category": "hardware",
 		"tags": ["making"],
 		"image": "https://img.staticdj.com/a79612e3276075fcc067c7a4cfe07d5e_1024x.jpg"
+	},
+	{
+		"title": "Voron Zero",
+		"description": "Printer go brrr.",
+		"url": "https://vorondesign.com/voron0",
+		"category": "hardware",
+		"tags": ["making"],
+		"image": "images/devices/voron.png"
 	},
 	{
 		"title": "Dremel 3000",
@@ -178,7 +187,7 @@
 		"url": "https://www.home-assistant.io/yellow/",
 		"category": "hardware",
 		"tags": ["homelab"],
-		"image": "https://www.home-assistant.io/images/yellow/yellow_hero.jpg"
+		"image": "images/devices/ha-yellow.png"
 	},
 	{
 		"title": "UGREEN NASync DXP4800Plus",
@@ -194,6 +203,6 @@
 		"url": "https://jetkvm.com/",
 		"category": "hardware",
 		"tags": ["homelab"],
-		"image": "https://jetkvm.com/jetkvm-device-still3.png"
+		"image": "images/devices/jetkvm.png"
 	}
 ]

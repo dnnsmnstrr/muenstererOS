@@ -180,7 +180,7 @@
 				<Card.Content class="flex h-full flex-col justify-between pt-6">
 					<div>
 						<img
-							src={item.image && item.image.includes('http') ? item.image : SvgIcons[item.image || item.title]}
+							src={item.image && item.image.includes('/') ? item.image : SvgIcons[item.image || item.title]}
 							alt={item.title}
 							class="mb-4 h-48 w-full rounded-t-lg object-contain"
 						/>
