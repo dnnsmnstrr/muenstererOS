@@ -396,3 +396,12 @@ export const redirects: Redirect[] = [
 	{ name: 'feed', url: '/feed.xml', aliases: ['rss', '📰', 'atom', 'subscribe'] },
 	{ name: 'help', aliases: ['?', 'available', 'urls', 'list', '🆘', '❔', '❓'] }
 ];
+
+export function getRedirectByName(name: string): Redirect | undefined {
+	const lowerCaseName = name.toLowerCase();
+	return redirects.find(
+		(redirect) =>
+			redirect.name.toLowerCase() === lowerCaseName ||
+			redirect.aliases?.some((alias) => alias.toLowerCase() === lowerCaseName)
+	);
+}

@@ -14,7 +14,7 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook } from 'lucide-svelte';
+	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
@@ -166,6 +166,7 @@
 		{ name: 'Uses', icon: TabletSmartphone },
 		{ name: 'Projects', icon: LayoutGrid },
 		{ name: 'Playlists', icon: ListMusic },
+		{ name: 'Hotkeys', icon: Keyboard },
 		{ name: 'Redirects', icon: Signpost },
     	{ name: 'Slashes', icon: Slash, hidden: true },
     	{ name: 'Terminal', icon: Terminal, hidden: true },

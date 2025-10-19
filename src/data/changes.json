@@ -1,5 +1,10 @@
 [
 	{
+		"date": "2025-10-19",
+		"title": "Hotkeys",
+		"description": "Made a page to showcase my Raycast hotkeys that use the hyper key."
+	},
+	{
 		"date": "2025-06-23",
 		"title": "Terminal",
 		"description": "Built an interactive terminal with https://www.shadcn-svelte-extras.com/",
