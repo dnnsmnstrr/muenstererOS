@@ -197,7 +197,7 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
-		if (['Tab', ' '].includes(e.key)) return;
+		if (['Tab', ' '].includes(e.key) || document.querySelector('.DocSearch-Modal')) return;
 		const label = normalizeEventKey(e.key);
 		clickKey(label);
 	}
@@ -231,7 +231,7 @@
 	<div class="mb-8">
 		<p class="text-card-foreground leading-loose">
 			Since Raycast introduced the <Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">Hyper Key</Link>, 
-			I have become a big fan and heavy user of this additional productivity layer. 
+			I've become a big fan and heavy user of this additional productivity layer. 
 			<br>
 			Hyper <Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd> means all modifier keys (<Kbd class="font-bold">{hyperKeys}</Kbd>) are triggered simultaneously with a single key, usually <Kbd class="font-bold">Caps Lock</Kbd>.
 			<br>
