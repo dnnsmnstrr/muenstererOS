@@ -182,11 +182,11 @@
 	</div>
 
 	<div class="mb-8">
-		<p class="text-muted-foreground leading-loose">
+		<p class="text-card-foreground leading-loose">
 			Since Raycast introduced the <Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">Hyper Key</Link>, 
 			I have become a big fan and heavy user of this additional productivity layer. 
 			<br>
-			Hyper <Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd> means all modifier keys (<Kbd class="font-bold">{hyperKeys}</Kbd>) are triggered with a single key, usually <Kbd class="font-bold">Caps Lock</Kbd>.
+			Hyper <Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd> means all modifier keys (<Kbd class="font-bold">{hyperKeys}</Kbd>) are triggered simultaneously with a single key, usually <Kbd class="font-bold">Caps Lock</Kbd>.
 			<br>
 			Here is an overview of the hotkeys I have defined and use across multiple devices for my daily workflow. 
 			

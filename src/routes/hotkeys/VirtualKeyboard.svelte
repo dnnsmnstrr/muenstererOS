@@ -72,7 +72,7 @@
 			return cn(
 				baseClass,
 				widthClass,
-				'bg-primary text-primary-foreground border-primary shadow-md hover:shadow-lg hover:scale-105 cursor-pointer'
+				'bg-muted text-foreground border-foreground/20 hover:bg-muted/80 hover:border-foreground/30 shadow-md hover:shadow-lg hover:scale-105 cursor-pointer'
 			);
 		}
 
@@ -117,9 +117,9 @@
 									<div class="text-sm text-muted-foreground">{shortcut.description}</div>
 									{#if shortcut.modifier}
 										<div class="flex items-center gap-1 font-mono text-xs">
-											<span class="rounded bg-muted px-1">{shortcut.modifier}</span>
+											<span class="rounded bg-muted p-1{shortcut.modifier === Modifier.Hyper ? ' text-sm pt-0 pb-0.5' : ''}">{shortcut.modifier}</span>
 											<span>+</span>
-											<span class="rounded bg-muted px-1">{key.toUpperCase()}</span>
+											<span class="rounded bg-muted p-1">{key.toUpperCase()}</span>
 										</div>
 									{/if}
 								</div>
