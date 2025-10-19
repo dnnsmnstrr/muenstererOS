@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onDestroy } from 'svelte';
 	import { Heading, Link, Kbd } from '$lib/components/typography';
 	import * as Card from '$lib/components/ui/card';
 	import { Command } from 'lucide-svelte';
@@ -159,6 +160,52 @@
 		},
 	];
 	const hyperKey = Modifier.Hyper || hyperKeys;
+
+	function normalizeEventKey(eventKey: string): string {
+		switch (eventKey) {
+			case ' ':
+				return 'space';
+			case 'Backspace':
+				return 'backspace';
+			case 'Enter':
+				return 'enter';
+			case 'Tab':
+				return 'tab';
+			case 'CapsLock':
+				return 'caps lock';
+			case 'Shift':
+				return 'shift';
+			case 'Control':
+				return 'ctrl';
+			case 'Meta':
+				return 'cmd';
+			case 'Alt':
+				return 'alt';
+			default:
+				return eventKey.length === 1 ? eventKey.toLowerCase() : eventKey.toLowerCase();
+		}
+	}
+
+	function clickKey(label: string) {
+		const el = document.querySelector(`[data-key="${label}"]`) as HTMLElement | null;
+		if (!el) return;
+		el.classList.add('ring-2', 'ring-primary', 'ring-offset-2', 'ring-offset-background');
+		el.parentElement?.focus();
+		setTimeout(() => {
+			el.classList.remove('ring-2', 'ring-primary', 'ring-offset-2', 'ring-offset-background');
+		}, 150);
+	}
+
+	function handleKeyUp(e: KeyboardEvent) {
+		if (['Tab', ' '].includes(e.key)) return;
+		const label = normalizeEventKey(e.key);
+		clickKey(label);
+	}
+
+	if (typeof window !== 'undefined') {
+		window.addEventListener('keyup', handleKeyUp);
+		onDestroy(() => window.removeEventListener('keyup', handleKeyUp));
+	}
 </script>
 
 <svelte:head>

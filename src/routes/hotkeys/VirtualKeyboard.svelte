@@ -20,6 +20,7 @@
 
 <script lang="ts">
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { isAppleDevice } from '$lib/utils/index';
 	import { cn } from '$lib/utils/utils';
 
 	interface Props {
@@ -27,7 +28,6 @@
 	}
 
 	let { shortcuts }: Props = $props();
-	let openTooltips: Record<string, boolean> = $state({});
 
 	// Create a map for quick lookup
 	const shortcutMap = $derived(
@@ -46,8 +46,9 @@
 		['Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\'],
 		['Caps Lock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'Enter'],
 		['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
-		['Ctrl', 'Cmd', 'Alt', 'Space', 'Alt', 'Ctrl']
+		isAppleDevice() ? ['Ctrl', 'Alt', 'Cmd', 'Space', 'Cmd', 'Alt'] : ['Ctrl', 'Cmd', 'Alt', 'Space', 'Alt', 'Ctrl']
 	];
+	console.log(keyboardRows, isAppleDevice());
 
 	// Special key widths
 	const specialKeys: Record<string, string> = {
@@ -104,7 +105,7 @@
 					<Tooltip.Provider disableCloseOnTriggerClick>
 						<Tooltip.Root delayDuration={0}>
 							<Tooltip.Trigger>
-								<div class={getKeyClass(key)}>
+								<div class={getKeyClass(key)} data-key={key.toLowerCase()} tabindex="0" role="button">
 									<span class="text-xs">{getKeyContent(key)}</span>
 									{#if shortcut.icon}
 										<span class="ml-1 text-xs">{shortcut.icon}</span>
@@ -127,7 +128,7 @@
 						</Tooltip.Root>
 					</Tooltip.Provider>
 				{:else}
-					<div class={getKeyClass(key)}>
+					<div class={getKeyClass(key)} data-key={key.toLowerCase()}>
 						<span class="text-xs">{getKeyContent(key)}</span>
 					</div>
 				{/if}
