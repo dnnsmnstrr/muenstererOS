@@ -4,12 +4,13 @@
 		Cmd: '⌘',
 		Alt: '⌥',
 		Ctrl: '⌃',
-		Shift: '⇧'
+		Shift: '⇧',
+		Caps: '⇪'
 	} as const;
 
 	export type ModifierKey = (typeof Modifier)[keyof typeof Modifier];
-    export interface Shortcut {
-        modifier?: ModifierKey
+	export interface Shortcut {
+		modifier?: ModifierKey;
 		key: string;
 		description: string;
 		action: string;
@@ -26,13 +27,17 @@
 	}
 
 	let { shortcuts }: Props = $props();
+	let openTooltips: Record<string, boolean> = $state({});
 
 	// Create a map for quick lookup
 	const shortcutMap = $derived(
-		shortcuts.reduce((acc, shortcut) => {
-			acc[shortcut.key.toLowerCase()] = shortcut;
-			return acc;
-		}, {} as Record<string, Shortcut>)
+		shortcuts.reduce(
+			(acc, shortcut) => {
+				acc[shortcut.key.toLowerCase()] = shortcut;
+				return acc;
+			},
+			{} as Record<string, Shortcut>
+		)
 	);
 
 	// Standard QWERTY keyboard layout
@@ -46,22 +51,23 @@
 
 	// Special key widths
 	const specialKeys: Record<string, string> = {
-		'Backspace': 'w-20',
-		'Tab': 'w-12',
+		Backspace: 'w-20',
+		Tab: 'w-12',
 		'Caps Lock': 'w-16',
-		'Enter': 'w-16',
-		'Shift': 'w-20',
-		'Space': 'w-32',
-		'Ctrl': 'w-12',
-		'Cmd': 'w-12',
-		'Alt': 'w-12'
+		Enter: 'w-16',
+		Shift: 'w-20',
+		Space: 'w-32',
+		Ctrl: 'w-12',
+		Cmd: 'w-12',
+		Alt: 'w-12'
 	};
 
 	function getKeyClass(key: string): string {
-		const baseClass = 'flex items-center justify-center h-8 px-2 text-xs font-medium rounded border transition-all duration-200';
+		const baseClass =
+			'flex items-center justify-center h-8 px-2 text-xs font-medium rounded border transition-all duration-200';
 		const widthClass = specialKeys[key] || 'w-8';
 		const shortcut = shortcutMap[key.toLowerCase()];
-		
+
 		if (shortcut) {
 			return cn(
 				baseClass,
@@ -69,12 +75,8 @@
 				'bg-primary text-primary-foreground border-primary shadow-md hover:shadow-lg hover:scale-105 cursor-pointer'
 			);
 		}
-		
-		return cn(
-			baseClass,
-			widthClass,
-			'bg-background border-border hover:bg-muted'
-		);
+
+		return cn(baseClass, widthClass, 'bg-background border-border hover:bg-muted');
 	}
 
 	function getKeyContent(key: string): string {
@@ -83,24 +85,24 @@
 		if (key === 'Backspace') return '⌫';
 		if (key === 'Enter') return '↵';
 		if (key === 'Tab') return '⇥';
-		if (key === 'Caps Lock') return '⇪';
-		if (key === 'Shift') return '⇧';
-		if (key === 'Ctrl') return '⌃';
-		if (key === 'Cmd') return '⌘';
-		if (key === 'Alt') return '⌥';
-		
+		if (key === 'Caps Lock') return Modifier.Caps;
+		if (key === 'Shift') return Modifier.Shift;
+		if (key === 'Ctrl') return Modifier.Ctrl;
+		if (key === 'Cmd') return Modifier.Cmd;
+		if (key === 'Alt') return Modifier.Alt;
+
 		return key.toUpperCase();
 	}
 </script>
 
-<div class="flex flex-col items-center gap-2 p-4 bg-muted/30 rounded-lg">
+<div class="flex flex-col items-center gap-2 rounded-lg bg-muted/30 p-4">
 	{#each keyboardRows as row, rowIndex}
 		<div class="flex gap-1">
 			{#each row as key}
 				{@const shortcut = shortcutMap[key.toLowerCase()]}
 				{#if shortcut}
-					<Tooltip.Provider>
-						<Tooltip.Root>
+					<Tooltip.Provider disableCloseOnTriggerClick>
+						<Tooltip.Root delayDuration={0}>
 							<Tooltip.Trigger>
 								<div class={getKeyClass(key)}>
 									<span class="text-xs">{getKeyContent(key)}</span>
@@ -113,13 +115,13 @@
 								<div class="space-y-1">
 									<div class="font-semibold">{shortcut.action}</div>
 									<div class="text-sm text-muted-foreground">{shortcut.description}</div>
-                                    {#if shortcut.modifier}
-                                        <div class="flex items-center gap-1 text-xs font-mono">
-                                            <span class="rounded bg-muted px-1">{shortcut.modifier}</span>
-                                            <span>+</span>
-                                            <span class="rounded bg-muted px-1">{key.toUpperCase()}</span>
-                                        </div>
-                                    {/if}
+									{#if shortcut.modifier}
+										<div class="flex items-center gap-1 font-mono text-xs">
+											<span class="rounded bg-muted px-1">{shortcut.modifier}</span>
+											<span>+</span>
+											<span class="rounded bg-muted px-1">{key.toUpperCase()}</span>
+										</div>
+									{/if}
 								</div>
 							</Tooltip.Content>
 						</Tooltip.Root>
