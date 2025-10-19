@@ -18,16 +18,6 @@ PUBLIC_ALGOLIA_API_ID=
 PUBLIC_ALGOLIA_API_KEY=
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
 ### Changelog
 
 After making a major change, add an entry to [changes.json](./src/data/changes.json) in this format:
