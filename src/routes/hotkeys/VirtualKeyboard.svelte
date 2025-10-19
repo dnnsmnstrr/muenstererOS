@@ -49,25 +49,24 @@
 		['Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'Shift'],
 		isAppleDevice() ? ['Ctrl', 'Alt', 'Cmd', 'Space', 'Cmd', 'Alt'] : ['Ctrl', 'Cmd', 'Alt', 'Space', 'Alt', 'Ctrl']
 	];
-	console.log(keyboardRows, isAppleDevice());
 
 	// Special key widths
 	const specialKeys: Record<string, string> = {
-		Backspace: 'w-20',
-		Tab: 'w-12',
-		'Caps Lock': 'w-16',
-		Enter: 'w-16',
-		Shift: 'w-20',
-		Space: 'w-32',
-		Ctrl: 'w-12',
-		Cmd: 'w-12',
-		Alt: 'w-12'
+		Backspace: 'w-20 lg:w-24 xl:w-28',
+		Tab: 'w-12 lg:w-16 xl:w-20',
+		'Caps Lock': 'w-16 lg:w-20 xl:w-24',
+		Enter: 'w-16 lg:w-20 xl:w-24',
+		Shift: 'w-20 lg:w-24 xl:w-28',
+		Space: 'w-32 lg:w-40 xl:w-48',
+		Ctrl: 'w-12 lg:w-16 xl:w-20',
+		Cmd: 'w-12 lg:w-16 xl:w-20',
+		Alt: 'w-12 lg:w-16 xl:w-20'
 	};
 
 	function getKeyClass(key: string): string {
 		const baseClass =
-			'flex items-center justify-center h-8 px-2 text-xs font-medium rounded border transition-all duration-200';
-		const widthClass = specialKeys[key] || 'w-8';
+			'flex items-center justify-center h-8 lg:h-10 xl:h-12 px-2 lg:px-3 xl:px-4 text-xs lg:text-sm xl:text-base font-medium rounded border transition-all duration-200';
+		const widthClass = specialKeys[key] || 'w-8 lg:w-10 xl:w-12';
 		const shortcut = shortcutMap[key.toLowerCase()];
 
 		if (shortcut) {
@@ -107,9 +106,9 @@
 						<Tooltip.Root delayDuration={0}>
 							<Tooltip.Trigger>
 								<div class={getKeyClass(key)} data-key={key.toLowerCase()} tabindex="0" role="button">
-									<span class="text-xs">{getKeyContent(key)}</span>
+									<span class="text-xs lg:text-sm xl:text-base">{getKeyContent(key)}</span>
 									{#if shortcut.icon}
-										<span class="ml-1 text-xs">{shortcut.icon}</span>
+										<span class="ml-1 text-xs lg:text-sm xl:text-base">{shortcut.icon}</span>
 									{/if}
 								</div>
 							</Tooltip.Trigger>
@@ -130,16 +129,10 @@
 					</Tooltip.Provider>
 				{:else}
 					<div class={getKeyClass(key)} data-key={key.toLowerCase()}>
-						<span class="text-xs">{getKeyContent(key)}</span>
+						<span class="text-xs lg:text-sm xl:text-base">{getKeyContent(key)}</span>
 					</div>
 				{/if}
 			{/each}
 		</div>
 	{/each}
-</div>
-
-<div class="mt-4 text-center">
-	<div class="text-sm text-muted-foreground">
-		Hover over highlighted keys to see their Raycast shortcuts
-	</div>
 </div>

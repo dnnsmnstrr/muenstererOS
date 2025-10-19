@@ -156,7 +156,7 @@
 		{
 			modifier: Modifier.Alt,
 			key: 'tab',
-			description: 'Search windows in Raycast Window Switcher',
+			description: 'Search windows in the Raycast Window Switcher',
 			action: 'Switch Windows',
 			icon: '🔎',
 		},
@@ -229,7 +229,7 @@
 		</Button>
 	</div>
 
-	<div class="mb-8">
+	<div class="my-8">
 		<p class="text-card-foreground leading-loose">
 			Since Raycast introduced the <Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">Hyper Key</Link>, 
 			I've become a big fan and heavy user of this additional productivity layer. 
@@ -246,6 +246,11 @@
 		<Card.Root class="hidden sm:block">
 			<Card.Content>
 				<VirtualKeyboard {shortcuts} />
+				<div class="mt-4 text-center">
+					<div class="text-sm text-muted-foreground">
+						Hover over highlighted keys to see their Raycast shortcuts (or try typing a key)
+					</div>
+				</div>
 			</Card.Content>
 		</Card.Root>
 
