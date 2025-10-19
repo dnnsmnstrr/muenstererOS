@@ -15,6 +15,7 @@
 		description: string;
 		action: string;
 		icon: string;
+		url?: string;
 	}
 </script>
 

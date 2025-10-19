@@ -69,17 +69,18 @@
 		},
 		{
 			modifier: Modifier.Hyper,
-			key: 'f',
-			description: 'Open current Finder window',
-			action: 'Finder',
-			icon: '📁'
+			key: 'g',
+			description: 'Search selected text with Google',
+			action: 'Google',
+			icon: '👀'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'r',
-			description: 'Recognize text from screen with OCR',
+			description: 'Recognize text from screen with ScreenOCR',
 			action: 'Recognize Text',
-			icon: '🔍'
+			icon: '👁️‍🗨️',
+			url: 'https://www.raycast.com/huzef44/screenocr'
 		},
 		{
 			modifier: Modifier.Hyper,
@@ -114,7 +115,8 @@
 			key: 'z',
 			description: 'Search history',
 			action: 'History',
-			icon: '⌛'
+			icon: '⌛',
+			url: 'https://www.raycast.com/Keyruu/zen-browser'
 		},
 		{
 			modifier: Modifier.Hyper,
@@ -159,7 +161,6 @@
 			icon: '🔎',
 		},
 	];
-	const hyperKey = Modifier.Hyper || hyperKeys;
 
 	function normalizeEventKey(eventKey: string): string {
 		switch (eventKey) {
@@ -261,18 +262,31 @@
 				<div class="space-y-3">
 					{#each shortcuts as shortcut}
 						{#if shortcut.modifier}
-							<div class="flex flex-col sm:flex-row items-start sm:items-center justify-start sm:justify-between rounded-lg border p-3 gap-3">
-								<div class="flex items-center gap-3">
+							<div class="flex flex-col md:flex-row items-start md:items-center justify-start sm:justify-between rounded-lg border p-3 gap-3">
+								<!-- Left section: Icon, Action, and Desktop Description -->
+								<div class="flex flex-1 items-center gap-3">
 									<span class="text-2xl">{shortcut.icon}</span>
-									<div>
-										<div class="font-medium">{shortcut.action}</div>
-										<div class="text-sm text-muted-foreground">{shortcut.description}</div>
+									<div class="flex flex-col">
+										<div class="font-medium">{shortcut.action}
+											{#if shortcut.url}
+												<a href={shortcut.url} target="_blank" rel="noopener noreferrer" class="ml-1">
+													<Kbd class="text-xs">Extension</Kbd>
+												</a>
+											{/if}
+										</div>
+										<!-- Description for desktop, hidden on mobile -->
+										<div class="hidden md:block text-sm text-muted-foreground md:mt-1">{shortcut.description}</div>
 									</div>
 								</div>
-								<div class="flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-mono text-sm self-end sm:self-auto">
-									<span class="pb-1 text-2xl">{hyperKey}</span>
-									<span class="font-bold">+</span>
-									<span class="font-bold">{shortcut.key.toUpperCase()}</span>
+								<!-- Right section: Mobile Description and Key Combination -->
+								<div class="flex flex-1 w-full flex-row items-center gap-2 md:flex-none md:w-auto">
+									<!-- Description for mobile, hidden on desktop -->
+									<div class="flex flex-1 text-sm text-muted-foreground md:hidden">{shortcut.description}</div>
+									<div class="flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-mono text-sm self-end sm:self-auto">
+										<span class="pb-1 text-2xl">{shortcut.modifier}</span>
+										<span class="font-bold">+</span>
+										<span class="font-bold">{shortcut.key === 'space' ? '⎵' : shortcut.key.toUpperCase()}</span>
+									</div>
 								</div>
 							</div>
 						{/if}
