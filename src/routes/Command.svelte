@@ -404,7 +404,7 @@
 		system: [
 			{
 				name: 'Toggle Dark Mode',
-				value: 'theme',
+				value: 'toggle dark mode, theme',
 				icon: $mode === 'light' ? Sun : Moon,
 				action: toggleMode
 			},
