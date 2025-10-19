@@ -181,6 +181,16 @@ export const redirects: Redirect[] = [
 		aliases: ['tool', 'tools', 'toolshare', '🧰']
 	},
 	{
+		name: 'progressions-web',
+		url: 'https://progressions-web.vercel.app/',
+		aliases: []
+	},
+	{
+		name: 'progressions',
+		url: 'https://progressions.expo.app/',
+		aliases: ['progressions', 'progression', 'progressions-app', '🎹']
+	},
+	{
 		name: 'humblekeys',
 		aliases: ['humble', 'keys', 'games', 'freegames', '🕹️', '🔑']
 	},

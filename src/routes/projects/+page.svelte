@@ -9,8 +9,8 @@
 		description: string;
 		technologies: string[];
 		webUrl?: string;
+		appUrl?: string;
 		githubUrl?: string;
-		liveUrl?: string;
 		image: string;
 	};
 
@@ -28,8 +28,9 @@
 			description: 'An app to manage lyrics and chords',
 			technologies: ['React Native', 'Expo', 'tamagui'],
 			githubUrl: 'https://github.com/dnnsmnstrr/progressions-new',
-			webUrl: 'https://progressions.live',
-			image: 'https://progressions.live/assets/images/songs-46ee7bf1e248d2e1fcfce53dc71d07e1.png'
+			appUrl: 'https://progressions.expo.app/',
+			webUrl: 'https://progressions-web.vercel.app/',
+			image: '/images/Progressions.png'
 		},
 		{
 			title: 'Zettelkasten',
@@ -40,25 +41,28 @@
 			image:
 				'https://assets.website-files.com/60f575ce343a495071f83206/6139d40abef777e56891db91_dendron-logo-original-green.svg'
 		},
-    {
-      title: 'BetterTouchTool Extension',
-      description: 'A custom extension to search and execute named triggers in BTT directly from Raycast',
-      technologies: ['Raycast', '1k+ Installs', 'TypeScript'],
-      webUrl: 'https://www.raycast.com/dnnsmnstrr/bettertouchtool',
-      githubUrl: 'https://github.com/raycast/extensions/tree/9ef485ab6cafe15b5968681d752f597b2ed6873a/extensions/bettertouchtool/',
-      image: 'https://files.raycast.com/9scaxngh5f31po57vd2mrxsnubaz'
-    },
-    {
-      title: 'Markdown Slides Extension',
-      description: 'A custom extension to search and execute named triggers in BTT directly from Raycast',
-      technologies: ['Raycast', 'Markdown'],
-      webUrl: 'https://www.raycast.com/dnnsmnstrr/markdown-slides',
-      githubUrl: 'https://github.com/raycast/extensions/tree/1f943e7af910a4cbe97a02a95b86e22f0022b490/extensions/markdown-slides/',
-      image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
-    },
+		{
+			title: 'BetterTouchTool Extension',
+			description:
+				'A custom extension to search and execute named triggers in BTT directly from Raycast',
+			technologies: ['Raycast', '1k+ Installs', 'TypeScript'],
+			webUrl: 'https://www.raycast.com/dnnsmnstrr/bettertouchtool',
+			githubUrl:
+				'https://github.com/raycast/extensions/tree/9ef485ab6cafe15b5968681d752f597b2ed6873a/extensions/bettertouchtool/',
+			image: 'https://files.raycast.com/9scaxngh5f31po57vd2mrxsnubaz'
+		},
+		{
+			title: 'Markdown Slides Extension',
+			description:
+				'A custom extension to search and execute named triggers in BTT directly from Raycast',
+			technologies: ['Raycast', 'Markdown'],
+			webUrl: 'https://www.raycast.com/dnnsmnstrr/markdown-slides',
+			githubUrl:
+				'https://github.com/raycast/extensions/tree/1f943e7af910a4cbe97a02a95b86e22f0022b490/extensions/markdown-slides/',
+			image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
+		}
 	];
 </script>
-
 
 <div class="container">
 	<Heading>My Projects</Heading>
@@ -96,14 +100,14 @@
 								Website →
 							</a>
 						{/if}
-						{#if project.liveUrl}
+						{#if project.appUrl}
 							<a
-								href={project.liveUrl}
+								href={project.appUrl}
 								target="_blank"
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								Live Demo →
+								App →
 							</a>
 						{/if}
 						{#if project.githubUrl}
