@@ -90,9 +90,9 @@
 	<Form.Field {form} name="debug">
     <Form.Control>
       <div class="flex flex-row items-start space-x-3 space-y-0">
-        <Checkbox checked={$debug} onCheckedChange={(value) => ($debug = !!value)} id="debug-checkbox"/>
+        <Checkbox checked={$debug} onCheckedChange={(value) => ($debug = !!value)} id="debug-checkbox" />
         <div class="space-y-1 leading-none">
-          <Form.Label class="-mt-0.5 flex items-center gap-2" for="debug-checkbox">
+          <Form.Label class="-mt-0.5 flex items-center gap-2" for="debug-checkbox" onclick={() => ($debug = !$debug)}>
             <span class="pb-1.5">Debug mode</span>
             <AnimatedToggle visible={$debug}>
               <Bug class="w-4" />

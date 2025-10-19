@@ -6,6 +6,9 @@
 	import * as Card from '$lib/components/ui/card';
 	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '$lib/components/ui/dropdown-menu';
+	import { MoreHorizontal, Copy, ExternalLink } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { data } = $props();
 	function handleRedirect(redirect: Redirect) {
@@ -117,6 +120,13 @@ function handleFaviconError(event: Event) {
 	target.src =
 		"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='30'>🌐</text></svg>";
 }
+
+	function copyRedirectUrl(redirect: Redirect) {
+		const url = getRedirectURL(redirect);
+		navigator.clipboard.writeText(url).then(() => {
+			toast.success('Copied redirect URL', { description: url });
+		});
+	}
 </script>
 
 <div class="container">
@@ -153,6 +163,7 @@ function handleFaviconError(event: Event) {
 					<Table.Head>Description</Table.Head>
 					<Table.Head>Aliases</Table.Head>
 					<Table.Head class="text-right">URL</Table.Head>
+					<Table.Head class="w-[50px]"></Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -196,6 +207,25 @@ function handleFaviconError(event: Event) {
 						<Table.Cell class="text-right"
 							>{redirect.url || '/' + redirect.name.toLocaleLowerCase()}</Table.Cell
 						>
+						<Table.Cell class="text-right">
+							<DropdownMenu>
+								<DropdownMenuTrigger>
+									{#snippet child({ props })}
+										<Button {...props} variant="ghost" size="icon" title="Actions" onclick={(e) => e.stopPropagation()}>
+											<MoreHorizontal />
+										</Button>
+									{/snippet}
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end">
+									<DropdownMenuItem onclick={() => copyRedirectUrl(redirect)}>
+										<Copy /> Copy URL
+									</DropdownMenuItem>
+									<DropdownMenuItem onclick={() => handleRedirect(redirect)}>
+										<ExternalLink /> Open
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>
@@ -248,9 +278,28 @@ function handleFaviconError(event: Event) {
 						<p>{redirect.description}</p>
 					{/if}
 
-          <p class="pt-3 pb-1 overflow-hidden overflow-x-auto font-mono text-sm text-gray-500">
-            {redirect.url || '/' + redirect.name.toLocaleLowerCase()}
-          </p>
+					  <div class="pt-3 pb-1 flex items-center justify-between gap-2">
+					  	<p class="overflow-hidden overflow-x-auto font-mono text-sm text-gray-500">
+							{redirect.url || '/' + redirect.name.toLocaleLowerCase()}
+					  	</p>
+					  	<DropdownMenu>
+					  		<DropdownMenuTrigger>
+					  			{#snippet child({ props })}
+					  				<Button {...props} variant="ghost" size="icon" title="Actions" onclick={(e) => e.stopPropagation()}>
+					  					<MoreHorizontal />
+					  				</Button>
+					  			{/snippet}
+					  		</DropdownMenuTrigger>
+					  		<DropdownMenuContent align="end">
+					  			<DropdownMenuItem onclick={() => copyRedirectUrl(redirect)}>
+					  				<Copy /> Copy URL
+					  			</DropdownMenuItem>
+					  			<DropdownMenuItem onclick={() => handleRedirect(redirect)}>
+					  				<ExternalLink /> Open
+					  			</DropdownMenuItem>
+					  		</DropdownMenuContent>
+					  	</DropdownMenu>
+					  </div>
 				</div>
 			</Card.Root>
 		{/each}
