@@ -3,7 +3,7 @@
 	import { Heading, Link, Kbd } from '$lib/components/typography';
 	import * as Card from '$lib/components/ui/card';
 	import { Command } from 'lucide-svelte';
-	import VirtualKeyboard, { Modifier, type Shortcut } from './VirtualKeyboard.svelte';
+	import VirtualKeyboard, { Modifier, normalizeEventKey, SpecialChar, type Shortcut } from './VirtualKeyboard.svelte';
 	import Raycast from '$lib/components/icons/raycast.svg';
 	import { getRedirectByName } from '$lib/redirects';
 	import { Button } from '$lib/components/ui/button';
@@ -14,13 +14,13 @@
 	const shortcuts: Shortcut[] = [
 		{
 			modifier: Modifier.Ctrl,
-			key: 'space',
+			key: 'Space',
 			description: 'I use Ctrl as modifier to keep Spotlight available as well',
 			action: 'Raycast Launcher',
 			icon: '🚀'
 		},
 		{
-			key: 'caps lock',
+			key: 'Caps',
 			description: `Capslock is rarely needed, so it is remapped to all modifier keys at once (${hyperKeys})`,
 			action: 'Hyper Key',
 			icon: Modifier.Hyper
@@ -155,39 +155,16 @@
 		},
 		{
 			modifier: Modifier.Alt,
-			key: 'tab',
+			key: 'Tab',
 			description: 'Search windows in the Raycast Window Switcher',
 			action: 'Switch Windows',
 			icon: '🔎',
 		},
 	];
 
-	function normalizeEventKey(eventKey: string): string {
-		switch (eventKey) {
-			case ' ':
-				return 'space';
-			case 'Backspace':
-				return 'backspace';
-			case 'Enter':
-				return 'enter';
-			case 'Tab':
-				return 'tab';
-			case 'CapsLock':
-				return 'caps lock';
-			case 'Shift':
-				return 'shift';
-			case 'Control':
-				return 'ctrl';
-			case 'Meta':
-				return 'cmd';
-			case 'Alt':
-				return 'alt';
-			default:
-				return eventKey.length === 1 ? eventKey.toLowerCase() : eventKey.toLowerCase();
-		}
-	}
 
 	function clickKey(label: string) {
+		console.log(label);
 		const el = document.querySelector(`[data-key="${label}"]`) as HTMLElement | null;
 		if (!el) return;
 		el.classList.add('ring-2', 'ring-primary', 'ring-offset-2', 'ring-offset-background');
@@ -288,9 +265,9 @@
 									<!-- Description for mobile, hidden on desktop -->
 									<div class="flex flex-1 text-sm text-muted-foreground md:hidden">{shortcut.description}</div>
 									<div class="flex items-center gap-1 rounded-md bg-muted px-2 py-1 font-mono text-sm self-end sm:self-auto">
-										<span class="pb-1 text-2xl">{shortcut.modifier}</span>
+										<span class="{shortcut.modifier === Modifier.Hyper ? 'pb-1 ' : ''}text-2xl">{shortcut.modifier}</span>
 										<span class="font-bold">+</span>
-										<span class="font-bold">{shortcut.key === 'space' ? '⎵' : shortcut.key.toUpperCase()}</span>
+										<span class="font-bold">{SpecialChar[shortcut.key as keyof typeof SpecialChar] || shortcut.key.toUpperCase()}</span>
 									</div>
 								</div>
 							</div>
