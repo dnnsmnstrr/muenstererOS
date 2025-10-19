@@ -40,6 +40,20 @@
 		},
 		{
 			modifier: Modifier.Hyper,
+			key: 'b',
+			description: 'Open Bitwarden (Quick Access to passwords)',
+			action: 'Bitwarden',
+			icon: '🔒'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: 'd',
+			description: 'Open Downloads in Finder',
+			action: 'Downloads',
+			icon: '📥'
+		},
+		{
+			modifier: Modifier.Hyper,
 			key: 'e',
 			description: 'Show current IDE window',
 			action: 'Editor',
@@ -54,10 +68,31 @@
 		},
 		{
 			modifier: Modifier.Hyper,
+			key: 'f',
+			description: 'Open current Finder window',
+			action: 'Finder',
+			icon: '📁'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: 'r',
+			description: 'Recognize text from screen with OCR',
+			action: 'Recognize Text',
+			icon: '🔍'
+		},
+		{
+			modifier: Modifier.Hyper,
 			key: 's',
 			description: 'Toggle Spotify player',
 			action: 'Spotify',
 			icon: '🎵'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: 't',
+			description: 'Open Microsoft Teams',
+			action: 'Teams',
+			icon: '👥'
 		},
 		{
 			modifier: Modifier.Hyper,
@@ -68,11 +103,60 @@
 		},
 		{
 			modifier: Modifier.Hyper,
+			key: 'x',
+			description: 'Open Xcode',
+			action: 'Xcode',
+			icon: '🔨'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: 'z',
+			description: 'Search history',
+			action: 'History',
+			icon: '⌛'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: '2',
+			description: 'Open Mail',
+			action: 'Mail',
+			icon: '📧'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: '4',
+			description: 'Search screenshots',
+			action: 'Screenshots',
+			icon: '📷'
+		},
+		{
+			modifier: Modifier.Hyper,
 			key: '.',
 			description: 'Launch Terminal',
 			action: 'Terminal',
 			icon: '💻'
-		}
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: '/',
+			description: 'Search menu items',
+			action: 'Menu Items',
+			icon: '🔎',
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: '`',
+			description: 'Toggle AI Chat window',
+			action: 'AI Chat',
+			icon: '💬',
+		},
+		{
+			modifier: Modifier.Alt,
+			key: 'tab',
+			description: 'Search windows in Raycast Window Switcher',
+			action: 'Switch Windows',
+			icon: '🔎',
+		},
 	];
 	const hyperKey = Modifier.Hyper || hyperKeys;
 </script>
