@@ -15,7 +15,7 @@
 	let githubToken = $state('');
 	let selectedGist = $state(gists.now.id);
 	let gistData = $state('{}');
-	let gistInfo = $state<GistData>(null);
+	let gistInfo = $state<GistData>();
 	let fullGistHistory = $state<any[]>([]);
 	let isLoading = $state(false);
 	let isSaving = $state(false);
@@ -23,8 +23,6 @@
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
 	let gistSelectionOpen = $state(true);
 	let gistInfoOpen = $state(false);
-	let jsonViewerOpen = $state(false);
-
 	let jsonEditor = $state<JsonEditor | null>(null);
 
 	// Predefined gists
@@ -33,15 +31,6 @@
 	// Custom gist fields for when user selects "Custom Gist..."
 	let customGistId = $state('');
 	let customFilename = $state('');
-	let selectedTheme = $state('json-dark');
-
-	// Available themes for the JSON editor
-	const availableThemes = [
-		{ value: 'json-dark', label: 'JSON Dark' },
-		{ value: 'json-light', label: 'JSON Light' },
-		{ value: 'vs-dark', label: 'VS Dark' },
-		{ value: 'vs', label: 'VS Light' }
-	];
 
 	onMount(() => {
 		// Load saved token and last gist selection from localStorage
@@ -223,11 +212,6 @@
 			jsonEditor?.setValue(originalContent);
 			toast.success('Editor reset to original content');
 		}
-	}
-
-	function onThemeChange(value: string) {
-		selectedTheme = value;
-		jsonEditor?.setTheme(value);
 	}
 </script>
 

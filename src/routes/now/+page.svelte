@@ -10,28 +10,44 @@
 	import { renderers } from '$lib/components/typography';
 	import Versions from './Versions.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	let { data }: PageProps = $props();
 
 	let nowData = $state(data.nowData);
 
 	let showingVersion = $state(false);
-	let currentPlaylist = playlists.find((p) => p.uri === nowData.playlist.uri);
-	let playlistImage =
-		currentPlaylist?.imageUrl ||
-		(currentPlaylist?.imageId ? `https://i.scdn.co/image/${currentPlaylist.imageId}` : undefined);
+	let currentPlaylist = $state<{ uri: string; imageUrl?: string; imageId?: string } | undefined>(
+		undefined
+	);
+	let playlistImage = $state<string | undefined>(undefined);
+
+	$effect(() => {
+		const nextPlaylist = playlists.find((p) => p.uri === nowData.playlist.uri);
+		const nextImage =
+			nextPlaylist?.imageUrl ||
+			(nextPlaylist?.imageId ? `https://i.scdn.co/image/${nextPlaylist.imageId}` : undefined);
+		currentPlaylist = nextPlaylist;
+		playlistImage = nextImage;
+		nowData;
+	});
 	let projects = $state('');
 	let plans = $state('');
 	let versionPositions = $state([]);
+	let showEditButton = $state(false);
+
 	$effect(() => {
 		projects = '- ' + nowData.projects.join('\n- ');
 		plans = nowData.plans.length ? '- ' + nowData.plans.join('\n- ') : '';
 		if (nowData.versions.length > 1) {
-			const timestamps = nowData.versions.map((v) => new Date(v.timestamp).getTime());
+			const timestamps = nowData.versions.map((v: { timestamp: string }) =>
+				new Date(v.timestamp).getTime()
+			);
 			const minTime = Math.min(...timestamps);
 			const maxTime = Math.max(...timestamps);
 			const padding = 2;
-			versionPositions = timestamps.map((t) => {
+			versionPositions = timestamps.map((t: number) => {
 				const position = ((t - minTime) / (maxTime - minTime)) * 100;
 				return Math.min(100 - padding, Math.max(padding, position));
 			});
@@ -51,9 +67,21 @@
 			versions: nowData.versions,
 			url: apiData.url
 		};
+		currentPlaylist = playlists.find((p) => p.uri === gistData.playlisturi);
+		console.log(currentPlaylist);
 		showingVersion = true;
 		return gistData;
 	}
+
+	onMount(() => {
+		// Load saved token and last gist selection from localStorage
+		if (browser) {
+			const savedToken = localStorage.getItem('github_admin_token');
+			if (savedToken) {
+				showEditButton = true;
+			}
+		}
+	});
 </script>
 
 <div class="container mx-auto p-4">
@@ -149,9 +177,11 @@
 
 	<div class="mt-4 flex items-center justify-center gap-2">
 		<Versions versions={nowData.versions} {versionPositions} {loadVersion} />
-		<Button class="" variant="ghost" aria-label="Edit" href="/admin/now">
-			<Pencil class="h-5 w-5" />
-			<span>Edit latest </span>
-		</Button>
+		{#if showEditButton}
+			<Button class="" variant="ghost" aria-label="Edit" href="/admin/now">
+				<Pencil class="h-5 w-5" />
+				<span>Edit latest </span>
+			</Button>
+		{/if}
 	</div>
 </div>

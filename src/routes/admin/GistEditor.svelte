@@ -5,6 +5,7 @@
 	import { Save } from 'lucide-svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import type { GistData } from '$lib/utils/github-api';
+	import { mode } from 'mode-watcher';
 
     let {
 		githubToken = $bindable(''),
@@ -25,7 +26,7 @@
 		{ value: 'vs', label: 'VS Light' }
 	];
 
-	let selectedTheme = $state('json-dark');
+	let selectedTheme = $state($mode === 'dark' ? 'json-dark' : 'json-light');
 	function handleThemeChange(value: string) {
 		selectedTheme = value;
 		jsonEditor?.setTheme(value);

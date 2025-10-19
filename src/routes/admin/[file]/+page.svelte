@@ -43,26 +43,12 @@
 	// Custom gist fields for when user selects "Custom Gist..."
 	let customGistId = $state('');
 	let customFilename = $state('');
-	let selectedTheme = $state('json-dark');
-
-	// Available themes for the JSON editor
-	const availableThemes = [
-		{ value: 'json-dark', label: 'JSON Dark' },
-		{ value: 'json-light', label: 'JSON Light' },
-		{ value: 'vs-dark', label: 'VS Dark' },
-		{ value: 'vs', label: 'VS Light' },
-	];
 
 	onMount(() => {
 		// Load saved token and last gist selection from localStorage
 		if (browser) {
 			const savedToken = localStorage.getItem('github_admin_token');
 			const savedGistId = localStorage.getItem('github_admin_last_gist');
-
-			// Restore last gist selection if available
-			// if (savedGistId) {
-			// 	selectedGist = savedGistId;
-			// }
 
 			if (savedToken) {
 				githubToken = savedToken;
@@ -245,7 +231,6 @@
 		<Heading class="mb-0">{capitalize(data.file || 'Gist')} Admin</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
-
 
 	{#if gistInfo}
 		<GistInfo {gistInfo} history={fullGistHistory} bind:isOpen={gistInfoOpen} />
