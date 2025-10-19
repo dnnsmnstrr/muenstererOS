@@ -11,18 +11,15 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { Heading } from '$lib/components/typography';
 	import * as Card from '$lib/components/ui/card';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Input } from '$lib/components/ui/input';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Select from '$lib/components/ui/select';
 	import { capitalize } from '$lib/utils/index';
 	import { RotateCcw, HelpCircle } from 'lucide-svelte';
-	import SvgIcons from './icons';
+	import SvgIcons from '$lib/components/icons';
 	import uses from '../../data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
 
