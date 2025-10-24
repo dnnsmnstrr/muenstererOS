@@ -155,6 +155,7 @@
 	});
 
 	let isLightMode = $derived($mode === 'light');
+	let isFullWidth = $derived(page.url.pathname === '/experiment');
 	let bgClass = $derived(
 		isLightMode
 			? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
@@ -197,7 +198,7 @@
 
 	<main
 		class={cn(
-			'inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto pt-4 [background-size:16px_16px] sm:px-16 print:max-h-none',
+			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto [background-size:16px_16px] ${isFullWidth ? 'p-0' : 'pt-4 sm:px-16'} print:max-h-none`,
 			bgClass,
 			`theme-${$theme}`
 		)}
