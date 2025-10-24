@@ -133,7 +133,7 @@
 			return;
 		}
 		
-		const ignoredKeys = ['Dead', 'Backspace', 'c', 'v', 'a', 'i'];
+		const ignoredKeys = ['Dead', 'Backspace', 'c', 'v', 'a', 'i', 'x'];
 		if (!ignoredKeys.includes(e.key) && (e.ctrlKey || e.metaKey || e.metaKey)) {
 			debugLog('Preventing default behavior for key: ' + e.key);
 			e.preventDefault();

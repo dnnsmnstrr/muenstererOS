@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import JSEditor from '$lib/components/JSEditor.svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { ChevronDown, RotateCw } from 'lucide-svelte';
+	import snippets from './snippets.json';
 
 	const defaultCode = `// Welcome to the Real-Time JavaScript Editor!
 // Code executes automatically as you type
@@ -17,20 +21,6 @@ console.log('Current time:', new Date().toLocaleTimeString());
 const output = document.getElementById('output');
 output.innerHTML = '<h2>Hello HTML!</h2>';
 // output.style.color = 'red';
-
-const input = document.createElement('input');
-input.type = 'text';
-input.placeholder = 'Enter your name';
-const result = document.createElement('span');
-
-output.append(input);
-output.append(result);
-
-input.addEventListener('input', (e) => {
-    console.log('Input value:', e.target.value);
-    result.innerHTML = e.target.value;
-});
-
 `;
 
 	let jsCode = $state(defaultCode);
@@ -40,6 +30,16 @@ input.addEventListener('input', (e) => {
 	let outputContainer: HTMLDivElement;
 	let jsEditor: JSEditor;
 	let debounceTimer: number;
+
+
+	function loadSnippet(snippet: typeof snippets[0]) {
+		jsCode = snippet.code;
+		// Focus the editor after loading snippet
+		setTimeout(() => {
+			jsEditor?.setValue(snippet.code);
+			jsEditor?.focus();
+		}, 100);
+	}
 
 	// Execute the JavaScript code with debouncing
 	function executeCode() {
@@ -110,12 +110,13 @@ input.addEventListener('input', (e) => {
 
 	function resetCode() {
 		jsCode = defaultCode;
+		jsEditor?.setValue(defaultCode);
+		jsEditor?.focus();
 	}
 
 	function clearOutput() {
 		executionResult = '';
 		executionError = '';
-		jsCode = defaultCode;
 		if (outputContainer) {
 			outputContainer.innerHTML = '';
 		}
@@ -142,6 +143,26 @@ input.addEventListener('input', (e) => {
 			</div>
 		</div>
 		<div class="flex items-center gap-2">
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger>
+					<Button variant="outline" size="sm" class="gap-2">
+						🎨 Snippets
+						<ChevronDown class="h-4 w-4" />
+					</Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content class="w-80">
+					<DropdownMenu.Label>Snippets</DropdownMenu.Label>
+					<DropdownMenu.Separator />
+					{#each snippets as snippet}
+						<DropdownMenu.Item onclick={() => loadSnippet(snippet)} class="cursor-pointer">
+							<div class="flex flex-col items-start">
+								<div class="font-medium">{snippet.name}</div>
+								<div class="text-xs text-muted-foreground">{snippet.description}</div>
+							</div>
+						</DropdownMenu.Item>
+					{/each}
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 			<button 
 				onclick={resetCode}
 				class="px-3 py-1 text-sm bg-muted hover:bg-muted/80 rounded-md transition-colors"
@@ -177,8 +198,11 @@ input.addEventListener('input', (e) => {
 
 		<!-- Right panel - Output -->
 		<div class="flex-1 flex flex-col">
-			<div class="px-4 py-2 bg-muted/20 border-b">
+			<div class="flex items-center justify-between px-4 py-2 bg-muted/20 border-b">
 				<h2 class="text-sm font-medium">Output</h2>
+				<Button variant="ghost" size="icon" onclick={executeCode}>
+					<RotateCw class="h-4 w-4" />
+				</Button>
 			</div>
 			<div class="flex-1 overflow-auto p-4 bg-muted/10">
 				{#if executionError}
