@@ -7,6 +7,7 @@
 	import Raycast from '$lib/components/icons/raycast.svg';
 	import { getRedirectByName } from '$lib/redirects';
 	import { Button } from '$lib/components/ui/button';
+	import { isCommandActive } from '$lib/stores/app';
 	const raycastUrl = getRedirectByName('raycast')?.url;
 
 	// Raycast shortcuts configuration
@@ -189,7 +190,7 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
-		if (['Tab', ' '].includes(e.key) || document.querySelector('.DocSearch-Modal')) return;
+		if (['Tab', ' '].includes(e.key) || document.querySelector('.DocSearch-Modal') || isCommandActive) return;
 		const label = normalizeEventKey(e.key);
 		clickKey(label);
 	}

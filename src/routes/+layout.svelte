@@ -18,6 +18,7 @@
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
+	import pages from '../data/pages.json';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -162,7 +163,7 @@
 			: 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
 	);
 
-	const pages: BookmarkItem[] = [
+	const bookmarks: BookmarkItem[] = [
 		{ name: 'Now', icon: Info },
 		{ name: 'Uses', icon: TabletSmartphone },
 		{ name: 'Projects', icon: LayoutGrid },
@@ -174,6 +175,13 @@
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
 	];
+	const otherPages = pages.filter(page => !bookmarks.some(bookmark => bookmark.name === page.title));
+	const otherBookmarks = otherPages.map(page => ({
+		name: page.title,
+		href: page.path,
+		icon: Info,
+	}));
+	const allPages = [...bookmarks, ...otherBookmarks];
 </script>
 
 <svelte:head>
@@ -185,14 +193,14 @@
 
 <ModeWatcher />
 <Toaster />
-<Command {pages} />
+<Command pages={allPages} />
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <div class="flex h-screen w-full flex-grow flex-col">
 	<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
 		<div class="sticky top-0 h-full w-full">
-			<Header {pages} />
+			<Header pages={bookmarks} />
 		</div>
 	</div>
 

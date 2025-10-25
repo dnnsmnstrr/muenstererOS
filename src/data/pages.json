@@ -1,5 +1,15 @@
 [
 	{
+		"title": "Experiment",
+		"path": "/experiment",
+		"date": "2025-10-25"
+	},
+	{
+		"title": "Hotkeys",
+		"path": "/hotkeys",
+		"date": "2025-10-19"
+	},
+	{
 		"title": "Timeline",
 		"path": "/timeline",
 		"date": "2025-07-12"
@@ -10,12 +20,12 @@
 		"date": "2025-06-23"
 	},
 	{
-		"title": "API Docs",
+		"title": "API",
 		"path": "/api",
 		"date": "2025-05-28"
 	},
 	{
-		"title": "Now Page",
+		"title": "Now",
 		"path": "/now",
 		"date": "2025-02-28"
 	},

@@ -31,4 +31,6 @@ After making a major change, add an entry to [changes.json](./src/data/changes.j
 },
 ```
 
+If a new page was added, also include it in [pages.json](./src/data/pages.json). This is used to generate a sitemap.
+
 Save the file and run `npm run xml` to generate the updated feed.

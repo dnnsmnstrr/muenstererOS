@@ -3,8 +3,8 @@
 	import { browser } from '$app/environment';
 	import { mode } from 'mode-watcher';
 	import type * as Monaco from 'monaco-editor';
-	
-	let { 
+
+	let {
 		value = $bindable(''),
 		language = 'javascript',
 		theme = $mode === 'dark' ? 'vs-dark' : 'vs',
@@ -17,6 +17,7 @@
 	let editor: Monaco.editor.IStandaloneCodeEditor | null = null;
 	let monaco: typeof Monaco | null = null;
 	let isEditorReady = $state(false);
+	let originalViewport: string | null = null;
 
 	const defaultOptions: Monaco.editor.IStandaloneEditorConstructionOptions = {
 		automaticLayout: true,
@@ -67,13 +68,18 @@
 				getWorker: function (workerId: string, label: string) {
 					// Use a more compatible worker setup for Vite
 					const createWorker = (workerPath: string) => {
-						const blob = new Blob([`
+						const blob = new Blob(
+							[
+								`
 							self.MonacoEnvironment = {
 								baseUrl: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/'
 							};
 							importScripts('https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/base/worker/workerMain.js');
-						`], { type: 'application/javascript' });
-						
+						`
+							],
+							{ type: 'application/javascript' }
+						);
+
 						return new Worker(URL.createObjectURL(blob));
 					};
 
@@ -99,7 +105,7 @@
 
 			// Dynamically import Monaco to avoid SSR issues
 			monaco = await import('monaco-editor');
-			
+
 			// Configure JavaScript/TypeScript language features
 			monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
 				noSemanticValidation: false,
@@ -122,7 +128,8 @@
 			});
 
 			// Add extra libraries for better IntelliSense
-			monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+			monaco.languages.typescript.javascriptDefaults.addExtraLib(
+				`
 				// DOM types
 				declare var document: Document;
 				declare var window: Window;
@@ -168,7 +175,9 @@
 				declare var String: StringConstructor;
 				declare var Number: NumberConstructor;
 				declare var Boolean: BooleanConstructor;
-			`, 'dom.d.ts');
+			`,
+				'dom.d.ts'
+			);
 
 			// Register custom JavaScript completion provider
 			monaco.languages.registerCompletionItemProvider('javascript', {
@@ -180,9 +189,9 @@
 						endLineNumber: position.lineNumber,
 						endColumn: wordInfo.endColumn
 					};
-					
+
 					if (!monaco) return { suggestions: [] };
-					
+
 					const suggestions = [
 						// Common JavaScript keywords and functions
 						{
@@ -268,7 +277,8 @@
 						{
 							label: 'for',
 							kind: monaco.languages.CompletionItemKind.Keyword,
-							insertText: 'for (let ${1:i} = 0; ${1:i} < ${2:length}; ${1:i}++) {\n\t${3:// code}\n}',
+							insertText:
+								'for (let ${1:i} = 0; ${1:i} < ${2:length}; ${1:i}++) {\n\t${3:// code}\n}',
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
 							documentation: 'For loop',
 							range
@@ -300,13 +310,14 @@
 						{
 							label: 'reduce',
 							kind: monaco.languages.CompletionItemKind.Method,
-							insertText: 'reduce((${1:acc}, ${2:item}) => {\n\treturn ${3:acc};\n}, ${4:initialValue})',
+							insertText:
+								'reduce((${1:acc}, ${2:item}) => {\n\treturn ${3:acc};\n}, ${4:initialValue})',
 							insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
 							documentation: 'Array reduce method',
 							range
 						}
 					];
-					
+
 					return { suggestions };
 				}
 			});
@@ -375,7 +386,7 @@
 			// Load popular themes from monaco-themes
 			try {
 				const monacoThemesModule = await import('monaco-themes');
-				
+
 				// Define additional popular themes for JavaScript editing
 				const popularThemes = [
 					'Monokai',
@@ -435,9 +446,7 @@
 				// JavaScript-specific features
 				hover: { enabled: true },
 				contextmenu: true,
-				lightbulb: { enabled: 'on' },
-				quickOpen: { enabled: true },
-				formatOnSave: true,
+				lightbulb: { enabled: 'on' as any },
 				formatOnType: true,
 				formatOnPaste: true
 			});
@@ -446,7 +455,7 @@
 			let validationTimeout: number;
 			editor.onDidChangeModelContent(() => {
 				value = editor?.getValue() || '';
-				
+
 				// Debounced validation to avoid excessive validation calls
 				clearTimeout(validationTimeout);
 				validationTimeout = setTimeout(() => {
@@ -454,8 +463,29 @@
 				}, 500);
 			});
 
-			isEditorReady = true;
+			// Prevent zoom on mobile when editor is focused
+			editor.onDidFocusEditorText(() => {
+				if (browser) {
+					const viewportMeta = document.querySelector('meta[name="viewport"]') as HTMLMetaElement;
+					if (viewportMeta) {
+						originalViewport = viewportMeta.content;
+						viewportMeta.content =
+							'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+					}
+				}
+			});
 
+			editor.onDidBlurEditorText(() => {
+				if (browser && originalViewport) {
+					const viewportMeta = document.querySelector('meta[name="viewport"]') as HTMLMetaElement;
+					if (viewportMeta) {
+						viewportMeta.content = originalViewport;
+						originalViewport = null;
+					}
+				}
+			});
+
+			isEditorReady = true;
 		} catch (error) {
 			console.error('Failed to load Monaco Editor:', error);
 		}
@@ -470,7 +500,7 @@
 
 	export function formatCode() {
 		if (!editor || !monaco) return false;
-		
+
 		try {
 			editor.getAction('editor.action.formatDocument')?.run();
 			return true;
@@ -480,12 +510,17 @@
 		}
 	}
 
-	export function validateJavaScript(): { valid: boolean; error?: string; line?: number; column?: number } {
+	export function validateJavaScript(): {
+		valid: boolean;
+		error?: string;
+		line?: number;
+		column?: number;
+	} {
 		if (!editor || !monaco) return { valid: false, error: 'Editor not initialized' };
-		
+
 		try {
 			const value = editor.getValue();
-			
+
 			// Basic syntax validation by trying to parse as JavaScript
 			// This is a simple check - Monaco's TypeScript service provides more detailed validation
 			const model = editor.getModel();
@@ -493,27 +528,29 @@
 				// Clear any existing error markers
 				monaco.editor.setModelMarkers(model, 'js-validation', []);
 			}
-			
+
 			return { valid: true };
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : 'Invalid JavaScript';
-			
+
 			// Add error marker to the editor
 			const model = editor.getModel();
 			if (model) {
-				const markers = [{
-					severity: monaco.MarkerSeverity.Error,
-					startLineNumber: 1,
-					startColumn: 1,
-					endLineNumber: 1,
-					endColumn: 1,
-					message: errorMessage
-				}];
+				const markers = [
+					{
+						severity: monaco.MarkerSeverity.Error,
+						startLineNumber: 1,
+						startColumn: 1,
+						endLineNumber: 1,
+						endColumn: 1,
+						message: errorMessage
+					}
+				];
 				monaco.editor.setModelMarkers(model, 'js-validation', markers);
 			}
-			
-			return { 
-				valid: false, 
+
+			return {
+				valid: false,
 				error: errorMessage
 			};
 		}
@@ -539,30 +576,31 @@
 	export function focus() {
 		editor?.focus();
 	}
-	
+
 	export function getTokensInfo() {
 		if (!editor || !monaco) return null;
-		
+
 		const model = editor.getModel();
 		if (!model) return null;
-		
+
 		const lineCount = model.getLineCount();
 		const tokens = [];
-		
+
 		for (let line = 1; line <= lineCount; line++) {
 			const lineTokens = monaco.editor.tokenize(model.getLineContent(line), 'javascript');
 			tokens.push({
 				line,
-				tokens: lineTokens[0]?.map(token => ({
-					type: token.type,
-					offset: token.offset
-				})) || []
+				tokens:
+					lineTokens[0]?.map((token) => ({
+						type: token.type,
+						offset: token.offset
+					})) || []
 			});
 		}
-		
+
 		return tokens;
 	}
-	
+
 	export function highlightErrors() {
 		const validation = validateJavaScript();
 		return validation;
@@ -577,7 +615,7 @@
 	export function getAvailableThemes() {
 		return [
 			'js-dark',
-			'js-light', 
+			'js-light',
 			'vs-dark',
 			'vs',
 			'Monokai',
@@ -617,9 +655,9 @@
 	});
 </script>
 
-<div 
-	bind:this={container} 
-	class="border border-border rounded-md overflow-hidden bg-background"
+<div
+	bind:this={container}
+	class="overflow-hidden rounded-md border border-border bg-background"
 	style="height: {height}; width: 100%;"
 ></div>
 
@@ -627,30 +665,36 @@
 	/* Ensure Monaco Editor styles are properly scoped */
 	:global(.monaco-editor) {
 		font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'SF Mono', monospace !important;
-		font-feature-settings: 'liga' 1, 'calt' 1;
+		font-feature-settings:
+			'liga' 1,
+			'calt' 1;
 	}
-	
+
 	:global(.monaco-editor .margin) {
 		background: transparent !important;
 	}
-	
+
 	/* Enhanced JavaScript syntax highlighting support */
-	:global(.monaco-editor .mtk1) { /* Default text */
+	:global(.monaco-editor .mtk1) {
+		/* Default text */
 		color: inherit;
 	}
-	
-	:global(.monaco-editor .mtk9) { /* Numbers */
+
+	:global(.monaco-editor .mtk9) {
+		/* Numbers */
 		font-weight: 600;
 	}
-	
-	:global(.monaco-editor .mtk22) { /* Strings */
+
+	:global(.monaco-editor .mtk22) {
+		/* Strings */
 		font-style: normal;
 	}
-	
-	:global(.monaco-editor .mtk5) { /* Keywords */
+
+	:global(.monaco-editor .mtk5) {
+		/* Keywords */
 		font-weight: 600;
 	}
-	
+
 	/* Bracket pair colorization */
 	:global(.monaco-editor .bracket-highlighting-0),
 	:global(.monaco-editor .bracket-highlighting-1),
@@ -660,76 +704,76 @@
 	:global(.monaco-editor .bracket-highlighting-5) {
 		font-weight: bold;
 	}
-	
+
 	/* Error and warning decorations */
 	:global(.monaco-editor .squiggly-error) {
 		border-bottom: 2px dotted #ff5555;
 		background: rgba(255, 85, 85, 0.1);
 	}
-	
+
 	:global(.monaco-editor .squiggly-warning) {
 		border-bottom: 2px dotted #ffaa00;
 		background: rgba(255, 170, 0, 0.1);
 	}
-	
+
 	/* Improved bracket matching */
 	:global(.monaco-editor .bracket-match) {
 		background: rgba(255, 215, 0, 0.3) !important;
 		border: 1px solid rgba(255, 215, 0, 0.8);
 		border-radius: 2px;
 	}
-	
+
 	/* Selection highlighting */
 	:global(.monaco-editor .selectionHighlight) {
 		background: rgba(173, 214, 255, 0.3);
 		border-radius: 2px;
 	}
-	
+
 	/* Word highlighting */
 	:global(.monaco-editor .wordHighlight) {
 		background: rgba(87, 156, 214, 0.25);
 		border-radius: 2px;
 	}
-	
+
 	:global(.monaco-editor .wordHighlightStrong) {
 		background: rgba(87, 156, 214, 0.4);
 		border-radius: 2px;
 	}
-	
+
 	/* Folding ranges */
 	:global(.monaco-editor .folded-background) {
 		background: rgba(255, 255, 255, 0.05);
 	}
-	
+
 	/* Indentation guides */
 	:global(.monaco-editor .guides-widget) {
 		opacity: 0.6;
 	}
-	
+
 	/* JavaScript-specific token colors */
 	:global(.monaco-editor .token.string) {
 		color: #ce9178;
 	}
-	
+
 	:global(.monaco-editor .token.keyword) {
 		color: #569cd6;
 		font-weight: 600;
 	}
-	
+
 	:global(.monaco-editor .token.number) {
 		color: #b5cea8;
 		font-weight: 600;
 	}
-	
+
 	:global(.monaco-editor .token.comment) {
 		color: #6a9955;
 		font-style: italic;
 	}
-	
+
 	:global(.monaco-editor .token.function) {
 		color: #dcdcaa;
 	}
-	
+
 	:global(.monaco-editor .token.variable) {
 		color: #9cdcfe;
 	}
