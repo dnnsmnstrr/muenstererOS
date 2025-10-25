@@ -76,6 +76,20 @@
 		},
 		{
 			modifier: Modifier.Hyper,
+			key: 'n',
+			description: 'Toggle Raycast Notes',
+			action: 'Notes',
+			icon: '🗒️'
+		},
+		{
+			modifier: Modifier.Hyper,
+			key: 'o',
+			description: 'Launch Obsidian',
+			action: 'Obsidian',
+			icon: '🪨'
+		},
+		{
+			modifier: Modifier.Hyper,
 			key: 'r',
 			description: 'Recognize text from screen with ScreenOCR',
 			action: 'Recognize Text',
@@ -158,7 +172,7 @@
 			key: 'Tab',
 			description: 'Search windows in the Raycast Window Switcher',
 			action: 'Switch Windows',
-			icon: '🔎',
+			icon: '🪟',
 		},
 	];
 
