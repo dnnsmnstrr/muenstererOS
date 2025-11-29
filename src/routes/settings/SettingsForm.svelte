@@ -22,9 +22,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 
-  let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } =
-    $props();
-	const form = superForm(data?.form || { debug: false, mode: 'system'}, {
+	let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
+	const form = superForm(data?.form || { debug: false, mode: 'system' }, {
 		validators: zodClient(settingsSchema)
 	});
 	function handleModeChange(value: string) {
@@ -40,28 +39,32 @@
 </script>
 
 <form>
-	<Form.Field {form} name="mode" class="flex flex-col sm:flex-row justify-between gap-2">
+	<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2 sm:flex-row">
 		<Form.Control>
 			<div class="flex flex-col space-y-2">
 				<h2>Mode</h2>
-				<RadioGroup.Root class="flex flex-col space-y-1" value={$mode} onValueChange={handleModeChange}>
-				  <div class="flex items-center space-x-3 space-y-0">
-					<RadioGroup.Item value="light" id="light" />
-					<Form.Label for="light" class="font-normal">Light</Form.Label>
-				  </div>
-				  <div class="flex items-center space-x-3 space-y-0">
-					<RadioGroup.Item value="dark" id="dark" />
-					<Form.Label for="dark" class="font-normal">Dark</Form.Label>
-				  </div>
-				  <div class="flex items-center space-x-3 space-y-0">
-					<RadioGroup.Item value="" id="system" />
-					<Form.Label for="system" class="font-normal">System</Form.Label>
-				  </div>
+				<RadioGroup.Root
+					class="flex flex-col space-y-1"
+					value={$mode}
+					onValueChange={handleModeChange}
+				>
+					<div class="flex items-center space-x-3 space-y-0">
+						<RadioGroup.Item value="light" id="light" />
+						<Form.Label for="light" class="font-normal">Light</Form.Label>
+					</div>
+					<div class="flex items-center space-x-3 space-y-0">
+						<RadioGroup.Item value="dark" id="dark" />
+						<Form.Label for="dark" class="font-normal">Dark</Form.Label>
+					</div>
+					<div class="flex items-center space-x-3 space-y-0">
+						<RadioGroup.Item value="" id="system" />
+						<Form.Label for="system" class="font-normal">System</Form.Label>
+					</div>
 				</RadioGroup.Root>
 			</div>
 		</Form.Control>
-		<div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-			<h2 class="col-span-2 md:col-span-3 -mt-2">Theme</h2>
+		<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
+			<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">Theme</h2>
 			{#each themes as theme (theme.name)}
 				{@const isActive = $themeStore === theme.name}
 				<Button
@@ -70,7 +73,7 @@
 					onclick={() => {
 						$themeStore = theme.name;
 					}}
-					class={cn("justify-start truncate", isActive && "border-primary border-2")}
+					class={cn('justify-start truncate', isActive && 'border-2 border-primary')}
 					style="--theme-primary: hsl({theme.activeColor[$mode ?? 'dark']})"
 				>
 					<span
@@ -85,22 +88,31 @@
 			{/each}
 		</div>
 	</Form.Field>
-	<Separator class="my-6"/>
-	
+	<Separator class="my-6" />
+
 	<Form.Field {form} name="debug">
-    <Form.Control>
-      <div class="flex flex-row items-start space-x-3 space-y-0">
-        <Checkbox checked={$debug} onCheckedChange={(value) => ($debug = !!value)} id="debug-checkbox" />
-        <div class="space-y-1 leading-none">
-          <Form.Label class="-mt-0.5 flex items-center gap-2" for="debug-checkbox" onclick={() => ($debug = !$debug)}>
-            <span class="pb-1.5">Debug mode</span>
-            <AnimatedToggle visible={$debug}>
-              <Bug class="w-4" />
-            </AnimatedToggle>
-          </Form.Label>
-          <Form.Description>This will cause more verbose logging in the console.</Form.Description>
-        </div>
-      </div>
-    </Form.Control>
+		<Form.Control>
+			<div class="flex flex-row items-start space-x-3 space-y-0">
+				<Checkbox
+					checked={$debug}
+					onCheckedChange={(value) => ($debug = !!value)}
+					id="debug-checkbox"
+				/>
+				<div class="space-y-1 leading-none">
+					<Form.Label
+						class="-mt-0.5 flex items-center gap-2"
+						for="debug-checkbox"
+						onclick={() => ($debug = !$debug)}
+					>
+						<span class="pb-1.5">Debug mode</span>
+						<AnimatedToggle visible={$debug}>
+							<Bug class="w-4" />
+						</AnimatedToggle>
+					</Form.Label>
+					<Form.Description>This will cause more verbose logging in the console.</Form.Description>
+				</div>
+			</div>
+		</Form.Control>
 	</Form.Field>
+	<Separator class="mt-6" />
 </form>
