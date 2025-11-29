@@ -184,14 +184,14 @@
 		<div
 			transition:fade
 			class="absolute z-30 block"
-			class:cursor-grab={!isDraggingWindow}
-			class:cursor-grabbing={isDraggingWindow}
 			style="left:{DraggableX}px; top:{DraggableY}px; width:{DraggableWidth}px; height:{DraggableHeight}px; user-select: none; touch-action: none;"
 		>
 			<Card.Root class="mb-0 block h-full w-full">
 				<div
 					class="absolute left-0 top-0 block h-10 w-full select-none"
 					role="application"
+					class:cursor-grab={!isDraggingWindow}
+					class:cursor-grabbing={isDraggingWindow}
 					on:pointerdown={handleWindowPointerDown}
 					on:pointermove={handleWindowPointerMove}
 					on:pointerup={handleWindowPointerUp}
