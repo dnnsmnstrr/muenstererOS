@@ -16,7 +16,7 @@
   // Define the files to display on desktop
   const files = [
     { id: 'projects', name: 'Projects', href: '/projects', icon: FolderOpen },
-    { id: 'test', name: 'test.txt', href: '/playground', icon: FileText, leftOffset: 2 },
+    { id: 'experiment', name: 'test.js', href: '/experiment', icon: FileText, leftOffset: 5 },
     { id: 'about', name: 'About', href: '/about', icon: Info, leftOffset: 5 },
   ];
   
