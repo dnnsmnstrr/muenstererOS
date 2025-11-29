@@ -3,22 +3,19 @@ import { randomNumber } from '$lib/utils/helper';
 import { writable } from 'svelte/store';
 import { debugLog } from './app';
 
+// Files
 export interface FileItem {
 	id: string;
 	x: number;
 	y: number;
+	leftOffset?: number;
 }
 
-const storedPosition =
-	browser && window?.localStorage?.filePosition
-		? JSON.parse(window?.localStorage?.filePosition)
-		: { x: 0, y: 0 };
-export const filePosition = writable<{ x: number; y: number }>(storedPosition);
-filePosition.subscribe((value) => {
-	if (browser && window?.localStorage) {
-		window.localStorage.filePosition = JSON.stringify(value);
-	}
-});
+export interface FileDefinition {
+	id: string;
+	leftOffset?: number;
+	[key: string]: any; // Allow additional properties like name, href, icon
+}
 
 const storedFiles =
 	browser && window?.localStorage?.desktopFiles
@@ -31,44 +28,38 @@ desktopFiles.subscribe((value) => {
 	}
 });
 
-export function initializeFile(fileSize = 50) {
-  if (browser) {
-    const windowSize = {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
-    const padding = 20
-    const randomX = randomNumber(windowSize.width / 2 - padding, windowSize.width / 2 + padding)
-    const randomY = randomNumber(windowSize.height / 3 - padding, windowSize.height / 3 + padding);
-    debugLog("Initializing file to random position", randomX, randomY);
-    filePosition.set({
-			x: randomX,
-			y: randomY,
-		});
-  }
-}
-
-export function initializeFiles(fileIds: string[], fileSize = 50, padding = 20) {
+export function initializeFiles(files: FileDefinition[], padding = 20, fileSize = 60) {
 	if (browser) {
 		const windowSize = {
 			width: window.innerWidth,
 			height: window.innerHeight
 		};
 		
-		const files: FileItem[] = fileIds.map((id, index) => {
-			const randomX = randomNumber(
-				windowSize.width / 2 - padding - index * 20,
-				windowSize.width / 2 + padding + index * 20
-			);
-			const randomY = randomNumber(
-				windowSize.height / 3 - padding - index * 20,
-				windowSize.height / 3 + padding + index * 20
-			);
-			return { id, x: randomX, y: randomY };
+		const spacing = fileSize + padding; // Vertical spacing between files
+		const placedFiles: FileItem[] = [];
+		
+		files.forEach(({ id, leftOffset = 0 }, index) => {
+			const x = padding + leftOffset;
+			const y = padding + (index * spacing);
+			
+			// Check if file would go off-screen vertically
+			if (y + fileSize > windowSize.height - padding) {
+				// Start a new column
+				const column = Math.floor((placedFiles.length * spacing) / (windowSize.height - 2 * padding));
+				const rowInColumn = index - (column * Math.floor((windowSize.height - 2 * padding) / spacing));
+				
+				placedFiles.push({
+					id,
+					x: padding + leftOffset + (column * spacing),
+					y: padding + (rowInColumn * spacing)
+				});
+			} else {
+				placedFiles.push({ id, x, y });
+			}
 		});
 		
-		debugLog('Initializing files to random positions', files);
-		desktopFiles.set(files);
+		debugLog('Initializing files vertically from top left', placedFiles);
+		desktopFiles.set(placedFiles);
 	}
 }
 

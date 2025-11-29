@@ -4,12 +4,15 @@
 	import * as Card from '$lib/components/ui/card';
 	import { fade } from 'svelte/transition';
 	import { cn } from '$lib/utils';
-	import { filePosition, desktopFiles, updateFilePosition, type FileItem } from '$lib/stores/desktop';
+	import {
+		desktopFiles,
+		updateFilePosition,
+	} from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
 
 	const minHeight = 300;
 	const minWidth = 210;
-	const fileSize = 50;
+	const fileSize = 60;
 	const padding = 20;
 	const breakpoint = 640;
 
@@ -33,6 +36,8 @@
 	let dragStartY = 0;
 	let initialX = 0;
 	let initialY = 0;
+	let hasDragged = false;
+	const dragThreshold = 5; // pixels to move before considering it a drag
 
 	$: if (width || height) {
 		// switch to vertical layout on mobile
@@ -63,11 +68,6 @@
 			if (DraggableY + DraggableHeight > height) {
 				DraggableHeight = height - DraggableHeight;
 			}
-		}
-
-		// keep file in view
-		if (width < $filePosition.x + fileSize) {
-			$filePosition.x = width - (fileSize + 20);
 		}
 	}
 
@@ -114,6 +114,7 @@
 			dragStartY = e.clientY;
 			initialX = fileX;
 			initialY = fileY;
+			hasDragged = false;
 			(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
 		};
 	}
@@ -124,53 +125,33 @@
 		const deltaX = e.clientX - dragStartX;
 		const deltaY = e.clientY - dragStartY;
 
-		let newX = initialX + deltaX;
-		let newY = initialY + deltaY;
+		// Check if moved beyond threshold
+		if (!hasDragged && (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold)) {
+			hasDragged = true;
+		}
 
-		// Apply bounds
-		newX = Math.max(0, Math.min(newX, width - fileSize));
-		newY = Math.max(0, Math.min(newY, height - fileSize));
+		if (hasDragged) {
+			let newX = initialX + deltaX;
+			let newY = initialY + deltaY;
 
-		updateFilePosition(draggingFileId, newX, newY);
+			// Apply bounds
+			newX = Math.max(0, Math.min(newX, width - fileSize));
+			newY = Math.max(0, Math.min(newY, height - fileSize));
+
+			updateFilePosition(draggingFileId, newX, newY);
+		}
 	}
 
-	function handleFilePointerUp(e: PointerEvent) {
-		draggingFileId = null;
-		(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
-	}
-
-	// Legacy single file support
-	function handleSingleFilePointerDown(e: PointerEvent) {
-		e.preventDefault();
-		e.stopPropagation();
-		dragStartX = e.clientX;
-		dragStartY = e.clientY;
-		initialX = $filePosition.x;
-		initialY = $filePosition.y;
-		(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-	}
-
-	function handleSingleFilePointerMove(e: PointerEvent) {
-		if (dragStartX === 0 && dragStartY === 0) return;
-
-		const deltaX = e.clientX - dragStartX;
-		const deltaY = e.clientY - dragStartY;
-
-		let newX = initialX + deltaX;
-		let newY = initialY + deltaY;
-
-		// Apply bounds
-		newX = Math.max(0, Math.min(newX, width - fileSize));
-		newY = Math.max(0, Math.min(newY, height - fileSize));
-
-		$filePosition.x = newX;
-		$filePosition.y = newY;
-	}
-
-	function handleSingleFilePointerUp(e: PointerEvent) {
-		dragStartX = 0;
-		dragStartY = 0;
-		(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+	function handleFilePointerUp(fileData: any) {
+		return (e: PointerEvent) => {
+			if (!hasDragged && fileData?.href) {
+				// This was a click, not a drag - navigate to the href
+				goto(fileData.href);
+			}
+			draggingFileId = null;
+			hasDragged = false;
+			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+		};
 	}
 
 	// Window resizing
@@ -203,9 +184,6 @@
 			DraggableWidth = newWidth;
 		}
 		DraggableHeight = newHeight;
-		// TODO: enable the following while option is pressed to resize around the center
-		// DraggableX = width / 2 - DraggableWidth / 2
-		// DraggableY = height / 3 - DraggableHeight / 2
 	}
 
 	function handleResizePointerUp(e: PointerEvent) {
@@ -258,20 +236,19 @@
 		</div>
 	{/if}
 	{#if files.length > 0}
-		{#each $desktopFiles.filter(f => files.some(file => file.id === f.id)) as fileItem (fileItem.id)}
-			{@const fileData = files.find(f => f.id === fileItem.id)}
+		{#each $desktopFiles.filter( (f) => files.some((file) => file.id === f.id) ) as fileItem (fileItem.id)}
+			{@const fileData = files.find((f) => f.id === fileItem.id)}
 			{#if fileData}
 				<div
 					transition:fade
 					class="absolute z-10 block select-none"
-					class:cursor-move={draggingFileId !== fileItem.id}
 					class:cursor-grabbing={draggingFileId === fileItem.id}
 					style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
 					draggable="false"
 					on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x, fileItem.y)}
 					on:pointermove={handleFilePointerMove}
-					on:pointerup={handleFilePointerUp}
-					on:pointercancel={handleFilePointerUp}
+					on:pointerup={handleFilePointerUp(fileData)}
+					on:pointercancel={handleFilePointerUp(fileData)}
 					on:dragstart={(e) => e.preventDefault()}
 					role="button"
 					tabindex="-1"
@@ -281,24 +258,5 @@
 				</div>
 			{/if}
 		{/each}
-	{:else if $$slots.file && ($filePosition.x || $filePosition.y)}
-		<div
-			transition:fade
-			class="absolute z-10 block select-none"
-			class:cursor-move={dragStartX === 0}
-			class:cursor-grabbing={dragStartX !== 0}
-			style="left:{$filePosition.x}px; top:{$filePosition.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
-			draggable="false"
-			on:pointerdown={handleSingleFilePointerDown}
-			on:pointermove={handleSingleFilePointerMove}
-			on:pointerup={handleSingleFilePointerUp}
-			on:pointercancel={handleSingleFilePointerUp}
-			on:dragstart={(e) => e.preventDefault()}
-			role="button"
-			tabindex="-1"
-			aria-label="Drag file"
-		>
-			<slot name="file" />
-		</div>
 	{/if}
 </div>
