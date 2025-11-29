@@ -4,7 +4,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { fade } from 'svelte/transition';
 	import { cn } from '$lib/utils';
-	import { filePosition } from '$lib/stores/desktop';
+	import { filePosition, desktopFiles, updateFilePosition, type FileItem } from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
 
 	const minHeight = 300;
@@ -15,6 +15,7 @@
 
 	export let width = 0;
 	export let height = 0;
+	export let files: Array<{ id: string; [key: string]: any }> = [];
 
 	let dragging = false;
 	let resizing = false;
@@ -27,7 +28,7 @@
 
 	// Drag state
 	let isDraggingWindow = false;
-	let isDraggingFile = false;
+	let draggingFileId: string | null = null;
 	let dragStartX = 0;
 	let dragStartY = 0;
 	let initialX = 0;
@@ -104,10 +105,44 @@
 	}
 
 	// File dragging
-	function handleFilePointerDown(e: PointerEvent) {
+	function handleFilePointerDown(fileId: string, fileX: number, fileY: number) {
+		return (e: PointerEvent) => {
+			e.preventDefault();
+			e.stopPropagation();
+			draggingFileId = fileId;
+			dragStartX = e.clientX;
+			dragStartY = e.clientY;
+			initialX = fileX;
+			initialY = fileY;
+			(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+		};
+	}
+
+	function handleFilePointerMove(e: PointerEvent) {
+		if (!draggingFileId) return;
+
+		const deltaX = e.clientX - dragStartX;
+		const deltaY = e.clientY - dragStartY;
+
+		let newX = initialX + deltaX;
+		let newY = initialY + deltaY;
+
+		// Apply bounds
+		newX = Math.max(0, Math.min(newX, width - fileSize));
+		newY = Math.max(0, Math.min(newY, height - fileSize));
+
+		updateFilePosition(draggingFileId, newX, newY);
+	}
+
+	function handleFilePointerUp(e: PointerEvent) {
+		draggingFileId = null;
+		(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+	}
+
+	// Legacy single file support
+	function handleSingleFilePointerDown(e: PointerEvent) {
 		e.preventDefault();
 		e.stopPropagation();
-		isDraggingFile = true;
 		dragStartX = e.clientX;
 		dragStartY = e.clientY;
 		initialX = $filePosition.x;
@@ -115,8 +150,8 @@
 		(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
 	}
 
-	function handleFilePointerMove(e: PointerEvent) {
-		if (!isDraggingFile) return;
+	function handleSingleFilePointerMove(e: PointerEvent) {
+		if (dragStartX === 0 && dragStartY === 0) return;
 
 		const deltaX = e.clientX - dragStartX;
 		const deltaY = e.clientY - dragStartY;
@@ -132,8 +167,9 @@
 		$filePosition.y = newY;
 	}
 
-	function handleFilePointerUp(e: PointerEvent) {
-		isDraggingFile = false;
+	function handleSingleFilePointerUp(e: PointerEvent) {
+		dragStartX = 0;
+		dragStartY = 0;
 		(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 	}
 
@@ -221,18 +257,42 @@
 			</Card.Root>
 		</div>
 	{/if}
-	{#if $$slots.file && ($filePosition.x || $filePosition.y)}
+	{#if files.length > 0}
+		{#each $desktopFiles.filter(f => files.some(file => file.id === f.id)) as fileItem (fileItem.id)}
+			{@const fileData = files.find(f => f.id === fileItem.id)}
+			{#if fileData}
+				<div
+					transition:fade
+					class="absolute z-10 block select-none"
+					class:cursor-move={draggingFileId !== fileItem.id}
+					class:cursor-grabbing={draggingFileId === fileItem.id}
+					style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
+					draggable="false"
+					on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x, fileItem.y)}
+					on:pointermove={handleFilePointerMove}
+					on:pointerup={handleFilePointerUp}
+					on:pointercancel={handleFilePointerUp}
+					on:dragstart={(e) => e.preventDefault()}
+					role="button"
+					tabindex="-1"
+					aria-label="Drag {fileData.name || fileItem.id}"
+				>
+					<slot name="file" file={fileData} />
+				</div>
+			{/if}
+		{/each}
+	{:else if $$slots.file && ($filePosition.x || $filePosition.y)}
 		<div
 			transition:fade
 			class="absolute z-10 block select-none"
-			class:cursor-move={!isDraggingFile}
-			class:cursor-grabbing={isDraggingFile}
+			class:cursor-move={dragStartX === 0}
+			class:cursor-grabbing={dragStartX !== 0}
 			style="left:{$filePosition.x}px; top:{$filePosition.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
 			draggable="false"
-			on:pointerdown={handleFilePointerDown}
-			on:pointermove={handleFilePointerMove}
-			on:pointerup={handleFilePointerUp}
-			on:pointercancel={handleFilePointerUp}
+			on:pointerdown={handleSingleFilePointerDown}
+			on:pointermove={handleSingleFilePointerMove}
+			on:pointerup={handleSingleFilePointerUp}
+			on:pointercancel={handleSingleFilePointerUp}
 			on:dragstart={(e) => e.preventDefault()}
 			role="button"
 			tabindex="-1"
