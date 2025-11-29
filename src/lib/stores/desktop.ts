@@ -1,5 +1,4 @@
 import { browser } from '$app/environment';
-import { randomNumber } from '$lib/utils/helper';
 import { writable } from 'svelte/store';
 import { debugLog } from './app';
 
@@ -67,4 +66,12 @@ export function updateFilePosition(id: string, x: number, y: number) {
 	desktopFiles.update(files => 
 		files.map(file => file.id === id ? { ...file, x, y } : file)
 	);
+}
+
+export function resetDesktopFiles() {
+	desktopFiles.set([]);
+	if (browser && window?.localStorage) {
+		delete window.localStorage.desktopFiles;
+	}
+	debugLog('Desktop files reset');
 }

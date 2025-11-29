@@ -78,6 +78,7 @@
         {
             name: 'help',
             description: 'Display help information for commands.',
+            aliases: ['h', '?'],
             usage: 'help [command]',
             example: 'help goto',
             callback: async ({ args, lines }) => {
@@ -118,7 +119,7 @@
         {
             name: 'hello',
             description: 'Say hello.',
-            aliases: ['hello', 'hey', 'hi'],
+            aliases: ['hello', 'hey', 'hi', 'yo', 'test'],
             usage: 'hello',
             callback: async ({ lines }) => {
                 const greetings = ['Hello!', 'Hi there!', 'Greetings!', 'Salutations!', 'Howdy!', 'Hey!', 'What\'s up?', 'Welcome!'];
@@ -183,16 +184,6 @@
             }
         },
         {
-            name: 'bye',
-            description: 'Exit the terminal.',
-            usage: 'bye',
-            example: 'bye',
-            callback: async ({ lines }) => {
-                lines.push({ value: 'Goodbye! See you next time!', type: 'output' });
-                goto('/');
-            }
-        },
-        {
             name: 'exit',
             description: 'Exit the terminal.',
             aliases: ['quit', 'bye', 'goodbye'],
@@ -234,8 +225,9 @@
                 if (args.length === 0) {
                     lines.push({ value: 'Please specify a file to read.', type: 'output' });
                 } else if (args[0] === 'readme.txt') {
-                    lines.push({ value: 'Welcome to muenstererOS!', type: 'output' });
-                    lines.push({ value: 'This is a simple terminal interface.', type: 'output' });
+                    lines.push({ value: 'Welcome to the muenstererOS terminal!', type: 'output' });
+                    lines.push({ value: 'You seem to know what you\'re doing. Carry on...', type: 'output' });
+                    lines.push({ value: '', type: 'output' });
                 } else if (args[0] === 'not_a_virus.exe') {
                     lines.push({ value: 'Hack the world!', type: 'output' });
                 } else {

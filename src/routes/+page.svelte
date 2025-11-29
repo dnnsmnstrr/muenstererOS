@@ -17,7 +17,7 @@
   const files = [
     { id: 'projects', name: 'Projects', href: '/projects', icon: FolderOpen },
     { id: 'test', name: 'test.txt', href: '/playground', icon: FileText, leftOffset: 2 },
-    { id: 'about', name: 'About', href: '/about', icon: Info, leftOffset: 4 },
+    { id: 'about', name: 'About', href: '/about', icon: Info, leftOffset: 5 },
   ];
   
   $effect(() => {
@@ -31,8 +31,8 @@
     }
   });
 
-  onMount(() => {
-    // Initialize files if not already positioned
+  $effect(() => {
+    // Initialize files if not already positioned or after reset
     if ($desktopFiles.length === 0) {
       initializeFiles(files);
     }

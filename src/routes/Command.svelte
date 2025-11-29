@@ -28,16 +28,12 @@
 		Send,
 		Linkedin,
 		Twitter,
-		Shapes,
 		Keyboard,
 		ScrollText,
 		Search,
-		Signpost,
 		Github,
-		LayoutGrid,
-		ListMusic,
-		Monitor,
-		Link
+		Link,
+		RotateCcw
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -76,6 +72,7 @@
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
+	import { resetDesktopFiles } from '$lib/stores/desktop';
 
 	interface Props {
 		pages?: BookmarkItem[];
@@ -93,7 +90,7 @@
 		{ key: '/', description: 'Search Zettelkasten with Algolia' },
 		{ key: ['⌘', ','], description: 'Go to settings' },
 		{ key: ['⌘', 'F'], description: 'Fullscreen' },
-		{ key: ['⌘', 'P'], description: 'Print' }
+		{ key: ['⌘', 'K'], description: 'Command Palette' },
 	];
 
 	const gotoShortcuts: Record<string, string> = {
@@ -238,6 +235,9 @@
 				case 'b':
 					scrollToBottom();
 					break;
+				case 't':
+					scrollToTop();
+					break;
 				default:
 					if (gotoShortcuts[e.key]) {
 						goto(gotoShortcuts[e.key]);
@@ -377,7 +377,7 @@
 			...pages,
 			{
 				name: 'Search Zettelkasten',
-				keywords: ['notes', 'find', 'information', 'knowledge', 'second brain'],
+				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
 				icon: Search,
 				action: handleDocsearch
 			},
@@ -412,6 +412,16 @@
 				name: ($debug ? 'Disable' : 'Enable') + ' Debug Mode',
 				icon: $debug ? BugOff : Bug,
 				action: toggleDebug
+			},
+			{
+				name: 'Reset Desktop Files',
+				value: 'reset desktop files, restore file positions, clear desktop',
+				icon: RotateCcw,
+				action: () => {
+					resetDesktopFiles();
+					toast.success('Desktop files reset to default positions');
+					$isCommandActive = false;
+				}
 			}
 		]
 	} as Record<string, CommandData[]>);
