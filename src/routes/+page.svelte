@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
 	import { WEBSITE_NAME } from '$lib/config';
 	import File from '$lib/components/File.svelte';
 	import DraggableWindow from '$lib/components/DraggableWindow.svelte';
@@ -11,17 +9,25 @@
 	import Dock from './Dock.svelte';
 
   let element: HTMLElement | null = $state(null);
-  let rect = $state(null);
-  run(() => {
-    element && (rect = elementBoundingStore(element));
+  let width = $state(0);
+  let height = $state(0);
+  
+  $effect(() => {
+    if (element) {
+      const store = elementBoundingStore(element);
+      const unsubscribe = store.subscribe((rect) => {
+        width = rect.width;
+        height = rect.height;
+      });
+      return unsubscribe;
+    }
   });
-  let { width, height } = $derived($rect || { width: 0, height: 0 });
 
   onMount(() => {
     if (!$filePosition.x && !$filePosition.y) {
-      initializeFile()
+      initializeFile();
     }
-  })
+  });
 </script>
 
 <svelte:head>
