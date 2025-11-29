@@ -179,7 +179,6 @@
 
 
 	function clickKey(label: string) {
-		console.log(label);
 		const el = document.querySelector(`[data-key="${label}"]`) as HTMLElement | null;
 		if (!el) return;
 		el.classList.add('ring-2', 'ring-primary', 'ring-offset-2', 'ring-offset-background');
@@ -190,15 +189,17 @@
 	}
 
 	function handleKeyUp(e: KeyboardEvent) {
-		if (['Tab', ' '].includes(e.key) || document.querySelector('.DocSearch-Modal') || isCommandActive) return;
+		if (['Tab', ' '].includes(e.key) || document.querySelector('.DocSearch-Modal') || $isCommandActive) return;
 		const label = normalizeEventKey(e.key);
 		clickKey(label);
 	}
 
-	if (typeof window !== 'undefined') {
-		window.addEventListener('keyup', handleKeyUp);
-		onDestroy(() => window.removeEventListener('keyup', handleKeyUp));
-	}
+	$effect(() => {
+		if (typeof window !== 'undefined') {
+			window.addEventListener('keyup', handleKeyUp);
+			return () => window.removeEventListener('keyup', handleKeyUp);
+		}
+	});
 </script>
 
 <svelte:head>

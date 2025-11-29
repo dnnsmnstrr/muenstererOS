@@ -95,7 +95,7 @@
 				Paste <Menubar.Shortcut>⌘V</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Item onclick={() => document.execCommand('selectall')}>
+			<Menubar.Item onclick={() => document.execCommand('selectAll')}>
 				Select All <Menubar.Shortcut>⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>

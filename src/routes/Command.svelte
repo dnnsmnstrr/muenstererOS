@@ -95,6 +95,7 @@
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
+		e: '/experiment',
 		i: '/legal', // impressum
 		l: '/legal',
 		p: '/projects',
@@ -125,11 +126,17 @@
 			((e.metaKey && e.altKey) || (e.ctrlKey && e.altKey)) &&
 			(e.code === 'KeyI' || e.key.toLowerCase() === 'i')
 		) return; // Allow dev tools to open (Cmd+Opt+I on Mac, Ctrl+Alt+I on Windows)
-		const allowedHotkeys = ['r'];
+		const allowedHotkeys = ['r', 'p'];
 		if (allowedHotkeys.includes(e.key) && (e.metaKey || e.ctrlKey)) {
+			debugLog('allowed hotkey pressed:', e.key);
 			return;
 		}
 		
+		const ignoredPages = ['/hotkeys'];
+		if (ignoredPages.includes(page.url.pathname)) {
+			debugLog('ignoring keydown event in command handler on page:', page.url.pathname);
+			return;
+		}
 		const ignoredKeys = ['Dead', 'Backspace', 'c', 'v', 'a', 'i', 'x'];
 		if (!ignoredKeys.includes(e.key) && (e.ctrlKey || e.metaKey || e.metaKey)) {
 			debugLog('Preventing default behavior for key: ' + e.key);
