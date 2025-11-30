@@ -13,6 +13,18 @@ export interface FileItem {
 // DVD Bounce
 export const dvdBounceActive = writable(false);
 
+// Hidden Files
+const storedHiddenFiles =
+	browser && window?.localStorage?.hiddenFiles
+		? JSON.parse(window?.localStorage?.hiddenFiles)
+		: [];
+export const hiddenFiles = writable<string[]>(storedHiddenFiles);
+hiddenFiles.subscribe((value) => {
+	if (browser && window?.localStorage) {
+		window.localStorage.hiddenFiles = JSON.stringify(value);
+	}
+});
+
 export interface FileDefinition {
 	id: string;
 	leftOffset?: number;
@@ -77,4 +89,19 @@ export function resetDesktopFiles() {
 		delete window.localStorage.desktopFiles;
 	}
 	debugLog('Desktop files reset');
+}
+
+export function hideFile(id: string) {
+	hiddenFiles.update(files => {
+		if (!files.includes(id)) {
+			return [...files, id];
+		}
+		return files;
+	});
+	debugLog('File hidden', id);
+}
+
+export function showFile(id: string) {
+	hiddenFiles.update(files => files.filter(f => f !== id));
+	debugLog('File shown', id);
 }

@@ -34,7 +34,8 @@
 		Github,
 		Link,
 		RotateCcw,
-		Monitor
+		Monitor,
+		Eye
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -73,7 +74,7 @@
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
-	import { resetDesktopFiles, dvdBounceActive } from '$lib/stores/desktop';
+	import { resetDesktopFiles, dvdBounceActive, hiddenFiles } from '$lib/stores/desktop';
 
 	interface Props {
 		pages?: BookmarkItem[];
@@ -430,6 +431,22 @@
 					toast.success('Desktop files reset to default positions');
 					$isCommandActive = false;
 				}
+			},
+			{
+				name: 'Restore Hidden Files',
+				value: 'restore hidden files, show deleted files, unhide files',
+				keywords: ['restore', 'show', 'unhide', 'deleted', 'hidden'],
+				icon: Eye,
+				action: () => {
+					const count = $hiddenFiles.length;
+					if (count === 0) {
+						toast.info('No hidden files to restore');
+					} else {
+						$hiddenFiles = [];
+						toast.success(`Restored ${count} hidden file${count > 1 ? 's' : ''}`);
+					}
+					$isCommandActive = false;
+				}
 			}
 		]
 	} as Record<string, CommandData[]>);
@@ -522,17 +539,19 @@
 					Confetti
 				</Command.Item>
 			</button>
-			<Command.Item
-				onSelect={() => {
-					$dvdBounceActive = !$dvdBounceActive;
-					$isCommandActive = false;
-				}}
-				value="dvd bounce"
-				keywords={['easter egg', 'screen saver']}
-			>
-				<Monitor class="mr-2" />
-				{ $dvdBounceActive ? 'Disable' : 'Enable' } DVD Bounce
-			</Command.Item>
+			{#if page.url.pathname === '/'}
+				<Command.Item
+					onSelect={() => {
+						$dvdBounceActive = !$dvdBounceActive;
+						$isCommandActive = false;
+					}}
+					value="dvd bounce"
+					keywords={['easter egg', 'screen saver']}
+				>
+					<Monitor class="mr-2" />
+					{ $dvdBounceActive ? 'Disable' : 'Enable' } DVD Bounce
+				</Command.Item>
+			{/if}
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>

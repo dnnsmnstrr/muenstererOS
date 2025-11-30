@@ -2,14 +2,18 @@
 <script lang="ts">
 	import WindowButtons from './WindowButtons.svelte';
 	import * as Card from '$lib/components/ui/card';
+	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { fade } from 'svelte/transition';
 	import { cn } from '$lib/utils';
 	import {
 		desktopFiles,
 		updateFilePosition,
-		dvdBounceActive
+		dvdBounceActive,
+		hideFile,
+		hiddenFiles
 	} from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
+	import { ExternalLink, Trash2 } from 'lucide-svelte';
 
 	const minHeight = 300;
 	const minWidth = 210;
@@ -178,6 +182,9 @@
 	// File dragging
 	function handleFilePointerDown(fileId: string, fileX: number, fileY: number) {
 		return (e: PointerEvent) => {
+			// Ignore right-clicks (context menu)
+			if (e.button === 2) return;
+			
 			e.preventDefault();
 			e.stopPropagation();
 			draggingFileId = fileId;
@@ -215,7 +222,8 @@
 
 	function handleFilePointerUp(fileData: any) {
 		return (e: PointerEvent) => {
-			if (!hasDragged && fileData?.href) {
+			// Only navigate on left-click without drag
+			if (!hasDragged && fileData?.href && e.button === 0) {
 				// This was a click, not a drag - navigate to the href
 				goto(fileData.href);
 			}
@@ -307,26 +315,45 @@
 		</div>
 	{/if}
 	{#if files.length > 0}
-		{#each $desktopFiles.filter( (f) => files.some((file) => file.id === f.id) ) as fileItem (fileItem.id)}
+		{#each $desktopFiles.filter( (f) => files.some((file) => file.id === f.id) && !$hiddenFiles.includes(f.id) ) as fileItem (fileItem.id)}
 			{@const fileData = files.find((f) => f.id === fileItem.id)}
 			{#if fileData}
-				<div
-					transition:fade
-					class="absolute z-10 block select-none"
-					class:cursor-grabbing={draggingFileId === fileItem.id}
-					style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
-					draggable="false"
-					on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x, fileItem.y)}
-					on:pointermove={handleFilePointerMove}
-					on:pointerup={handleFilePointerUp(fileData)}
-					on:pointercancel={handleFilePointerUp(fileData)}
-					on:dragstart={(e) => e.preventDefault()}
-					role="button"
-					tabindex="-1"
-					aria-label="Drag {fileData.name || fileItem.id}"
-				>
-					<slot name="file" file={fileData} />
-				</div>
+				<ContextMenu.Root>
+					<ContextMenu.Trigger>
+						<div
+							transition:fade
+							class="absolute z-10 block select-none"
+							class:cursor-grabbing={draggingFileId === fileItem.id}
+							style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
+							draggable="false"
+							on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x, fileItem.y)}
+							on:pointermove={handleFilePointerMove}
+							on:pointerup={handleFilePointerUp(fileData)}
+							on:pointercancel={handleFilePointerUp(fileData)}
+							on:dragstart={(e) => e.preventDefault()}
+							role="button"
+							tabindex="-1"
+							aria-label="Drag {fileData.name || fileItem.id}"
+						>
+							<slot name="file" file={fileData} />
+						</div>
+					</ContextMenu.Trigger>
+					<ContextMenu.Content>
+						<ContextMenu.Item onclick={() => {
+							if (fileData.href) {
+								window.open(fileData.href, '_blank');
+							}
+						}}>
+							<ExternalLink class="mr-2 h-4 w-4" />
+							Open in New Tab
+						</ContextMenu.Item>
+						<ContextMenu.Separator />
+						<ContextMenu.Item onclick={() => hideFile(fileItem.id)}>
+							<Trash2 class="mr-2 h-4 w-4" />
+							Delete
+						</ContextMenu.Item>
+					</ContextMenu.Content>
+				</ContextMenu.Root>
 			{/if}
 		{/each}
 	{/if}
