@@ -74,7 +74,7 @@
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
-	import { resetDesktopFiles, dvdBounceActive, hiddenFiles } from '$lib/stores/desktop';
+	import { resetDesktopFiles, dvdBounceActive, desktopFiles, restoreAllHiddenFiles } from '$lib/stores/desktop';
 
 	interface Props {
 		pages?: BookmarkItem[];
@@ -432,22 +432,22 @@
 					$isCommandActive = false;
 				}
 			},
-			{
-				name: 'Restore Hidden Files',
-				value: 'restore hidden files, show deleted files, unhide files',
-				keywords: ['restore', 'show', 'unhide', 'deleted', 'hidden'],
-				icon: Eye,
-				action: () => {
-					const count = $hiddenFiles.length;
-					if (count === 0) {
-						toast.info('No hidden files to restore');
-					} else {
-						$hiddenFiles = [];
-						toast.success(`Restored ${count} hidden file${count > 1 ? 's' : ''}`);
-					}
-					$isCommandActive = false;
-				}
-			}
+			// {
+			// 	name: 'Restore Hidden Files',
+			// 	value: 'restore hidden files, show deleted files, unhide files',
+			// 	keywords: ['restore', 'show', 'unhide', 'deleted', 'hidden'],
+			// 	icon: Eye,
+			// 	action: () => {
+			// 		const count = $desktopFiles.filter(f => f.hidden).length;
+			// 		if (count === 0) {
+			// 			toast.info('No hidden files to restore');
+			// 		} else {
+			// 			restoreAllHiddenFiles();
+			// 			toast.success(`Restored ${count} hidden file${count > 1 ? 's' : ''}`);
+			// 		}
+			// 		$isCommandActive = false;
+			// 	}
+			// }
 		]
 	} as Record<string, CommandData[]>);
 </script>

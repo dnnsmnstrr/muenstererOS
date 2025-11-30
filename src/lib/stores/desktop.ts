@@ -8,28 +8,12 @@ export interface FileItem {
 	x: number;
 	y: number;
 	leftOffset?: number;
+	hidden?: boolean;
+  [key: string]: any; // Allow additional properties like name, href, icon
 }
 
 // DVD Bounce
 export const dvdBounceActive = writable(false);
-
-// Hidden Files
-const storedHiddenFiles =
-	browser && window?.localStorage?.hiddenFiles
-		? JSON.parse(window?.localStorage?.hiddenFiles)
-		: [];
-export const hiddenFiles = writable<string[]>(storedHiddenFiles);
-hiddenFiles.subscribe((value) => {
-	if (browser && window?.localStorage) {
-		window.localStorage.hiddenFiles = JSON.stringify(value);
-	}
-});
-
-export interface FileDefinition {
-	id: string;
-	leftOffset?: number;
-	[key: string]: any; // Allow additional properties like name, href, icon
-}
 
 const storedFiles =
 	browser && window?.localStorage?.desktopFiles
@@ -42,7 +26,7 @@ desktopFiles.subscribe((value) => {
 	}
 });
 
-export function initializeFiles(files: FileDefinition[], padding = 20, fileSize = 60) {
+export function initializeFiles(files: FileItem[], padding = 20, fileSize = 60) {
 	if (browser) {
 		const windowSize = {
 			width: window.innerWidth,
@@ -92,16 +76,22 @@ export function resetDesktopFiles() {
 }
 
 export function hideFile(id: string) {
-	hiddenFiles.update(files => {
-		if (!files.includes(id)) {
-			return [...files, id];
-		}
-		return files;
-	});
+	desktopFiles.update(files =>
+		files.map(file => file.id === id ? { ...file, hidden: true } : file)
+	);
 	debugLog('File hidden', id);
 }
 
 export function showFile(id: string) {
-	hiddenFiles.update(files => files.filter(f => f !== id));
+	desktopFiles.update(files =>
+		files.map(file => file.id === id ? { ...file, hidden: false } : file)
+	);
 	debugLog('File shown', id);
+}
+
+export function restoreAllHiddenFiles() {
+	desktopFiles.update(files =>
+		files.map(file => ({ ...file, hidden: false }))
+	);
+	debugLog('All hidden files restored');
 }

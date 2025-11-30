@@ -9,8 +9,7 @@
 		desktopFiles,
 		updateFilePosition,
 		dvdBounceActive,
-		hideFile,
-		hiddenFiles
+		hideFile
 	} from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
 	import { ExternalLink, Trash2 } from 'lucide-svelte';
@@ -315,7 +314,7 @@
 		</div>
 	{/if}
 	{#if files.length > 0}
-		{#each $desktopFiles.filter( (f) => files.some((file) => file.id === f.id) && !$hiddenFiles.includes(f.id) ) as fileItem (fileItem.id)}
+		{#each $desktopFiles.filter( (f) => files.some((file) => file.id === f.id) && !f.hidden ) as fileItem (fileItem.id)}
 			{@const fileData = files.find((f) => f.id === fileItem.id)}
 			{#if fileData}
 				<ContextMenu.Root>
