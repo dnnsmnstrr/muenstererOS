@@ -38,7 +38,7 @@
   <DraggableWindow {width} {height} class="flex flex-col gap-4 justify-center items-center p-4">
     <Profile />
   </DraggableWindow>
-  <div class="absolute top-40 right-10 z-20">
+  <div class="fixed top-52 right-0 -translate-y-1/2 z-20">
     <NowPlaying />
   </div>
   <Dock />

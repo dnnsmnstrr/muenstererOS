@@ -11,9 +11,8 @@
 	import File from './File.svelte';
 
 	const minHeight = 300;
-	const minWidth = 210;
+	const minWidth = 200;
 	const fileSize = 60;
-	const padding = 20;
 	const breakpoint = 640;
 
 	let {
@@ -28,8 +27,8 @@
 
 	let dragging = $state(false);
 	let resizing = $state(false);
-	let defaultWidth = $derived(width < 640 ? minWidth : 390);
-	let DraggableWidth = $state(defaultWidth || 250);
+	let defaultWidth = $derived(width < 640 ? minWidth : 400);
+	let DraggableWidth = $state(400);
 	let DraggableHeight = $state(minHeight);
 	let DraggableX = $state(-1);
 	let DraggableY = $state(-1);
@@ -76,6 +75,7 @@
 
 		// initial positioning (only once)
 		if (!initialized && width > 0 && height > 0) {
+			DraggableWidth = defaultWidth;
 			DraggableX = width / 2 - DraggableWidth / 2;
 			DraggableY = height / 3 - DraggableHeight / 2;
 			initialized = true;
