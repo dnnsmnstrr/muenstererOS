@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { WEBSITE_NAME } from '$lib/config';
-	import File from '$lib/components/File.svelte';
 	import DraggableWindow from '$lib/components/DraggableWindow.svelte';
   import { elementBoundingStore } from '@sveltelegos-blue/svelte-legos';
 	import Profile from '$lib/components/Profile.svelte';
 	import { initializeFiles } from '$lib/stores/desktop';
 	import Dock from './Dock.svelte';
+	import { onMount } from 'svelte';
 
   let element: HTMLElement | null = $state(null);
   let width = $state(0);
@@ -23,8 +23,8 @@
     }
   });
 
-  $effect(() => {
-    // Initialize files on mount or when empty
+  // Initialize files once on mount
+  onMount(() => {
     initializeFiles();
   });
 </script>

@@ -19,12 +19,10 @@
 	let {
 		width = 0,
 		height = 0,
-		files = [],
 		class: className
 	}: {
 		width?: number;
 		height?: number;
-		files?: Array<{ id: string; [key: string]: any }>;
 		class?: string;
 	} = $props();
 
@@ -280,11 +278,11 @@
 					role="application"
 					class:cursor-grab={!isDraggingWindow}
 					class:cursor-grabbing={isDraggingWindow}
-					on:pointerdown={handleWindowPointerDown}
-					on:pointermove={handleWindowPointerMove}
-					on:pointerup={handleWindowPointerUp}
-					on:pointercancel={handleWindowPointerUp}
-					on:dblclick={() => {
+					onpointerdown={handleWindowPointerDown}
+					onpointermove={handleWindowPointerMove}
+					onpointerup={handleWindowPointerUp}
+					onpointercancel={handleWindowPointerUp}
+					ondblclick={() => {
 						DraggableWidth = defaultWidth;
 						DraggableHeight = minHeight;
 						DraggableX = width / 2 - DraggableWidth / 2;
@@ -298,10 +296,10 @@
 				</div>
 				<div
 					class="absolute bottom-0 right-0 hidden h-8 w-8 cursor-nwse-resize select-none md:block"
-					on:pointerdown={handleResizePointerDown}
-					on:pointermove={handleResizePointerMove}
-					on:pointerup={handleResizePointerUp}
-					on:pointercancel={handleResizePointerUp}
+					onpointerdown={handleResizePointerDown}
+					onpointermove={handleResizePointerMove}
+					onpointerup={handleResizePointerUp}
+					onpointercancel={handleResizePointerUp}
 					role="button"
 					tabindex="-1"
 					aria-label="Resize window"
@@ -319,11 +317,11 @@
 						class:cursor-grabbing={draggingFileId === fileItem.id}
 						style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
 						draggable="false"
-						on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x || 0, fileItem.y || 0)}
-						on:pointermove={handleFilePointerMove}
-						on:pointerup={handleFilePointerUp(fileItem)}
-						on:pointercancel={handleFilePointerUp(fileItem)}
-						on:dragstart={(e) => e.preventDefault()}
+						onpointerdown={handleFilePointerDown(fileItem.id, fileItem.x || 0, fileItem.y || 0)}
+						onpointermove={handleFilePointerMove}
+						onpointerup={handleFilePointerUp(fileItem)}
+						onpointercancel={handleFilePointerUp(fileItem)}
+						ondragstart={(e) => e.preventDefault()}
 						role="button"
 						tabindex="-1"
 						aria-label="Drag {fileItem.name || fileItem.id}"
