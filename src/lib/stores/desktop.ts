@@ -140,6 +140,13 @@ export function updateFilePosition(id: string, x: number, y: number) {
 	desktopFiles.update((files) => files.map((file) => (file.id === id ? { ...file, x, y } : file)));
 }
 
+export function renameFile(id: string, newName: string) {
+	if (!newName || !newName.trim()) return;
+	desktopFiles.update((files) => 
+		files.map((file) => (file.id === id ? { ...file, name: newName.trim() } : file))
+	);
+}
+
 export function resetDesktopFiles() {
   desktopFiles.set([]);
   if (browser && window?.localStorage) {

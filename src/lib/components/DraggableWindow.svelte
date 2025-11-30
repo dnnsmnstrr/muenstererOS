@@ -5,9 +5,9 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { fade } from 'svelte/transition';
 	import { cn } from '$lib/utils';
-	import { desktopFiles, updateFilePosition, dvdBounceActive, hideFile } from '$lib/stores/desktop';
+	import { desktopFiles, updateFilePosition, dvdBounceActive, hideFile, renameFile } from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
-	import { ExternalLink, Trash2 } from 'lucide-svelte';
+	import { ExternalLink, Trash2, Pencil, FolderOpen } from 'lucide-svelte';
 	import File from './File.svelte';
 
 	const minHeight = 300;
@@ -362,12 +362,33 @@
 					<ContextMenu.Item
 						onclick={() => {
 							if (fileItem.href) {
+								goto(fileItem.href);
+							}
+						}}
+					>
+						<FolderOpen class="mr-2 h-4 w-4" />
+						Open
+					</ContextMenu.Item>
+					<ContextMenu.Item
+						onclick={() => {
+							if (fileItem.href) {
 								window.open(fileItem.href, '_blank');
 							}
 						}}
 					>
 						<ExternalLink class="mr-2 h-4 w-4" />
 						Open in New Tab
+					</ContextMenu.Item>
+					<ContextMenu.Item
+						onclick={() => {
+							const newName = prompt('Enter new name:', fileItem.name || fileItem.id);
+							if (newName !== null) {
+								renameFile(fileItem.id, newName);
+							}
+						}}
+					>
+						<Pencil class="mr-2 h-4 w-4" />
+						Rename
 					</ContextMenu.Item>
 					<ContextMenu.Separator />
 					<ContextMenu.Item onclick={() => hideFile(fileItem.id)}>
