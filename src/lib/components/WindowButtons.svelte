@@ -1,19 +1,24 @@
 <script lang="ts">
-  import {
-    X,
-    Minus,
-    ChevronsLeftRight
-  } from "lucide-svelte";
+	import { X, Minus, ChevronsLeftRight } from 'lucide-svelte';
+
+	let { onMaximize }: { onMaximize?: () => void } = $props();
 </script>
 
-<div class="inline-flex items-center space-x-2 m-3 [:hover&>div>*]:opacity-40">
-  <div class="bg-red-500 rounded-full w-3.5 h-3.5 focus:opacity-50">
-    <X size=14 color="#000" class="opacity-0"/>
-  </div>
-  <div class="bg-yellow-500 rounded-full w-3.5 h-3.5 focus:opacity-50">
-    <Minus size=14 color="#000" class="opacity-0"/>
-  </div>
-  <div class="bg-green-500 rounded-full w-3.5 h-3.5 focus:opacity-50">
-    <ChevronsLeftRight size=14 color="#000" class="opacity-0 rotate-45"/>
-  </div>
+<div class="group m-3 inline-flex items-center space-x-2">
+	<button class="h-3.5 w-3.5 cursor-pointer rounded-full border-0 bg-red-500 p-0 hover:opacity-90">
+		<X size={14} color="#000" class="opacity-0 group-hover:opacity-40" />
+	</button>
+	<button
+		class="h-3.5 w-3.5 cursor-pointer rounded-full border-0 bg-yellow-500 p-0 hover:opacity-90"
+	>
+		<Minus size={14} color="#000" class="opacity-0 group-hover:opacity-40" />
+	</button>
+	<button
+		class="h-3.5 w-3.5 cursor-pointer rounded-full border-0 bg-green-500 p-0 hover:opacity-90"
+		onclick={() => onMaximize && onMaximize() && console.log('maximize clicked')}
+		aria-label="Maximize window"
+		data-window-action="maximize"
+	>
+		<ChevronsLeftRight size={14} color="#000" class="rotate-45 opacity-0 group-hover:opacity-40" />
+	</button>
 </div>

@@ -33,6 +33,13 @@
 	let DraggableX = $state(-1);
 	let DraggableY = $state(-1);
 	let initialized = $state(false);
+	let isMaximized = $state(false);
+
+	// Store previous state for restore
+	let previousWidth = 400;
+	let previousHeight = minHeight;
+	let previousX = -1;
+	let previousY = -1;
 
 	// Drag state
 	let isDraggingWindow = false;
@@ -43,6 +50,31 @@
 	let initialY = 0;
 	let hasDragged = false;
 	const dragThreshold = 5; // pixels to move before considering it a drag
+
+	// Maximize/restore function
+	function toggleMaximize() {
+		console.log('maximize toggle');
+		if (isMaximized) {
+			// Restore previous size and position
+			DraggableWidth = previousWidth;
+			DraggableHeight = previousHeight;
+			DraggableX = previousX;
+			DraggableY = previousY;
+			isMaximized = false;
+		} else {
+			// Save current state
+			previousWidth = DraggableWidth;
+			previousHeight = DraggableHeight;
+			previousX = DraggableX;
+			previousY = DraggableY;
+			// Maximize to full viewport
+			DraggableWidth = width;
+			DraggableHeight = height - 120; // leave space for dock
+			DraggableX = 0;
+			DraggableY = 0;
+			isMaximized = true;
+		}
+	}
 
 	// DVD Bounce animation
 	let bounceAnimationId: number | null = null;
@@ -108,6 +140,14 @@
 
 	// Window dragging
 	function handleWindowPointerDown(e: PointerEvent) {
+		console.log(e)
+		// Check if the maximize button was clicked
+		const target = e.target as HTMLElement;
+		const maximizeButton = target.closest('[data-window-action="maximize"]');
+		if (maximizeButton) {
+			toggleMaximize();
+			return;
+		}
 		e.preventDefault();
 
 		// Disable bounce animation when user interacts with window
