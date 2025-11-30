@@ -50,14 +50,28 @@
 	let velocityX = 2;
 	let velocityY = 2;
 
+	let lastWidth = $state(0);
+	let lastHeight = $state(0);
+
 	$effect(() => {
+		// Only run when width or height actually changes from external source
+		if (width === lastWidth && height === lastHeight) return;
+		
+		const widthChanged = width !== lastWidth;
+		const heightChanged = height !== lastHeight;
+		
+		lastWidth = width;
+		lastHeight = height;
+
 		// switch to vertical layout on mobile
-		if (width < breakpoint && DraggableWidth > defaultWidth && !dragging) {
-			DraggableWidth = minWidth;
-			DraggableHeight = minHeight;
-		} else if (width > breakpoint && DraggableWidth < defaultWidth && !dragging) {
-			DraggableWidth = defaultWidth;
-			DraggableHeight = minHeight;
+		if (widthChanged) {
+			if (width < breakpoint && DraggableWidth > defaultWidth && !dragging) {
+				DraggableWidth = minWidth;
+				DraggableHeight = minHeight;
+			} else if (width > breakpoint && DraggableWidth < defaultWidth && !dragging) {
+				DraggableWidth = defaultWidth;
+				DraggableHeight = minHeight;
+			}
 		}
 
 		// initial positioning (only once)
@@ -67,17 +81,27 @@
 			initialized = true;
 		}
 
-		// keep window in view while changing window size (but not while dragging)
-		if (!isDraggingWindow && !resizing) {
-			if (DraggableX + DraggableWidth > width) {
-				if (width - DraggableX > minWidth) {
-					DraggableWidth = width - DraggableX;
-				} else if (width - DraggableWidth - padding > padding) {
-					DraggableX = width - DraggableWidth - padding;
-				}
+		// keep window in view while changing window size
+		if (widthChanged && DraggableX + DraggableWidth > width) {
+			const availableWidth = width - DraggableX;
+			if (availableWidth >= minWidth) {
+				// Can fit at current position, shrink width
+				DraggableWidth = availableWidth;
+			} else {
+				// Can't fit, move left to fit minWidth
+				DraggableX = Math.max(0, width - minWidth);
+				DraggableWidth = minWidth;
 			}
-			if (DraggableY + DraggableHeight > height) {
-				DraggableHeight = height - DraggableHeight;
+		}
+		if (heightChanged && DraggableY + DraggableHeight > height) {
+			const availableHeight = height - DraggableY;
+			if (availableHeight >= minHeight) {
+				// Can fit at current position, shrink height
+				DraggableHeight = availableHeight;
+			} else {
+				// Can't fit, move up to fit minHeight
+				DraggableY = Math.max(0, height - minHeight);
+				DraggableHeight = minHeight;
 			}
 		}
 	});
