@@ -4,7 +4,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import playlistData from '../../data/playlists.json';
-	import { fly } from 'svelte/transition';
+	import { fly, fade } from 'svelte/transition';
+	import Disc from './icons/disc.svelte';
 
 	interface PlaylistItem {
 		title: string;
@@ -41,27 +42,24 @@
 </script>
 
 <div class="relative flex items-center">
-	<!-- Toggle Button -->
-	<Button
-		variant="outline"
-		size="icon"
-		class="h-10 w-10 rounded-full shadow-lg z-10 mr-4 group"
-		onclick={toggleExpanded}
-		aria-label={isExpanded ? 'Hide Now Playing' : 'Show Now Playing'}
-	>
-		{#if isExpanded}
-			<ChevronRight class="h-5 w-5" />
-        {:else}
-            <Music class="h-5 w-5 group-hover:hidden" />
-            <ChevronLeft class="h-5 w-5 hidden group-hover:block" />
-		{/if}
-	</Button>
-
-	<!-- Sliding Panel -->
 	{#if isExpanded}
 		<div
-			transition:fly={{ x: 200, duration: 300 }}
+			class="flex items-center"
+			in:fly|local={{ x: 200, duration: 300 }}
+			out:fly|local={{ x: 200, duration: 500, delay: 0 }}
 		>
+			<!-- Toggle Button -->
+			<Button
+				variant="outline"
+				size="icon"
+				class="h-10 w-10 rounded-full shadow-lg z-10 group mr-4"
+				onclick={toggleExpanded}
+				aria-label="Hide Now Playing"
+			>
+				<ChevronRight class="h-5 w-5" />
+			</Button>
+
+			<!-- Playlist Card -->
 			<Card.Root
 				class="group cursor-pointer overflow-hidden transition-all hover:scale-105 hover:shadow-lg mr-4"
 				onclick={handleClick}
@@ -99,6 +97,22 @@
 					</div>
 				</Card.Content>
 			</Card.Root>
+		</div>
+	{:else}
+		<!-- Collapsed Button -->
+		<div 
+			in:fade|local={{ duration: 300, delay: 300 }}
+			out:fade|local={{ duration: 0 }}
+		>
+			<Button
+				variant="outline"
+				size="icon"
+				class="h-10 w-10 rounded-full shadow-lg z-10 mr-4"
+				onclick={toggleExpanded}
+				aria-label="Show Now Playing"
+			>
+                <Disc />
+			</Button>
 		</div>
 	{/if}
 </div>
