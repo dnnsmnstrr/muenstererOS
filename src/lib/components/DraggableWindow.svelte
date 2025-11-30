@@ -5,14 +5,10 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { fade } from 'svelte/transition';
 	import { cn } from '$lib/utils';
-	import {
-		desktopFiles,
-		updateFilePosition,
-		dvdBounceActive,
-		hideFile
-	} from '$lib/stores/desktop';
+	import { desktopFiles, updateFilePosition, dvdBounceActive, hideFile } from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
 	import { ExternalLink, Trash2 } from 'lucide-svelte';
+	import File from './File.svelte';
 
 	const minHeight = 300;
 	const minWidth = 210;
@@ -20,16 +16,16 @@
 	const padding = 20;
 	const breakpoint = 640;
 
-	let { 
-		width = 0, 
-		height = 0, 
-		files = [], 
-		class: className 
-	}: { 
-		width?: number; 
-		height?: number; 
-		files?: Array<{ id: string; [key: string]: any }>; 
-		class?: string; 
+	let {
+		width = 0,
+		height = 0,
+		files = [],
+		class: className
+	}: {
+		width?: number;
+		height?: number;
+		files?: Array<{ id: string; [key: string]: any }>;
+		class?: string;
 	} = $props();
 
 	let dragging = $state(false);
@@ -50,7 +46,7 @@
 	let initialY = 0;
 	let hasDragged = false;
 	const dragThreshold = 5; // pixels to move before considering it a drag
-	
+
 	// DVD Bounce animation
 	let bounceAnimationId: number | null = null;
 	let velocityX = 2;
@@ -91,12 +87,12 @@
 	// Window dragging
 	function handleWindowPointerDown(e: PointerEvent) {
 		e.preventDefault();
-		
+
 		// Disable bounce animation when user interacts with window
 		if ($dvdBounceActive) {
 			dvdBounceActive.set(false);
 		}
-		
+
 		isDraggingWindow = true;
 		dragStartX = e.clientX;
 		dragStartY = e.clientY;
@@ -130,17 +126,17 @@
 	// DVD Bounce animation
 	function startDvdBounce() {
 		if (bounceAnimationId) return; // Already running
-		
+
 		const animate = () => {
 			if (!$dvdBounceActive) {
 				bounceAnimationId = null;
 				return;
 			}
-			
+
 			// Update position
 			DraggableX += velocityX;
 			DraggableY += velocityY;
-			
+
 			// Check horizontal bounds and bounce
 			if (DraggableX <= 0) {
 				DraggableX = 0;
@@ -149,7 +145,7 @@
 				DraggableX = width - DraggableWidth;
 				velocityX = -Math.abs(velocityX);
 			}
-			
+
 			// Check vertical bounds and bounce
 			if (DraggableY <= 0) {
 				DraggableY = 0;
@@ -158,10 +154,10 @@
 				DraggableY = height - DraggableHeight;
 				velocityY = -Math.abs(velocityY);
 			}
-			
+
 			bounceAnimationId = requestAnimationFrame(animate);
 		};
-		
+
 		bounceAnimationId = requestAnimationFrame(animate);
 	}
 
@@ -169,7 +165,7 @@
 		if ($dvdBounceActive) {
 			startDvdBounce();
 		}
-		
+
 		return () => {
 			if (bounceAnimationId) {
 				cancelAnimationFrame(bounceAnimationId);
@@ -183,7 +179,7 @@
 		return (e: PointerEvent) => {
 			// Ignore right-clicks (context menu)
 			if (e.button === 2) return;
-			
+
 			e.preventDefault();
 			e.stopPropagation();
 			draggingFileId = fileId;
@@ -313,47 +309,51 @@
 			</Card.Root>
 		</div>
 	{/if}
-	{#if files.length > 0}
-		{#each $desktopFiles.filter( (f) => files.some((file) => file.id === f.id) && !f.hidden ) as fileItem (fileItem.id)}
-			{@const fileData = files.find((f) => f.id === fileItem.id)}
-			{#if fileData}
-				<ContextMenu.Root>
-					<ContextMenu.Trigger>
-						<div
-							transition:fade
-							class="absolute z-10 block select-none"
-							class:cursor-grabbing={draggingFileId === fileItem.id}
-							style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
-							draggable="false"
-							on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x, fileItem.y)}
-							on:pointermove={handleFilePointerMove}
-							on:pointerup={handleFilePointerUp(fileData)}
-							on:pointercancel={handleFilePointerUp(fileData)}
-							on:dragstart={(e) => e.preventDefault()}
-							role="button"
-							tabindex="-1"
-							aria-label="Drag {fileData.name || fileItem.id}"
-						>
-							<slot name="file" file={fileData} />
-						</div>
-					</ContextMenu.Trigger>
-					<ContextMenu.Content>
-						<ContextMenu.Item onclick={() => {
-							if (fileData.href) {
-								window.open(fileData.href, '_blank');
+	{#if $desktopFiles.length > 0}
+		{#each $desktopFiles.filter((f) => !f.hidden) as fileItem (fileItem.id)}
+			<ContextMenu.Root>
+				<ContextMenu.Trigger>
+					<div
+						transition:fade
+						class="absolute z-10 block select-none"
+						class:cursor-grabbing={draggingFileId === fileItem.id}
+						style="left:{fileItem.x}px; top:{fileItem.y}px; width:{fileSize}px; height:{fileSize}px; user-select: none; touch-action: none;"
+						draggable="false"
+						on:pointerdown={handleFilePointerDown(fileItem.id, fileItem.x || 0, fileItem.y || 0)}
+						on:pointermove={handleFilePointerMove}
+						on:pointerup={handleFilePointerUp(fileItem)}
+						on:pointercancel={handleFilePointerUp(fileItem)}
+						on:dragstart={(e) => e.preventDefault()}
+						role="button"
+						tabindex="-1"
+						aria-label="Drag {fileItem.name || fileItem.id}"
+					>
+						<File
+							name={fileItem.name || fileItem.id}
+							href={fileItem.href}
+							icon={fileItem.icon}
+							size={fileSize}
+						/>
+					</div>
+				</ContextMenu.Trigger>
+				<ContextMenu.Content>
+					<ContextMenu.Item
+						onclick={() => {
+							if (fileItem.href) {
+								window.open(fileItem.href, '_blank');
 							}
-						}}>
-							<ExternalLink class="mr-2 h-4 w-4" />
-							Open in New Tab
-						</ContextMenu.Item>
-						<ContextMenu.Separator />
-						<ContextMenu.Item onclick={() => hideFile(fileItem.id)}>
-							<Trash2 class="mr-2 h-4 w-4" />
-							Delete
-						</ContextMenu.Item>
-					</ContextMenu.Content>
-				</ContextMenu.Root>
-			{/if}
+						}}
+					>
+						<ExternalLink class="mr-2 h-4 w-4" />
+						Open in New Tab
+					</ContextMenu.Item>
+					<ContextMenu.Separator />
+					<ContextMenu.Item onclick={() => hideFile(fileItem.id)}>
+						<Trash2 class="mr-2 h-4 w-4" />
+						Delete
+					</ContextMenu.Item>
+				</ContextMenu.Content>
+			</ContextMenu.Root>
 		{/each}
 	{/if}
 </div>

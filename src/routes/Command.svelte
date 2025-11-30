@@ -35,7 +35,8 @@
 		Link,
 		RotateCcw,
 		Monitor,
-		Eye
+		Eye,
+		Plus
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -74,7 +75,7 @@
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
-	import { resetDesktopFiles, dvdBounceActive, desktopFiles, restoreAllHiddenFiles } from '$lib/stores/desktop';
+	import { resetDesktopFiles, dvdBounceActive, desktopFiles, restoreAllHiddenFiles, addFileToDesktop } from '$lib/stores/desktop';
 
 	interface Props {
 		pages?: BookmarkItem[];
@@ -428,26 +429,39 @@
 				icon: RotateCcw,
 				action: () => {
 					resetDesktopFiles();
-					toast.success('Desktop files reset to default positions');
+					toast.success('Desktop restored to default.');
 					$isCommandActive = false;
 				}
 			},
-			// {
-			// 	name: 'Restore Hidden Files',
-			// 	value: 'restore hidden files, show deleted files, unhide files',
-			// 	keywords: ['restore', 'show', 'unhide', 'deleted', 'hidden'],
-			// 	icon: Eye,
-			// 	action: () => {
-			// 		const count = $desktopFiles.filter(f => f.hidden).length;
-			// 		if (count === 0) {
-			// 			toast.info('No hidden files to restore');
-			// 		} else {
-			// 			restoreAllHiddenFiles();
-			// 			toast.success(`Restored ${count} hidden file${count > 1 ? 's' : ''}`);
-			// 		}
-			// 		$isCommandActive = false;
-			// 	}
-			// }
+			...(() => {
+				// Only show "Create Desktop Shortcut" if current page has a bookmark entry
+				const currentPage = pages.find(p => p.href === page.url.pathname || p.name.toLowerCase() === page.url.pathname.replace(/^\//, ''));
+				if (!currentPage || page.url.pathname === '/') return [];
+				
+				return [{
+					name: 'Create Desktop Shortcut',
+					value: 'create desktop shortcut, add to desktop, pin to desktop',
+					keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
+					icon: Plus,
+					action: () => {
+						const fileId = currentPage.name.toLocaleLowerCase() || currentPage.href?.replace(/\//g, '') || 'page';
+						const existingFile = $desktopFiles.find(f => f.id === fileId);
+						console.log(currentPage)
+						if (existingFile && !existingFile.hidden) {
+							toast.info('Shortcut already exists on desktop');
+						} else {
+							addFileToDesktop({
+								id: fileId,
+								name: currentPage.name,
+								href: currentPage.href || '/' + currentPage.name.toLowerCase(),
+								icon: currentPage.icon
+							});
+							toast.success(`Added "${currentPage.name}" to desktop`);
+						}
+						$isCommandActive = false;
+					}
+				}];
+			})()
 		]
 	} as Record<string, CommandData[]>);
 </script>
