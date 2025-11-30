@@ -3,6 +3,7 @@
 	import DraggableWindow from '$lib/components/DraggableWindow.svelte';
   import { elementBoundingStore } from '@sveltelegos-blue/svelte-legos';
 	import Profile from '$lib/components/Profile.svelte';
+	import NowPlaying from '$lib/components/NowPlaying.svelte';
 	import { initializeFiles } from '$lib/stores/desktop';
 	import Dock from './Dock.svelte';
 	import { onMount } from 'svelte';
@@ -34,8 +35,11 @@
 </svelte:head>
 
 <section class="w-full h-full" bind:this={element}>
-  <DraggableWindow {width} {height} class="flex justify-center items-center">
+  <DraggableWindow {width} {height} class="flex flex-col gap-4 justify-center items-center p-4">
     <Profile />
   </DraggableWindow>
+  <div class="absolute top-40 right-10 z-20">
+    <NowPlaying />
+  </div>
   <Dock />
 </section>

@@ -5,8 +5,7 @@ import * as LucideIcons from 'lucide-svelte';
 
 export const defaultFiles = [
 	{ id: 'projects', name: 'Projects', href: '/projects', icon: LucideIcons.FolderOpen },
-	{ id: 'experiment', name: 'test.js', href: '/experiment', icon: LucideIcons.FileText, leftOffset: 5 },
-	{ id: 'about', name: 'About', href: '/about', icon: LucideIcons.Info, leftOffset: 5 }
+	{ id: 'experiment', name: 'index.js', href: '/experiment', icon: LucideIcons.FileText, leftOffset: 3 },
 ];
 
 // Icon registry for serialization
