@@ -88,6 +88,12 @@
 	// Window dragging
 	function handleWindowPointerDown(e: PointerEvent) {
 		e.preventDefault();
+		
+		// Disable bounce animation when user interacts with window
+		if ($dvdBounceActive) {
+			dvdBounceActive.set(false);
+		}
+		
 		isDraggingWindow = true;
 		dragStartX = e.clientX;
 		dragStartY = e.clientY;
