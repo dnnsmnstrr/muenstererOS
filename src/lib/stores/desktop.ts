@@ -10,6 +10,9 @@ export interface FileItem {
 	leftOffset?: number;
 }
 
+// DVD Bounce
+export const dvdBounceActive = writable(false);
+
 export interface FileDefinition {
 	id: string;
 	leftOffset?: number;

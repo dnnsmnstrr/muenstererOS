@@ -33,7 +33,8 @@
 		Search,
 		Github,
 		Link,
-		RotateCcw
+		RotateCcw,
+		Monitor
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -72,7 +73,7 @@
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
-	import { resetDesktopFiles } from '$lib/stores/desktop';
+	import { resetDesktopFiles, dvdBounceActive } from '$lib/stores/desktop';
 
 	interface Props {
 		pages?: BookmarkItem[];
@@ -521,6 +522,17 @@
 					Confetti
 				</Command.Item>
 			</button>
+			<Command.Item
+				onSelect={() => {
+					$dvdBounceActive = !$dvdBounceActive;
+					$isCommandActive = false;
+				}}
+				value="dvd bounce"
+				keywords={['easter egg', 'screen saver']}
+			>
+				<Monitor class="mr-2" />
+				{ $dvdBounceActive ? 'Disable' : 'Enable' } DVD Bounce
+			</Command.Item>
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>

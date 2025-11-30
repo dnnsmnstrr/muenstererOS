@@ -7,6 +7,7 @@
 	import {
 		desktopFiles,
 		updateFilePosition,
+		dvdBounceActive
 	} from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
 
@@ -16,18 +17,26 @@
 	const padding = 20;
 	const breakpoint = 640;
 
-	export let width = 0;
-	export let height = 0;
-	export let files: Array<{ id: string; [key: string]: any }> = [];
+	let { 
+		width = 0, 
+		height = 0, 
+		files = [], 
+		class: className 
+	}: { 
+		width?: number; 
+		height?: number; 
+		files?: Array<{ id: string; [key: string]: any }>; 
+		class?: string; 
+	} = $props();
 
-	let dragging = false;
-	let resizing = false;
-	$: defaultWidth = width < 640 ? minWidth : 390;
-	let DraggableWidth = defaultWidth || 250;
-	let DraggableHeight = minHeight;
-	let DraggableX = -1;
-	let DraggableY = -1;
-	let initialized = false;
+	let dragging = $state(false);
+	let resizing = $state(false);
+	let defaultWidth = $derived(width < 640 ? minWidth : 390);
+	let DraggableWidth = $state(defaultWidth || 250);
+	let DraggableHeight = $state(minHeight);
+	let DraggableX = $state(-1);
+	let DraggableY = $state(-1);
+	let initialized = $state(false);
 
 	// Drag state
 	let isDraggingWindow = false;
@@ -38,8 +47,13 @@
 	let initialY = 0;
 	let hasDragged = false;
 	const dragThreshold = 5; // pixels to move before considering it a drag
+	
+	// DVD Bounce animation
+	let bounceAnimationId: number | null = null;
+	let velocityX = 2;
+	let velocityY = 2;
 
-	$: if (width || height) {
+	$effect(() => {
 		// switch to vertical layout on mobile
 		if (width < breakpoint && DraggableWidth > defaultWidth && !dragging) {
 			DraggableWidth = minWidth;
@@ -69,7 +83,7 @@
 				DraggableHeight = height - DraggableHeight;
 			}
 		}
-	}
+	});
 
 	// Window dragging
 	function handleWindowPointerDown(e: PointerEvent) {
@@ -103,6 +117,57 @@
 		isDraggingWindow = false;
 		(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 	}
+
+	// DVD Bounce animation
+	function startDvdBounce() {
+		if (bounceAnimationId) return; // Already running
+		
+		const animate = () => {
+			if (!$dvdBounceActive) {
+				bounceAnimationId = null;
+				return;
+			}
+			
+			// Update position
+			DraggableX += velocityX;
+			DraggableY += velocityY;
+			
+			// Check horizontal bounds and bounce
+			if (DraggableX <= 0) {
+				DraggableX = 0;
+				velocityX = Math.abs(velocityX);
+			} else if (DraggableX + DraggableWidth >= width) {
+				DraggableX = width - DraggableWidth;
+				velocityX = -Math.abs(velocityX);
+			}
+			
+			// Check vertical bounds and bounce
+			if (DraggableY <= 0) {
+				DraggableY = 0;
+				velocityY = Math.abs(velocityY);
+			} else if (DraggableY + DraggableHeight >= height) {
+				DraggableY = height - DraggableHeight;
+				velocityY = -Math.abs(velocityY);
+			}
+			
+			bounceAnimationId = requestAnimationFrame(animate);
+		};
+		
+		bounceAnimationId = requestAnimationFrame(animate);
+	}
+
+	$effect(() => {
+		if ($dvdBounceActive) {
+			startDvdBounce();
+		}
+		
+		return () => {
+			if (bounceAnimationId) {
+				cancelAnimationFrame(bounceAnimationId);
+				bounceAnimationId = null;
+			}
+		};
+	});
 
 	// File dragging
 	function handleFilePointerDown(fileId: string, fileX: number, fileY: number) {
@@ -219,7 +284,7 @@
 				>
 					<WindowButtons />
 				</div>
-				<div class={cn('flex h-full items-center justify-center', $$props.class)}>
+				<div class={cn('flex h-full items-center justify-center', className)}>
 					<slot />
 				</div>
 				<div
