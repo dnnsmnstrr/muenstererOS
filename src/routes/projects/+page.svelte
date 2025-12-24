@@ -1,7 +1,5 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import { setContext } from 'svelte';
-	import { page } from '$app/stores';
 	import { Heading } from '$lib/components/typography';
 
 	type Project = {
@@ -24,6 +22,15 @@
 			image: '/images/muenstererOS.png'
 		},
 		{
+			title: 'Zettelkasten',
+			description: 'My digital note-taking system',
+			technologies: ['Dendron'],
+			webUrl: 'https://dnnsmnstrr.gitlab.io/zettelkasten/',
+			githubUrl: 'https://github.com/dnnsmnstrr/zettelkasten',
+			image:
+				'/images/zettelkasten.png'
+		},
+		{
 			title: 'Progressions',
 			description: 'An app to manage lyrics and chords',
 			technologies: ['React Native', 'Expo', 'tamagui'],
@@ -33,32 +40,33 @@
 			image: '/images/Progressions.png'
 		},
 		{
-			title: 'Zettelkasten',
-			description: 'My digital note-taking system',
-			technologies: ['Dendron'],
-			webUrl: 'https://dnnsmnstrr.gitlab.io/zettelkasten/',
-			githubUrl: 'https://github.com/dnnsmnstrr/zettelkasten',
-			image:
-				'https://assets.website-files.com/60f575ce343a495071f83206/6139d40abef777e56891db91_dendron-logo-original-green.svg'
-		},
-		{
 			title: 'BetterTouchTool Extension',
 			description:
 				'A custom extension to search and execute named triggers in BTT directly from Raycast',
-			technologies: ['Raycast', '1k+ Installs', 'TypeScript'],
+			technologies: ['Raycast', '2k+ Installs', 'TypeScript'],
 			webUrl: 'https://www.raycast.com/dnnsmnstrr/bettertouchtool',
 			githubUrl:
-				'https://github.com/raycast/extensions/tree/9ef485ab6cafe15b5968681d752f597b2ed6873a/extensions/bettertouchtool/',
+				'https://github.com/raycast/extensions/tree/main/extensions/bettertouchtool/',
 			image: 'https://files.raycast.com/9scaxngh5f31po57vd2mrxsnubaz'
 		},
 		{
 			title: 'Markdown Slides Extension',
 			description:
-				'A custom extension to search and execute named triggers in BTT directly from Raycast',
+				'A solution for creating and presenting slides written in Markdown directly from Raycast',
 			technologies: ['Raycast', 'Markdown'],
 			webUrl: 'https://www.raycast.com/dnnsmnstrr/markdown-slides',
 			githubUrl:
-				'https://github.com/raycast/extensions/tree/1f943e7af910a4cbe97a02a95b86e22f0022b490/extensions/markdown-slides/',
+				'https://github.com/raycast/extensions/tree/main/extensions/markdown-slides/',
+			image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
+		},
+		{
+			title: '40 Questions Extension',
+			description:
+				'An intuitive interface to answer and browse 40 questions for reflecting each year',
+			technologies: ['Raycast', 'Mindfulness'],
+			webUrl: 'https://www.raycast.com/dnnsmnstrr/40-questions',
+			githubUrl:
+				'https://github.com/raycast/extensions/tree/main/extensions/40-questions/',
 			image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
 		}
 	];
