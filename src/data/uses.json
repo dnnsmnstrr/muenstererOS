@@ -134,12 +134,44 @@
 		"image": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airtag-single-select-202104?wid=532&hei=582&fmt=png-alpha&.v=1617761671000"
 	},
 	{
+		"title": "Logitech MX Series",
+		"description": "Vertical mice, MX Keys & MX Master 3s",
+		"url": "https://www.logitech.com/en-us/mx/master-series.html",
+		"category": "hardware",
+		"tags": ["computer", "accessories"],
+		"image": "https://resource.logitech.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/keyboards/mx-keys-mini/gallery/us/mx-keys-mini-top-black-us.png"
+	},
+	{
+		"title": "Keychron K-Series",
+		"description": "Mechanical keyboards for work and home",
+		"url": "https://www.keychron.com/collections/keychron-k-series-keyboard",
+		"category": "hardware",
+		"tags": ["computer", "accessories"],
+		"image": "images/devices/keychron.png"
+	},
+	{
 		"title": "Steam Deck",
 		"description": "My main gaming device",
 		"url": "https://www.steamdeck.com/en/deck",
 		"category": "hardware",
 		"tags": ["gaming"],
 		"image": "images/devices/steamdeck.png"
+	},
+	{
+		"title": "Steam Controller",
+		"description": "My favorite controller of all time",
+		"url": "https://store.steampowered.com/sale/steamcontroller",
+		"category": "hardware",
+		"tags": ["gaming"],
+		"image": "images/devices/steamcontroller.png"
+	},
+	{
+		"title": "Genki Pocket Pro",
+		"description": "8BitDo SN30 Pro in transparent shell",
+		"url": "https://www.genkithings.com/products/pocketpro",
+		"category": "hardware",
+		"tags": ["gaming", "accessories"],
+		"image": "images/devices/pocketpro.png"
 	},
 	{
 		"title": "Stream Deck",
@@ -150,20 +182,12 @@
 		"image": "https://res.cloudinary.com/elgato-pwa/image/upload/q_auto,f_auto/v1710142076/legacy/organismCard/okjaup05hlxslkgzph9k.png"
 	},
 	{
-		"title": "Logitech MX Series",
-		"description": "Vertical mice, MX Keys & MX Master 3s",
-		"url": "https://www.logitech.com/en-us/mx/master-series.html",
-		"category": "hardware",
-		"tags": ["computer", "accessories"],
-		"image": "https://resource.logitech.com/w_1600,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/keyboards/mx-keys-mini/gallery/us/mx-keys-mini-top-black-us.png"
-	},
-	{
 		"title": "Creality CR6-SE",
 		"description": "3D printer I got through Kickstarter. Have two of them now.",
 		"url": "https://www.creality.com/products/cr-6-se-3d-printer",
 		"category": "hardware",
 		"tags": ["making"],
-		"image": "https://img.staticdj.com/a79612e3276075fcc067c7a4cfe07d5e_1024x.jpg"
+		"image": "images/devices/cr6se.png"
 	},
 	{
 		"title": "Voron Zero",
@@ -180,6 +204,22 @@
 		"category": "hardware",
 		"tags": ["making"],
 		"image": "https://www.dremel.com/imagestorage/de-de/dremel-3000-9356-hires-png-rgb-oneux-8095_w_233_h_233.png"
+	},
+	{
+		"title": "Pinecil",
+		"description": "Smart soldering iron powered by RISC-V",
+		"url": "https://pine64.com/product/pinecil-smart-mini-portable-soldering-iron/",
+		"category": "hardware",
+		"tags": ["making"],
+		"image": "images/devices/pinecil.png"
+	},
+	{
+		"title": "Raspberry Pi 5",
+		"description": "Playground Server",
+		"url": "https://www.raspberrypi.com/products/raspberry-pi-5/",
+		"category": "hardware",
+		"tags": ["homelab"],
+		"image": "https://assets.raspberrypi.com/static/8f6eca535dbb23a21eb41a748050e3a0/f7ad0/16gb.webp"
 	},
 	{
 		"title": "Home Assistant Yellow",
