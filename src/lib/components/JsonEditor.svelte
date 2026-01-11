@@ -236,36 +236,6 @@
 				}
 			});
 
-			// Load popular themes from monaco-themes
-			try {
-				const monacoThemesModule = await import('monaco-themes');
-				
-				// Define additional popular themes for JSON editing
-				const popularThemes = [
-					'Monokai',
-					'GitHub',
-					'Solarized-dark',
-					'Dracula'
-				];
-
-				// Load these themes if available
-				for (const themeName of popularThemes) {
-					try {
-						if (monacoThemesModule.default) {
-							// Use the default export method
-							const themeData = monacoThemesModule.default.parseTmTheme(themeName);
-							if (themeData) {
-								monaco.editor.defineTheme(themeName, themeData);
-							}
-						}
-					} catch (e) {
-						console.warn(`Could not load theme ${themeName}:`, e);
-					}
-				}
-			} catch (e) {
-				console.warn('Could not load monaco-themes:', e);
-			}
-
 			// Create the editor with enhanced options
 			const currentTheme = $mode === 'dark' ? 'json-dark' : 'json-light';
 			editor = monaco.editor.create(container, {
@@ -506,10 +476,6 @@
 			'json-light', 
 			'vs-dark',
 			'vs',
-			'Monokai',
-			'GitHub',
-			'Solarized-dark',
-			'Dracula'
 		];
 	}
 

@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import JsonEditor from '$lib/components/JsonEditor.svelte';
-	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import AdminSettings from '../AdminSettings.svelte';
-	import { Button } from '$lib/components/ui/button';
-	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-	import { Save } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { gists  } from '$lib/config';
 	import { GitHubGistAPI, type GistData } from '$lib/utils/github-api';
@@ -32,7 +27,7 @@
 	let gistInfoOpen = $state(false);
 	let jsonViewerOpen = $state(false);
 
-	let jsonEditor = $state<JsonEditor | null>(null);
+	let gistEditorComponent = $state<GistEditor | null>(null);
 
 	// Predefined gists
 	const knownGists = [
@@ -141,7 +136,7 @@
 				}
 			}
 
-			jsonEditor?.setValue(gistData);
+			gistEditorComponent?.setValue(gistData);
 			toast.success('Gist loaded successfully');
 		} catch (error) {
 			console.error('Error loading gist:', error);
@@ -160,7 +155,7 @@
 		}
 
 		// Validate JSON before saving
-		const validation = jsonEditor?.validateJson();
+		const validation = gistEditorComponent?.validateJson();
 		if (!validation?.valid) {
 			toast.error(`Invalid JSON: ${validation?.error || 'Unknown error'}`);
 			return;
@@ -174,7 +169,7 @@
 
 		isSaving = true;
 		try {
-			const currentValue = jsonEditor?.getValue() || '';
+			const currentValue = gistEditorComponent?.getValue() || '';
 
 			const api = new GitHubGistAPI(githubToken);
 			const updatedData = await api.updateGist(gistId, {
@@ -199,7 +194,7 @@
 	}
 
 	function formatJson() {
-		const success = jsonEditor?.formatJson();
+		const success = gistEditorComponent?.formatJson();
 		if (success) {
 			toast.success('JSON formatted');
 		} else {
@@ -216,7 +211,7 @@
 			const originalContent = gistInfo.files[filename]?.content || '{}';
 
 			// Use setValue to properly update the editor
-			jsonEditor?.setValue(originalContent);
+			gistEditorComponent?.setValue(originalContent);
 			toast.success('Editor reset to original content');
 		}
 	}
@@ -238,6 +233,7 @@
 
 	{#if gistData !== '{}'}
 		<GistEditor
+			bind:this={gistEditorComponent}
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo

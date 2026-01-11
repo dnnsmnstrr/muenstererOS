@@ -6,7 +6,7 @@
 	} from '$lib/components/ui/dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button';
-	import { GalleryVertical, Pencil } from 'lucide-svelte';
+	import { GalleryVertical } from 'lucide-svelte';
 
 	export let versions: Array<{ url: string; timestamp: string; change_status: { total: number } }> = [];
 	export let versionPositions: number[] = [];

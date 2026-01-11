@@ -59,16 +59,16 @@
 				'https://github.com/raycast/extensions/tree/main/extensions/markdown-slides/',
 			image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
 		},
-		{
-			title: '40 Questions Extension',
-			description:
-				'An intuitive interface to answer and browse 40 questions for reflecting each year',
-			technologies: ['Raycast', 'Mindfulness'],
-			webUrl: 'https://www.raycast.com/dnnsmnstrr/40-questions',
-			githubUrl:
-				'https://github.com/raycast/extensions/tree/main/extensions/40-questions/',
-			image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
-		}
+		// {
+		// 	title: '40 Questions Extension',
+		// 	description:
+		// 		'An intuitive interface to answer and browse 40 questions for reflecting each year',
+		// 	technologies: ['Raycast', 'Mindfulness'],
+		// 	webUrl: 'https://www.raycast.com/dnnsmnstrr/40-questions',
+		// 	githubUrl:
+		// 		'https://github.com/raycast/extensions/tree/main/extensions/40-questions/',
+		// 	image: 'https://files.raycast.com/cnpj978kwys39v4lll900b7d1wi6'
+		// }
 	];
 </script>
 

@@ -17,7 +17,28 @@
         onSaveGist,
 	} = $props();
     
-	let jsonEditor = $state<JsonEditor | null>(null);
+	let jsonEditorRef = $state<JsonEditor | null>(null);
+	
+	// Re-export methods from JsonEditor
+	export function setValue(value: string) {
+		jsonEditorRef?.setValue(value);
+	}
+	
+	export function getValue() {
+		return jsonEditorRef?.getValue();
+	}
+	
+	export function validateJson() {
+		return jsonEditorRef?.validateJson();
+	}
+	
+	export function formatJson() {
+		return jsonEditorRef?.formatJson();
+	}
+	
+	export function setTheme(themeName: string) {
+		jsonEditorRef?.setTheme(themeName);
+	}
 
 	const availableThemes = [
 		{ value: 'json-dark', label: 'JSON Dark' },
@@ -29,7 +50,7 @@
 	let selectedTheme = $state($mode === 'dark' ? 'json-dark' : 'json-light');
 	function handleThemeChange(value: string) {
 		selectedTheme = value;
-		jsonEditor?.setTheme(value);
+		jsonEditorRef?.setTheme(value);
 	}
 </script>
 
@@ -61,7 +82,7 @@
 	</CardHeader>
 	<CardContent>
 		<JsonEditor
-			bind:this={jsonEditor}
+			bind:this={jsonEditorRef}
 			bind:value={gistData}
 			height="70vh"
 			options={{
