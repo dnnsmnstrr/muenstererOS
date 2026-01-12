@@ -5,10 +5,19 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { fade } from 'svelte/transition';
 	import { cn } from '$lib/utils';
-	import { desktopFiles, updateFilePosition, dvdBounceActive, hideFile, renameFile } from '$lib/stores/desktop';
+	import {
+		desktopFiles,
+		updateFilePosition,
+		dvdBounceActive,
+		hideFile,
+		renameFile
+	} from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
 	import { ExternalLink, Trash2, Pencil, FolderOpen } from 'lucide-svelte';
 	import File from './File.svelte';
+	import { debugLog } from '$lib/stores/app';
+
+	const INACTIVITY_TIMEOUT = 1 * 60 * 1000; // 1 minute in milliseconds
 
 	const minHeight = 300;
 	const minWidth = 200;
@@ -81,16 +90,20 @@
 	let velocityX = 2;
 	let velocityY = 2;
 
+	// Inactivity timer for auto-starting DVD bounce
+	let inactivityTimer: number | null = null;
+	let isManualBounce = $state(false); // Track if bounce was manually activated
+
 	let lastWidth = $state(0);
 	let lastHeight = $state(0);
 
 	$effect(() => {
 		// Only run when width or height actually changes from external source
 		if (width === lastWidth && height === lastHeight) return;
-		
+
 		const widthChanged = width !== lastWidth;
 		const heightChanged = height !== lastHeight;
-		
+
 		lastWidth = width;
 		lastHeight = height;
 
@@ -140,7 +153,6 @@
 
 	// Window dragging
 	function handleWindowPointerDown(e: PointerEvent) {
-		console.log(e)
 		// Check if the maximize button was clicked
 		const target = e.target as HTMLElement;
 		const maximizeButton = target.closest('[data-window-action="maximize"]');
@@ -219,6 +231,7 @@
 
 			bounceAnimationId = requestAnimationFrame(animate);
 		};
+		debugLog('Starting DVD Bounce');
 
 		bounceAnimationId = requestAnimationFrame(animate);
 	}
@@ -233,6 +246,51 @@
 				cancelAnimationFrame(bounceAnimationId);
 				bounceAnimationId = null;
 			}
+		};
+	});
+
+	// Inactivity timer functions
+	function resetInactivityTimer() {
+		// Clear existing timer
+		if (inactivityTimer) {
+			clearTimeout(inactivityTimer);
+		}
+
+		// Set new timer to start bounce after inactivity
+		inactivityTimer = setTimeout(() => {
+			if (!$dvdBounceActive) {
+				dvdBounceActive.set(true);
+			}
+		}, INACTIVITY_TIMEOUT);
+	}
+
+	// Initialize inactivity timer on mount and add global event listeners
+	$effect(() => {
+		resetInactivityTimer();
+
+		const handleActivity = () => {
+			resetInactivityTimer();
+			// Stop bounce animation on any activity
+			if ($dvdBounceActive) {
+				console.log('stopping bouncex');
+				dvdBounceActive.set(false);
+			}
+		};
+
+		window.addEventListener('mousemove', handleActivity);
+		window.addEventListener('click', handleActivity);
+		window.addEventListener('scroll', handleActivity);
+		window.addEventListener('touchstart', handleActivity);
+
+		return () => {
+			if (inactivityTimer) {
+				clearTimeout(inactivityTimer);
+			}
+			// Clean up event listeners
+			window.removeEventListener('mousemove', handleActivity);
+			window.removeEventListener('click', handleActivity);
+			window.removeEventListener('scroll', handleActivity);
+			window.removeEventListener('touchstart', handleActivity);
 		};
 	});
 

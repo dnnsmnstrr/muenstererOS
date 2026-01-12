@@ -553,7 +553,7 @@
 					Confetti
 				</Command.Item>
 			</button>
-			{#if page.url.pathname === '/'}
+			{#if page.url.pathname === '/' && $dvdBounceActive}
 				<Command.Item
 					onSelect={() => {
 						$dvdBounceActive = !$dvdBounceActive;
