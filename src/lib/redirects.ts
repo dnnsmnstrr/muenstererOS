@@ -170,10 +170,16 @@ export const redirects: Redirect[] = [
 		aliases: ['gaming', 'play', 'zocken', '🎮', '👾']
 	},
 	{ name: 'discord', url: 'https://discord.gg/CrB72mXEzN' },
+	// ref links
 	{
 		name: 'raycast',
 		url: 'https://raycast.com/?via=' + USERNAME_SHORT,
 		aliases: ['ray', 'launcher', 'spotlight', '🔍', '🔎']
+	},
+	{
+		name: 'recyclingfabrik',
+		url: 'https://www.recyclingfabrik.com?kb_ref=6781773308383',
+		aliases: ['recycle', 'filament']
 	},
 	// Projects
 	{
@@ -370,12 +376,12 @@ export const redirects: Redirect[] = [
 		aliases: ['monitor', 'betteruptime', '✅']
 	},
 	{ name: 'uptime', aliases: ['up', 'upptime'] },
-	{ name: 'api', description: 'my personal API page', url: API_URL },
+	{ name: 'next-api', description: 'my personal API page', url: API_URL },
 	{
 		name: 'information',
 		url: API_URL + '/api/dennis',
 		description: 'information about me in JSON format',
-		aliases: ['info', 'stats', 'personal-data', 'ℹ️', 'ℹ']
+		aliases: ['info', 'stats', 'personal-data', 'aboutme', 'ℹ']
 	},
 	{
 		name: 'humans.txt',
