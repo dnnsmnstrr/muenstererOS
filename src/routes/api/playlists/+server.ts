@@ -13,7 +13,7 @@ export async function GET({ url }) {
 	}
 
 	if (search) {
-		filtered = searchData(filtered, search, ['title', 'description', 'emoji', 'season'])
+		filtered = searchData(filtered, search, ['title', 'description', 'emoji', 'season', 'year']);
 	}
 
 	return json(filtered);

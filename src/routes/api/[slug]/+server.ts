@@ -37,7 +37,7 @@ export async function GET({ params, url }) {
 
     // Search filter
     if (search && Array.isArray(filteredData)) {
-      filteredData = searchData(filteredData, search, ['title', 'description'])
+      filteredData = searchData(filteredData, search, ['title', 'description', 'year', 'date'])
     }
     // Sorting
     if (sortKey && Array.isArray(filteredData)) {
