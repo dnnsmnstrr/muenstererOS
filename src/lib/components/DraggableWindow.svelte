@@ -411,7 +411,7 @@
 						DraggableY = height / 3 - DraggableHeight / 2;
 					}}
 				>
-					<WindowButtons />
+					<WindowButtons {isMaximized} onMaximize={toggleMaximize} />
 				</div>
 				<div class={cn('flex h-full items-center justify-center', className)}>
 					<slot />
