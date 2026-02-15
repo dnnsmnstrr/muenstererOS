@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import Link from '$lib/components/typography/Link.svelte';
 	import List from '$lib/components/typography/List.svelte';
@@ -7,6 +7,55 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { OWNER_NAME, links } from '$lib/config';
 	import { Github } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+
+	interface Status {
+		lastDeployment: string;
+		commitCount: number;
+		pageCount: number;
+	}
+
+	let status = $state<Status | null>(null);
+
+	onMount(async () => {
+		try {
+			const response = await fetch('/api/status');
+			status = await response.json();
+		} catch (e) {
+			console.error('Failed to fetch status', e);
+		}
+	});
+
+	function getFriendlyTime(date: Date) {
+		const now = new Date();
+		const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+		if (diffInSeconds < 60) return 'just now';
+		const diffInMinutes = Math.floor(diffInSeconds / 60);
+		if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+		const diffInHours = Math.floor(diffInMinutes / 60);
+		if (diffInHours < 24) return `${diffInHours}h ago`;
+		const diffInDays = Math.floor(diffInHours / 24);
+		return `${diffInDays}d ago`;
+	}
+
+	let lastDeploymentDate = $derived(status ? new Date(status.lastDeployment) : null);
+	let isRecent = $derived(
+		lastDeploymentDate
+			? new Date().getTime() - lastDeploymentDate.getTime() < 2 * 24 * 60 * 60 * 1000
+			: false
+	);
+
+	let displayTime = $derived.by(() => {
+		if (!lastDeploymentDate) return '';
+		if (isRecent) return getFriendlyTime(lastDeploymentDate);
+		return lastDeploymentDate.toLocaleDateString();
+	});
+
+	let titleTime = $derived.by(() => {
+		if (!lastDeploymentDate) return '';
+		if (isRecent) return lastDeploymentDate.toISOString();
+		return getFriendlyTime(lastDeploymentDate);
+	});
 </script>
 
 <svelte:head>
@@ -37,8 +86,8 @@
 				<br />
 
 				It is built with <Link href="https://kit.svelte.dev" target="_blank">SvelteKit</Link>
-				and <Link href="https://www.shadcn-svelte.com/" target="_blank">shadcn-svelte</Link>.
-				Hosted on <Link href="https://vercel.com/">Vercel</Link>
+				and <Link href="https://www.shadcn-svelte.com/" target="_blank">shadcn-svelte</Link>. Hosted
+				on <Link href="https://vercel.com/">Vercel</Link>
 			</p>
 		</Card.Header>
 		<Card.Content>
@@ -56,10 +105,22 @@
 				</List>
 			</ScrollArea>
 		</Card.Content>
-		<Card.Footer class="justify-between">
-			<Button variant="link" href="/humans.txt" class="mb-4">
-				<img src="/images/humanstxt.png" alt="" />
+		<Card.Footer class="justify-between text-xs text-muted-foreground">
+			<Button variant="link" href="/humans.txt" class="h-auto p-0">
+				<img src="/images/humanstxt.png" alt="" class="h-8" />
 			</Button>
+			{#if status}
+				<div class="flex flex-col items-end gap-1">
+					<span title={titleTime}>
+						Last deployed: {displayTime}
+					</span>
+					<span>
+						{status.commitCount}
+						{status.commitCount === 1 ? 'commit' : 'commits'} • {status.pageCount}
+						{status.pageCount === 1 ? 'page' : 'pages'}
+					</span>
+				</div>
+			{/if}
 		</Card.Footer>
 	</Card.Root>
 </div>
