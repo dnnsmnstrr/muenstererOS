@@ -240,12 +240,7 @@ export const redirects: Redirect[] = [
 		url: 'https://felixmuensterer.com/',
 		aliases: ['brother', 'bro', 'fdp', 'lindner-junior', 'dumbass', '🤑']
 	},
-	{
-		name: 'lancemax',
-		url: 'https://lancemax.com/',
-		aliases: ['lance', 'lm']
-	},
-	{ name: 'desyst', url: 'https://desyst.de/' },
+	{ name: 'outmark', url: 'https://outmark.ca/' },                                                                                                                                                      
 	{
 		name: 'farm',
 		url: 'http://beaver-river-oil-mill.com/',
