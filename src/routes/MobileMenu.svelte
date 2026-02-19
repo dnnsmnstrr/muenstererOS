@@ -18,7 +18,7 @@
 
 <Sheet.Root {open} onOpenChange={(value) => (open = value)}>
 	<Sheet.Trigger>
-		<Button variant="outline">
+		<Button variant="outline" aria-label="Open navigation menu">
 			<MenuIcon />
 		</Button>
 	</Sheet.Trigger>
