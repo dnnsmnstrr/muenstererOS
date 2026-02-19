@@ -212,6 +212,7 @@
 		<div class="flex w-full gap-2 sm:w-auto">
 			<Button
 				title="I'm feeling lucky"
+				aria-label="I'm feeling lucky"
 				variant="outline"
 				size="icon"
 				class="shrink-0"

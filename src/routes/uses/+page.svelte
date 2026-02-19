@@ -94,7 +94,7 @@
 		<div class="flex items-center gap-2">
 			<Heading class="mb-0">Uses</Heading>
 			<Popover.Root>
-				<Popover.Trigger class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+				<Popover.Trigger class={buttonVariants({ variant: 'ghost', size: 'icon' })} aria-label="About uses page">
 					<HelpCircle />
 				</Popover.Trigger>
 				<Popover.Content>

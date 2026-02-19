@@ -17,15 +17,23 @@
 <Tooltip.Provider>
   <Tooltip.Root>
     <Tooltip.Trigger>
-      {#if charging}
-        <BatteryCharging />
-      {:else if level < 0.2}
-        <BatteryLow />
-      {:else if level < 0.6}
-        <BatteryMedium />
-      {:else}
-        <BatteryFull />
-      {/if}
+      {#snippet child({ props })}
+        <button
+          {...props}
+          class="inline-flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          aria-label="Battery: {Math.round(level * 100)}% {charging ? '(Charging)' : ''}"
+        >
+          {#if charging}
+            <BatteryCharging />
+          {:else if level < 0.2}
+            <BatteryLow />
+          {:else if level < 0.6}
+            <BatteryMedium />
+          {:else}
+            <BatteryFull />
+          {/if}
+        </button>
+      {/snippet}
     </Tooltip.Trigger>
     <Tooltip.Content>
       <p>{Math.round(level * 100)}%</p>

@@ -75,6 +75,7 @@
 		class="absolute right-2 top-2 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
 		class:opacity-0={!playlist.isHovered && window?.innerWidth < breakpoints.sm}
 		onclick={stopPropagation(preventDefault(() => setSelectedPlaylistUri(playlist.uri)))}
+		aria-label="Show playlist preview"
 	>
 		<Info class="h-4 w-4" />
 	</button>

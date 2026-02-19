@@ -11,6 +11,7 @@
 		variant="outline"
 		onclick={() => ($isCommandActive = !$isCommandActive)}
 		class="flex items-center gap-2"
+		aria-label="Open command palette"
 	>
 		<Search />
 		<Kbd class="hidden sm:inline-flex bg-muted h-6">
