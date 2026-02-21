@@ -11,11 +11,12 @@
 		variant="outline"
 		onclick={() => ($isCommandActive = !$isCommandActive)}
 		class="flex items-center gap-2"
+		aria-label="Open command palette"
 	>
 		<Search />
 		<Kbd class="hidden sm:inline-flex bg-muted h-6">
 			<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
-      <span class="text-xs pb-0.5"> K </span>
+			<span class="text-xs pb-0.5"> K </span>
 		</Kbd>
 	</Button>
 </p>
