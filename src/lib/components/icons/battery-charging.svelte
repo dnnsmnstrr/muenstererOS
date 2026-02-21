@@ -4,7 +4,8 @@
 		size = 28,
 		strokeWidth = 2,
 		isHovered = false,
-		classes = ''
+		classes = '',
+		...restProps
 	} = $props();
 
 	function handleMouseEnter() {
@@ -16,7 +17,13 @@
 	}
 </script>
 
-<div class={classes} aria-label="battery-charging" role="img" onmouseenter={handleMouseEnter}>
+<div
+	class={classes}
+	aria-label="battery-charging"
+	role="img"
+	onmouseenter={handleMouseEnter}
+	{...restProps}
+>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}
@@ -38,10 +45,6 @@
 </div>
 
 <style>
-	.battery-icon {
-		overflow: visible;
-	}
-
 	.battery-charging-icon.animate .battery-charging {
 		opacity: 0;
 		animation: blink 0.5s 3;
