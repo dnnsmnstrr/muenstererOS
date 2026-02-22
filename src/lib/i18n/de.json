@@ -13,12 +13,33 @@
 		"redirects": "Weiterleitungen",
 		"terminal": "Terminal",
 		"changelog": "Änderungsprotokoll",
-		"api": "API"
+		"api": "API",
+		"contact": "Kontakt",
+		"quit": "Beenden",
+		"new_window": "Neues Fenster",
+		"close_window": "Fenster schließen",
+		"print": "Drucken...",
+		"undo": "Rückgängig",
+		"redo": "Wiederholen",
+		"cut": "Ausschneiden",
+		"copy": "Kopieren",
+		"paste": "Einfügen",
+		"select_all": "Alle auswählen",
+		"deselect_all": "Auswahl aufheben",
+		"emoji_symbols": "Emojis & Symbole",
+		"reload": "Neu laden",
+		"enter_fullscreen": "Vollbild aktivieren",
+		"exit_fullscreen": "Vollbild beenden"
 	},
 	"header": {
 		"pages": "Seiten",
 		"social": "Social Media",
-		"command_palette": "Befehlspalette"
+		"command_palette": "Befehlspalette",
+		"file": "Datei",
+		"edit": "Bearbeiten",
+		"view": "Darstellung",
+		"bookmarks": "Lesezeichen",
+		"help": "Hilfe"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"

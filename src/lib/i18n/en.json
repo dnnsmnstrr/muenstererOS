@@ -13,12 +13,33 @@
 		"redirects": "Redirects",
 		"terminal": "Terminal",
 		"changelog": "Changelog",
-		"api": "API"
+		"api": "API",
+		"contact": "Contact",
+		"quit": "Quit",
+		"new_window": "New Window",
+		"close_window": "Close Window",
+		"print": "Print...",
+		"undo": "Undo",
+		"redo": "Redo",
+		"cut": "Cut",
+		"copy": "Copy",
+		"paste": "Paste",
+		"select_all": "Select All",
+		"deselect_all": "Deselect All",
+		"emoji_symbols": "Emoji & Symbols",
+		"reload": "Reload",
+		"enter_fullscreen": "Enter Full Screen",
+		"exit_fullscreen": "Exit Full Screen"
 	},
 	"header": {
 		"pages": "Pages",
 		"social": "Social",
-		"command_palette": "Command Palette"
+		"command_palette": "Command Palette",
+		"file": "File",
+		"edit": "Edit",
+		"view": "View",
+		"bookmarks": "Bookmarks",
+		"help": "Help"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"

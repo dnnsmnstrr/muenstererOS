@@ -164,7 +164,7 @@
 			: 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
 	);
 
-	const bookmarks: BookmarkItem[] = [
+	const bookmarksRaw: BookmarkItem[] = [
 		{ name: 'Now', href: '/now', icon: Info },
 		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
 		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
@@ -176,13 +176,22 @@
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
 	];
-	const otherPages = pages.filter(page => !bookmarks.some(bookmark => bookmark.name === page.title));
-	const otherBookmarks = otherPages.map(page => ({
-		name: page.title,
-		href: page.path,
-		icon: Info,
+	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
+		...b,
+		name: i18n.t(`common.${b.name.toLowerCase()}`) !== `common.${b.name.toLowerCase()}`
+			? i18n.t(`common.${b.name.toLowerCase()}`)
+			: b.name
+	})));
+	const otherPages = pages.filter(page => !bookmarksRaw.some(bookmark => bookmark.name === page.title));
+	const otherBookmarks = $derived(otherPages.map(page => {
+		const translatedName = i18n.t(`common.${page.title.toLowerCase()}`);
+		return {
+			name: translatedName !== `common.${page.title.toLowerCase()}` ? translatedName : page.title,
+			href: page.path,
+			icon: Info,
+		};
 	}));
-	const allPages = [...bookmarks, ...otherBookmarks];
+	const allPages = $derived([...bookmarks, ...otherBookmarks]);
 </script>
 
 <svelte:head>
