@@ -165,14 +165,14 @@
 	);
 
 	const bookmarks: BookmarkItem[] = [
-		{ name: 'Now', icon: Info },
-		{ name: 'Uses', icon: TabletSmartphone },
-		{ name: 'Projects', icon: LayoutGrid },
-		{ name: 'Playlists', icon: ListMusic },
-		{ name: 'Hotkeys', icon: Keyboard },
-		{ name: 'Redirects', icon: Signpost },
-    	{ name: 'Slashes', icon: Slash, hidden: true },
-    	{ name: 'Terminal', icon: Terminal, hidden: true },
+		{ name: 'Now', href: '/now', icon: Info },
+		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
+		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
+		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
+		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
+		{ name: 'Redirects', href: '/redirects', icon: Signpost },
+	{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },
+	{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
 	];

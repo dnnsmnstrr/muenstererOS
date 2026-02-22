@@ -44,7 +44,7 @@
 			]
 		},
 		[
-			{ name: i18n.t('common.settings'), icon: Settings, hidden: true },
+			{ name: i18n.t('common.settings'), href: '/settings', icon: Settings, hidden: true },
 			{ name: i18n.t('common.legal'), href: '/legal', icon: Gavel },
 		],
 	]);
