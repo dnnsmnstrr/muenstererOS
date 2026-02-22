@@ -97,7 +97,7 @@
 				expanded: nowPlayingExpanded
 			});
 		} else {
-			goto('/playlists');
+			goto('/playlists?current');
 		}
 	}
 

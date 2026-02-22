@@ -10,13 +10,14 @@
 	interface Props {
 		playlist: PlaylistItem;
 		compact?: boolean;
+		isHighlighted?: boolean;
 		setSelectedPlaylistUri: (uri: string) => {};
 	}
 
-	let { playlist = $bindable(), compact = false, setSelectedPlaylistUri }: Props = $props();
+	let { playlist = $bindable(), compact = false, isHighlighted = false, setSelectedPlaylistUri }: Props = $props();
 </script>
 
-<Card.Root data-playlist-card class="group relative">
+<Card.Root data-playlist-card class="group relative {isHighlighted ? 'ring-2 ring-primary' : ''}">
 	<a href={SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank" class="h-full">
 		<Card.Content class="pt-6 h-full">
 			{#if !compact}

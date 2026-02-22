@@ -1,12 +1,13 @@
 [
 	{
 		"title": "404s & Heartbreaks",
-		"type": "hidden",
+		"type": "season",
 		"season": "winter",
 		"year": "2025",
 		"emoji": "⚠️",
 		"uri": "7DGwSWe6AFV9rANwBRdf3h",
-		"imageUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c5ade9d9f0581cb897835e679"
+		"imageUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000d72c5ade9d9f0581cb897835e679",
+		"gif": "https://media4.giphy.com/media/xuWkuYl33i28fIwkBM/giphy.gif"
 	},
 	{
 		"title": "Jellyfish",
@@ -334,7 +335,7 @@
 		"emoji": "🥶",
 		"uri": "1848N9RTlN3StgrX9eLARj",
 		"imageUrl": "https://i.scdn.co/image/ab67706c0000da84228fa213943c94bb37e1aefd",
-		"gif": "https://media1.giphy.com/media/10HYnc0laZc4Hm/giphy.webp"
+		"gif": "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGkwb21rcHNzaWxsd3UyZjNqcnQwc2V4ejl1ajZvZjZ3bjU2dWh1NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/a0H2GkUJcoy4w/giphy.gif"
 	},
 	{
 		"title": "the_leaves_are_brown",

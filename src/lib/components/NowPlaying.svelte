@@ -99,7 +99,7 @@
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
 						></div>
-						<a class="absolute bottom-0 left-0 right-0 p-3" href="/playlists">
+						<a class="absolute bottom-0 left-0 right-0 p-3" href="/playlists" title={currentPlaylist?.title}>
 							<div class="flex items-center gap-2 text-white">
 								<Music class="h-4 w-4" />
 								<div class="flex-1 min-w-0">
