@@ -29,7 +29,9 @@
 		"emoji_symbols": "Emojis & Symbole",
 		"reload": "Neu laden",
 		"enter_fullscreen": "Vollbild aktivieren",
-		"exit_fullscreen": "Vollbild beenden"
+		"exit_fullscreen": "Vollbild beenden",
+		"de": "Deutsch",
+		"en": "Englisch"
 	},
 	"header": {
 		"pages": "Seiten",
@@ -104,6 +106,8 @@
 			"fullscreen": "Vollbild",
 			"command_palette": "Befehlspalette"
 		},
+		"switch_language": "Sprache wechseln",
+		"language_switched": "Sprache gewechselt",
 		"konami_success": "Achievement freigeschaltet: Konami Code",
 		"konami_description": "Glückwunsch, du bist ein Nerd!"
 	},

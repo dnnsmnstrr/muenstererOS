@@ -29,7 +29,9 @@
 		"emoji_symbols": "Emoji & Symbols",
 		"reload": "Reload",
 		"enter_fullscreen": "Enter Full Screen",
-		"exit_fullscreen": "Exit Full Screen"
+		"exit_fullscreen": "Exit Full Screen",
+		"de": "German",
+		"en": "English"
 	},
 	"header": {
 		"pages": "Pages",
@@ -102,6 +104,8 @@
 			"fullscreen": "Fullscreen",
 			"command_palette": "Command Palette"
 		},
+		"switch_language": "Switch Language",
+		"language_switched": "Language switched",
 		"konami_success": "Achievement Unlocked: Konami Code",
 		"konami_description": "Congratulations, you're a nerd!"
 	},

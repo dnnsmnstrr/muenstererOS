@@ -35,8 +35,8 @@
 		Link,
 		RotateCcw,
 		Monitor,
-		Eye,
-		Plus
+		Plus,
+		Globe
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -435,6 +435,17 @@
 				value: 'toggle dark mode, theme',
 				icon: $mode === 'light' ? Sun : Moon,
 				action: toggleMode
+			},
+			{
+				name: i18n.t('command.switch_language'),
+				value: 'switch language, change language, sprache wechseln',
+				icon: Globe,
+				action: async () => {
+					const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
+					await i18n.setLanguage(newLanguage);
+					toast.success(i18n.t('command.language_switched'));
+					$isCommandActive = false;	
+				}
 			},
 			{
 				name: $debug ? i18n.t('command.disable_debug_mode') : i18n.t('command.enable_debug_mode'),

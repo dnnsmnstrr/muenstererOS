@@ -4,33 +4,20 @@
 	import { Search } from 'lucide-svelte';
 	import { isAppleDevice } from '$lib/utils/index';
 	import { Kbd } from '$lib/components/ui/kbd';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 </script>
 
 <p class="text-sm">
-	<Tooltip.Provider>
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				{#snippet child({ props })}
-					<Button
-						{...props}
-						variant="outline"
-						onclick={() => ($isCommandActive = !$isCommandActive)}
-						class="flex items-center gap-2"
-						aria-label={i18n.t('header.command_palette')}
-					>
-						<Search />
-						<Kbd class="hidden sm:inline-flex bg-muted h-6">
-							<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
-							<span class="text-xs pb-0.5"> K </span>
-						</Kbd>
-					</Button>
-				{/snippet}
-			</Tooltip.Trigger>
-			<Tooltip.Content>
-				<p>{i18n.t('header.command_palette')}</p>
-			</Tooltip.Content>
-		</Tooltip.Root>
-	</Tooltip.Provider>
+	<Button
+		variant="outline"
+		onclick={() => ($isCommandActive = !$isCommandActive)}
+		class="flex items-center gap-2"
+		aria-label={i18n.t('header.command_palette')}
+	>
+		<Search />
+		<Kbd class="hidden h-6 bg-muted sm:inline-flex">
+			<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
+			<span class="pb-0.5 text-xs"> K </span>
+		</Kbd>
+	</Button>
 </p>
