@@ -5,6 +5,7 @@
 	import Profile from '$lib/components/Profile.svelte';
 	import NowPlaying from '$lib/components/NowPlaying.svelte';
 	import { initializeFiles } from '$lib/stores/desktop';
+	import { nowPlayingStore } from '$lib/stores/nowplaying';
 	import Dock from './Dock.svelte';
 	import { onMount } from 'svelte';
 	import { cn } from '$lib/utils';
@@ -61,13 +62,18 @@
 			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 			if (hasDragged) {
 				lastDragEndTime = Date.now();
+				// Save state when drag ends
+				nowPlayingStore.saveToStorage({
+					y: nowPlayingY,
+					side: nowPlayingSide,
+					expanded: nowPlayingExpanded
+				});
 			}
 		}
 		isDragging = false;
 	}
 
 	function handleClickCapture(e: MouseEvent) {
-
 		// Allow drag gesture to prevent expansion toggle
 		if (hasDragged || (Date.now() - lastDragEndTime < 100)) {
 			e.stopPropagation();
@@ -78,13 +84,18 @@
 
 		// Check if click is outside of the expanded area
 		const clickX = e.clientX;
-    const toggleThreshold = 56;
+		const toggleThreshold = 56;
 		const isNearActiveSide = 
 			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
 			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
 
 		if (isNearActiveSide) {
 			nowPlayingExpanded = !nowPlayingExpanded;
+			nowPlayingStore.saveToStorage({
+				y: nowPlayingY,
+				side: nowPlayingSide,
+				expanded: nowPlayingExpanded
+			});
 		} else {
 			goto('/playlists');
 		}
@@ -101,9 +112,19 @@
 		}
 	});
 
-	// Initialize files once on mount
+	// Initialize state from storage on mount
 	onMount(() => {
 		initializeFiles();
+		nowPlayingStore.loadFromStorage();
+		
+		// Subscribe to store changes to sync local state
+		const unsubscribe = nowPlayingStore.subscribe((state) => {
+			nowPlayingY = state.y;
+			nowPlayingSide = state.side;
+			nowPlayingExpanded = state.expanded;
+		});
+
+		return unsubscribe;
 	});
 </script>
 
