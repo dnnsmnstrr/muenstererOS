@@ -1,11 +1,11 @@
 
     /* muensterer.tech */
                             
-    Developer: Dennis Muensterer                       
-    Location: Mainz, Germany				
-    Contact: dennismuensterer@gmail.com
-    Twitter: @dnnsmnstrr                     
-                                
+    Developer: Dennis Muensterer        
+    Location: Mainz, Germany			
+    Contact: dennismuensterer@gmail.com              
+    Mastodon: @dnnsmnstrr@mastodon.social                            
+    
     /* SITE */
     Language: English                
     Standards: svelte, typescript, vite                         
