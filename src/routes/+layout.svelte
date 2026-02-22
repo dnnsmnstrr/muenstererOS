@@ -171,10 +171,11 @@
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
 		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
-	{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },
-	{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
+		{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },
+		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
+    	{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
 	];
 	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
 		...b,

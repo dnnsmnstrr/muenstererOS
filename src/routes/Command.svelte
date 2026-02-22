@@ -77,14 +77,19 @@
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
-	import { resetDesktopFiles, dvdBounceActive, desktopFiles, restoreAllHiddenFiles, addFileToDesktop } from '$lib/stores/desktop';
+	import {
+		resetDesktopFiles,
+		dvdBounceActive,
+		desktopFiles,
+		addFileToDesktop
+	} from '$lib/stores/desktop';
 
 	interface Props {
 		pages?: BookmarkItem[];
 	}
 
 	let { pages = [] }: Props = $props();
-	
+
 	let loading = false;
 	let query = $state('');
 	let lastKey = '';
@@ -95,7 +100,7 @@
 		{ key: '/', description: i18n.t('command.shortcuts.search_zettelkasten') },
 		{ key: ['⌘', ','], description: i18n.t('command.shortcuts.settings') },
 		{ key: ['⌘', 'F'], description: i18n.t('command.shortcuts.fullscreen') },
-		{ key: ['⌘', 'K'], description: i18n.t('command.shortcuts.command_palette') },
+		{ key: ['⌘', 'K'], description: i18n.t('command.shortcuts.command_palette') }
 	]);
 
 	const gotoShortcuts: Record<string, string> = {
@@ -130,13 +135,14 @@
 		if (
 			((e.metaKey && e.altKey) || (e.ctrlKey && e.altKey)) &&
 			(e.code === 'KeyI' || e.key.toLowerCase() === 'i')
-		) return; // Allow dev tools to open (Cmd+Opt+I on Mac, Ctrl+Alt+I on Windows)
+		)
+			return; // Allow dev tools to open (Cmd+Opt+I on Mac, Ctrl+Alt+I on Windows)
 		const allowedHotkeys = ['r', 'p'];
 		if (allowedHotkeys.includes(e.key) && (e.metaKey || e.ctrlKey)) {
 			debugLog('allowed hotkey pressed:', e.key);
 			return;
 		}
-		
+
 		const ignoredPages = ['/hotkeys'];
 		if (ignoredPages.includes(page.url.pathname)) {
 			debugLog('ignoring keydown event in command handler on page:', page.url.pathname);
@@ -347,6 +353,7 @@
 		let value = link.value || link.name;
 		return {
 			...link,
+			keywords: link.keywords || link.name.toLowerCase().split(' '),
 			href,
 			action,
 			value
@@ -386,14 +393,19 @@
 		navigation: [
 			{ name: i18n.t('common.home'), icon: Home, href: '/' },
 			{ name: i18n.t('common.about'), icon: User, href: '/about' },
-			...pages.filter(page => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
+			...pages.filter((page) => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
 			{
 				name: i18n.t('command.search_zettelkasten'),
 				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
 				icon: Search,
 				action: handleDocsearch
 			},
-			{ name: i18n.t('common.settings'), keywords: ['preferences'], icon: Settings, href: '/settings' },
+			{
+				name: i18n.t('common.settings'),
+				keywords: ['preferences'],
+				icon: Settings,
+				href: '/settings'
+			},
 			{
 				name: i18n.t('command.keyboard_shortcuts'),
 				keywords: ['help', 'hotkeys'],
@@ -403,15 +415,19 @@
 					$isCommandActive = false;
 				}
 			},
-			{ name: i18n.t('command.go_forward'), icon: ArrowRight, action: () => window.history.forward() },
+			{
+				name: i18n.t('command.go_forward'),
+				icon: ArrowRight,
+				action: () => window.history.forward()
+			},
 			{ name: i18n.t('command.go_back'), icon: ArrowLeft, action: () => window.history.back() },
 			{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage }
 		]
-		.map(enrichLink)
-		.filter((link) => {
-			// remove current page from navigation
-			return page.url.pathname !== link.href;
-		}),
+			.map(enrichLink)
+			.filter((link) => {
+				// remove current page from navigation
+				return page.url.pathname !== link.href;
+			}),
 		links: externalLinks,
 		system: [
 			{
@@ -421,7 +437,7 @@
 				action: toggleMode
 			},
 			{
-				name: ($debug ? i18n.t('command.disable_debug_mode') : i18n.t('command.enable_debug_mode')),
+				name: $debug ? i18n.t('command.disable_debug_mode') : i18n.t('command.enable_debug_mode'),
 				icon: $debug ? BugOff : Bug,
 				action: toggleDebug
 			},
@@ -437,32 +453,41 @@
 			},
 			...(() => {
 				// Only show "Create Desktop Shortcut" if current page has a bookmark entry
-				const currentPage = pages.find(p => p.href === page.url.pathname || p.name.toLowerCase() === page.url.pathname.replace(/^\//, ''));
+				const currentPage = pages.find(
+					(p) =>
+						p.href === page.url.pathname ||
+						p.name.toLowerCase() === page.url.pathname.replace(/^\//, '')
+				);
 				if (!currentPage || page.url.pathname === '/') return [];
-				
-				return [{
-					name: i18n.t('command.create_desktop_shortcut'),
-					value: 'create desktop shortcut, add to desktop, pin to desktop',
-					keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
-					icon: Plus,
-					action: () => {
-						const fileId = currentPage.name.toLocaleLowerCase() || currentPage.href?.replace(/\//g, '') || 'page';
-						const existingFile = $desktopFiles.find(f => f.id === fileId);
-						console.log(currentPage)
-						if (existingFile && !existingFile.hidden) {
-							toast.info(i18n.t('command.shortcut_exists'));
-						} else {
-							addFileToDesktop({
-								id: fileId,
-								name: currentPage.name,
-								href: currentPage.href || '/' + currentPage.name.toLowerCase(),
-								icon: currentPage.icon
-							});
-							toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
+
+				return [
+					{
+						name: i18n.t('command.create_desktop_shortcut'),
+						value: 'create desktop shortcut, add to desktop, pin to desktop',
+						keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
+						icon: Plus,
+						action: () => {
+							const fileId =
+								currentPage.name.toLocaleLowerCase() ||
+								currentPage.href?.replace(/\//g, '') ||
+								'page';
+							const existingFile = $desktopFiles.find((f) => f.id === fileId);
+							console.log(currentPage);
+							if (existingFile && !existingFile.hidden) {
+								toast.info(i18n.t('command.shortcut_exists'));
+							} else {
+								addFileToDesktop({
+									id: fileId,
+									name: currentPage.name,
+									href: currentPage.href || '/' + currentPage.name.toLowerCase(),
+									icon: currentPage.icon
+								});
+								toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
+							}
+							$isCommandActive = false;
 						}
-						$isCommandActive = false;
 					}
-				}];
+				];
 			})()
 		]
 	} as Record<string, CommandData[]>);
@@ -483,8 +508,16 @@
 					</Command.Item>
 				{/each}
 				{#if group === 'links'}
-					{#each Object.entries(links).map(([name, href]) => enrichLink({ name, href })) as command}
-						<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
+					{#each Object.entries(links)
+						.filter(([name]) => !commands.some((c) => c.name.toLowerCase() === name.toLowerCase()))
+						.map(([name, href]) => enrichLink({ name, href })) 
+						as command
+					}
+						<Command.Item
+							onSelect={command.action}
+							value={command.value}
+							keywords={command.keywords}
+						>
 							<Link class="mr-2" />
 							{capitalize(command.name)}
 						</Command.Item>
@@ -565,7 +598,9 @@
 					keywords={['easter egg', 'screen saver']}
 				>
 					<Monitor class="mr-2" />
-					{ $dvdBounceEnabled ? i18n.t('command.disable_dvd_bounce') : i18n.t('command.enable_dvd_bounce') }
+					{$dvdBounceEnabled
+						? i18n.t('command.disable_dvd_bounce')
+						: i18n.t('command.enable_dvd_bounce')}
 				</Command.Item>
 			{/if}
 		</Command.Group>
