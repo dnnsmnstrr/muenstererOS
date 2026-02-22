@@ -19,7 +19,7 @@
 		toggleFullscreen
 	} from '$lib/utils/index';
 	import { WEBSITE_NAME, links } from '$lib/config';
-	import { toggleMode } from 'mode-watcher';
+	import { mode, toggleMode } from 'mode-watcher';
 	import { showHelp } from '$lib/stores/app';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
@@ -52,7 +52,7 @@
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={closeWindow}>
-				{i18n.t('common.quit')} {WEBSITE_NAME}
+				{i18n.t('common.quit')}
 				<Menubar.Shortcut>⌘Q</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
@@ -63,15 +63,19 @@
 		<Menubar.Content>
 			<Menubar.Item>
 				{#snippet child({ props })}
-					<a href="/about" target="_blank" {...props}>{i18n.t('common.new_window')} <Menubar.Shortcut>⌘N</Menubar.Shortcut></a>
+					<a href="/about" target="_blank" {...props}
+						>{i18n.t('common.new_window')} <Menubar.Shortcut>⌘N</Menubar.Shortcut></a
+					>
 				{/snippet}
 			</Menubar.Item>
 			<Menubar.Item onclick={closeWindow}>
-				{i18n.t('common.close_window')} <Menubar.Shortcut>⌘W</Menubar.Shortcut>
+				{i18n.t('common.close_window')}
+				<Menubar.Shortcut>⌘W</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={printPage}>
-				{i18n.t('common.print')} <Menubar.Shortcut>⌘P</Menubar.Shortcut>
+				{i18n.t('common.print')}
+				<Menubar.Shortcut>⌘P</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
@@ -80,27 +84,34 @@
 		<Menubar.Trigger class="hidden lg:flex">{i18n.t('header.edit')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item disabled>
-				{i18n.t('common.undo')} <Menubar.Shortcut>⌘Z</Menubar.Shortcut>
+				{i18n.t('common.undo')}
+				<Menubar.Shortcut>⌘Z</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				{i18n.t('common.redo')} <Menubar.Shortcut>⇧⌘Z</Menubar.Shortcut>
+				{i18n.t('common.redo')}
+				<Menubar.Shortcut>⇧⌘Z</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item disabled>
-				{i18n.t('common.cut')} <Menubar.Shortcut>⌘X</Menubar.Shortcut>
+				{i18n.t('common.cut')}
+				<Menubar.Shortcut>⌘X</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				{i18n.t('common.copy')} <Menubar.Shortcut>⌘C</Menubar.Shortcut>
+				{i18n.t('common.copy')}
+				<Menubar.Shortcut>⌘C</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				{i18n.t('common.paste')} <Menubar.Shortcut>⌘V</Menubar.Shortcut>
+				{i18n.t('common.paste')}
+				<Menubar.Shortcut>⌘V</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={() => document.execCommand('selectAll')}>
-				{i18n.t('common.select_all')} <Menubar.Shortcut>⌘A</Menubar.Shortcut>
+				{i18n.t('common.select_all')}
+				<Menubar.Shortcut>⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				{i18n.t('common.deselect_all')} <Menubar.Shortcut>⇧⌘A</Menubar.Shortcut>
+				{i18n.t('common.deselect_all')}
+				<Menubar.Shortcut>⇧⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={() => (showPicker = true)}>
@@ -130,16 +141,19 @@
 		<Menubar.Trigger class="hidden md:flex">{i18n.t('header.view')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item onclick={reloadPage}>
-				{i18n.t('common.reload')} <Menubar.Shortcut>⌘R</Menubar.Shortcut>
+				{i18n.t('common.reload')}
+				<Menubar.Shortcut>⌘R</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={toggleFullscreen}
-				>{isBrowserInFullscreen() ? i18n.t('common.exit_fullscreen') : i18n.t('common.enter_fullscreen')} <Menubar.Shortcut
-					>⌘F</Menubar.Shortcut
-				></Menubar.Item
+				>{isBrowserInFullscreen()
+					? i18n.t('common.exit_fullscreen')
+					: i18n.t('common.enter_fullscreen')}
+				<Menubar.Shortcut>⌘F</Menubar.Shortcut></Menubar.Item
 			>
 			<Menubar.Item onclick={toggleMode}>
-				{i18n.t('command.toggle_dark_mode')} <Menubar.Shortcut>^M</Menubar.Shortcut>
+				{$mode === 'dark' ? i18n.t('command.light_mode') : i18n.t('command.dark_mode')}
+				<Menubar.Shortcut>^M</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
@@ -180,11 +194,13 @@
 		<Menubar.Trigger>{i18n.t('header.help')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item onclick={() => ($showHelp = !$showHelp)}>
-				{i18n.t('command.keyboard_shortcuts')} <Menubar.Shortcut>?</Menubar.Shortcut>
+				{i18n.t('command.keyboard_shortcuts')}
+				<Menubar.Shortcut>?</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Link href={links.mailto} target="_blank">
-				{i18n.t('common.contact')} <Menubar.Shortcut>@</Menubar.Shortcut>
+				{i18n.t('common.contact')}
+				<Menubar.Shortcut>@</Menubar.Shortcut>
 			</Menubar.Link>
 		</Menubar.Content>
 	</Menubar.Menu>

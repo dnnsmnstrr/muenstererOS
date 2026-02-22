@@ -1,5 +1,10 @@
 [
 	{
+		"title": "Status",
+		"path": "/status",
+		"date": "2026-02-01"
+	},
+	{
 		"title": "Experiment",
 		"path": "/experiment",
 		"date": "2025-10-25"

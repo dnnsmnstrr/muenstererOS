@@ -28,9 +28,12 @@
 	import { INACTIVITY_TIMEOUT } from '$lib/config';
 
 	let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
-	const form = superForm(data?.form || { debug: false, mode: 'system', language: i18n.lang, dvdBounceEnabled: false }, {
-		validators: zodClient(settingsSchema)
-	});
+	const form = superForm(
+		data?.form || { debug: false, mode: 'system', language: i18n.lang, dvdBounceEnabled: false },
+		{
+			validators: zodClient(settingsSchema)
+		}
+	);
 	function handleModeChange(value: string) {
 		switch (value) {
 			case 'light':
@@ -119,21 +122,26 @@
 		</Form.Field>
 
 		<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between gap-2">
-			<Form.Control>
-				<div class="flex flex-col space-y-2">
-					<h2>{i18n.t('settings.dvd_bounce')}</h2>
-					<div class="flex items-center space-x-3 space-y-0">
+			<div class="flex flex-col space-y-2">
+				<h2>{i18n.t('settings.dvd_bounce')}</h2>
+				<div class="flex items-center space-x-3 space-y-0">
+					<Form.Control>
 						<Checkbox
 							checked={$dvdBounceEnabled}
 							onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
 							id="dvd-bounce-checkbox"
 						/>
-						<Form.Label for="dvd-bounce-checkbox" class="font-normal cursor-pointer" title={formatDuration(INACTIVITY_TIMEOUT)}>
-							{ i18n.t('settings.enable_dvd_bounce') }
+						<Form.Label
+							for="dvd-bounce-checkbox"
+							class="font-normal"
+							title={formatDuration(INACTIVITY_TIMEOUT)}
+							onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
+						>
+							{i18n.t('settings.enable_dvd_bounce')}
 						</Form.Label>
-					</div>
+					</Form.Control>
 				</div>
-			</Form.Control>
+			</div>
 		</Form.Field>
 	</div>
 

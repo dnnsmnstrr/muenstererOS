@@ -58,7 +58,7 @@
 		"debug_mode": "Debug mode",
 		"debug_description": "This will cause more verbose logging in the console.",
 		"dvd_bounce": "Screensaver",
-		"enable_dvd_bounce": "Bounce window around after inactivity.",
+		"enable_dvd_bounce": "DVD Bounce",
 		"actions": "Actions",
 		"reset_desktop": "Reset Desktop Files",
 		"reset_success": "Desktop files reset to default positions",

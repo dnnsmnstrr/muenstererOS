@@ -3,12 +3,23 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2025-10-19T13:57:48.172Z</updated>
+    <updated>2026-02-22T12:29:04.793Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
+    <entry>
+        <title>i18n</title>
+        <link href="https://muensterer.tech/de"/>
+        <id>0-de</id>
+        <updated>2026-02-22</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Added german translations.</p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Hotkeys</title>
         <link href="https://muensterer.tech/hotkeys"/>
