@@ -2,7 +2,8 @@
 	import { z } from 'zod';
 	export const settingsSchema = z.object({
 		debug: z.boolean().default(false),
-		mode: z.string().default('system')
+		mode: z.string().default('system'),
+		language: z.string().default('en')
 	});
 	export type SettingsSchema = typeof settingsSchema;
 </script>
@@ -21,9 +22,10 @@
 	import { themes } from '$lib/utils/themes';
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
-	const form = superForm(data?.form || { debug: false, mode: 'system' }, {
+	const form = superForm(data?.form || { debug: false, mode: 'system', language: i18n.lang }, {
 		validators: zodClient(settingsSchema)
 	});
 	function handleModeChange(value: string) {
@@ -42,7 +44,7 @@
 	<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2 sm:flex-row">
 		<Form.Control>
 			<div class="flex flex-col space-y-2">
-				<h2>Mode</h2>
+				<h2>{i18n.t('settings.mode')}</h2>
 				<RadioGroup.Root
 					class="flex flex-col space-y-1"
 					value={$mode}
@@ -50,21 +52,21 @@
 				>
 					<div class="flex items-center space-x-3 space-y-0">
 						<RadioGroup.Item value="light" id="light" />
-						<Form.Label for="light" class="font-normal">Light</Form.Label>
+						<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
 					</div>
 					<div class="flex items-center space-x-3 space-y-0">
 						<RadioGroup.Item value="dark" id="dark" />
-						<Form.Label for="dark" class="font-normal">Dark</Form.Label>
+						<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
 					</div>
 					<div class="flex items-center space-x-3 space-y-0">
 						<RadioGroup.Item value="" id="system" />
-						<Form.Label for="system" class="font-normal">System</Form.Label>
+						<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label>
 					</div>
 				</RadioGroup.Root>
 			</div>
 		</Form.Control>
 		<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
-			<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">Theme</h2>
+			<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">{i18n.t('settings.theme')}</h2>
 			{#each themes as theme (theme.name)}
 				{@const isActive = $themeStore === theme.name}
 				<Button
@@ -90,6 +92,29 @@
 	</Form.Field>
 	<Separator class="my-6" />
 
+	<Form.Field {form} name="language" class="flex flex-col justify-between gap-2 sm:flex-row">
+		<Form.Control>
+			<div class="flex flex-col space-y-2">
+				<h2>{i18n.t('settings.language')}</h2>
+				<RadioGroup.Root
+					class="flex flex-col space-y-1"
+					value={i18n.lang}
+					onValueChange={(v) => i18n.setLanguage(v as any)}
+				>
+					<div class="flex items-center space-x-3 space-y-0">
+						<RadioGroup.Item value="en" id="en" />
+						<Form.Label for="en" class="font-normal">{i18n.t('settings.english')}</Form.Label>
+					</div>
+					<div class="flex items-center space-x-3 space-y-0">
+						<RadioGroup.Item value="de" id="de" />
+						<Form.Label for="de" class="font-normal">{i18n.t('settings.german')}</Form.Label>
+					</div>
+				</RadioGroup.Root>
+			</div>
+		</Form.Control>
+	</Form.Field>
+	<Separator class="my-6" />
+
 	<Form.Field {form} name="debug">
 		<Form.Control>
 			<div class="flex flex-row items-start space-x-3 space-y-0">
@@ -104,12 +129,12 @@
 						for="debug-checkbox"
 						onclick={() => ($debug = !$debug)}
 					>
-						<span class="pb-1.5">Debug mode</span>
+						<span class="pb-1.5">{i18n.t('settings.debug_mode')}</span>
 						<AnimatedToggle visible={$debug}>
 							<Bug class="w-4" />
 						</AnimatedToggle>
 					</Form.Label>
-					<Form.Description>This will cause more verbose logging in the console.</Form.Description>
+					<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
 				</div>
 			</div>
 		</Form.Control>

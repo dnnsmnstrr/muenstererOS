@@ -18,6 +18,7 @@
 	import { links } from '$lib/config';
 	import MobileMenu from './MobileMenu.svelte';
 	import logo from '$lib/assets/muenstererOS.png';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 
 	interface Props {
@@ -25,17 +26,17 @@
 	}
 
 	let { pages = [] }: Props = $props();
-	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = [
+	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = $derived([
 		[
-			{ name: 'Home', href: '/', icon: Home },
+			{ name: i18n.t('common.home'), href: '/', icon: Home },
 			// { name: 'About', icon: FileQuestion },
 		],
 		{
-			name: 'Pages',
+			name: i18n.t('header.pages'),
 			sub: pages
 		},
 		{
-			name: 'Social',
+			name: i18n.t('header.social'),
 			sub: [
 				{ name: 'Instagram', href: links.instagram, icon: Instagram },
 				{ name: 'X / Twitter', href: links.twitter, icon: X },
@@ -43,10 +44,10 @@
 			]
 		},
 		[
-			{ name: 'Settings', icon: Settings, hidden: true },
-			{ name: 'Legal', href: '/legal', icon: Gavel },
+			{ name: i18n.t('common.settings'), icon: Settings, hidden: true },
+			{ name: i18n.t('common.legal'), href: '/legal', icon: Gavel },
 		],
-	];
+	]);
 </script>
 
 <header class="flex justify-between gap-4">

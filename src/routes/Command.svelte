@@ -71,6 +71,7 @@
 	import Kbd from '$lib/components/typography/Kbd.svelte';
 	import { page } from '$app/state';
 	import { links } from '$lib/config';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
@@ -87,14 +88,14 @@
 	let query = $state('');
 	let lastKey = '';
 
-	const keyboardShortcuts = [
-		{ key: '?', description: 'Open this help dialog' },
-		{ key: 'esc', description: 'Close open dialog' },
-		{ key: '/', description: 'Search Zettelkasten with Algolia' },
-		{ key: ['⌘', ','], description: 'Go to settings' },
-		{ key: ['⌘', 'F'], description: 'Fullscreen' },
-		{ key: ['⌘', 'K'], description: 'Command Palette' },
-	];
+	const keyboardShortcuts = $derived([
+		{ key: '?', description: i18n.t('command.shortcuts.help') },
+		{ key: 'esc', description: i18n.t('command.shortcuts.close') },
+		{ key: '/', description: i18n.t('command.shortcuts.search_zettelkasten') },
+		{ key: ['⌘', ','], description: i18n.t('command.shortcuts.settings') },
+		{ key: ['⌘', 'F'], description: i18n.t('command.shortcuts.fullscreen') },
+		{ key: ['⌘', 'K'], description: i18n.t('command.shortcuts.command_palette') },
+	]);
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
@@ -193,8 +194,8 @@
 			setTimeout(shoot, 450);
 			setTimeout(shoot, 600);
 
-			toast.success('Achievement Unlocked: Konami Code', {
-				description: "Congratulations, you're a nerd!"
+			toast.success(i18n.t('command.konami_success'), {
+				description: i18n.t('command.konami_description')
 			});
 		}
 
@@ -382,18 +383,18 @@
 	}
 	let commandConfig = $derived({
 		navigation: [
-			{ name: 'Home', icon: Home, href: '/' },
-			{ name: 'About', icon: User, href: '/about' },
-			...pages,
+			{ name: i18n.t('common.home'), icon: Home, href: '/' },
+			{ name: i18n.t('common.about'), icon: User, href: '/about' },
+			...pages.map(p => ({ ...p, name: i18n.t(`common.${p.name.toLowerCase()}`) !== `common.${p.name.toLowerCase()}` ? i18n.t(`common.${p.name.toLowerCase()}`) : p.name })),
 			{
-				name: 'Search Zettelkasten',
+				name: i18n.t('command.search_zettelkasten'),
 				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
 				icon: Search,
 				action: handleDocsearch
 			},
-			{ name: 'Settings', keywords: ['preferences'], icon: Settings, href: '/settings' },
+			{ name: i18n.t('common.settings'), keywords: ['preferences'], icon: Settings, href: '/settings' },
 			{
-				name: 'Keyboard Shortcuts',
+				name: i18n.t('command.keyboard_shortcuts'),
 				keywords: ['help', 'hotkeys'],
 				icon: Keyboard,
 				action: () => {
@@ -401,9 +402,9 @@
 					$isCommandActive = false;
 				}
 			},
-			{ name: 'Go Forward', icon: ArrowRight, action: () => window.history.forward() },
-			{ name: 'Go Back', icon: ArrowLeft, action: () => window.history.back() },
-			{ name: 'Reload', icon: ArrowLeft, action: reloadPage }
+			{ name: i18n.t('command.go_forward'), icon: ArrowRight, action: () => window.history.forward() },
+			{ name: i18n.t('command.go_back'), icon: ArrowLeft, action: () => window.history.back() },
+			{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage }
 		]
 		.map(enrichLink)
 		.filter((link) => {
@@ -413,23 +414,23 @@
 		links: externalLinks,
 		system: [
 			{
-				name: 'Toggle Dark Mode',
+				name: i18n.t('command.toggle_dark_mode'),
 				value: 'toggle dark mode, theme',
 				icon: $mode === 'light' ? Sun : Moon,
 				action: toggleMode
 			},
 			{
-				name: ($debug ? 'Disable' : 'Enable') + ' Debug Mode',
+				name: ($debug ? i18n.t('command.disable_debug_mode') : i18n.t('command.enable_debug_mode')),
 				icon: $debug ? BugOff : Bug,
 				action: toggleDebug
 			},
 			{
-				name: 'Reset Desktop Files',
+				name: i18n.t('command.reset_desktop_files'),
 				value: 'reset desktop files, restore file positions, clear desktop',
 				icon: RotateCcw,
 				action: () => {
 					resetDesktopFiles();
-					toast.success('Desktop restored to default.');
+					toast.success(i18n.t('command.reset_desktop_success'));
 					$isCommandActive = false;
 				}
 			},
@@ -439,7 +440,7 @@
 				if (!currentPage || page.url.pathname === '/') return [];
 				
 				return [{
-					name: 'Create Desktop Shortcut',
+					name: i18n.t('command.create_desktop_shortcut'),
 					value: 'create desktop shortcut, add to desktop, pin to desktop',
 					keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
 					icon: Plus,
@@ -448,7 +449,7 @@
 						const existingFile = $desktopFiles.find(f => f.id === fileId);
 						console.log(currentPage)
 						if (existingFile && !existingFile.hidden) {
-							toast.info('Shortcut already exists on desktop');
+							toast.info(i18n.t('command.shortcut_exists'));
 						} else {
 							addFileToDesktop({
 								id: fileId,
@@ -456,7 +457,7 @@
 								href: currentPage.href || '/' + currentPage.name.toLowerCase(),
 								icon: currentPage.icon
 							});
-							toast.success(`Added "${currentPage.name}" to desktop`);
+							toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
 						}
 						$isCommandActive = false;
 					}
@@ -467,11 +468,11 @@
 </script>
 
 <Command.Dialog bind:open={$isCommandActive}>
-	<Command.Input bind:value={query} placeholder="Type a command or search..." class="text-base" />
+	<Command.Input bind:value={query} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
-		<Command.Empty>No results found.</Command.Empty>
+		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
 		{#each Object.entries(commandConfig) as [group, commands]}
-			<Command.Group heading={capitalize(group)}>
+			<Command.Group heading={i18n.t(`command.${group}`)}>
 				{#each commands as command}
 					<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
 						{#if command.icon}
@@ -490,7 +491,7 @@
 				{/if}
 			</Command.Group>
 		{/each}
-		<Command.Group heading="Settings">
+		<Command.Group heading={i18n.t('common.settings')}>
 			{#if !isMobile.any()}
 				<button
 					use:eyeDropperAction={{
@@ -512,7 +513,7 @@
 				>
 					<Command.Item keywords={['theme']}>
 						<Pipette class="mr-2" />
-						Pick primary color
+						{i18n.t('command.pick_primary_color')}
 					</Command.Item>
 				</button>
 				<button
@@ -535,22 +536,22 @@
 				>
 					<Command.Item keywords={['theme']}>
 						<Pipette class="mr-2" />
-						Pick background color
+						{i18n.t('command.pick_background_color')}
 					</Command.Item>
 				</button>
 			{/if}
 			{#if $modifiedColors}
 				<Command.Item onSelect={resetColors} keywords={['theme']}>
 					<Palette class="mr-2" />
-					Reset theme colors
+					{i18n.t('command.reset_theme_colors')}
 				</Command.Item>
 			{/if}
 		</Command.Group>
-		<Command.Group heading="Fun">
+		<Command.Group heading={i18n.t('command.fun')}>
 			<button use:confettiAction class="w-full">
 				<Command.Item value="confetti" keywords={['party', 'celebrate']}>
 					<PartyPopper class="mr-2" />
-					Confetti
+					{i18n.t('command.confetti')}
 				</Command.Item>
 			</button>
 			{#if page.url.pathname === '/' && $dvdBounceActive}
@@ -563,7 +564,7 @@
 					keywords={['easter egg', 'screen saver']}
 				>
 					<Monitor class="mr-2" />
-					{ $dvdBounceActive ? 'Disable' : 'Enable' } DVD Bounce
+					{ $dvdBounceActive ? i18n.t('command.disable_dvd_bounce') : i18n.t('command.enable_dvd_bounce') }
 				</Command.Item>
 			{/if}
 		</Command.Group>
@@ -573,10 +574,9 @@
 <Dialog.Root open={$showHelp} onOpenChange={(value) => ($showHelp = value)}>
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Keyboard Shortcuts</Dialog.Title>
+			<Dialog.Title>{i18n.t('command.shortcuts_title')}</Dialog.Title>
 			<Dialog.Description>
-				There are many different shortcuts and features to explore on this page. Here is a selection
-				of the most obvious ones:
+				{i18n.t('command.shortcuts_description')}
 			</Dialog.Description>
 		</Dialog.Header>
 		<List class="space-y-4">

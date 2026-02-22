@@ -18,6 +18,7 @@
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 	import pages from '../data/pages.json';
 
 	interface Props {
@@ -188,7 +189,7 @@
 	<style>
 		@import '/themes.css';
 	</style>
-	<title>{page.url.pathname === '/' ? 'Home' : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
+	<title>{page.url.pathname === '/' ? i18n.t('common.home') : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <ModeWatcher />
