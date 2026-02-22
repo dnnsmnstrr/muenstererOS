@@ -50,7 +50,8 @@
 		backgroundColor,
 		resetColors,
 		showHelp,
-		modifiedColors
+		modifiedColors,
+		dvdBounceEnabled
 	} from '$lib/stores/app';
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
@@ -385,7 +386,7 @@
 		navigation: [
 			{ name: i18n.t('common.home'), icon: Home, href: '/' },
 			{ name: i18n.t('common.about'), icon: User, href: '/about' },
-			...pages,
+			...pages.filter(page => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
 			{
 				name: i18n.t('command.search_zettelkasten'),
 				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
@@ -554,17 +555,17 @@
 					{i18n.t('command.confetti')}
 				</Command.Item>
 			</button>
-			{#if page.url.pathname === '/' && $dvdBounceActive}
+			{#if !$dvdBounceActive}
 				<Command.Item
 					onSelect={() => {
-						$dvdBounceActive = !$dvdBounceActive;
+						$dvdBounceEnabled = !$dvdBounceEnabled;
 						$isCommandActive = false;
 					}}
 					value="dvd bounce"
 					keywords={['easter egg', 'screen saver']}
 				>
 					<Monitor class="mr-2" />
-					{ $dvdBounceActive ? i18n.t('command.disable_dvd_bounce') : i18n.t('command.enable_dvd_bounce') }
+					{ $dvdBounceEnabled ? i18n.t('command.disable_dvd_bounce') : i18n.t('command.enable_dvd_bounce') }
 				</Command.Item>
 			{/if}
 		</Command.Group>

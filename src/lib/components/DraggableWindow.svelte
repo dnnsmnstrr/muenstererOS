@@ -15,9 +15,9 @@
 	import { goto } from '$app/navigation';
 	import { ExternalLink, Trash2, Pencil, FolderOpen } from 'lucide-svelte';
 	import File from './File.svelte';
-	import { debugLog } from '$lib/stores/app';
+	import { debugLog, dvdBounceEnabled } from '$lib/stores/app';
+	import { INACTIVITY_TIMEOUT } from '$lib/config';
 
-	const INACTIVITY_TIMEOUT = 1 * 60 * 1000; // 1 minute in milliseconds
 
 	const minHeight = 300;
 	const minWidth = 200;
@@ -199,7 +199,7 @@
 
 	// DVD Bounce animation
 	function startDvdBounce() {
-		if (bounceAnimationId) return; // Already running
+		if (bounceAnimationId || !$dvdBounceEnabled) return; // Already running
 
 		const animate = () => {
 			if (!$dvdBounceActive) {
