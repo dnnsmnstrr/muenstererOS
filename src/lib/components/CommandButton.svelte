@@ -4,18 +4,32 @@
 	import { Search } from 'lucide-svelte';
 	import { isAppleDevice } from '$lib/utils/index';
 	import { Kbd } from '$lib/components/ui/kbd';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 </script>
 
 <p class="text-sm">
-	<Button
-		variant="outline"
-		onclick={() => ($isCommandActive = !$isCommandActive)}
-		class="flex items-center gap-2"
-	>
-		<Search />
-		<Kbd class="hidden sm:inline-flex bg-muted h-6">
-			<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
-      <span class="text-xs pb-0.5"> K </span>
-		</Kbd>
-	</Button>
+	<Tooltip.Provider>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
+					<Button
+						{...props}
+						variant="outline"
+						onclick={() => ($isCommandActive = !$isCommandActive)}
+						class="flex items-center gap-2"
+						aria-label="Open command palette"
+					>
+						<Search />
+						<Kbd class="hidden sm:inline-flex bg-muted h-6">
+							<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
+							<span class="text-xs pb-0.5"> K </span>
+						</Kbd>
+					</Button>
+				{/snippet}
+			</Tooltip.Trigger>
+			<Tooltip.Content>
+				<p>Command Palette</p>
+			</Tooltip.Content>
+		</Tooltip.Root>
+	</Tooltip.Provider>
 </p>
