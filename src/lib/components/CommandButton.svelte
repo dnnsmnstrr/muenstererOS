@@ -5,6 +5,7 @@
 	import { isAppleDevice } from '$lib/utils/index';
 	import { Kbd } from '$lib/components/ui/kbd';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 </script>
 
 <p class="text-sm">
@@ -17,7 +18,7 @@
 						variant="outline"
 						onclick={() => ($isCommandActive = !$isCommandActive)}
 						class="flex items-center gap-2"
-						aria-label="Open command palette"
+						aria-label={i18n.t('header.command_palette')}
 					>
 						<Search />
 						<Kbd class="hidden sm:inline-flex bg-muted h-6">
@@ -28,7 +29,7 @@
 				{/snippet}
 			</Tooltip.Trigger>
 			<Tooltip.Content>
-				<p>Command Palette</p>
+				<p>{i18n.t('header.command_palette')}</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
 	</Tooltip.Provider>

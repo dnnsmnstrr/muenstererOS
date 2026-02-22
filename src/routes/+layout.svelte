@@ -18,6 +18,7 @@
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 	import pages from '../data/pages.json';
 
 	interface Props {
@@ -163,32 +164,41 @@
 			: 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
 	);
 
-	const bookmarks: BookmarkItem[] = [
-		{ name: 'Now', icon: Info },
-		{ name: 'Uses', icon: TabletSmartphone },
-		{ name: 'Projects', icon: LayoutGrid },
-		{ name: 'Playlists', icon: ListMusic },
-		{ name: 'Hotkeys', icon: Keyboard },
-		{ name: 'Redirects', icon: Signpost },
-    	{ name: 'Slashes', icon: Slash, hidden: true },
-    	{ name: 'Terminal', icon: Terminal, hidden: true },
+	const bookmarksRaw: BookmarkItem[] = [
+		{ name: 'Now', href: '/now', icon: Info },
+		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
+		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
+		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
+		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
+		{ name: 'Redirects', href: '/redirects', icon: Signpost },
+	{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },
+	{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
 	];
-	const otherPages = pages.filter(page => !bookmarks.some(bookmark => bookmark.name === page.title));
-	const otherBookmarks = otherPages.map(page => ({
-		name: page.title,
-		href: page.path,
-		icon: Info,
+	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
+		...b,
+		name: i18n.t(`common.${b.name.toLowerCase()}`) !== `common.${b.name.toLowerCase()}`
+			? i18n.t(`common.${b.name.toLowerCase()}`)
+			: b.name
+	})));
+	const otherPages = pages.filter(page => !bookmarksRaw.some(bookmark => bookmark.name === page.title));
+	const otherBookmarks = $derived(otherPages.map(page => {
+		const translatedName = i18n.t(`common.${page.title.toLowerCase()}`);
+		return {
+			name: translatedName !== `common.${page.title.toLowerCase()}` ? translatedName : page.title,
+			href: page.path,
+			icon: Info,
+		};
 	}));
-	const allPages = [...bookmarks, ...otherBookmarks];
+	const allPages = $derived([...bookmarks, ...otherBookmarks]);
 </script>
 
 <svelte:head>
 	<style>
 		@import '/themes.css';
 	</style>
-	<title>{page.url.pathname === '/' ? 'Home' : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
+	<title>{page.url.pathname === '/' ? i18n.t('common.home') : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <ModeWatcher />

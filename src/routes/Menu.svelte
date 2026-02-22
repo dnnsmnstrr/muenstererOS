@@ -21,6 +21,7 @@
 	import { WEBSITE_NAME, links } from '$lib/config';
 	import { toggleMode } from 'mode-watcher';
 	import { showHelp } from '$lib/stores/app';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	let showPicker = $state(false);
 	interface Props {
@@ -37,7 +38,7 @@
 			<Menubar.Item>
 				{#snippet child({ props })}
 					<a href="/about" {...props}>
-						About
+						{i18n.t('common.about')}
 					</a>
 				{/snippet}
 			</Menubar.Item>
@@ -45,65 +46,65 @@
 			<Menubar.Item>
 				{#snippet child({ props })}
 					<a href="/settings" {...props}>
-						Settings... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
+						{i18n.t('common.settings')}... <Menubar.Shortcut>⌘,</Menubar.Shortcut>
 					</a>
 				{/snippet}
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={closeWindow}>
-				Quit {WEBSITE_NAME}
+				{i18n.t('common.quit')} {WEBSITE_NAME}
 				<Menubar.Shortcut>⌘Q</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger class="hidden lg:flex">File</Menubar.Trigger>
+		<Menubar.Trigger class="hidden lg:flex">{i18n.t('header.file')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item>
 				{#snippet child({ props })}
-					<a href="/about" target="_blank" {...props}>New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut></a>
+					<a href="/about" target="_blank" {...props}>{i18n.t('common.new_window')} <Menubar.Shortcut>⌘N</Menubar.Shortcut></a>
 				{/snippet}
 			</Menubar.Item>
 			<Menubar.Item onclick={closeWindow}>
-				Close Window <Menubar.Shortcut>⌘W</Menubar.Shortcut>
+				{i18n.t('common.close_window')} <Menubar.Shortcut>⌘W</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={printPage}>
-				Print... <Menubar.Shortcut>⌘P</Menubar.Shortcut>
+				{i18n.t('common.print')} <Menubar.Shortcut>⌘P</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger class="hidden lg:flex">Edit</Menubar.Trigger>
+		<Menubar.Trigger class="hidden lg:flex">{i18n.t('header.edit')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item disabled>
-				Undo <Menubar.Shortcut>⌘Z</Menubar.Shortcut>
+				{i18n.t('common.undo')} <Menubar.Shortcut>⌘Z</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				Redo <Menubar.Shortcut>⇧⌘Z</Menubar.Shortcut>
+				{i18n.t('common.redo')} <Menubar.Shortcut>⇧⌘Z</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item disabled>
-				Cut <Menubar.Shortcut>⌘X</Menubar.Shortcut>
+				{i18n.t('common.cut')} <Menubar.Shortcut>⌘X</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				Copy <Menubar.Shortcut>⌘C</Menubar.Shortcut>
+				{i18n.t('common.copy')} <Menubar.Shortcut>⌘C</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				Paste <Menubar.Shortcut>⌘V</Menubar.Shortcut>
+				{i18n.t('common.paste')} <Menubar.Shortcut>⌘V</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={() => document.execCommand('selectAll')}>
-				Select All <Menubar.Shortcut>⌘A</Menubar.Shortcut>
+				{i18n.t('common.select_all')} <Menubar.Shortcut>⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Item disabled>
-				Deselect All <Menubar.Shortcut>⇧⌘A</Menubar.Shortcut>
+				{i18n.t('common.deselect_all')} <Menubar.Shortcut>⇧⌘A</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={() => (showPicker = true)}>
-				Emoji & Symbols{' '}
+				{i18n.t('common.emoji_symbols')}{' '}
 				<Menubar.Shortcut>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -126,25 +127,25 @@
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger class="hidden md:flex">View</Menubar.Trigger>
+		<Menubar.Trigger class="hidden md:flex">{i18n.t('header.view')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item onclick={reloadPage}>
-				Reload <Menubar.Shortcut>⌘R</Menubar.Shortcut>
+				{i18n.t('common.reload')} <Menubar.Shortcut>⌘R</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Item onclick={toggleFullscreen}
-				>{isBrowserInFullscreen() ? 'Exit' : 'Enter'} Full Screen <Menubar.Shortcut
+				>{isBrowserInFullscreen() ? i18n.t('common.exit_fullscreen') : i18n.t('common.enter_fullscreen')} <Menubar.Shortcut
 					>⌘F</Menubar.Shortcut
 				></Menubar.Item
 			>
 			<Menubar.Item onclick={toggleMode}>
-				Toggle Dark Mode <Menubar.Shortcut>^M</Menubar.Shortcut>
+				{i18n.t('command.toggle_dark_mode')} <Menubar.Shortcut>^M</Menubar.Shortcut>
 			</Menubar.Item>
 		</Menubar.Content>
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger class="hidden sm:flex">Bookmarks</Menubar.Trigger>
+		<Menubar.Trigger class="hidden sm:flex">{i18n.t('header.bookmarks')}</Menubar.Trigger>
 		<Menubar.Content>
 			{#each bookmarks as bookmark, index}
 				{#if Array.isArray(bookmark)}
@@ -176,14 +177,14 @@
 	</Menubar.Menu>
 
 	<Menubar.Menu>
-		<Menubar.Trigger>Help</Menubar.Trigger>
+		<Menubar.Trigger>{i18n.t('header.help')}</Menubar.Trigger>
 		<Menubar.Content>
 			<Menubar.Item onclick={() => ($showHelp = !$showHelp)}>
-				Keyboard Shortcuts <Menubar.Shortcut>?</Menubar.Shortcut>
+				{i18n.t('command.keyboard_shortcuts')} <Menubar.Shortcut>?</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
 			<Menubar.Link href={links.mailto} target="_blank">
-				Contact <Menubar.Shortcut>@</Menubar.Shortcut>
+				{i18n.t('common.contact')} <Menubar.Shortcut>@</Menubar.Shortcut>
 			</Menubar.Link>
 		</Menubar.Content>
 	</Menubar.Menu>
