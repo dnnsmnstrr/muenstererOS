@@ -438,7 +438,7 @@
 			},
 			{
 				name: i18n.t('command.switch_language'),
-				value: 'switch language, change language, sprache wechseln',
+				value: 'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
 				icon: Globe,
 				action: async () => {
 					const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
