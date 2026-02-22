@@ -385,7 +385,15 @@
 		navigation: [
 			{ name: i18n.t('common.home'), icon: Home, href: '/' },
 			{ name: i18n.t('common.about'), icon: User, href: '/about' },
-			...pages.map(p => ({ ...p, name: i18n.t(`common.${p.name.toLowerCase()}`) !== `common.${p.name.toLowerCase()}` ? i18n.t(`common.${p.name.toLowerCase()}`) : p.name })),
+			...pages.map((p) => {
+				const href = p.href || '/' + p.name.toLowerCase();
+				const translatedName = i18n.t(`common.${p.name.toLowerCase()}`);
+				return {
+					...p,
+					name: translatedName !== `common.${p.name.toLowerCase()}` ? translatedName : p.name,
+					href
+				};
+			}),
 			{
 				name: i18n.t('command.search_zettelkasten'),
 				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
