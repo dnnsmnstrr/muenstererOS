@@ -1,27 +1,37 @@
 <script lang="ts">
-  import { Button } from "$lib/components/ui/button";
-  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-  import { Sun, Moon } from "lucide-svelte";
-  import { setMode, resetMode } from "mode-watcher";
+	import { Button } from '$lib/components/ui/button';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { Sun, Moon } from 'lucide-svelte';
+	import { setMode, resetMode } from 'mode-watcher';
 </script>
 
 <DropdownMenu.Root>
-  <DropdownMenu.Trigger>
-      <Button variant="outline" size="icon">
-        <Sun
-          class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-        />
-        <Moon
-          class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-        />
-        <span class="sr-only">Toggle theme</span>
-      </Button>
-    </DropdownMenu.Trigger>
-  <DropdownMenu.Content align="end">
-    <DropdownMenu.Item onclick={() => setMode("light")}
-      >Light</DropdownMenu.Item
-    >
-    <DropdownMenu.Item onclick={() => setMode("dark")}>Dark</DropdownMenu.Item>
-    <DropdownMenu.Item onclick={() => resetMode()}>System</DropdownMenu.Item>
-  </DropdownMenu.Content>
+	<Tooltip.Provider>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				{#snippet child({ props: tooltipProps })}
+					<DropdownMenu.Trigger>
+						{#snippet child({ props: menuProps })}
+							<Button variant="outline" size="icon" {...tooltipProps} {...menuProps}>
+								<Sun
+									class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+								/>
+								<Moon
+									class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+								/>
+								<span class="sr-only">Toggle theme</span>
+							</Button>
+						{/snippet}
+					</DropdownMenu.Trigger>
+				{/snippet}
+			</Tooltip.Trigger>
+			<Tooltip.Content>Toggle theme</Tooltip.Content>
+		</Tooltip.Root>
+	</Tooltip.Provider>
+	<DropdownMenu.Content align="end">
+		<DropdownMenu.Item onclick={() => setMode('light')}>Light</DropdownMenu.Item>
+		<DropdownMenu.Item onclick={() => setMode('dark')}>Dark</DropdownMenu.Item>
+		<DropdownMenu.Item onclick={() => resetMode()}>System</DropdownMenu.Item>
+	</DropdownMenu.Content>
 </DropdownMenu.Root>
