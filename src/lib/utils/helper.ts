@@ -1,3 +1,5 @@
+import { i18n } from '$lib/i18n/i18n.svelte';
+
 // string
 export const capitalize = (string: string) =>
 	(string && string[0].toUpperCase() + string.slice(1)) || '';
@@ -21,7 +23,7 @@ export const randomNumber = (min = 0, max = 100) => {
 // date
 export function formatDate(dateString: string): string {
 	const date = new Date(dateString);
-	return date.toLocaleDateString('en-US', {
+	return date.toLocaleDateString(i18n.lang, {
 		year: 'numeric',
 		month: 'short',
 		day: 'numeric'
@@ -30,7 +32,7 @@ export function formatDate(dateString: string): string {
 
 export function formatTime(dateString: string): string {
 	const date = new Date(dateString);
-	return date.toLocaleTimeString('en-US', {
+	return date.toLocaleTimeString(i18n.lang, {
 		hour: '2-digit',
 		minute: '2-digit'
 	});
@@ -38,15 +40,15 @@ export function formatTime(dateString: string): string {
 
 export function formatDateTime(dateString: string): string {
 	const date = new Date(dateString);
-	return date.toLocaleString('en-US', {
+	return date.toLocaleString(i18n.lang, {
 		year: 'numeric',
 		month: 'short',
 		day: 'numeric',
 		hour: '2-digit',
 		minute: '2-digit',
-		hour12: true
+		hour12: i18n.lang === 'en'
 	});
-}	
+}
 
 export function formatDuration(milliseconds: number): string {
 	const seconds = Math.floor((milliseconds / 1000) % 60);
