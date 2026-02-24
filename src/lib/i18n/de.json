@@ -41,7 +41,10 @@
 		"edit": "Bearbeiten",
 		"view": "Darstellung",
 		"bookmarks": "Lesezeichen",
-		"help": "Hilfe"
+		"help": "Hilfe",
+		"battery": "Batterie",
+		"charging": "Lädt",
+		"discharging": "Entlädt"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
