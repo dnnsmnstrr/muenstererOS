@@ -41,7 +41,10 @@
 		"edit": "Edit",
 		"view": "View",
 		"bookmarks": "Bookmarks",
-		"help": "Help"
+		"help": "Help",
+		"battery": "Battery",
+		"charging": "Charging",
+		"discharging": "Discharging"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"

@@ -53,12 +53,12 @@
 <header class="flex justify-between gap-4">
 	<nav class="flex items-center sm:hidden">
 		<MobileMenu {bookmarks} />
-		<a href="/" class="ml-4" aria-label="Home">
+		<a href="/" class="ml-4" aria-label={i18n.t('common.home')}>
 			<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 	</nav>
 	<nav class="hidden items-center sm:flex">
-		<a href="/" aria-label="Home">
+		<a href="/" aria-label={i18n.t('common.home')}>
 			<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 		<Menu {bookmarks} />
