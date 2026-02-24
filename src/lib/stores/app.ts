@@ -55,3 +55,12 @@ export function debugLog(...args: any[]) {
     console.log(...args);
   }
 }
+
+// dvd bounce
+const storedDvdBounceSetting = browser ? window?.localStorage?.dvdBounceEnabled === 'true' : false;
+export const dvdBounceEnabled = writable<boolean>(storedDvdBounceSetting);
+dvdBounceEnabled.subscribe((value) => {
+  if (browser && window?.localStorage) {
+    window.localStorage.dvdBounceEnabled = String(value);
+  }
+})

@@ -11,7 +11,7 @@
 </script>
 
 <Button
-	href={bookmark.href || '/' + (bookmark.name || '').toLowerCase()}
+	href={bookmark.href ?? '/' + (bookmark.name || '').toLowerCase()}
 	class="w-full justify-{bookmark.icon ? 'start' : 'center'}"
 	variant="secondary"
 	{...rest}

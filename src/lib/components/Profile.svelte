@@ -4,6 +4,7 @@
 	import { NAME_ABBREVIATION, OWNER_NAME, descriptions, links } from '$lib/config';
 	import Typewriter from 'svelte-typewriter';
 	import { Button } from './ui/button';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 </script>
 
 <Card.Header class="h-card mt-4 flex flex-row flex-wrap items-center justify-start gap-6 md:mt-0">
@@ -25,7 +26,7 @@
 			</Typewriter>
 		</Card.Description>
 		<Card.Footer class="hidden p-0 pt-2 md:block">
-			<Button href={links.cv} size="sm" class="u-url">Find out more...</Button>
+			<Button href={links.cv} size="sm" class="u-url">{i18n.t('profile.find_out_more')}</Button>
 		</Card.Footer>
 	</div>
 </Card.Header>

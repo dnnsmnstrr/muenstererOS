@@ -30,11 +30,14 @@
 	import playlistData from '../../data/playlists.json';
 	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 
 	let showGifs = $state(false);
+	let showCurrentHighlight = $state(false);
 
 	const allPlaylists = playlistData as PlaylistItem[];
+	const latestPlaylistUri = allPlaylists[0]?.uri;
 
 	let seasonPlaylists = $state(allPlaylists.filter((playlist) => playlist.type === 'season'));
 	const aggregatedPlaylists = allPlaylists.filter((playlist) => playlist.type === 'aggregated');
@@ -94,6 +97,10 @@
 	}
 
 	onMount(() => {
+		// Check if ?current param is in the URL
+		const urlParams = new URLSearchParams(window.location.search);
+		showCurrentHighlight = urlParams.has('current');
+
 		const observers = new Map();
 
 		const playlistElements = document.querySelectorAll('[data-playlist-card]');
@@ -243,6 +250,7 @@
 					{playlist}
 					setSelectedPlaylistUri={() => selectedPlaylistUri = playlist.uri}
 					compact={!!filterQuery}
+					isHighlighted={showCurrentHighlight && playlist.uri === latestPlaylistUri}
 				/>
 			{/each}
 		</div>

@@ -110,16 +110,14 @@
 				<img src="/images/humanstxt.png" alt="" class="h-8" />
 			</Button>
 			{#if status}
-				<div class="flex flex-col items-end gap-1">
+				<Link
+					href="/status"
+					class="flex flex-col items-end gap-1 font-normal text-muted-foreground decoration-muted-foreground/50 transition-colors hover:text-foreground"
+				>
 					<span title={titleTime}>
-						Last deployed: {displayTime}
+						Last deployment: {displayTime}
 					</span>
-					<span>
-						{status.commitCount}
-						{status.commitCount === 1 ? 'commit' : 'commits'} • {status.pageCount}
-						{status.pageCount === 1 ? 'page' : 'pages'}
-					</span>
-				</div>
+				</Link>
 			{/if}
 		</Card.Footer>
 	</Card.Root>

@@ -22,7 +22,7 @@
 			<MenuIcon />
 		</Button>
 	</Sheet.Trigger>
-	<Sheet.Content side="left" class="w-48 overflow-scroll">
+	<Sheet.Content side="left" class="w-64 overflow-scroll">
 		<Sheet.Header>
 			<Sheet.Title class="py-2">
 				<Heading depth={4}>

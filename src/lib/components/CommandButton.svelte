@@ -4,6 +4,7 @@
 	import { Search } from 'lucide-svelte';
 	import { isAppleDevice } from '$lib/utils/index';
 	import { Kbd } from '$lib/components/ui/kbd';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 </script>
 
 <p class="text-sm">
@@ -11,10 +12,10 @@
 		variant="outline"
 		onclick={() => ($isCommandActive = !$isCommandActive)}
 		class="flex items-center gap-2"
-		aria-label="Open command palette"
+		aria-label={i18n.t('header.command_palette')}
 	>
 		<Search />
-		<Kbd class="hidden sm:inline-flex bg-muted h-6">
+		<Kbd class="hidden h-6 bg-muted sm:inline-flex">
 			<span class="text-lg">{isAppleDevice() ? '⌘' : '^'}</span>
 			<span class="text-xs pb-0.5"> K </span>
 		</Kbd>
