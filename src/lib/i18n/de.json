@@ -31,7 +31,9 @@
 		"enter_fullscreen": "Vollbild aktivieren",
 		"exit_fullscreen": "Vollbild beenden",
 		"de": "Deutsch",
-		"en": "Englisch"
+		"en": "Englisch",
+		"show_now_playing": "Wiedergabe anzeigen",
+		"hide_now_playing": "Wiedergabe ausblenden"
 	},
 	"header": {
 		"pages": "Seiten",

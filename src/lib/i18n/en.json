@@ -31,7 +31,9 @@
 		"enter_fullscreen": "Enter Full Screen",
 		"exit_fullscreen": "Exit Full Screen",
 		"de": "German",
-		"en": "English"
+		"en": "English",
+		"show_now_playing": "Show Now Playing",
+		"hide_now_playing": "Hide Now Playing"
 	},
 	"header": {
 		"pages": "Pages",

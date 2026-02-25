@@ -8,6 +8,7 @@
 	import Disc from './icons/disc.svelte';
 	import { cn } from '$lib/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface PlaylistItem {
 		title: string;
@@ -61,7 +62,7 @@
 							size="icon"
 							class="h-10 w-10 rounded-full shadow-lg z-10 group mx-4"
 							onclick={toggleExpanded}
-							aria-label="Hide Now Playing"
+							aria-label={i18n.t('common.hide_now_playing')}
 						>
 							{#if side === 'right'}
 								<ChevronRight class="h-5 w-5" />
@@ -72,7 +73,7 @@
 					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content side={side === 'right' ? 'left' : 'right'}>
-					<p>Hide Now Playing</p>
+					<p>{i18n.t('common.hide_now_playing')}</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 
@@ -130,14 +131,14 @@
 							size="icon"
 							class={cn("h-10 w-10 rounded-full shadow-lg z-10 mx-4")}
 							onclick={toggleExpanded}
-							aria-label="Show Now Playing"
+							aria-label={i18n.t('common.show_now_playing')}
 						>
 							<Disc />
 						</Button>
 					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content side={side === 'right' ? 'left' : 'right'}>
-					<p>Show Now Playing</p>
+					<p>{i18n.t('common.show_now_playing')}</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</div>

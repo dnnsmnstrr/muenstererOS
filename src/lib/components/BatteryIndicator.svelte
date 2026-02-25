@@ -18,7 +18,6 @@
 	);
 </script>
 
-<Tooltip.Provider>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
 			{#snippet child({ props })}
@@ -43,4 +42,3 @@
 			<p>{statusText}</p>
 		</Tooltip.Content>
 	</Tooltip.Root>
-</Tooltip.Provider>

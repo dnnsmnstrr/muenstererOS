@@ -208,6 +208,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
+<Tooltip.Provider>
 <div class="flex h-screen w-full flex-grow flex-col">
 	<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
 		<div class="sticky top-0 h-full w-full">
@@ -233,9 +234,8 @@
 				: '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current
 				.x}px; --y: {cursor.current.y}px;"
 		></div>
-		<Tooltip.Provider>
-			{@render children?.()}
-		</Tooltip.Provider>
+		{@render children?.()}
 	</main>
 	<Footer />
 </div>
+</Tooltip.Provider>
