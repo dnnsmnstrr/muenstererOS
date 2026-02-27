@@ -119,5 +119,16 @@
 		"minimize": "Fenster minimieren",
 		"maximize": "Fenster maximieren",
 		"restore": "Fenster wiederherstellen"
+	},
+	"status": {
+		"title": "Systemstatus",
+		"metric": "Metrik",
+		"value": "Wert",
+		"last_deployment": "Letztes Deployment",
+		"commit_count": "Commit-Anzahl",
+		"page_count": "Seitenanzahl",
+		"cv_status": "CV-Status",
+		"online": "online",
+		"offline": "offline"
 	}
 }
