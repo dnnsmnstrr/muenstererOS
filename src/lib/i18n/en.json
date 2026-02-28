@@ -117,5 +117,10 @@
 		"minimize": "Minimize window",
 		"maximize": "Maximize window",
 		"restore": "Restore window"
+	},
+	"now_playing": {
+		"title": "Now Playing",
+		"hide": "Hide Now Playing",
+		"show": "Show Now Playing"
 	}
 }

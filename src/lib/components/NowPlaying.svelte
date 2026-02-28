@@ -8,6 +8,13 @@
 	import Disc from './icons/disc.svelte';
 	import { cn } from '$lib/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+
+	/**
+	 * OPTIMIZATION: Use the i18n service to localize component labels and tooltips.
+	 * This ensures that the Now Playing widget is accessible and understandable
+	 * in all supported languages.
+	 */
 
 	interface PlaylistItem {
 		title: string;
@@ -61,7 +68,7 @@
 							size="icon"
 							class="h-10 w-10 rounded-full shadow-lg z-10 group mx-4"
 							onclick={toggleExpanded}
-							aria-label="Hide Now Playing"
+							aria-label={i18n.t('now_playing.hide')}
 						>
 							{#if side === 'right'}
 								<ChevronRight class="h-5 w-5" />
@@ -72,7 +79,7 @@
 					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content side={side === 'right' ? 'left' : 'right'}>
-					<p>Hide Now Playing</p>
+					<p>{i18n.t('now_playing.hide')}</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 
@@ -103,7 +110,7 @@
 							<div class="flex items-center gap-2 text-white">
 								<Music class="h-4 w-4" />
 								<div class="flex-1 min-w-0">
-									<p class="text-xs font-medium opacity-80">Now Playing</p>
+									<p class="text-xs font-medium opacity-80">{i18n.t('now_playing.title')}</p>
 									<p class="truncate text-sm font-bold">
 										{currentPlaylist?.emoji || '🎵'}
 										{currentPlaylist?.title || 'Loading...'}
@@ -130,14 +137,14 @@
 							size="icon"
 							class={cn("h-10 w-10 rounded-full shadow-lg z-10 mx-4")}
 							onclick={toggleExpanded}
-							aria-label="Show Now Playing"
+							aria-label={i18n.t('now_playing.show')}
 						>
 							<Disc />
 						</Button>
 					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content side={side === 'right' ? 'left' : 'right'}>
-					<p>Show Now Playing</p>
+					<p>{i18n.t('now_playing.show')}</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</div>

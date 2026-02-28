@@ -119,5 +119,10 @@
 		"minimize": "Fenster minimieren",
 		"maximize": "Fenster maximieren",
 		"restore": "Fenster wiederherstellen"
+	},
+	"now_playing": {
+		"title": "Aktuelle Wiedergabe",
+		"hide": "Wiedergabe ausblenden",
+		"show": "Wiedergabe anzeigen"
 	}
 }
