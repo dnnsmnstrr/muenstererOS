@@ -8,6 +8,7 @@
 	import Disc from './icons/disc.svelte';
 	import { cn } from '$lib/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface PlaylistItem {
 		title: string;
@@ -19,10 +20,13 @@
 		imageUrl?: string;
 	}
 
-	let { side = 'right', expanded = false } = $props<{ side?: 'left' | 'right', expanded?: boolean }>();
+	let { side = 'right', expanded = false } = $props<{
+		side?: 'left' | 'right';
+		expanded?: boolean;
+	}>();
 
 	const playlists = playlistData as PlaylistItem[];
-	
+
 	// Get the most recent season playlist
 	const currentPlaylist = playlists
 		.filter((p) => p.type === 'season')
@@ -44,10 +48,10 @@
 	}
 </script>
 
-<div class={cn("relative flex items-center", side === 'right' ? "flex-row-reverse" : "")}>
+<div class={cn('relative flex items-center', side === 'right' ? 'flex-row-reverse' : '')}>
 	{#if expanded}
 		<div
-			class={cn("flex items-center", side === 'right' ? "flex-row-reverse" : "")}
+			class={cn('flex items-center', side === 'right' ? 'flex-row-reverse' : '')}
 			in:fly={{ x: side === 'right' ? 200 : -200, duration: 300 }}
 			out:fly={{ x: side === 'right' ? 200 : -200, duration: 500, delay: 0 }}
 		>
@@ -59,9 +63,9 @@
 							{...props}
 							variant="outline"
 							size="icon"
-							class="h-10 w-10 rounded-full shadow-lg z-10 group mx-4"
+							class="group z-10 mx-4 h-10 w-10 rounded-full shadow-lg"
 							onclick={toggleExpanded}
-							aria-label="Hide Now Playing"
+							aria-label={i18n.t('now_playing.hide')}
 						>
 							{#if side === 'right'}
 								<ChevronRight class="h-5 w-5" />
@@ -72,16 +76,19 @@
 					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content side={side === 'right' ? 'left' : 'right'}>
-					<p>Hide Now Playing</p>
+					<p>{i18n.t('now_playing.hide')}</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 
 			<!-- Playlist Card -->
 			<Card.Root
-				class={cn("group cursor-pointer overflow-hidden transition-all hover:scale-105 hover:shadow-lg", side === 'right' ? "ml-4" : "mr-4")}
+				class={cn(
+					'group cursor-pointer overflow-hidden transition-all hover:scale-105 hover:shadow-lg',
+					side === 'right' ? 'ml-4' : 'mr-4'
+				)}
 				onclick={handleClick}
 			>
-				<Card.Content class="p-0 w-40 h-40">
+				<Card.Content class="h-40 w-40 p-0">
 					<div class="relative">
 						{#if currentPlaylist?.imageUrl}
 							<img
@@ -99,14 +106,18 @@
 						<div
 							class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
 						></div>
-						<a class="absolute bottom-0 left-0 right-0 p-3" href="/playlists" title={currentPlaylist?.title}>
+						<a
+							class="absolute bottom-0 left-0 right-0 p-3"
+							href="/playlists"
+							title={currentPlaylist?.title}
+						>
 							<div class="flex items-center gap-2 text-white">
 								<Music class="h-4 w-4" />
-								<div class="flex-1 min-w-0">
-									<p class="text-xs font-medium opacity-80">Now Playing</p>
+								<div class="min-w-0 flex-1">
+									<p class="text-xs font-medium opacity-80">{i18n.t('now_playing.title')}</p>
 									<p class="truncate text-sm font-bold">
 										{currentPlaylist?.emoji || '🎵'}
-										{currentPlaylist?.title || 'Loading...'}
+										{currentPlaylist?.title || i18n.t('now_playing.loading')}
 									</p>
 								</div>
 							</div>
@@ -117,10 +128,7 @@
 		</div>
 	{:else}
 		<!-- Collapsed Button -->
-		<div 
-			in:fade={{ duration: 300, delay: 300 }}
-			out:fade={{ duration: 0 }}
-		>
+		<div in:fade={{ duration: 300, delay: 300 }} out:fade={{ duration: 0 }}>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
 					{#snippet child({ props })}
@@ -128,16 +136,16 @@
 							{...props}
 							variant="outline"
 							size="icon"
-							class={cn("h-10 w-10 rounded-full shadow-lg z-10 mx-4")}
+							class={cn('z-10 mx-4 h-10 w-10 rounded-full shadow-lg')}
 							onclick={toggleExpanded}
-							aria-label="Show Now Playing"
+							aria-label={i18n.t('now_playing.show')}
 						>
 							<Disc />
 						</Button>
 					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content side={side === 'right' ? 'left' : 'right'}>
-					<p>Show Now Playing</p>
+					<p>{i18n.t('now_playing.show')}</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		</div>
