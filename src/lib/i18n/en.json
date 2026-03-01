@@ -130,5 +130,11 @@
 		"online": "online",
 		"offline": "offline",
 		"unknown": "unknown"
+  },
+	"now_playing": {
+		"title": "Now Playing",
+		"show": "Show Now Playing",
+		"hide": "Hide Now Playing",
+		"loading": "Loading..."
 	}
 }

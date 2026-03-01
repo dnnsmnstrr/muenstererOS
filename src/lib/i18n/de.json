@@ -132,5 +132,11 @@
 		"online": "online",
 		"offline": "offline",
 		"unknown": "unbekannt"
+  },
+	"now_playing": {
+		"title": "Aktuelle Wiedergabe",
+		"show": "Wiedergabe anzeigen",
+		"hide": "Wiedergabe ausblenden",
+		"loading": "Wird geladen..."
 	}
 }
