@@ -25,6 +25,10 @@
 	]);
 </script>
 
+<svelte:head>
+	<title>{i18n.t('status.title')}</title>
+</svelte:head>
+
 <div class="container mx-auto max-w-2xl p-4">
 	<Heading>{i18n.t('status.title')}</Heading>
 

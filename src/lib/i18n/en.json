@@ -15,6 +15,7 @@
 		"changelog": "Changelog",
 		"api": "API",
 		"contact": "Contact",
+		"status": "Status",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -127,6 +128,13 @@
 		"page_count": "Page Count",
 		"cv_status": "CV Page Status",
 		"online": "online",
-		"offline": "offline"
+		"offline": "offline",
+		"unknown": "unknown"
+  },
+	"now_playing": {
+		"title": "Now Playing",
+		"show": "Show Now Playing",
+		"hide": "Hide Now Playing",
+		"loading": "Loading..."
 	}
 }
