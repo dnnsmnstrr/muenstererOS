@@ -146,6 +146,14 @@ export function renameFile(id: string, newName: string) {
 	);
 }
 
+export function updateFileIcon(id: string, iconName: string) {
+	const icon = deserializeIcon(iconName);
+	if (!icon) return;
+	desktopFiles.update((files) =>
+		files.map((file) => (file.id === id ? { ...file, icon, iconName } : file))
+	);
+}
+
 export function resetDesktopFiles() {
   desktopFiles.set([]);
   if (browser && window?.localStorage) {

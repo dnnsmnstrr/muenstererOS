@@ -10,7 +10,7 @@
   export let href: string | null | undefined;
   export let icon: ComponentType | undefined = undefined;
   
-  let Icon = icon || FileIcon;
+  $: Icon = icon || FileIcon;
 </script>
 
 <div
