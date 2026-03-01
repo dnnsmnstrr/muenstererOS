@@ -15,6 +15,7 @@
 		"changelog": "Changelog",
 		"api": "API",
 		"contact": "Contact",
+		"status": "Status",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -117,5 +118,17 @@
 		"minimize": "Minimize window",
 		"maximize": "Maximize window",
 		"restore": "Restore window"
+	},
+	"status": {
+		"title": "System Status",
+		"metric": "Metric",
+		"value": "Value",
+		"last_deployment": "Last Deployment",
+		"commit_count": "Commit Count",
+		"page_count": "Page Count",
+		"cv_status": "CV Page Status",
+		"online": "online",
+		"offline": "offline",
+		"unknown": "unknown"
 	}
 }

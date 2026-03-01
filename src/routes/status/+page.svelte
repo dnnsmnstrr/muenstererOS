@@ -3,27 +3,35 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { formatDateTime } from '$lib/utils/helper';
 
 	let { data } = $props();
-	const { status } = data;
 
-	const statusItems = [
-		{ label: 'Last Deployment', value: new Date(status.lastDeployment).toLocaleString() },
-		{ label: 'Commit Count', value: status.commitCount },
-		{ label: 'Page Count', value: status.pageCount },
-		{ label: 'CV Page Status', value: status.cvStatus, isBadge: true }
-	];
+	const statusItems = $derived([
+		{
+			label: i18n.t('status.last_deployment'),
+			value: formatDateTime(data.status.lastDeployment)
+		},
+		{ label: i18n.t('status.commit_count'), value: data.status.commitCount },
+		{ label: i18n.t('status.page_count'), value: data.status.pageCount },
+		{ label: i18n.t('status.cv_status'), value: data.status.cvStatus, isBadge: true }
+	]);
 </script>
 
+<svelte:head>
+	<title>{i18n.t('status.title')}</title>
+</svelte:head>
+
 <div class="container mx-auto max-w-2xl p-4">
-	<Heading>System Status</Heading>
+	<Heading>{i18n.t('status.title')}</Heading>
 
 	<Card.Root>
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head>Metric</Table.Head>
-					<Table.Head>Value</Table.Head>
+					<Table.Head>{i18n.t('status.metric')}</Table.Head>
+					<Table.Head>{i18n.t('status.value')}</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -33,7 +41,7 @@
 						<Table.Cell>
 							{#if item.isBadge}
 								<Badge variant={item.value === 'online' ? 'default' : 'destructive'}>
-									{item.value}
+									{i18n.t(`status.${item.value}`)}
 								</Badge>
 							{:else}
 								{item.value}
