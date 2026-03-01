@@ -8,14 +8,20 @@
 
 	let { data } = $props();
 
+	/**
+	 * Optimized status items that update automatically when the language changes.
+	 * Uses i18n.t for translating labels and badge values.
+	 */
 	const statusItems = $derived([
-		{
-			label: i18n.t('status.last_deployment'),
-			value: formatDateTime(data.status.lastDeployment)
-		},
+		{ label: i18n.t('status.last_deployment'), value: formatDateTime(data.status.lastDeployment) },
 		{ label: i18n.t('status.commit_count'), value: data.status.commitCount },
 		{ label: i18n.t('status.page_count'), value: data.status.pageCount },
-		{ label: i18n.t('status.cv_status'), value: data.status.cvStatus, isBadge: true }
+		{
+			label: i18n.t('status.cv_status'),
+			value: data.status.cvStatus,
+			isBadge: true,
+			displayValue: i18n.t(`status.${data.status.cvStatus}`)
+		}
 	]);
 </script>
 
@@ -41,7 +47,7 @@
 						<Table.Cell>
 							{#if item.isBadge}
 								<Badge variant={item.value === 'online' ? 'default' : 'destructive'}>
-									{i18n.t(`status.${item.value}`)}
+									{item.displayValue}
 								</Badge>
 							{:else}
 								{item.value}

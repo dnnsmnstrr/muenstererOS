@@ -125,13 +125,12 @@
 		"title": "Systemstatus",
 		"metric": "Metrik",
 		"value": "Wert",
-		"last_deployment": "Letzte Bereitstellung",
-		"commit_count": "Anzahl der Commits",
+		"last_deployment": "Letztes Deployment",
+		"commit_count": "Commit-Anzahl",
 		"page_count": "Seitenanzahl",
-		"cv_status": "Status der Lebenslauf-Seite",
+		"cv_status": "CV-Status",
 		"online": "online",
-		"offline": "offline",
-		"unknown": "unbekannt"
+		"offline": "offline"
   },
 	"now_playing": {
 		"title": "Aktuelle Wiedergabe",
