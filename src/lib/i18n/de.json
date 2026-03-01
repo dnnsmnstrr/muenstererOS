@@ -15,6 +15,7 @@
 		"changelog": "Änderungsprotokoll",
 		"api": "API",
 		"contact": "Kontakt",
+		"status": "Status",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -120,6 +121,18 @@
 		"maximize": "Fenster maximieren",
 		"restore": "Fenster wiederherstellen"
 	},
+	"status": {
+		"title": "Systemstatus",
+		"metric": "Metrik",
+		"value": "Wert",
+		"last_deployment": "Letzte Bereitstellung",
+		"commit_count": "Anzahl der Commits",
+		"page_count": "Seitenanzahl",
+		"cv_status": "Status der Lebenslauf-Seite",
+		"online": "online",
+		"offline": "offline",
+		"unknown": "unbekannt"
+  },
 	"now_playing": {
 		"title": "Aktuelle Wiedergabe",
 		"show": "Wiedergabe anzeigen",
