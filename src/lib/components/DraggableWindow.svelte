@@ -540,17 +540,6 @@
 								<Settings class="mr-2 h-4 w-4" />
 								Settings
 							</ContextMenu.Item>
-							<ContextMenu.Separator />
-							<ContextMenu.Item
-								onclick={() => {
-									const iconName = prompt('Enter Lucide icon name (PascalCase):');
-									if (iconName) {
-										updateFileIcon(fileItem.id, iconName);
-									}
-								}}
-							>
-								Custom...
-							</ContextMenu.Item>
 						</ContextMenu.SubContent>
 					</ContextMenu.Sub>
 					<ContextMenu.Separator />
