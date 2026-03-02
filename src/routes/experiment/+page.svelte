@@ -138,17 +138,16 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 <!-- Full-screen split-pane layout -->
 <div class="flex h-full flex-col bg-background">
 	<!-- Top toolbar -->
-	<div
-		class="flex flex-col items-center justify-between gap-3 border-b bg-muted/30 px-4 py-2 md:flex-row"
-	>
-		<div class="flex w-full items-center justify-between gap-4 md:w-auto">
-			<h1 class="text-lg font-semibold">⚡ {title}</h1>
-			<div class="flex items-center gap-2 text-sm text-muted-foreground">
-				<span class="h-2 w-2 animate-pulse rounded-full bg-green-500"></span>
-				<span>Live execution</span>
-			</div>
+	<div class="flex flex-row items-center justify-between gap-3 border-b bg-muted/30 px-4 py-2">
+		<div class="flex items-center justify-between gap-2">
+			<h1 class="text-lg font-semibold">
+				{title}
+			</h1>
+			<span
+				class="duration-[2000] mt-1 hidden h-2 w-2 animate-pulse rounded-full bg-green-500 opacity-70 sm:block"
+			></span>
 		</div>
-		<div class="flex w-full items-center justify-between gap-2 md:w-auto">
+		<div class="flex items-center justify-between gap-2">
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Button variant="outline" size="sm" class="gap-2">
@@ -169,39 +168,41 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 					{/each}
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
-			<div class="flex items-center gap-2">
-				<button
-					onclick={resetCode}
-					class="rounded-md bg-muted px-3 py-1 text-sm transition-colors hover:bg-muted/80"
-				>
-					Reset
-				</button>
-				<button
-					onclick={clearOutput}
-					class="rounded-md bg-muted px-3 py-1 text-sm transition-colors hover:bg-muted/80"
-				>
-					Clear Output
-				</button>
-			</div>
 		</div>
 	</div>
 
 	<Tabs.Root bind:value={activeTab} class="flex flex-1 flex-col overflow-hidden">
-		<Tabs.List class="mx-4 mt-2 grid w-[calc(100%-2rem)] grid-cols-2 md:hidden">
-			<Tabs.Trigger value="editor">Editor</Tabs.Trigger>
-			<Tabs.Trigger value="output">Output</Tabs.Trigger>
-		</Tabs.List>
+		<div class="flex items-center justify-between border-b bg-muted/20 pr-4 py-2 md:hidden">
+			<Tabs.List class="mx-4 grid w-[calc(100%-2rem)] grid-cols-2">
+				<Tabs.Trigger value="editor">Editor</Tabs.Trigger>
+				<Tabs.Trigger value="output">Output</Tabs.Trigger>
+			</Tabs.List>
+			<Button
+				onclick={activeTab === 'editor' ? resetCode : clearOutput}
+				variant="secondary"
+			>
+				{activeTab === 'editor' ? 'Reset' : 'Clear'}
+			 </Button>
+		</div>
 
 		<!-- Main content area -->
 		<div class="flex flex-1 overflow-hidden">
 			<!-- Left panel - Code Editor -->
 			<div
-				class="{activeTab === 'editor' ? 'flex' : 'hidden md:flex'} w-full flex-1 flex-col border-r md:w-auto"
+				class="{activeTab === 'editor'
+					? 'flex'
+					: 'hidden md:flex'} w-full flex-1 flex-col border-r md:w-auto"
 			>
-				<div class="flex items-center justify-between border-b bg-muted/20 px-4 py-2">
+				<div class="hidden items-center justify-between border-b bg-muted/20 px-4 py-2 md:flex">
 					<h2 class="text-sm font-medium">Editor</h2>
+					<button
+						onclick={resetCode}
+						class="rounded-md bg-muted px-3 py-1 text-sm transition-colors hover:bg-muted/80"
+					>
+						Reset
+					</button>
 				</div>
-				<div class="relative flex-1">
+				<div class="relative flex-1 pt-2 md:pt-0">
 					<JSEditor
 						bind:this={jsEditor}
 						bind:value={jsCode}
@@ -213,48 +214,56 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 			</div>
 			<!-- Right panel - Output -->
 			<div
-				class="{activeTab === 'output' ? 'flex' : 'hidden md:flex'} flex-1 flex-col md:flex-2 lg:flex-1"
+				class="{activeTab === 'output'
+					? 'flex'
+					: 'hidden md:flex'} md:flex-2 flex-1 flex-col lg:flex-1"
 			>
-				<div class="flex items-center justify-between border-b bg-muted/20 px-4 py-2">
+				<div class="hidden items-center justify-between border-b bg-muted/20 px-4 md:flex">
 					<h2 class="text-sm font-medium">Output</h2>
 					<div class="flex items-center gap-2">
+						<button
+							onclick={clearOutput}
+							class="rounded-md bg-muted px-3 py-1 text-sm transition-colors hover:bg-muted/80"
+						>
+							Clear
+						</button>
 						<Button variant="ghost" size="icon" onclick={executeCode}>
 							<RotateCw class="h-4 w-4" />
 						</Button>
 					</div>
 				</div>
 				<div class="flex-1 overflow-auto bg-muted/10 p-4">
-				{#if executionError}
-					<div class="mb-4 rounded-md border border-destructive/20 bg-destructive/10 p-3">
-						<div class="mb-2 flex items-center gap-2">
-							<span class="font-semibold text-destructive">Error</span>
+					{#if executionError}
+						<div class="mb-4 rounded-md border border-destructive/20 bg-destructive/10 p-3">
+							<div class="mb-2 flex items-center gap-2">
+								<span class="font-semibold text-destructive">Error</span>
+							</div>
+							<pre
+								class="whitespace-pre-wrap font-mono text-sm text-destructive">{executionError}</pre>
 						</div>
-						<pre
-							class="whitespace-pre-wrap font-mono text-sm text-destructive">{executionError}</pre>
-					</div>
-				{/if}
+					{/if}
 
-				{#if executionResult}
-					<div class="mb-4">
-						<div class="mb-2 flex items-center gap-2">
-							<span class="text-sm font-semibold text-muted-foreground">Console Output</span>
+					{#if executionResult}
+						<div class="mb-4">
+							<div class="mb-2 flex items-center gap-2">
+								<span class="text-sm font-semibold text-muted-foreground">Console Output</span>
+							</div>
+							<pre
+								class="whitespace-pre-wrap rounded-md border bg-background p-3 font-mono text-sm">{executionResult}</pre>
 						</div>
-						<pre
-							class="whitespace-pre-wrap rounded-md border bg-background p-3 font-mono text-sm">{executionResult}</pre>
-					</div>
-				{/if}
+					{/if}
 
-				<!-- HTML Output Container -->
-				<div bind:this={outputContainer} class="empty:hidden"></div>
+					<!-- HTML Output Container -->
+					<div bind:this={outputContainer} class="empty:hidden"></div>
 
-				{#if !executionResult && !executionError}
-					<div class="flex h-full items-center justify-center text-center">
-						<div class="text-muted-foreground">
-							<p class="mb-2">Start typing to see live execution</p>
-							<p class="text-sm">Code runs automatically as you type</p>
+					{#if !executionResult && !executionError}
+						<div class="flex h-full items-center justify-center text-center">
+							<div class="text-muted-foreground">
+								<p class="mb-2">Start typing to see live execution</p>
+								<p class="text-sm">Code runs automatically as you type</p>
+							</div>
 						</div>
-					</div>
-				{/if}
+					{/if}
 				</div>
 			</div>
 		</div>
