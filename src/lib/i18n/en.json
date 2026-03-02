@@ -70,7 +70,11 @@
 		"reset_success": "Desktop files reset to default positions",
 		"language": "Language",
 		"english": "English",
-		"german": "German"
+		"german": "German",
+		"texture": "Background Texture",
+		"dots": "Dots",
+		"grid": "Grid",
+		"diagonal": "Diagonal"
 	},
 	"command": {
 		"placeholder": "Type a command or search...",

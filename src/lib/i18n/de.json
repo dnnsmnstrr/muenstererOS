@@ -70,7 +70,11 @@
 		"reset_success": "Desktop-Dateien auf Standardpositionen zurückgesetzt",
 		"language": "Sprache",
 		"english": "Englisch",
-		"german": "Deutsch"
+		"german": "Deutsch",
+		"texture": "Hintergrundstruktur",
+		"dots": "Punkte",
+		"grid": "Gitter",
+		"diagonal": "Diagonal"
 	},
 	"command": {
 		"placeholder": "Befehl eingeben oder suchen...",

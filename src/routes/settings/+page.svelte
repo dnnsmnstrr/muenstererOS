@@ -11,20 +11,19 @@
 </script>
 
 <div class="container">
-	<div class="flex max-w-screen-sm items-center justify-between">
-		<Heading>{i18n.t('settings.title')}</Heading>
-		<Link href="/admin" class="text-muted-foreground no-underline" showIcon>{i18n.t('common.admin')}</Link>
-	</div>
-
 	<Card.Root class="mb-40 max-w-screen-sm">
 		<Card.Header>
-			<Card.Title>{i18n.t('settings.look_and_feel')}</Card.Title>
+			<Card.Title class="flex w-full items-center justify-between">
+				<Heading class="mb-0">{i18n.t('settings.title')}</Heading>
+				<Link href="/admin" class="text-muted-foreground no-underline" showIcon>{i18n.t('common.admin')}</Link>
+			</Card.Title>
 		</Card.Header>
 		<Card.Content>
 			<SettingsForm />
 		</Card.Content>
-		<Card.Footer class="flex flex-col sm:flex-row justify-end items-start sm:items-center gap-4">
-			<Heading depth={4} class="mr-auto text-muted-foreground">{i18n.t('settings.actions')}</Heading>
+		<Card.Footer class="flex flex-col items-start justify-end gap-4 sm:flex-row sm:items-center">
+			<Heading depth={4} class="mr-auto text-muted-foreground">{i18n.t('settings.actions')}</Heading
+			>
 			<Button
 				variant="outline"
 				size="sm"
