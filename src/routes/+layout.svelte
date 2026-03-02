@@ -158,16 +158,16 @@
 
 	let isLightMode = $derived($mode === 'light');
 	let isFullWidth = $derived(page.url.pathname === '/experiment');
-	let bgClass = $derived.by(() => {
+	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
 		switch ($backgroundTexture) {
 			case 'grid':
-				return `bg-[linear-gradient(to_right,${color}_1px,transparent_1px),linear-gradient(to_bottom,${color}_1px,transparent_1px)]`;
+				return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
 			case 'diagonal':
-				return `bg-[repeating-linear-gradient(45deg,${color},${color}_1px,transparent_1px,transparent_10px)]`;
+				return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
 			case 'dots':
 			default:
-				return `bg-[radial-gradient(${color}_1px,transparent_1px)]`;
+				return `background-image: radial-gradient(${color} 1px, transparent 1px); background-size: 16px 16px;`;
 		}
 	});
 
@@ -224,10 +224,10 @@
 
 	<main
 		class={cn(
-			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto [background-size:16px_16px] ${isFullWidth ? 'p-0' : 'pt-4 sm:px-16'} print:max-h-none`,
-			bgClass,
+			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto ${isFullWidth ? 'p-0' : 'pt-4 sm:px-16'} print:max-h-none`,
 			`theme-${$theme}`
 		)}
+		style={bgStyle}
 	>
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<div
