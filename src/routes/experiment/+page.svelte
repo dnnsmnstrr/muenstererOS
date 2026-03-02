@@ -2,8 +2,9 @@
 	import { onMount } from 'svelte';
 	import JSEditor from '$lib/components/JSEditor.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { ChevronDown, Eye, RotateCw, X } from 'lucide-svelte';
+	import { ChevronDown, RotateCw } from 'lucide-svelte';
 	import snippets from './snippets.json';
 
 	const defaultCode = `// Welcome to the Real-Time JavaScript Editor!
@@ -29,7 +30,7 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 	let executionError = $state('');
 	let outputContainer: HTMLDivElement;
 	let jsEditor: JSEditor;
-	let showOutput = $state(false);
+	let activeTab = $state('editor');
 	let debounceTimer: number;
 	const DEBOUNCE_TIME = 500;
 
@@ -185,40 +186,44 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 		</div>
 	</div>
 
-	<!-- Main content area -->
-	<div class="flex flex-1 overflow-hidden">
-		<!-- Left panel - Code Editor -->
-		<div class="{!showOutput ? 'flex' : 'hidden'} flex w-full flex-1 flex-col border-r md:w-auto md:flex-1">
-			<div class="flex items-center justify-between border-b bg-muted/20 px-4 py-2">
-				<h2 class="text-sm font-medium">Editor</h2>
-				<Button variant="ghost" class="md:hidden" size="icon" onclick={() => (showOutput = true)}>
-					<Eye class="h-4 w-4" />
-				</Button>
-			</div>
-			<div class="relative flex-1">
-				<JSEditor
-					bind:this={jsEditor}
-					bind:value={jsCode}
-					language="javascript"
-					height="100%"
-					readonly={false}
-				/>
-			</div>
-		</div>
-		<!-- Right panel - Output -->
-		<div class="{showOutput ? 'flex' : 'hidden'} flex-1 flex-col md:flex md:flex-2 lg:flex-1">
-			<div class="flex items-center justify-between border-b bg-muted/20 px-4 py-2">
-				<h2 class="text-sm font-medium">Output</h2>
-				<div class="flex items-center gap-2">
-					<Button variant="ghost" size="icon" onclick={executeCode}>
-						<RotateCw class="h-4 w-4" />
-					</Button>
-					<Button variant="ghost" size="icon" class="md:hidden" onclick={() => (showOutput = false)}>
-						<X class="h-4 w-4" />
-					</Button>
+	<Tabs.Root bind:value={activeTab} class="flex flex-1 flex-col overflow-hidden">
+		<Tabs.List class="mx-4 mt-2 grid w-[calc(100%-2rem)] grid-cols-2 md:hidden">
+			<Tabs.Trigger value="editor">Editor</Tabs.Trigger>
+			<Tabs.Trigger value="output">Output</Tabs.Trigger>
+		</Tabs.List>
+
+		<!-- Main content area -->
+		<div class="flex flex-1 overflow-hidden">
+			<!-- Left panel - Code Editor -->
+			<div
+				class="{activeTab === 'editor' ? 'flex' : 'hidden md:flex'} w-full flex-1 flex-col border-r md:w-auto"
+			>
+				<div class="flex items-center justify-between border-b bg-muted/20 px-4 py-2">
+					<h2 class="text-sm font-medium">Editor</h2>
+				</div>
+				<div class="relative flex-1">
+					<JSEditor
+						bind:this={jsEditor}
+						bind:value={jsCode}
+						language="javascript"
+						height="100%"
+						readonly={false}
+					/>
 				</div>
 			</div>
-			<div class="flex-1 overflow-auto bg-muted/10 p-4">
+			<!-- Right panel - Output -->
+			<div
+				class="{activeTab === 'output' ? 'flex' : 'hidden md:flex'} flex-1 flex-col md:flex-2 lg:flex-1"
+			>
+				<div class="flex items-center justify-between border-b bg-muted/20 px-4 py-2">
+					<h2 class="text-sm font-medium">Output</h2>
+					<div class="flex items-center gap-2">
+						<Button variant="ghost" size="icon" onclick={executeCode}>
+							<RotateCw class="h-4 w-4" />
+						</Button>
+					</div>
+				</div>
+				<div class="flex-1 overflow-auto bg-muted/10 p-4">
 				{#if executionError}
 					<div class="mb-4 rounded-md border border-destructive/20 bg-destructive/10 p-3">
 						<div class="mb-2 flex items-center gap-2">
@@ -250,9 +255,10 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 						</div>
 					</div>
 				{/if}
+				</div>
 			</div>
 		</div>
-	</div>
+	</Tabs.Root>
 </div>
 
 <style>
