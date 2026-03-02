@@ -6,7 +6,7 @@
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
 	import { page } from '$app/state';
-	import { theme, debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
+	import { theme, debug, debugLog, isCommandActive, resetColors, backgroundTexture } from '$lib/stores/app';
 	import { onMount } from 'svelte';
 	import { Spring, Tween } from 'svelte/motion';
 
@@ -158,11 +158,18 @@
 
 	let isLightMode = $derived($mode === 'light');
 	let isFullWidth = $derived(page.url.pathname === '/experiment');
-	let bgClass = $derived(
-		isLightMode
-			? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
-			: 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
-	);
+	let bgClass = $derived.by(() => {
+		const color = isLightMode ? '#e5e5e5' : '#222222';
+		switch ($backgroundTexture) {
+			case 'grid':
+				return `bg-[linear-gradient(to_right,${color}_1px,transparent_1px),linear-gradient(to_bottom,${color}_1px,transparent_1px)]`;
+			case 'diagonal':
+				return `bg-[repeating-linear-gradient(45deg,${color},${color}_1px,transparent_1px,transparent_10px)]`;
+			case 'dots':
+			default:
+				return `bg-[radial-gradient(${color}_1px,transparent_1px)]`;
+		}
+	});
 
 	const bookmarksRaw: BookmarkItem[] = [
 		{ name: 'Now', href: '/now', icon: Info },

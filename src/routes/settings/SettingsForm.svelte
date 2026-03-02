@@ -5,16 +5,18 @@
 		debug: z.boolean().default(false),
 		mode: z.string().default('system'),
 		language: z.string().default('en'),
-		dvdBounceEnabled: z.boolean().default(false)
+		dvdBounceEnabled: z.boolean().default(false),
+		backgroundTexture: z.string().default('dots')
 	});
 	export type SettingsSchema = typeof settingsSchema;
 </script>
 
 <script lang="ts">
+	import { get } from 'svelte/store';
 	import * as Form from '$lib/components/ui/form';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import { mode, setMode, resetMode } from 'mode-watcher';
-	import { debug, dvdBounceEnabled, theme as themeStore } from '$lib/stores/app';
+	import { debug, dvdBounceEnabled, backgroundTexture, theme as themeStore } from '$lib/stores/app';
 	import { Bug, Check } from 'lucide-svelte';
 	import { Separator } from '$lib/components/ui/separator';
 	import AnimatedToggle from '$lib/components/AnimatedToggle.svelte';
@@ -29,7 +31,13 @@
 
 	let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
 	const form = superForm(
-		data?.form || { debug: false, mode: 'system', language: i18n.lang, dvdBounceEnabled: false },
+		data?.form || {
+			debug: false,
+			mode: 'system',
+			language: i18n.lang,
+			dvdBounceEnabled: false,
+			backgroundTexture: get(backgroundTexture)
+		},
 		{
 			validators: zodClient(settingsSchema)
 		}
@@ -99,6 +107,32 @@
 	<Separator class="my-6" />
 
 	<div class="grid gap-6 md:grid-cols-2">
+		<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
+			<Form.Control>
+				<div class="flex flex-col space-y-2">
+					<h2>{i18n.t('settings.texture')}</h2>
+					<RadioGroup.Root
+						class="flex flex-col space-y-1"
+						value={$backgroundTexture}
+						onValueChange={(v) => ($backgroundTexture = v)}
+					>
+						<div class="flex items-center space-x-3 space-y-0">
+							<RadioGroup.Item value="dots" id="dots" />
+							<Form.Label for="dots" class="font-normal">{i18n.t('settings.dots')}</Form.Label>
+						</div>
+						<div class="flex items-center space-x-3 space-y-0">
+							<RadioGroup.Item value="grid" id="grid" />
+							<Form.Label for="grid" class="font-normal">{i18n.t('settings.grid')}</Form.Label>
+						</div>
+						<div class="flex items-center space-x-3 space-y-0">
+							<RadioGroup.Item value="diagonal" id="diagonal" />
+							<Form.Label for="diagonal" class="font-normal">{i18n.t('settings.diagonal')}</Form.Label>
+						</div>
+					</RadioGroup.Root>
+				</div>
+			</Form.Control>
+		</Form.Field>
+
 		<Form.Field {form} name="language" class="flex flex-col justify-between gap-2">
 			<Form.Control>
 				<div class="flex flex-col space-y-2">
