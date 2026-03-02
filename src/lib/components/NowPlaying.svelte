@@ -53,7 +53,7 @@
 		<div
 			class={cn('flex items-center', side === 'right' ? 'flex-row-reverse' : '')}
 			in:fly={{ x: side === 'right' ? 200 : -200, duration: 300 }}
-			out:fly={{ x: side === 'right' ? 200 : -200, duration: 500, delay: 0 }}
+			out:fly={{ x: side === 'right' ? 200 : -200, duration: 350, delay: 0 }}
 		>
 			<!-- Toggle Button -->
 			<Tooltip.Root>
@@ -128,7 +128,7 @@
 		</div>
 	{:else}
 		<!-- Collapsed Button -->
-		<div in:fade={{ duration: 300, delay: 300 }} out:fade={{ duration: 0 }}>
+		<div in:fade={{ duration: 200, delay: 330 }} out:fade={{ duration: 0 }}>
 			<Tooltip.Root>
 				<Tooltip.Trigger>
 					{#snippet child({ props })}

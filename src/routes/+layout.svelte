@@ -87,6 +87,7 @@
 					cursor.set({ x: event.clientX, y: event.clientY - 100 });
 				} else {
 					cursor.set({ x: innerWidth / 2, y: innerHeight / 3 });
+					setMaskSize(300, 200);
 					changeRadius(300, 500);
 				}
 

@@ -84,12 +84,12 @@
 
 		// Check if click is outside of the expanded area
 		const clickX = e.clientX;
-		const toggleThreshold = 56;
+		const toggleThreshold = 70;
 		const isNearActiveSide = 
 			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
 			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
 
-		if (isNearActiveSide) {
+		if (isNearActiveSide || !nowPlayingExpanded) {
 			nowPlayingExpanded = !nowPlayingExpanded;
 			nowPlayingStore.saveToStorage({
 				y: nowPlayingY,
