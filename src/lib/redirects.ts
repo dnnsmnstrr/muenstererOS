@@ -43,6 +43,11 @@ export const redirects: Redirect[] = [
 		url: links.spotify,
 		aliases: ['s', 'sp', 'spot', 'music', '🎵', '🎧']
 	},
+	{
+		name: 'applemusic',
+		url: links.applemusic,
+		aliases: ['am', 'amusic', '']
+	},
 	{ name: 'statsfm', url: 'https://stats.fm/' + USERNAME, aliases: ['spotistats', '📊'] },
 	// Socials
 	{
