@@ -56,83 +56,7 @@
 </script>
 
 <form>
-	<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2 sm:flex-row">
-		<Form.Control>
-			{#snippet children({ props })}
-				<div class="flex flex-col space-y-2">
-					<h2>{i18n.t('settings.mode')}</h2>
-					<RadioGroup.Root
-						class="flex flex-col space-y-1"
-						value={$mode}
-						onValueChange={handleModeChange}
-						{...props}
-					>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="light" id="light" />
-							<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="dark" id="dark" />
-							<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="" id="system" />
-							<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label>
-						</div>
-					</RadioGroup.Root>
-				</div>
-			{/snippet}
-		</Form.Control>
-		<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
-			<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">{i18n.t('settings.theme')}</h2>
-			{#each themes as theme (theme.name)}
-				{@const isActive = $themeStore === theme.name}
-				<Button
-					variant="outline"
-					size="sm"
-					onclick={() => {
-						$themeStore = theme.name;
-					}}
-					class={cn('justify-start truncate', isActive && 'border-2 border-primary')}
-					style="--theme-primary: hsl({theme.activeColor[$mode ?? 'dark']})"
-				>
-					<span
-						class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]"
-					>
-						{#if isActive}
-							<Check class="h-4 w-4 text-white" />
-						{/if}
-					</span>
-					{theme.label}
-				</Button>
-			{/each}
-		</div>
-	</Form.Field>
-	<Separator class="my-6" />
-
 	<div class="grid gap-6 md:grid-cols-2">
-		<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
-			<Form.Control>
-				{#snippet children({ props })}
-					<div class="flex flex-col space-y-2">
-						<Form.Label>{i18n.t('settings.texture')}</Form.Label>
-						<Select.Root type="single" bind:value={$backgroundTexture} name={props.name}>
-							<Select.Trigger {...props} class="w-full">
-								{$backgroundTexture
-									? i18n.t(`settings.${$backgroundTexture}`)
-									: i18n.t('settings.texture')}
-							</Select.Trigger>
-							<Select.Content>
-								<Select.Item value="dots" label={i18n.t('settings.dots')} />
-								<Select.Item value="grid" label={i18n.t('settings.grid')} />
-								<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
-							</Select.Content>
-						</Select.Root>
-					</div>
-				{/snippet}
-			</Form.Control>
-		</Form.Field>
-
 		<Form.Field {form} name="language" class="flex flex-col justify-between gap-2">
 			<Form.Control>
 				{#snippet children({ props })}
@@ -158,41 +82,10 @@
 			</Form.Control>
 		</Form.Field>
 
-		<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between gap-2">
-			<div class="flex flex-col space-y-2">
-				<h2>{i18n.t('settings.dvd_bounce')}</h2>
-				<div class="flex items-center space-x-3 space-y-0">
-					<Form.Control>
-						{#snippet children({ props })}
-							<Checkbox
-								{...props}
-								checked={$dvdBounceEnabled}
-								onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
-								id="dvd-bounce-checkbox"
-							/>
-							<Form.Label
-								for="dvd-bounce-checkbox"
-								class="font-normal"
-								title={formatDuration(INACTIVITY_TIMEOUT)}
-								onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
-							>
-								{i18n.t('settings.enable_dvd_bounce')}
-							</Form.Label>
-						{/snippet}
-					</Form.Control>
-				</div>
-			</div>
-		</Form.Field>
-	</div>
-
-	<Separator class="my-6" />
-
-	<Form.Field {form} name="debug">
-		<Form.Control>
-			{#snippet children({ props })}
-				<div class="flex flex-row items-start space-x-3 space-y-0">
+		<Form.Field {form} name="debug">
+			<Form.Control>
+				<div class="flex flex-row items-start space-x-3 space-y-0 pt-3">
 					<Checkbox
-						{...props}
 						checked={$debug}
 						onCheckedChange={(value) => ($debug = !!value)}
 						id="debug-checkbox"
@@ -208,11 +101,119 @@
 								<Bug class="w-4" />
 							</AnimatedToggle>
 						</Form.Label>
-						<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
 					</div>
 				</div>
-			{/snippet}
-		</Form.Control>
+				<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
+			</Form.Control>
+		</Form.Field>
+	</div>
+
+	<Separator class="my-6" />
+
+	<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2 sm:flex-row">
+		<div class="flex flex-col space-y-6">
+			<Form.Control>
+				{#snippet children({ props })}
+					<div class="flex flex-col space-y-2">
+						<h2>{i18n.t('settings.mode')}</h2>
+						<RadioGroup.Root
+							class="flex flex-col space-y-1"
+							value={$mode}
+							onValueChange={handleModeChange}
+							{...props}
+						>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="light" id="light" />
+								<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
+							</div>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="dark" id="dark" />
+								<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
+							</div>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="" id="system" />
+								<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label
+								>
+							</div>
+						</RadioGroup.Root>
+					</div>
+				{/snippet}
+			</Form.Control>
+
+			<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between gap-2">
+				<div class="flex flex-col space-y-2">
+					<h2>{i18n.t('settings.dvd_bounce')}</h2>
+					<div class="flex items-center space-x-3 space-y-0">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Checkbox
+									{...props}
+									checked={$dvdBounceEnabled}
+									onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
+									id="dvd-bounce-checkbox"
+								/>
+								<Form.Label
+									for="dvd-bounce-checkbox"
+									class="font-normal"
+									title={formatDuration(INACTIVITY_TIMEOUT)}
+									onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
+								>
+									{i18n.t('settings.enable_dvd_bounce')}
+								</Form.Label>
+							{/snippet}
+						</Form.Control>
+					</div>
+				</div>
+			</Form.Field>
+
+			<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
+				<Form.Control>
+					{#snippet children({ props })}
+						<div class="flex flex-col space-y-2">
+							<Form.Label>{i18n.t('settings.texture')}</Form.Label>
+							<Select.Root type="single" bind:value={$backgroundTexture} name={props.name}>
+								<Select.Trigger {...props} class="w-full">
+									{$backgroundTexture
+										? i18n.t(`settings.${$backgroundTexture}`)
+										: i18n.t('settings.texture')}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="dots" label={i18n.t('settings.dots')} />
+									<Select.Item value="grid" label={i18n.t('settings.grid')} />
+									<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
+								</Select.Content>
+							</Select.Root>
+						</div>
+					{/snippet}
+				</Form.Control>
+			</Form.Field>
+		</div>
+
+		<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
+			<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">{i18n.t('settings.theme')}</h2>
+			{#each themes as theme (theme.name)}
+				{@const isActive = $themeStore === theme.name}
+				<Button
+					variant="outline"
+					size="sm"
+					onclick={() => {
+						$themeStore = theme.name;
+					}}
+					class={cn('justify-start truncate', isActive && 'border-2 border-primary')}
+					style="--theme-primary: hsl({theme.activeColor[$mode ?? 'dark']})"
+				>
+					<span
+						class="mr-1 flex h-5 w-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]"
+					>
+						{#if isActive}
+							<Check class="h-4 w-4 text-white" />
+						{/if}
+					</span>
+					{theme.label}
+				</Button>
+			{/each}
+		</div>
 	</Form.Field>
+
 	<Separator class="mt-6" />
 </form>

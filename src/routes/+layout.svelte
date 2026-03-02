@@ -93,9 +93,9 @@
 				break;
 			case '/settings':
 				// focus on top area
-				cursor.set({ x: innerWidth / 2, y: innerHeight / 4 });
-				setMaskSize(400, 200, 800);
-				changeRadius(800, 1000);
+				cursor.set({ x: innerWidth / 2.7, y: innerHeight / 4 });
+				setMaskSize(300, 600, 800);
+				changeRadius(200, 600);
 				break;
 			case '/about':
 				// focus on the top left area
