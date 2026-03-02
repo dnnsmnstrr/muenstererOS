@@ -10,7 +10,10 @@
 		ListMusic,
 		Gavel,
 		TabletSmartphone,
+		Icon,
 	} from 'lucide-svelte';
+	import { elephant, elephantFace } from '@lucide/lab';
+
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import BatteryIndicator from '$lib/components/BatteryIndicator.svelte';
 	import Menu, { type BookmarkItem } from './Menu.svelte';
@@ -26,6 +29,7 @@
 	}
 
 	let { pages = [] }: Props = $props();
+
 	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = $derived([
 		[
 			{ name: i18n.t('common.home'), href: '/', icon: Home },
@@ -39,8 +43,8 @@
 			name: i18n.t('header.social'),
 			sub: [
 				{ name: 'Instagram', href: links.instagram, icon: Instagram },
-				{ name: 'X / Twitter', href: links.twitter, icon: X },
-				{ name: 'Mastodon', href: links.mastodon }
+				{ name: 'Mastodon', href: links.mastodon },
+				{ name: 'Twitter', href: links.twitter, icon: X },
 			]
 		},
 		[
