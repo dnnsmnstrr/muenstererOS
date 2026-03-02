@@ -15,6 +15,7 @@
 	import { get } from 'svelte/store';
 	import * as Form from '$lib/components/ui/form';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
+	import * as Select from '$lib/components/ui/select/index.js';
 	import { mode, setMode, resetMode } from 'mode-watcher';
 	import { debug, dvdBounceEnabled, backgroundTexture, theme as themeStore } from '$lib/stores/app';
 	import { Bug, Check } from 'lucide-svelte';
@@ -57,27 +58,30 @@
 <form>
 	<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2 sm:flex-row">
 		<Form.Control>
-			<div class="flex flex-col space-y-2">
-				<h2>{i18n.t('settings.mode')}</h2>
-				<RadioGroup.Root
-					class="flex flex-col space-y-1"
-					value={$mode}
-					onValueChange={handleModeChange}
-				>
-					<div class="flex items-center space-x-3 space-y-0">
-						<RadioGroup.Item value="light" id="light" />
-						<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
-					</div>
-					<div class="flex items-center space-x-3 space-y-0">
-						<RadioGroup.Item value="dark" id="dark" />
-						<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
-					</div>
-					<div class="flex items-center space-x-3 space-y-0">
-						<RadioGroup.Item value="" id="system" />
-						<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label>
-					</div>
-				</RadioGroup.Root>
-			</div>
+			{#snippet children({ props })}
+				<div class="flex flex-col space-y-2">
+					<h2>{i18n.t('settings.mode')}</h2>
+					<RadioGroup.Root
+						class="flex flex-col space-y-1"
+						value={$mode}
+						onValueChange={handleModeChange}
+						{...props}
+					>
+						<div class="flex items-center space-x-3 space-y-0">
+							<RadioGroup.Item value="light" id="light" />
+							<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
+						</div>
+						<div class="flex items-center space-x-3 space-y-0">
+							<RadioGroup.Item value="dark" id="dark" />
+							<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
+						</div>
+						<div class="flex items-center space-x-3 space-y-0">
+							<RadioGroup.Item value="" id="system" />
+							<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label>
+						</div>
+					</RadioGroup.Root>
+				</div>
+			{/snippet}
 		</Form.Control>
 		<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
 			<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">{i18n.t('settings.theme')}</h2>
@@ -109,49 +113,48 @@
 	<div class="grid gap-6 md:grid-cols-2">
 		<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
 			<Form.Control>
-				<div class="flex flex-col space-y-2">
-					<h2>{i18n.t('settings.texture')}</h2>
-					<RadioGroup.Root
-						class="flex flex-col space-y-1"
-						value={$backgroundTexture}
-						onValueChange={(v) => ($backgroundTexture = v)}
-					>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="dots" id="dots" />
-							<Form.Label for="dots" class="font-normal">{i18n.t('settings.dots')}</Form.Label>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="grid" id="grid" />
-							<Form.Label for="grid" class="font-normal">{i18n.t('settings.grid')}</Form.Label>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="diagonal" id="diagonal" />
-							<Form.Label for="diagonal" class="font-normal">{i18n.t('settings.diagonal')}</Form.Label>
-						</div>
-					</RadioGroup.Root>
-				</div>
+				{#snippet children({ props })}
+					<div class="flex flex-col space-y-2">
+						<Form.Label>{i18n.t('settings.texture')}</Form.Label>
+						<Select.Root type="single" bind:value={$backgroundTexture} name={props.name}>
+							<Select.Trigger {...props} class="w-full">
+								{$backgroundTexture
+									? i18n.t(`settings.${$backgroundTexture}`)
+									: i18n.t('settings.texture')}
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="dots" label={i18n.t('settings.dots')} />
+								<Select.Item value="grid" label={i18n.t('settings.grid')} />
+								<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
+							</Select.Content>
+						</Select.Root>
+					</div>
+				{/snippet}
 			</Form.Control>
 		</Form.Field>
 
 		<Form.Field {form} name="language" class="flex flex-col justify-between gap-2">
 			<Form.Control>
-				<div class="flex flex-col space-y-2">
-					<h2>{i18n.t('settings.language')}</h2>
-					<RadioGroup.Root
-						class="flex flex-col space-y-1"
-						value={i18n.lang}
-						onValueChange={(v) => i18n.setLanguage(v as any)}
-					>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="en" id="en" />
-							<Form.Label for="en" class="font-normal">{i18n.t('settings.english')}</Form.Label>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="de" id="de" />
-							<Form.Label for="de" class="font-normal">{i18n.t('settings.german')}</Form.Label>
-						</div>
-					</RadioGroup.Root>
-				</div>
+				{#snippet children({ props })}
+					<div class="flex flex-col space-y-2">
+						<h2>{i18n.t('settings.language')}</h2>
+						<RadioGroup.Root
+							class="flex flex-col space-y-1"
+							value={i18n.lang}
+							onValueChange={(v) => i18n.setLanguage(v as any)}
+							{...props}
+						>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="en" id="en" />
+								<Form.Label for="en" class="font-normal">{i18n.t('settings.english')}</Form.Label>
+							</div>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="de" id="de" />
+								<Form.Label for="de" class="font-normal">{i18n.t('settings.german')}</Form.Label>
+							</div>
+						</RadioGroup.Root>
+					</div>
+				{/snippet}
 			</Form.Control>
 		</Form.Field>
 
@@ -160,19 +163,22 @@
 				<h2>{i18n.t('settings.dvd_bounce')}</h2>
 				<div class="flex items-center space-x-3 space-y-0">
 					<Form.Control>
-						<Checkbox
-							checked={$dvdBounceEnabled}
-							onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
-							id="dvd-bounce-checkbox"
-						/>
-						<Form.Label
-							for="dvd-bounce-checkbox"
-							class="font-normal"
-							title={formatDuration(INACTIVITY_TIMEOUT)}
-							onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
-						>
-							{i18n.t('settings.enable_dvd_bounce')}
-						</Form.Label>
+						{#snippet children({ props })}
+							<Checkbox
+								{...props}
+								checked={$dvdBounceEnabled}
+								onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
+								id="dvd-bounce-checkbox"
+							/>
+							<Form.Label
+								for="dvd-bounce-checkbox"
+								class="font-normal"
+								title={formatDuration(INACTIVITY_TIMEOUT)}
+								onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
+							>
+								{i18n.t('settings.enable_dvd_bounce')}
+							</Form.Label>
+						{/snippet}
 					</Form.Control>
 				</div>
 			</div>
@@ -183,26 +189,29 @@
 
 	<Form.Field {form} name="debug">
 		<Form.Control>
-			<div class="flex flex-row items-start space-x-3 space-y-0">
-				<Checkbox
-					checked={$debug}
-					onCheckedChange={(value) => ($debug = !!value)}
-					id="debug-checkbox"
-				/>
-				<div class="space-y-1 leading-none">
-					<Form.Label
-						class="-mt-0.5 flex items-center gap-2"
-						for="debug-checkbox"
-						onclick={() => ($debug = !$debug)}
-					>
-						<span class="pb-1.5">{i18n.t('settings.debug_mode')}</span>
-						<AnimatedToggle visible={$debug}>
-							<Bug class="w-4" />
-						</AnimatedToggle>
-					</Form.Label>
-					<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
+			{#snippet children({ props })}
+				<div class="flex flex-row items-start space-x-3 space-y-0">
+					<Checkbox
+						{...props}
+						checked={$debug}
+						onCheckedChange={(value) => ($debug = !!value)}
+						id="debug-checkbox"
+					/>
+					<div class="space-y-1 leading-none">
+						<Form.Label
+							class="-mt-0.5 flex items-center gap-2"
+							for="debug-checkbox"
+							onclick={() => ($debug = !$debug)}
+						>
+							<span class="pb-1.5">{i18n.t('settings.debug_mode')}</span>
+							<AnimatedToggle visible={$debug}>
+								<Bug class="w-4" />
+							</AnimatedToggle>
+						</Form.Label>
+						<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
+					</div>
 				</div>
-			</div>
+			{/snippet}
 		</Form.Control>
 	</Form.Field>
 	<Separator class="mt-6" />
