@@ -35,7 +35,6 @@
 
 	const minHeight = 300;
 	const minWidth = 200;
-	const fileSize = 60;
 	const breakpoint = 640;
 
 	let {
@@ -48,9 +47,10 @@
 		class?: string;
 	} = $props();
 
+	let fileSize = $derived(width < breakpoint ? 50 : 60);
 	let dragging = $state(false);
 	let resizing = $state(false);
-	let defaultWidth = $derived(width < 640 ? minWidth : 400);
+	let defaultWidth = $derived(width < breakpoint ? minWidth : 400);
 	let DraggableWidth = $state(400);
 	let DraggableHeight = $state(minHeight);
 	let DraggableX = $state(-1);
