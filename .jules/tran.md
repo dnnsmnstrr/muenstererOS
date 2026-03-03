@@ -22,3 +22,9 @@
 **Learning:** Automated code reviews will flag accidental inclusion of log files (e.g., dev_server.log) or environment files (.env) even if they are only in the working directory but not intended for commit.
 
 **Action:** Explicitly delete any temporary files created during verification or local testing before calling the submit tool.
+
+## 2026-03-03 - [Reactive i18n with Svelte 5 $state]
+
+**Learning:** The project's i18n service uses Svelte 5's $state for the current language. Components that import this service (e.g., i18n.svelte.ts) automatically become reactive to language changes when they use i18n.t(). No manual subscription or onDestroy logic is needed.
+
+**Action:** When localizing Svelte 5 components, simply import the i18n service and use i18n.t('key') directly in the markup or in $derived runes for clean, reactive translations.

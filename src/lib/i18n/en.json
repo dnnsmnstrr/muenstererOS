@@ -140,5 +140,21 @@
 		"show": "Show Now Playing",
 		"hide": "Hide Now Playing",
 		"loading": "Loading..."
+	},
+	"playlists": {
+		"title": "My Playlists",
+		"feeling_lucky": "I'm feeling lucky",
+		"search_placeholder": "Search playlists...",
+		"no_results": "No matching playlists found.",
+		"spotify_profile_prefix": "Check out my",
+		"spotify_profile_link": "Spotify profile",
+		"spotify_profile_suffix": "for more playlists.",
+		"season_playlists": "Season Playlists",
+		"other_playlists": "Other Playlists",
+		"show_gifs": "Show GIFs",
+		"top_artists": "Top Artists",
+		"top_artists_description": "These were my top artists on Spotify over the years",
+		"preview_title": "Playlist Preview",
+		"alt_gif": "Playlist GIF"
 	}
 }
