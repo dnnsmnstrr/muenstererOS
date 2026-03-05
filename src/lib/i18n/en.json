@@ -169,6 +169,8 @@
 		"zoom": "Zoom",
 		"until": "until",
 		"no_events": "No events found",
-		"loading": "Loading timeline..."
+		"loading": "Loading timeline...",
+		"show_future": "Show Future",
+		"life_expectancy": "Life Expectancy"
 	}
 }

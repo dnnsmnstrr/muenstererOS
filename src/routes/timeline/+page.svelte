@@ -17,7 +17,9 @@
 	let resolution = $state<'week' | 'month'>('week');
 	let zoom = $state(12);
 	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
-	const targetAge = 80;
+	let selectedUnit = $state<(typeof gridUnits)[0] | null>(null);
+	let showFuture = $state(false);
+	let targetAge = $state(80);
 
 	const birthDate = $derived(new Date(BIRTHDATE));
 	const now = new Date();
@@ -35,6 +37,9 @@
 			}
 
 			const isPast = unitDate < now;
+
+			if (!showFuture && !isPast) continue;
+
 			const nextUnitDate = new Date(unitDate);
 			if (resolution === 'week') {
 				nextUnitDate.setDate(unitDate.getDate() + 7);
@@ -135,6 +140,26 @@
 						class="h-1.5 w-32 cursor-pointer appearance-none rounded-lg bg-secondary accent-primary"
 					/>
 				</div>
+
+				<div class="flex items-center gap-3">
+					<label class="flex cursor-pointer items-center gap-2 text-sm font-semibold">
+						<input type="checkbox" bind:checked={showFuture} class="rounded border-gray-300" />
+						{i18n.t('timeline.show_future')}
+					</label>
+				</div>
+
+				{#if showFuture}
+					<div class="flex items-center gap-3">
+						<span class="text-sm font-semibold">{i18n.t('timeline.life_expectancy')}:</span>
+						<input
+							type="number"
+							bind:value={targetAge}
+							min="1"
+							max="150"
+							class="w-16 rounded border bg-background px-2 py-1 text-sm"
+						/>
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</div>
@@ -223,26 +248,32 @@
 	</div>
 {:else}
 	<!-- Grid view -->
-	<div class="container mx-auto px-4 pb-20">
+	<div class="container mx-auto overflow-x-hidden px-4 pb-20">
 		<div
 			class="grid"
-			style="grid-template-columns: repeat(auto-fill, {zoom}px); gap: {zoom > 8 ? 2 : 1}px;"
+			style="grid-template-columns: repeat(auto-fill, {zoom}px); gap: {zoom > 8 ? 2 : 1}px; width: 100%;"
 		>
 			{#each gridUnits as unit}
 				{@const primaryEvent = unit.events[0]}
+				{@const isSelected = selectedUnit === unit}
 				<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 				<div
 					role="presentation"
 					onmouseover={() => (hoveredUnit = unit)}
 					onmouseleave={() => (hoveredUnit = null)}
-					onclick={() => (hoveredUnit = hoveredUnit === unit ? null : unit)}
+					onclick={() => {
+						hoveredUnit = unit;
+						selectedUnit = unit;
+					}}
 					class="aspect-square rounded-[1px] border"
 					style="
                         width: {zoom}px;
                         height: {zoom}px;
                         background-color: {primaryEvent?.color || 'transparent'};
                         opacity: {unit.isPast ? 1 : 0.2};
-                        border-color: {primaryEvent ? 'rgba(0,0,0,0.2)' : 'var(--border)'};
+                        border-color: {isSelected ? 'var(--primary)' : primaryEvent ? 'rgba(0,0,0,0.2)' : 'var(--border)'};
+                        box-shadow: {isSelected ? '0 0 0 2px var(--background), 0 0 0 4px var(--primary)' : 'none'};
+                        z-index: {isSelected ? 10 : 1};
                         {zoom < 6 ? 'border-width: 0;' : ''}
                     "
 				></div>
@@ -250,14 +281,15 @@
 		</div>
 	</div>
 
-	{#if hoveredUnit}
+	{#if hoveredUnit || selectedUnit}
+		{@const displayUnit = hoveredUnit || selectedUnit}
 		<div
 			class="pointer-events-none fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
 		>
-			<div class="font-bold">{formatDate(hoveredUnit.date.toISOString())}</div>
-			{#if hoveredUnit.events.length > 0}
+			<div class="font-bold">{formatDate(displayUnit!.date.toISOString())}</div>
+			{#if displayUnit!.events.length > 0}
 				<div class="mt-2 flex flex-col gap-1">
-					{#each hoveredUnit.events as event}
+					{#each displayUnit!.events as event}
 						<div class="flex items-center gap-2">
 							<div class="h-2 w-2 rounded-full" style="background-color: {event.color}"></div>
 							<div class="text-xs">{event.name}</div>

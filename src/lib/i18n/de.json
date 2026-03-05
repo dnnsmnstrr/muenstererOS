@@ -170,6 +170,8 @@
 		"zoom": "Zoom",
 		"until": "bis",
 		"no_events": "Keine Ereignisse gefunden",
-		"loading": "Zeitstrahl wird geladen..."
+		"loading": "Zeitstrahl wird geladen...",
+		"show_future": "Zukunft anzeigen",
+		"life_expectancy": "Lebenserwartung"
 	}
 }
