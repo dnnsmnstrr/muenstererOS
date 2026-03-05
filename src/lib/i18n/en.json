@@ -13,6 +13,7 @@
 		"redirects": "Redirects",
 		"terminal": "Terminal",
 		"changelog": "Changelog",
+		"playlist": "Playlist",
 		"api": "API",
 		"contact": "Contact",
 		"quit": "Quit",
@@ -117,5 +118,22 @@
 		"minimize": "Minimize window",
 		"maximize": "Maximize window",
 		"restore": "Restore window"
+	},
+	"now": {
+		"title": "What I'm doing Now",
+		"last_updated": "Last updated:",
+		"version_from": "Version from:",
+		"status": "Status",
+		"location": "Location",
+		"plans": "Plans",
+		"no_playlist": "No playlist available",
+		"edit_latest": "Edit latest",
+		"edit": "Edit",
+		"versions": "Versions",
+		"version_history": "Version History",
+		"changes_one": "1 change",
+		"changes_many": "{count} changes",
+		"version_marker": "Version from {date}",
+		"load": "Load"
 	}
 }

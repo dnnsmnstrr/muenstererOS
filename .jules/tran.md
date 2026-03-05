@@ -16,3 +16,9 @@
 **Learning:** Reading Svelte 5 `$state` from a regular `.ts` file is supported and does not strictly require the `.svelte.ts` extension unless you are defining state or using other runes that require the Svelte compiler to transform the file. This avoids potential module resolution issues with some tools that expect standard extensions.
 
 **Action:** Prefer `.ts` for simple utilities that only read state, but use `.svelte.ts` if defining reactive state or using `$derived` / `$effect` in the module.
+
+## 2025-05-14 - [Manual Pluralization and ARIA Localization]
+
+**Learning:** The current i18n system supports interpolation but lacks native pluralization logic. Additionally, accessibility labels (aria-label) and titles are often overlooked during localization but are critical for an international experience.
+
+**Action:** Handle pluralization manually in components by selecting different translation keys based on counts (e.g., `key_one`, `key_many`). Always search for and localize `aria-label`, `title`, and other user-facing accessibility strings.
