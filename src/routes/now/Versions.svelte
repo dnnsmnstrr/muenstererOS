@@ -7,6 +7,9 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button';
 	import { GalleryVertical } from 'lucide-svelte';
+	// 🌐 Localization: use i18n for text and helper for locale-aware date formatting
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { formatDate } from '$lib/utils/helper';
 
 	export let versions: Array<{ url: string; timestamp: string; change_status: { total: number } }> = [];
 	export let versionPositions: number[] = [];
@@ -19,26 +22,24 @@
 	<DialogTrigger>
 		<Button variant="ghost">
 			<GalleryVertical class="h-5 w-5" />
-			Versions
+			{i18n.t('now.versions')}
 		</Button>
 	</DialogTrigger>
 	<DialogContent class="w-11/12 max-w-2xl p-6">
 		<div class="mb-4 flex items-center">
-			<h2 class="text-2xl font-bold">Version History</h2>
+			<h2 class="text-2xl font-bold">{i18n.t('now.version_history')}</h2>
 		</div>
 		<div class="block sm:hidden max-h-80 overflow-y-auto">
 			<ul class="space-y-2">
 				{#each versions as version}
 					<li class="flex items-center justify-between rounded bg-gray-100 dark:bg-gray-800 px-3 py-2">
 						<span>
-							{new Date(version.timestamp).toLocaleDateString('en-US', {
-								year: 'numeric',
-								month: '2-digit',
-								day: '2-digit'
-							})}
+							{formatDate(version.timestamp)}
                             {#if version.change_status?.total > 0}
                                 <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                    ({version?.change_status.total} changes)
+                                    ({version.change_status.total === 1
+										? i18n.t('now.changes_one')
+										: i18n.t('now.changes_many', { count: version.change_status.total.toString() })})
                                 </span>
                             {/if}
 						</span>
@@ -50,7 +51,7 @@
 								showModal = false;
 							}}
 						>
-							Load
+							{i18n.t('now.load')}
 						</Button>
 					</li>
 				{/each}
@@ -64,7 +65,7 @@
 						style="left: {versionPositions[index]}%"
 					>
 						<button
-							aria-label="Version marker"
+							aria-label={i18n.t('now.version_marker', { date: formatDate(version.timestamp) })}
 							class="absolute left-1/2 h-4 w-1"
 							onclick={() => {
 								loadVersion(version.url);
@@ -73,11 +74,7 @@
 						></button>
 					</Tooltip.Trigger>
 					<Tooltip.Content side="bottom">
-						{new Date(version.timestamp).toLocaleDateString('en-US', {
-							year: 'numeric',
-							month: '2-digit',
-							day: '2-digit'
-						})}
+						{formatDate(version.timestamp)}
 					</Tooltip.Content>
 				</Tooltip.Root>
 			{/each}

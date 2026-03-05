@@ -17,6 +17,12 @@
 
 **Action:** Prefer `.ts` for simple utilities that only read state, but use `.svelte.ts` if defining reactive state or using `$derived` / `$effect` in the module.
 
+## 2025-05-14 - [Manual Pluralization and ARIA Localization]
+
+**Learning:** The current i18n system supports interpolation but lacks native pluralization logic. Additionally, accessibility labels (aria-label) and titles are often overlooked during localization but are critical for an international experience.
+
+**Action:** Handle pluralization manually in components by selecting different translation keys based on counts (e.g., `key_one`, `key_many`). Always search for and localize `aria-label`, `title`, and other user-facing accessibility strings.
+
 ## 2025-05-15 - Clean Workspace Before Submission
 
 **Learning:** Automated code reviews will flag accidental inclusion of log files (e.g., dev_server.log) or environment files (.env) even if they are only in the working directory but not intended for commit.

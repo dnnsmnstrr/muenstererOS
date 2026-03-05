@@ -13,6 +13,7 @@
 		"redirects": "Weiterleitungen",
 		"terminal": "Terminal",
 		"changelog": "Änderungsprotokoll",
+		"playlist": "Playlist",
 		"api": "API",
 		"contact": "Kontakt",
 		"status": "Status",
@@ -125,7 +126,24 @@
 		"maximize": "Fenster maximieren",
 		"restore": "Fenster wiederherstellen"
 	},
-	"status": {
+	"now": {
+		"title": "Now - Was ich gerade mache",
+		"last_updated": "Zuletzt aktualisiert:",
+		"version_from": "Version vom:",
+		"status": "Status",
+		"location": "Standort",
+		"plans": "Pläne",
+		"no_playlist": "Keine Playlist verfügbar",
+		"edit_latest": "Neueste bearbeiten",
+		"edit": "Bearbeiten",
+		"versions": "Versionen",
+		"version_history": "Versionsverlauf",
+		"changes_one": "1 Änderung",
+		"changes_many": "{count} Änderungen",
+		"version_marker": "Version vom {date}",
+		"load": "Laden"
+  },
+  "status": {
 		"title": "Systemstatus",
 		"metric": "Metrik",
 		"value": "Wert",

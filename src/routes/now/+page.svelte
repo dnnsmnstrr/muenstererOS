@@ -12,6 +12,9 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	// 🌐 Localization: use i18n for text and helper for locale-aware date formatting
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { formatDate } from '$lib/utils/helper';
 
 	let { data }: PageProps = $props();
 
@@ -86,22 +89,18 @@
 
 <div class="container mx-auto p-4">
 	<Heading class="mb-8 flex w-full items-center justify-between text-3xl">
-		What I'm doing now
+		{i18n.t('now.title')}
 		<div class="flex items-center">
 			<Link
 				href={nowData.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
 				class="block text-sm font-normal"
 			>
 				{#if showingVersion}
-					Version from:
+					{i18n.t('now.version_from')}
 				{:else}
-					Last updated:
+					{i18n.t('now.last_updated')}
 				{/if}
-				{new Date(nowData.updatedAt).toLocaleDateString('en-US', {
-					year: 'numeric',
-					month: '2-digit',
-					day: '2-digit'
-				})}
+				{formatDate(nowData.updatedAt)}
 			</Link>
 			{#if showingVersion}
 				<Button
@@ -121,7 +120,7 @@
 	<div class="grid grid-cols-12 grid-rows-5 gap-4 md:grid-rows-3">
 		<Card class="col-span-12 col-start-1 row-span-1 row-start-1 p-4 sm:col-span-8">
 			<Heading depth={2} class="mb-4 text-xl">
-				<InfoIcon class="mb-1 mr-2 inline-block" /> Status
+				<InfoIcon class="mb-1 mr-2 inline-block" /> {i18n.t('now.status')}
 			</Heading>
 			<MdSvelte source={nowData.status} {renderers} />
 		</Card>
@@ -129,7 +128,7 @@
 		<Card class="col-span-6 row-span-1 row-start-2 p-4 sm:col-span-4 lg:col-span-3 lg:col-start-6">
 			<Heading depth={2} class="mb-4 text-xl">
 				<MapPin class="mr-2 inline-block" />
-				<Link href="/where">Location</Link>
+				<Link href="/where">{i18n.t('now.location')}</Link>
 			</Heading>
 			<p>{nowData.location}</p>
 		</Card>
@@ -137,7 +136,7 @@
 		<Card class="col-span-6 row-span-1 p-4 sm:col-span-4 lg:row-span-2 lg:row-start-1">
 			<Heading depth={2} class="mb-2 text-xl">
 				<Music class="mr-2 inline-block" />
-				<Link href="/playlists">Playlist</Link>
+				<Link href="/playlists">{i18n.t('common.playlist')}</Link>
 			</Heading>
 			{#if nowData.playlist}
 				<div class="flex flex-col items-center space-y-2">
@@ -153,13 +152,13 @@
 					</Link>
 				</div>
 			{:else}
-				<p class="text-muted-foreground">No playlist available</p>
+				<p class="text-muted-foreground">{i18n.t('now.no_playlist')}</p>
 			{/if}
 		</Card>
 
 		<Card class="col-span-12 row-span-1 p-4 sm:col-span-8 sm:row-span-1 lg:col-start-6">
 			<Heading depth={2} class="mb-4 flex items-center text-xl">
-				<Calendar class="mr-2 inline-block" /> Plans
+				<Calendar class="mr-2 inline-block" /> {i18n.t('now.plans')}
 			</Heading>
 			<MdSvelte source={plans} {renderers} />
 		</Card>
@@ -169,18 +168,19 @@
 		>
 			<Heading depth={2} class="mb-4 flex items-center text-xl">
 				<Code class="mr-2 inline-block" />
-				<Link href="/projects">Projects</Link>
+				<Link href="/projects">{i18n.t('common.projects')}</Link>
 			</Heading>
 			<MdSvelte source={projects} {renderers} />
 		</Card>
 	</div>
 
+	<!-- 🌐 Localization Optimization: Use localized labels and components for better accessibility and multi-language support -->
 	<div class="mt-4 flex items-center justify-center gap-2">
 		<Versions versions={nowData.versions} {versionPositions} {loadVersion} />
 		{#if showEditButton}
-			<Button class="" variant="ghost" aria-label="Edit" href="/admin/now">
+			<Button class="" variant="ghost" aria-label={i18n.t('now.edit')} href="/admin/now">
 				<Pencil class="h-5 w-5" />
-				<span>Edit latest </span>
+				<span>{i18n.t('now.edit_latest')}</span>
 			</Button>
 		{/if}
 	</div>
