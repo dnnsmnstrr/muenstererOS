@@ -144,7 +144,7 @@
 	</div>
 {:else if error}
 	<div class="py-20 text-center">
-		<p class="text-lg text-red-500">Error: {error}</p>
+		<p class="text-lg text-red-500">{i18n.t('common.error')}: {error}</p>
 	</div>
 {:else if parsedEvents.length === 0}
 	<div class="py-20 text-center">
@@ -175,7 +175,13 @@
 
 							<div class="mb-3 text-sm text-muted-foreground">
 								<div class="mb-1 flex items-center justify-center space-x-1">
-									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<svg
+										aria-hidden="true"
+										class="h-4 w-4"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -197,7 +203,13 @@
 								<div
 									class="mb-3 flex items-center justify-center space-x-1 text-sm text-muted-foreground"
 								>
-									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<svg
+										aria-hidden="true"
+										class="h-4 w-4"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"

@@ -16,6 +16,7 @@
 		"api": "API",
 		"contact": "Kontakt",
 		"status": "Status",
+		"error": "Fehler",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -142,6 +143,22 @@
 		"hide": "Wiedergabe ausblenden",
 		"loading": "Wird geladen..."
 	},
+	"uses": {
+		"search": "Suche...",
+		"no_results": "Keine Ergebnisse.",
+		"all_categories": "Alle Kategorien",
+		"results_found": "{count} Ergebnisse.",
+		"reset_filters": "Filter zurücksetzen",
+		"description": "Dinge, die ich jeden Tag benutze.",
+		"more_info": "Mehr Infos in meinem"
+  },
+	"timeline": {
+		"title": "Lebens-Timeline",
+		"description": "Interaktive Timeline meines Lebens",
+		"subheading": "Eine chronologische Ansicht meines Lebens",
+		"until": "bis",
+		"no_events": "Keine Ereignisse gefunden"
+  },
 	"playlists": {
 		"title": "Meine Playlists",
 		"feeling_lucky": "Auf gut Glück",
