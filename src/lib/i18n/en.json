@@ -173,6 +173,7 @@
 		"loading": "Loading timeline...",
 		"show_future": "Show Future",
 		"show_birthdays": "Show Birthdays",
+		"birthday": "Birthday",
 		"life_expectancy": "Life Expectancy"
 	}
 }

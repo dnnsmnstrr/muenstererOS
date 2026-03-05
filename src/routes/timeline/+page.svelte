@@ -292,8 +292,8 @@
 							class="absolute inset-0 flex items-center justify-center pointer-events-none"
 						>
 							<div
-								class="rounded-full bg-primary"
-								style="width: {Math.max(2, zoom / 4)}px; height: {Math.max(2, zoom / 4)}px;"
+								class="rounded-full bg-white shadow-sm"
+								style="width: {Math.max(3, zoom / 3)}px; height: {Math.max(3, zoom / 3)}px;"
 							></div>
 						</div>
 					{/if}
@@ -308,6 +308,12 @@
 			class="pointer-events-none fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
 		>
 			<div class="font-bold">{formatDate(displayUnit!.date.toISOString())}</div>
+			{#if displayUnit!.isBirthday}
+				<div class="mt-1 flex items-center gap-2">
+					<div class="h-2 w-2 rounded-full bg-primary"></div>
+					<div class="text-xs font-semibold">{i18n.t('timeline.birthday')}</div>
+				</div>
+			{/if}
 			{#if displayUnit!.events.length > 0}
 				<div class="mt-2 flex flex-col gap-1">
 					{#each displayUnit!.events as event}
