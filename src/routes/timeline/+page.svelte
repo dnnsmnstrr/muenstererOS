@@ -16,6 +16,7 @@
 	let viewMode = $state<'timeline' | 'grid'>('timeline');
 	let resolution = $state<'week' | 'month'>('week');
 	let zoom = $state(12);
+	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
 	const targetAge = 80;
 
 	const birthDate = $derived(new Date(BIRTHDATE));
@@ -144,7 +145,7 @@
 	</div>
 {:else if error}
 	<div class="py-20 text-center">
-		<p class="text-lg text-red-500">{i18n.t('common.error')}: {error}</p>
+		<p class="text-lg text-red-500">Error: {error}</p>
 	</div>
 {:else if parsedEvents.length === 0}
 	<div class="py-20 text-center">
@@ -175,13 +176,7 @@
 
 							<div class="mb-3 text-sm text-muted-foreground">
 								<div class="mb-1 flex items-center justify-center space-x-1">
-									<svg
-										aria-hidden="true"
-										class="h-4 w-4"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
+									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -203,13 +198,7 @@
 								<div
 									class="mb-3 flex items-center justify-center space-x-1 text-sm text-muted-foreground"
 								>
-									<svg
-										aria-hidden="true"
-										class="h-4 w-4"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
+									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -236,26 +225,48 @@
 	<!-- Grid view -->
 	<div class="container mx-auto px-4 pb-20">
 		<div
-			class="grid gap-1"
-			style="grid-template-columns: repeat(auto-fill, minmax({zoom}px, 1fr));"
+			class="grid"
+			style="grid-template-columns: repeat(auto-fill, {zoom}px); gap: {zoom > 8 ? 2 : 1}px;"
 		>
 			{#each gridUnits as unit}
 				{@const primaryEvent = unit.events[0]}
-				{@const title = `${formatDate(unit.date.toISOString())}${unit.events.length > 0 ? '\n' + unit.events.map((e) => e.name).join(', ') : ''}`}
+				<!-- svelte-ignore a11y_mouse_events_have_key_events -->
 				<div
-					{title}
-					class="aspect-square rounded-sm border"
+					role="presentation"
+					onmouseover={() => (hoveredUnit = unit)}
+					onmouseleave={() => (hoveredUnit = null)}
+					onclick={() => (hoveredUnit = hoveredUnit === unit ? null : unit)}
+					class="aspect-square rounded-[1px] border"
 					style="
-                                width: {zoom}px;
-                                height: {zoom}px;
-                                background-color: {primaryEvent?.color || 'transparent'};
-                                opacity: {unit.isPast ? 1 : 0.2};
-                                border-color: {primaryEvent ? 'rgba(0,0,0,0.1)' : 'var(--border)'};
-                            "
+                        width: {zoom}px;
+                        height: {zoom}px;
+                        background-color: {primaryEvent?.color || 'transparent'};
+                        opacity: {unit.isPast ? 1 : 0.2};
+                        border-color: {primaryEvent ? 'rgba(0,0,0,0.2)' : 'var(--border)'};
+                        {zoom < 6 ? 'border-width: 0;' : ''}
+                    "
 				></div>
 			{/each}
 		</div>
 	</div>
+
+	{#if hoveredUnit}
+		<div
+			class="pointer-events-none fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
+		>
+			<div class="font-bold">{formatDate(hoveredUnit.date.toISOString())}</div>
+			{#if hoveredUnit.events.length > 0}
+				<div class="mt-2 flex flex-col gap-1">
+					{#each hoveredUnit.events as event}
+						<div class="flex items-center gap-2">
+							<div class="h-2 w-2 rounded-full" style="background-color: {event.color}"></div>
+							<div class="text-xs">{event.name}</div>
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	{/if}
 {/if}
 
 <style>

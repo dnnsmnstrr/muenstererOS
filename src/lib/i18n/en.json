@@ -16,7 +16,6 @@
 		"api": "API",
 		"contact": "Contact",
 		"status": "Status",
-		"error": "Error",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -142,22 +141,6 @@
 		"hide": "Hide Now Playing",
 		"loading": "Loading..."
 	},
-	"uses": {
-		"search": "Search...",
-		"no_results": "No results found.",
-		"all_categories": "All Categories",
-		"results_found": "{count} results found.",
-		"reset_filters": "Reset Filters",
-		"description": "Things I use every day.",
-		"more_info": "More Info in my"
-  },
-	"timeline": {
-		"title": "Life Timeline",
-		"description": "Interactive timeline of my life",
-		"subheading": "A chronological view of my life",
-		"until": "until",
-		"no_events": "No events found"
-  },
 	"playlists": {
 		"title": "My Playlists",
 		"feeling_lucky": "I'm feeling lucky",
