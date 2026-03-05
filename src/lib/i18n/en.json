@@ -168,6 +168,7 @@
 		"month": "Month",
 		"zoom": "Zoom",
 		"until": "until",
+		"until_now": "until now",
 		"no_events": "No events found",
 		"loading": "Loading timeline...",
 		"show_future": "Show Future",

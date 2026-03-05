@@ -81,7 +81,7 @@
 			.map((event) => ({
 				...event,
 				start: new Date(event.startDate),
-				end: new Date(event.endDate)
+				end: event.endDate ? new Date(event.endDate) : new Date()
 			}))
 			.sort((a, b) => a.start.getTime() - b.start.getTime())
 	);
@@ -211,10 +211,11 @@
 									</svg>
 									<span>{formatDate(event.startDate)}</span>
 								</div>
-								{#if event.endDate !== event.startDate}
+								{#if event.endDate !== event.startDate || !event.endDate}
 									<div class="text-xs opacity-75">
-										{i18n.t('timeline.until')}
-										{formatDate(event.endDate)} ({formatDuration(duration)})
+										{event.endDate ? i18n.t('timeline.until') : ''}
+										{event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}
+										({formatDuration(duration)})
 									</div>
 								{/if}
 							</div>
