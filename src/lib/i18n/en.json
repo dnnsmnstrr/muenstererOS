@@ -16,6 +16,7 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"contact": "Contact",
+		"status": "Status",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -70,7 +71,11 @@
 		"reset_success": "Desktop files reset to default positions",
 		"language": "Language",
 		"english": "English",
-		"german": "German"
+		"german": "German",
+		"texture": "Background Texture",
+		"dots": "Dots",
+		"grid": "Grid",
+		"diagonal": "Diagonal"
 	},
 	"command": {
 		"placeholder": "Type a command or search...",
@@ -135,5 +140,59 @@
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
 		"load": "Load"
+  },
+  "status": {
+		"title": "System Status",
+		"metric": "Metric",
+		"value": "Value",
+		"last_deployment": "Last Deployment",
+		"commit_count": "Commit Count",
+		"page_count": "Page Count",
+		"cv_status": "CV Page Status",
+		"online": "online",
+		"offline": "offline",
+		"unknown": "unknown"
+  },
+	"now_playing": {
+		"title": "Now Playing",
+		"show": "Show Now Playing",
+		"hide": "Hide Now Playing",
+		"loading": "Loading..."
+	},
+	"playlists": {
+		"title": "My Playlists",
+		"feeling_lucky": "I'm feeling lucky",
+		"search_placeholder": "Search playlists...",
+		"no_results": "No matching playlists found.",
+		"spotify_profile_prefix": "Check out my",
+		"spotify_profile_link": "Spotify profile",
+		"spotify_profile_suffix": "for more playlists.",
+		"season_playlists": "Season Playlists",
+		"other_playlists": "Other Playlists",
+		"show_gifs": "Show GIFs",
+		"top_artists": "Top Artists",
+		"top_artists_description": "These were my top artists on Spotify over the years",
+		"preview_title": "Playlist Preview",
+		"alt_gif": "Playlist GIF"
+	},
+	"timeline": {
+		"title": "Life Timeline",
+		"description": "A chronological view of my life",
+		"view_mode": "View Mode",
+		"timeline": "Timeline",
+		"grid": "Grid",
+		"resolution": "Resolution",
+		"week": "Week",
+		"month": "Month",
+		"zoom": "Zoom",
+		"until": "until",
+		"until_now": "until now",
+		"no_events": "No events found",
+		"loading": "Loading timeline...",
+		"show_future": "Show Future",
+		"show_birthdays": "Show Birthdays",
+		"birthday": "Birthday",
+		"age": "Age",
+		"life_expectancy": "Life Expectancy"
 	}
 }

@@ -10,10 +10,24 @@
 		updateFilePosition,
 		dvdBounceActive,
 		hideFile,
-		renameFile
+		renameFile,
+		updateFileIcon
 	} from '$lib/stores/desktop';
 	import { goto } from '$app/navigation';
-	import { ExternalLink, Trash2, Pencil, FolderOpen } from 'lucide-svelte';
+	import {
+		ExternalLink,
+		Trash2,
+		Pencil,
+		FolderOpen,
+		Palette,
+		File as FileIcon,
+		FileText,
+		Music,
+		Code,
+		Terminal,
+		Settings,
+		Image as ImageIcon
+	} from 'lucide-svelte';
 	import File from './File.svelte';
 	import { debugLog, dvdBounceEnabled } from '$lib/stores/app';
 	import { INACTIVITY_TIMEOUT } from '$lib/config';
@@ -21,7 +35,6 @@
 
 	const minHeight = 300;
 	const minWidth = 200;
-	const fileSize = 60;
 	const breakpoint = 640;
 
 	let {
@@ -34,9 +47,10 @@
 		class?: string;
 	} = $props();
 
+	let fileSize = $derived(width < breakpoint ? 50 : 60);
 	let dragging = $state(false);
 	let resizing = $state(false);
-	let defaultWidth = $derived(width < 640 ? minWidth : 400);
+	let defaultWidth = $derived(width < breakpoint ? minWidth : 400);
 	let DraggableWidth = $state(400);
 	let DraggableHeight = $state(minHeight);
 	let DraggableX = $state(-1);
@@ -488,6 +502,46 @@
 						<Pencil class="mr-2 h-4 w-4" />
 						Rename
 					</ContextMenu.Item>
+					<ContextMenu.Sub>
+						<ContextMenu.SubTrigger>
+							<Palette class="mr-2 h-4 w-4" />
+							Change Icon
+						</ContextMenu.SubTrigger>
+						<ContextMenu.SubContent>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'FolderOpen')}>
+								<FolderOpen class="mr-2 h-4 w-4" />
+								Folder
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'File')}>
+								<FileIcon class="mr-2 h-4 w-4" />
+								File
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'FileText')}>
+								<FileText class="mr-2 h-4 w-4" />
+								Text
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Image')}>
+								<ImageIcon class="mr-2 h-4 w-4" />
+								Image
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Music')}>
+								<Music class="mr-2 h-4 w-4" />
+								Music
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Code')}>
+								<Code class="mr-2 h-4 w-4" />
+								Code
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Terminal')}>
+								<Terminal class="mr-2 h-4 w-4" />
+								Terminal
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Settings')}>
+								<Settings class="mr-2 h-4 w-4" />
+								Settings
+							</ContextMenu.Item>
+						</ContextMenu.SubContent>
+					</ContextMenu.Sub>
 					<ContextMenu.Separator />
 					<ContextMenu.Item onclick={() => hideFile(fileItem.id)}>
 						<Trash2 class="mr-2 h-4 w-4" />

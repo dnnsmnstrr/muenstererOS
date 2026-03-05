@@ -11,6 +11,7 @@
         2022: ['Ahzumjot', 'Cro', 'Maeckes', 'Schmyt', 'MAJAN'],
         2023: ['Cro', 'Kanye West', 'Levin Liam', 'MAJAN', 'Paula Hartmann'],
         2024: ['Tua', 'Paula Hartmann', 'Levin Liam', 'Maeckes', 'Berq'],
+        2025: ['Cro', 'Levin Liam', 'Tua', 'Nina Chuba', 'Zartmann']
     }
 
     let currentYear = $state(Number(Object.keys(years).pop()) || 2017);

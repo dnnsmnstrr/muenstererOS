@@ -16,6 +16,7 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"contact": "Kontakt",
+		"status": "Status",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -70,7 +71,11 @@
 		"reset_success": "Desktop-Dateien auf Standardpositionen zurückgesetzt",
 		"language": "Sprache",
 		"english": "Englisch",
-		"german": "Deutsch"
+		"german": "Deutsch",
+		"texture": "Hintergrundstruktur",
+		"dots": "Punkte",
+		"grid": "Gitter",
+		"diagonal": "Diagonal"
 	},
 	"command": {
 		"placeholder": "Befehl eingeben oder suchen...",
@@ -122,7 +127,7 @@
 		"restore": "Fenster wiederherstellen"
 	},
 	"now": {
-		"title": "Was ich gerade mache (Now)",
+		"title": "Now - Was ich gerade mache",
 		"last_updated": "Zuletzt aktualisiert:",
 		"version_from": "Version vom:",
 		"status": "Status",
@@ -137,5 +142,58 @@
 		"changes_many": "{count} Änderungen",
 		"version_marker": "Version vom {date}",
 		"load": "Laden"
+  },
+  "status": {
+		"title": "Systemstatus",
+		"metric": "Metrik",
+		"value": "Wert",
+		"last_deployment": "Letztes Deployment",
+		"commit_count": "Commit-Anzahl",
+		"page_count": "Seitenanzahl",
+		"cv_status": "CV-Status",
+		"online": "online",
+		"offline": "offline"
+  },
+	"now_playing": {
+		"title": "Aktuelle Wiedergabe",
+		"show": "Wiedergabe anzeigen",
+		"hide": "Wiedergabe ausblenden",
+		"loading": "Wird geladen..."
+	},
+	"playlists": {
+		"title": "Meine Playlists",
+		"feeling_lucky": "Auf gut Glück",
+		"search_placeholder": "Playlists suchen...",
+		"no_results": "Keine passenden Playlists gefunden.",
+		"spotify_profile_prefix": "Besuche mein",
+		"spotify_profile_link": "Spotify-Profil",
+		"spotify_profile_suffix": "für weitere Playlists.",
+		"season_playlists": "Saisonale Playlists",
+		"other_playlists": "Andere Playlists",
+		"show_gifs": "GIFs anzeigen",
+		"top_artists": "Top-Künstler",
+		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
+		"preview_title": "Playlist-Vorschau",
+		"alt_gif": "Playlist GIF"
+	},
+	"timeline": {
+		"title": "Lebens-Zeitstrahl",
+		"description": "Ein chronologischer Blick auf mein Leben",
+		"view_mode": "Ansichtsmodus",
+		"timeline": "Zeitstrahl",
+		"grid": "Gitter",
+		"resolution": "Auflösung",
+		"week": "Woche",
+		"month": "Monat",
+		"zoom": "Zoom",
+		"until": "bis",
+		"until_now": "bis heute",
+		"no_events": "Keine Ereignisse gefunden",
+		"loading": "Zeitstrahl wird geladen...",
+		"show_future": "Zukunft anzeigen",
+		"show_birthdays": "Geburtstage anzeigen",
+		"birthday": "Geburtstag",
+		"age": "Alter",
+		"life_expectancy": "Lebenserwartung"
 	}
 }

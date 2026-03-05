@@ -64,3 +64,12 @@ dvdBounceEnabled.subscribe((value) => {
     window.localStorage.dvdBounceEnabled = String(value);
   }
 })
+
+// background texture
+const storedBackgroundTexture = browser ? window?.localStorage?.backgroundTexture : 'dots';
+export const backgroundTexture = writable<string>(storedBackgroundTexture || 'dots');
+backgroundTexture.subscribe((value) => {
+  if (browser && window?.localStorage) {
+    window.localStorage.backgroundTexture = String(value);
+  }
+})

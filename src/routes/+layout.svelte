@@ -6,7 +6,7 @@
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
 	import { page } from '$app/state';
-	import { theme, debug, debugLog, isCommandActive, resetColors } from '$lib/stores/app';
+	import { theme, debug, debugLog, isCommandActive, resetColors, backgroundTexture } from '$lib/stores/app';
 	import { onMount } from 'svelte';
 	import { Spring, Tween } from 'svelte/motion';
 
@@ -87,15 +87,16 @@
 					cursor.set({ x: event.clientX, y: event.clientY - 100 });
 				} else {
 					cursor.set({ x: innerWidth / 2, y: innerHeight / 3 });
+					setMaskSize(300, 200);
 					changeRadius(300, 500);
 				}
 
 				break;
 			case '/settings':
 				// focus on top area
-				cursor.set({ x: innerWidth / 2, y: innerHeight / 4 });
-				setMaskSize(400, 200, 800);
-				changeRadius(800, 1000);
+				cursor.set({ x: innerWidth / 2.7, y: innerHeight / 4 });
+				setMaskSize(300, 600, 800);
+				changeRadius(200, 600);
 				break;
 			case '/about':
 				// focus on the top left area
@@ -158,11 +159,18 @@
 
 	let isLightMode = $derived($mode === 'light');
 	let isFullWidth = $derived(page.url.pathname === '/experiment');
-	let bgClass = $derived(
-		isLightMode
-			? 'bg-[radial-gradient(#e5e5e5_1px,transparent_1px)]'
-			: 'bg-[radial-gradient(#222222_1px,transparent_1px)]'
-	);
+	let bgStyle = $derived.by(() => {
+		const color = isLightMode ? '#e5e5e5' : '#222222';
+		switch ($backgroundTexture) {
+			case 'grid':
+				return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
+			case 'diagonal':
+				return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
+			case 'dots':
+			default:
+				return `background-image: radial-gradient(${color} 1px, transparent 1px); background-size: 16px 16px;`;
+		}
+	});
 
 	const bookmarksRaw: BookmarkItem[] = [
 		{ name: 'Now', href: '/now', icon: Info },
@@ -217,10 +225,10 @@
 
 	<main
 		class={cn(
-			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto [background-size:16px_16px] ${isFullWidth ? 'p-0' : 'pt-4 sm:px-16'} print:max-h-none`,
-			bgClass,
+			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto ${isFullWidth ? 'p-0' : 'pt-4 sm:px-16'} print:max-h-none`,
 			`theme-${$theme}`
 		)}
+		style={bgStyle}
 	>
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<div
