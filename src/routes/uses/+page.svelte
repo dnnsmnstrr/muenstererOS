@@ -22,6 +22,7 @@
 	import SvgIcons from '$lib/components/icons';
 	import uses from '../../data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
@@ -81,7 +82,9 @@
 	});
 
 	const triggerContent = $derived(
-		capitalize(categories.find((category) => category === selectedCategory) ?? 'All Categories')
+		selectedCategory
+			? capitalize(categories.find((category) => category === selectedCategory) || '')
+			: i18n.t('uses.all_categories')
 	);
 </script>
 
@@ -92,7 +95,7 @@
 <div class="container">
 	<div class="mb-6 flex items-center justify-between">
 		<div class="flex items-center gap-2">
-			<Heading class="mb-0">Uses</Heading>
+			<Heading class="mb-0">{i18n.t('common.uses')}</Heading>
 			<Popover.Root>
 				<Popover.Trigger class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
 					<HelpCircle />
@@ -100,9 +103,10 @@
 				<Popover.Content>
 					<div class="grid gap-4">
 						<div class="space-y-2">
-							<h4 class="font-medium leading-none">Things I use every day.</h4>
+							<h4 class="font-medium leading-none">{i18n.t('uses.description')}</h4>
 							<p class="text-sm text-muted-foreground">
-								More Info in my <Link href="/zettelkasten/uses" target="_blank">Zettelkasten</Link>
+								{i18n.t('uses.more_info')}
+								<Link href="/zettelkasten/uses" target="_blank">Zettelkasten</Link>
 							</p>
 						</div>
 					</div>
@@ -117,7 +121,7 @@
 
 	<div class="mb-8 space-y-4">
 		<div class="flex flex-col items-center gap-4 sm:flex-row">
-			<Input placeholder="Search..." type="search" bind:value={searchQuery} />
+			<Input placeholder={i18n.t('uses.search')} type="search" bind:value={searchQuery} />
 
 			<Select.Root type="single" bind:value={selectedCategory}>
 				<Select.Trigger class="min-w-40">
@@ -125,7 +129,7 @@
 				</Select.Trigger>
 				<Select.Content>
 					<Select.Group>
-						<Select.Item value="">All Categories</Select.Item>
+						<Select.Item value="">{i18n.t('uses.all_categories')}</Select.Item>
 						{#each categories as category}
 							<Select.Item value={category}>{capitalize(category)}</Select.Item>
 						{/each}
@@ -152,7 +156,7 @@
 					onclick={handleReset}
 				>
 					<RotateCcw class="h-4" />
-					Reset Filters
+					{i18n.t('uses.reset_filters')}
 				</button>
 			{/if}
 		</div>
@@ -160,13 +164,13 @@
 
 	{#if filteredUses.length === 0}
 		<div class="text-center text-muted-foreground">
-			No results found.
+			{i18n.t('uses.no_results')}
 			<br />
 			<button
 				class="hover:bg-primary-500 mt-4 rounded-md bg-secondary px-4 py-2 transition duration-300 ease-in-out"
 				onclick={handleReset}
 			>
-				Reset filters
+				{i18n.t('uses.reset_filters')}
 			</button>
 		</div>
 	{/if}
@@ -215,7 +219,7 @@
 
 	{#if filteredUses.length > 0}
 		<div class="my-4 text-center text-sm text-muted-foreground">
-			{filteredUses.length} results found.
+			{i18n.t('uses.results_found', { count: filteredUses.length.toString() })}
 		</div>
 	{/if}
 </div>

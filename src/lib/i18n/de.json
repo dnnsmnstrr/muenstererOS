@@ -143,6 +143,15 @@
 		"hide": "Wiedergabe ausblenden",
 		"loading": "Wird geladen..."
 	},
+	"uses": {
+		"search": "Suche...",
+		"no_results": "Keine Ergebnisse.",
+		"all_categories": "Alle Kategorien",
+		"results_found": "{count} Ergebnisse.",
+		"reset_filters": "Filter zurücksetzen",
+		"description": "Dinge, die ich jeden Tag benutze.",
+		"more_info": "Mehr Infos in meinem"
+  },
 	"timeline": {
 		"title": "Lebens-Timeline",
 		"description": "Interaktive Timeline meines Lebens",
