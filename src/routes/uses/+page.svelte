@@ -24,7 +24,6 @@
 		LayoutGrid,
 		List,
 		ArrowUpDown,
-		Filter,
 		ArrowUp,
 		ArrowDown
 	} from 'lucide-svelte';
@@ -173,7 +172,7 @@
 		</div>
 	</div>
 
-	<div class="mb-8 space-y-4" class:hidden={viewMode === 'table'}>
+	<div class="mb-8 space-y-4">
 		<div class="flex flex-col items-center gap-4 sm:flex-row">
 			<Input placeholder="Search..." type="search" bind:value={searchQuery} />
 
@@ -285,104 +284,41 @@
 					<Table.Row>
 						<Table.Head class="w-[80px]">Icon</Table.Head>
 						<Table.Head>
-							<div class="flex flex-col gap-2 py-2">
-								<button
-									class="flex items-center gap-1 hover:text-foreground"
-									onclick={() => toggleSort('title')}
-								>
-									Title
-									{#if sortConfig.field === 'title'}
-										{#if sortConfig.direction === 'asc'}
-											<ArrowUp class="h-3 w-3" />
-										{:else}
-											<ArrowDown class="h-3 w-3" />
-										{/if}
+							<button
+								class="flex items-center gap-1 hover:text-foreground"
+								onclick={() => toggleSort('title')}
+							>
+								Title
+								{#if sortConfig.field === 'title'}
+									{#if sortConfig.direction === 'asc'}
+										<ArrowUp class="h-3 w-3" />
 									{:else}
-										<ArrowUpDown class="h-3 w-3 opacity-50" />
+										<ArrowDown class="h-3 w-3" />
 									{/if}
-								</button>
-								<Input
-									placeholder="Filter title..."
-									class="h-8 w-full min-w-[150px]"
-									bind:value={searchQuery}
-								/>
-							</div>
+								{:else}
+									<ArrowUpDown class="h-3 w-3 opacity-50" />
+								{/if}
+							</button>
 						</Table.Head>
 						<Table.Head class="hidden md:table-cell">Description</Table.Head>
 						<Table.Head>
-							<div class="flex flex-col gap-2 py-2">
-								<button
-									class="flex items-center gap-1 hover:text-foreground"
-									onclick={() => toggleSort('category')}
-								>
-									Category
-									{#if sortConfig.field === 'category'}
-										{#if sortConfig.direction === 'asc'}
-											<ArrowUp class="h-3 w-3" />
-										{:else}
-											<ArrowDown class="h-3 w-3" />
-										{/if}
+							<button
+								class="flex items-center gap-1 hover:text-foreground"
+								onclick={() => toggleSort('category')}
+							>
+								Category
+								{#if sortConfig.field === 'category'}
+									{#if sortConfig.direction === 'asc'}
+										<ArrowUp class="h-3 w-3" />
 									{:else}
-										<ArrowUpDown class="h-3 w-3 opacity-50" />
+										<ArrowDown class="h-3 w-3" />
 									{/if}
-								</button>
-								<Select.Root type="single" bind:value={selectedCategory}>
-									<Select.Trigger class="h-8 w-full min-w-[120px]">
-										{triggerContent}
-									</Select.Trigger>
-									<Select.Content>
-										<Select.Group>
-											<Select.Item value="">All Categories</Select.Item>
-											{#each categories as category}
-												<Select.Item value={category}>{capitalize(category)}</Select.Item>
-											{/each}
-										</Select.Group>
-									</Select.Content>
-								</Select.Root>
-							</div>
+								{:else}
+									<ArrowUpDown class="h-3 w-3 opacity-50" />
+								{/if}
+							</button>
 						</Table.Head>
-						<Table.Head>
-							<div class="flex flex-col gap-2 py-2">
-								<div class="flex items-center gap-1">Tags</div>
-								<Popover.Root>
-									<Popover.Trigger
-										class={buttonVariants({
-											variant: 'outline',
-											size: 'sm',
-											class: 'h-8 w-full justify-start gap-2 font-normal'
-										})}
-									>
-										<Filter class="h-3 w-3" />
-										{selectedTag ? capitalize(selectedTag) : 'Filter tags...'}
-									</Popover.Trigger>
-									<Popover.Content class="w-64 p-2">
-										<div class="flex flex-wrap gap-1">
-											{#each allTags as tag}
-												<button
-													class="rounded-full px-2 py-0.5 text-xs transition-colors {selectedTag ===
-													tag
-														? 'bg-primary text-primary-foreground'
-														: 'bg-primary/10 hover:bg-primary/20'}"
-													onclick={() => toggleTag(tag)}
-												>
-													{capitalize(tag)}
-												</button>
-											{/each}
-											{#if selectedTag}
-												<Button
-													variant="ghost"
-													size="sm"
-													class="h-6 px-2 text-xs"
-													onclick={() => (selectedTag = null)}
-												>
-													Clear
-												</Button>
-											{/if}
-										</div>
-									</Popover.Content>
-								</Popover.Root>
-							</div>
-						</Table.Head>
+						<Table.Head>Tags</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -418,7 +354,7 @@
 								<div class="flex flex-wrap gap-1">
 									{#if item.tags}
 										{#each item.tags as tag}
-											<Badge variant="secondary" class="text-[10px] font-normal"
+											<Badge variant="secondary" class="text-xs font-normal"
 												>{capitalize(tag)}</Badge
 											>
 										{/each}
