@@ -19,6 +19,7 @@
 	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
 	let selectedUnit = $state<(typeof gridUnits)[0] | null>(null);
 	let showFuture = $state(false);
+	let showBirthdays = $state(true);
 	let targetAge = $state(80);
 
 	const birthDate = $derived(new Date(BIRTHDATE));
@@ -54,7 +55,8 @@
 			units.push({
 				date: unitDate,
 				isPast,
-				events: activeEvents
+				events: activeEvents,
+				isBirthday: resolution === 'week' ? i % 52 === 0 : i % 12 === 0
 			});
 		}
 		return units;
@@ -145,6 +147,13 @@
 					<label class="flex cursor-pointer items-center gap-2 text-sm font-semibold">
 						<input type="checkbox" bind:checked={showFuture} class="rounded border-gray-300" />
 						{i18n.t('timeline.show_future')}
+					</label>
+				</div>
+
+				<div class="flex items-center gap-3">
+					<label class="flex cursor-pointer items-center gap-2 text-sm font-semibold">
+						<input type="checkbox" bind:checked={showBirthdays} class="rounded border-gray-300" />
+						{i18n.t('timeline.show_birthdays')}
 					</label>
 				</div>
 
@@ -266,7 +275,7 @@
 						hoveredUnit = unit;
 						selectedUnit = unit;
 					}}
-					class="aspect-square rounded-[1px] border"
+					class="relative aspect-square rounded-[1px] border"
 					style="
                         width: {zoom}px;
                         height: {zoom}px;
@@ -277,7 +286,18 @@
                         z-index: {isSelected ? 10 : 1};
                         {zoom < 6 ? 'border-width: 0;' : ''}
                     "
-				></div>
+				>
+					{#if showBirthdays && unit.isBirthday}
+						<div
+							class="absolute inset-0 flex items-center justify-center pointer-events-none"
+						>
+							<div
+								class="rounded-full bg-primary"
+								style="width: {Math.max(2, zoom / 4)}px; height: {Math.max(2, zoom / 4)}px;"
+							></div>
+						</div>
+					{/if}
+				</div>
 			{/each}
 		</div>
 	</div>
