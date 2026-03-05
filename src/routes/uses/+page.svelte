@@ -18,31 +18,57 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Select from '$lib/components/ui/select';
 	import { capitalize } from '$lib/utils/index';
-	import { RotateCcw, HelpCircle } from 'lucide-svelte';
+	import {
+		RotateCcw,
+		HelpCircle,
+		LayoutGrid,
+		List,
+		ArrowUpDown,
+		Filter,
+		ArrowUp,
+		ArrowDown
+	} from 'lucide-svelte';
 	import SvgIcons from '$lib/components/icons';
 	import uses from '../../data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
+	import * as Table from '$lib/components/ui/table';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { Badge } from '$lib/components/ui/badge';
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
 	let selectedTag: string | null = $state(null);
+	let viewMode: 'grid' | 'table' = $state('grid');
+	let sortConfig = $state({
+		field: 'title' as 'title' | 'category',
+		direction: 'asc' as 'asc' | 'desc'
+	});
 
 	// Get unique tags from all items
 	let allTags = $derived([...new Set(uses.flatMap((item) => item.tags || []))].sort());
 	let filteredUses = $derived(
-		uses.filter((item) => {
-			const lowerCaseQuery = searchQuery.toLowerCase();
-			const matchesSearch =
-				item.title.toLowerCase().includes(lowerCaseQuery) ||
-				item.description?.toLowerCase().includes(lowerCaseQuery) ||
-				item.tags?.some((tag) => tag.includes(lowerCaseQuery));
+		uses
+			.filter((item) => {
+				const lowerCaseQuery = searchQuery.toLowerCase();
+				const matchesSearch =
+					item.title.toLowerCase().includes(lowerCaseQuery) ||
+					item.description?.toLowerCase().includes(lowerCaseQuery) ||
+					item.tags?.some((tag) => tag.includes(lowerCaseQuery));
 
-			const matchesCategory = !selectedCategory || item.category === selectedCategory;
+				const matchesCategory = !selectedCategory || item.category === selectedCategory;
 
-			const matchesTags = !selectedTag || item.tags?.includes(selectedTag);
+				const matchesTags = !selectedTag || item.tags?.includes(selectedTag);
 
-			return matchesSearch && matchesCategory && matchesTags;
-		})
+				return matchesSearch && matchesCategory && matchesTags;
+			})
+			.sort((a, b) => {
+				const { field, direction } = sortConfig;
+				const aValue = a[field].toLowerCase();
+				const bValue = b[field].toLowerCase();
+				if (aValue < bValue) return direction === 'asc' ? -1 : 1;
+				if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+				return 0;
+			})
 	);
 	let filteredTags = $derived(
 		allTags.filter((tag) => {
@@ -71,6 +97,16 @@
 		searchQuery = '';
 		selectedCategory = '';
 		selectedTag = null;
+		sortConfig = { field: 'title', direction: 'asc' };
+	}
+
+	function toggleSort(field: 'title' | 'category') {
+		if (sortConfig.field === field) {
+			sortConfig.direction = sortConfig.direction === 'asc' ? 'desc' : 'asc';
+		} else {
+			sortConfig.field = field;
+			sortConfig.direction = 'asc';
+		}
 	}
 
 	$effect(() => {
@@ -110,12 +146,34 @@
 			</Popover.Root>
 		</div>
 
-		<p class="text-sm text-muted-foreground">
-			Inspired by <Link href="https://uses.tech" target="_blank">uses.tech</Link>
-		</p>
+		<div class="flex items-center gap-4">
+			<div class="flex items-center rounded-md border p-1">
+				<Button
+					variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+					size="icon"
+					class="h-8 w-8"
+					onclick={() => (viewMode = 'grid')}
+					title="Grid View"
+				>
+					<LayoutGrid class="h-4 w-4" />
+				</Button>
+				<Button
+					variant={viewMode === 'table' ? 'secondary' : 'ghost'}
+					size="icon"
+					class="h-8 w-8"
+					onclick={() => (viewMode = 'table')}
+					title="Table View"
+				>
+					<List class="h-4 w-4" />
+				</Button>
+			</div>
+			<p class="hidden text-sm text-muted-foreground sm:block">
+				Inspired by <Link href="https://uses.tech" target="_blank">uses.tech</Link>
+			</p>
+		</div>
 	</div>
 
-	<div class="mb-8 space-y-4">
+	<div class="mb-8 space-y-4" class:hidden={viewMode === 'table'}>
 		<div class="flex flex-col items-center gap-4 sm:flex-row">
 			<Input placeholder="Search..." type="search" bind:value={searchQuery} />
 
@@ -171,47 +229,208 @@
 		</div>
 	{/if}
 
-	<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-		{#each filteredUses as item}
-			<Card.Root>
-				<Card.Content class="flex h-full flex-col justify-between pt-6">
-					<div>
-						<img
-							src={item.image && item.image.includes('/') ? item.image : SvgIcons[item.image || item.title]}
-							alt={item.title}
-							class="mb-4 h-48 w-full rounded-t-lg object-contain"
-						/>
-						<h2 class="mb-2 flex items-center text-xl font-semibold">
-							{#if item.url}
-								<a class="hover:underline" href={item.url}>{item.title}</a>
-							{:else}
-								{item.title}
-							{/if}
-						</h2>
-						{#if item.description}
-							<p class="mb-4 text-muted-foreground">{item.description}</p>
-						{/if}
-					</div>
-
-					<div>
+	{#if viewMode === 'grid'}
+		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{#each filteredUses as item}
+				<Card.Root>
+					<Card.Content class="flex h-full flex-col justify-between pt-6">
 						<div>
-							<div class="-ml-2 mb-4 flex flex-wrap justify-between gap-2">
-								{#if item.tags}
-									<div class="flex flex-wrap gap-2">
-										{#each item.tags as tag}
-											<span class="rounded-full bg-primary/10 px-2 py-1 text-sm">
-												{capitalize(tag)}
-											</span>
-										{/each}
-									</div>
+							<img
+								src={item.image && item.image.includes('/') ? item.image : SvgIcons[item.image || item.title]}
+								alt={item.title}
+								class="mb-4 h-48 w-full rounded-t-lg object-contain"
+							/>
+							<h2 class="mb-2 flex items-center text-xl font-semibold">
+								{#if item.url}
+								<a
+									class="hover:underline"
+									href={item.url}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{item.title}
+								</a>
+								{:else}
+									{item.title}
 								{/if}
+							</h2>
+							{#if item.description}
+								<p class="mb-4 text-muted-foreground">{item.description}</p>
+							{/if}
+						</div>
+
+						<div>
+							<div>
+								<div class="-ml-2 mb-4 flex flex-wrap justify-between gap-2">
+									{#if item.tags}
+										<div class="flex flex-wrap gap-2">
+											{#each item.tags as tag}
+											<Badge variant="secondary" class="text-xs font-normal">
+													{capitalize(tag)}
+											</Badge>
+											{/each}
+										</div>
+									{/if}
+								</div>
 							</div>
 						</div>
-					</div>
-				</Card.Content>
-			</Card.Root>
-		{/each}
-	</div>
+					</Card.Content>
+				</Card.Root>
+			{/each}
+		</div>
+	{:else}
+		<Card.Root>
+			<Table.Root>
+				<Table.Header>
+					<Table.Row>
+						<Table.Head class="w-[80px]">Icon</Table.Head>
+						<Table.Head>
+							<div class="flex flex-col gap-2 py-2">
+								<button
+									class="flex items-center gap-1 hover:text-foreground"
+									onclick={() => toggleSort('title')}
+								>
+									Title
+									{#if sortConfig.field === 'title'}
+										{#if sortConfig.direction === 'asc'}
+											<ArrowUp class="h-3 w-3" />
+										{:else}
+											<ArrowDown class="h-3 w-3" />
+										{/if}
+									{:else}
+										<ArrowUpDown class="h-3 w-3 opacity-50" />
+									{/if}
+								</button>
+								<Input
+									placeholder="Filter title..."
+									class="h-8 w-full min-w-[150px]"
+									bind:value={searchQuery}
+								/>
+							</div>
+						</Table.Head>
+						<Table.Head class="hidden md:table-cell">Description</Table.Head>
+						<Table.Head>
+							<div class="flex flex-col gap-2 py-2">
+								<button
+									class="flex items-center gap-1 hover:text-foreground"
+									onclick={() => toggleSort('category')}
+								>
+									Category
+									{#if sortConfig.field === 'category'}
+										{#if sortConfig.direction === 'asc'}
+											<ArrowUp class="h-3 w-3" />
+										{:else}
+											<ArrowDown class="h-3 w-3" />
+										{/if}
+									{:else}
+										<ArrowUpDown class="h-3 w-3 opacity-50" />
+									{/if}
+								</button>
+								<Select.Root type="single" bind:value={selectedCategory}>
+									<Select.Trigger class="h-8 w-full min-w-[120px]">
+										{triggerContent}
+									</Select.Trigger>
+									<Select.Content>
+										<Select.Group>
+											<Select.Item value="">All Categories</Select.Item>
+											{#each categories as category}
+												<Select.Item value={category}>{capitalize(category)}</Select.Item>
+											{/each}
+										</Select.Group>
+									</Select.Content>
+								</Select.Root>
+							</div>
+						</Table.Head>
+						<Table.Head>
+							<div class="flex flex-col gap-2 py-2">
+								<div class="flex items-center gap-1">Tags</div>
+								<Popover.Root>
+									<Popover.Trigger
+										class={buttonVariants({
+											variant: 'outline',
+											size: 'sm',
+											class: 'h-8 w-full justify-start gap-2 font-normal'
+										})}
+									>
+										<Filter class="h-3 w-3" />
+										{selectedTag ? capitalize(selectedTag) : 'Filter tags...'}
+									</Popover.Trigger>
+									<Popover.Content class="w-64 p-2">
+										<div class="flex flex-wrap gap-1">
+											{#each allTags as tag}
+												<button
+													class="rounded-full px-2 py-0.5 text-xs transition-colors {selectedTag ===
+													tag
+														? 'bg-primary text-primary-foreground'
+														: 'bg-primary/10 hover:bg-primary/20'}"
+													onclick={() => toggleTag(tag)}
+												>
+													{capitalize(tag)}
+												</button>
+											{/each}
+											{#if selectedTag}
+												<Button
+													variant="ghost"
+													size="sm"
+													class="h-6 px-2 text-xs"
+													onclick={() => (selectedTag = null)}
+												>
+													Clear
+												</Button>
+											{/if}
+										</div>
+									</Popover.Content>
+								</Popover.Root>
+							</div>
+						</Table.Head>
+					</Table.Row>
+				</Table.Header>
+				<Table.Body>
+					{#each filteredUses as item}
+						<Table.Row>
+							<Table.Cell>
+								<img
+									src={item.image && item.image.includes('/')
+										? item.image
+										: SvgIcons[item.image || item.title]}
+									alt={item.title}
+									class="h-10 w-10 object-contain"
+								/>
+							</Table.Cell>
+							<Table.Cell class="font-medium">
+								{#if item.url}
+									<a class="hover:underline" href={item.url} target="_blank" rel="noopener noreferrer">
+										{item.title}
+									</a>
+								{:else}
+									{item.title}
+								{/if}
+							</Table.Cell>
+							<Table.Cell class="hidden md:table-cell">
+								<p class="line-clamp-2 max-w-md text-sm text-muted-foreground">
+									{item.description || '-'}
+								</p>
+							</Table.Cell>
+							<Table.Cell>
+								<Badge variant="outline">{capitalize(item.category)}</Badge>
+							</Table.Cell>
+							<Table.Cell>
+								<div class="flex flex-wrap gap-1">
+									{#if item.tags}
+										{#each item.tags as tag}
+											<Badge variant="secondary" class="text-[10px] font-normal"
+												>{capitalize(tag)}</Badge
+											>
+										{/each}
+									{/if}
+								</div>
+							</Table.Cell>
+						</Table.Row>
+					{/each}
+				</Table.Body>
+			</Table.Root>
+		</Card.Root>
+	{/if}
 
 	{#if filteredUses.length > 0}
 		<div class="my-4 text-center text-sm text-muted-foreground">
