@@ -7,7 +7,28 @@
 
 	let { schema, data = $bindable() } = $props();
 
+	function resolveSchema(s: any): any {
+		if (!s || !s.$ref) return s;
+
+		const ref = s.$ref;
+		if (ref.startsWith('#/')) {
+			const parts = ref.split('/').slice(1);
+			let current = schema;
+			for (const part of parts) {
+				if (current && current[part] !== undefined) {
+					current = current[part];
+				} else {
+					console.warn(`Could not resolve ref: ${ref}`);
+					return s;
+				}
+			}
+			return { ...current, ...s, $ref: undefined };
+		}
+		return s;
+	}
+
 	function getInitialValue(s: any) {
+		s = resolveSchema(s);
 		if (!s) return null;
 		if (s.default !== undefined) return JSON.parse(JSON.stringify(s.default));
 
@@ -37,6 +58,7 @@
 
 	// Initialize missing data based on schema
 	function initializeData(s: any, d: any) {
+		s = resolveSchema(s);
 		if (!s || !d) return;
 
 		const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'));
@@ -63,7 +85,8 @@
 	});
 </script>
 
-{#snippet renderField(s: any, obj: any, key: string | number, label: string, path: string)}
+{#snippet renderField(s_raw: any, obj: any, key: string | number, label: string, path: string)}
+	{@const s = resolveSchema(s_raw)}
 	{#if obj && s}
 		{@const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'))}
 		<div class="space-y-2">
