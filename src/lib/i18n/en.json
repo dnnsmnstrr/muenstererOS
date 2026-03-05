@@ -172,6 +172,9 @@
 		"no_events": "No events found",
 		"loading": "Loading timeline...",
 		"show_future": "Show Future",
+		"show_birthdays": "Show Birthdays",
+		"birthday": "Birthday",
+		"age": "Age",
 		"life_expectancy": "Life Expectancy"
 	}
 }

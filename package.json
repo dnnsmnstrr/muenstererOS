@@ -14,6 +14,8 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
+		"@docsearch/css": "^4.6.0",
+		"@docsearch/js": "^3.5.2",
 		"@fontsource/fira-mono": "^4.5.10",
 		"@lucide/svelte": "^0.482.0",
 		"@neoconfetti/svelte": "^1.0.0",
@@ -25,6 +27,7 @@
 		"@types/leaflet": "^1.9.16",
 		"autoprefixer": "^10.4.16",
 		"bits-ui": "^1.8.0",
+		"canvas-confetti": "^1.9.4",
 		"clsx": "^2.1.1",
 		"embla-carousel-svelte": "^8.5.2",
 		"formsnap": "^2.0.0",
@@ -35,6 +38,7 @@
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.5.9",
+		"runed": "^0.37.1",
 		"svelte": "^5.19.5",
 		"svelte-check": "^4.0.0",
 		"svelte-dnd-action": "^0.9.38",
@@ -53,7 +57,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@docsearch/js": "^3.5.2",
 		"@jazzymcjazz/mdsvelte": "^0.3.3",
 		"@lucide/lab": "^0.1.2",
 		"@sveltelegos-blue/svelte-legos": "^0.2.0",

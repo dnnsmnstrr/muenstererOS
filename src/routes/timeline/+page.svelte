@@ -19,6 +19,7 @@
 	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
 	let selectedUnit = $state<(typeof gridUnits)[0] | null>(null);
 	let showFuture = $state(false);
+	let showBirthdays = $state(true);
 	let targetAge = $state(80);
 
 	const birthDate = $derived(new Date(BIRTHDATE));
@@ -54,7 +55,9 @@
 			units.push({
 				date: unitDate,
 				isPast,
-				events: activeEvents
+				events: activeEvents,
+				isBirthday: resolution === 'week' ? i % 52 === 0 : i % 12 === 0,
+				age: resolution === 'week' ? Math.floor(i / 52) : Math.floor(i / 12)
 			});
 		}
 		return units;
@@ -145,6 +148,13 @@
 					<label class="flex cursor-pointer items-center gap-2 text-sm font-semibold">
 						<input type="checkbox" bind:checked={showFuture} class="rounded border-gray-300" />
 						{i18n.t('timeline.show_future')}
+					</label>
+				</div>
+
+				<div class="flex items-center gap-3">
+					<label class="flex cursor-pointer items-center gap-2 text-sm font-semibold">
+						<input type="checkbox" bind:checked={showBirthdays} class="rounded border-gray-300" />
+						{i18n.t('timeline.show_birthdays')}
 					</label>
 				</div>
 
@@ -266,7 +276,7 @@
 						hoveredUnit = unit;
 						selectedUnit = unit;
 					}}
-					class="aspect-square rounded-[1px] border"
+					class="relative aspect-square rounded-[1px] border"
 					style="
                         width: {zoom}px;
                         height: {zoom}px;
@@ -277,7 +287,18 @@
                         z-index: {isSelected ? 10 : 1};
                         {zoom < 6 ? 'border-width: 0;' : ''}
                     "
-				></div>
+				>
+					{#if showBirthdays && unit.isBirthday}
+						<div
+							class="absolute inset-0 flex items-center justify-center pointer-events-none"
+						>
+							<div
+								class="rounded-full bg-black shadow-sm dark:bg-white"
+								style="width: {Math.max(3, zoom / 3)}px; height: {Math.max(3, zoom / 3)}px;"
+							></div>
+						</div>
+					{/if}
+				</div>
 			{/each}
 		</div>
 	</div>
@@ -288,6 +309,15 @@
 			class="pointer-events-none fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
 		>
 			<div class="font-bold">{formatDate(displayUnit!.date.toISOString())}</div>
+			{#if displayUnit!.isBirthday}
+				<div class="mt-1 flex items-center gap-2">
+					<div class="h-2 w-2 rounded-full bg-primary"></div>
+					<div class="text-xs font-semibold">
+						{i18n.t('timeline.birthday')}
+						({i18n.t('timeline.age')}: {displayUnit!.age})
+					</div>
+				</div>
+			{/if}
 			{#if displayUnit!.events.length > 0}
 				<div class="mt-2 flex flex-col gap-1">
 					{#each displayUnit!.events as event}

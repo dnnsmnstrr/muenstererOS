@@ -173,6 +173,9 @@
 		"no_events": "Keine Ereignisse gefunden",
 		"loading": "Zeitstrahl wird geladen...",
 		"show_future": "Zukunft anzeigen",
+		"show_birthdays": "Geburtstage anzeigen",
+		"birthday": "Geburtstag",
+		"age": "Alter",
 		"life_expectancy": "Lebenserwartung"
 	}
 }
