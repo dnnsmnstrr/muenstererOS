@@ -15,6 +15,7 @@
 	let githubToken = $state('');
 	let selectedGist = $state(gists.now.id);
 	let gistData = $state('{}');
+	let gistSchema = $state<any>(null);
 	let gistInfo = $state<GistData>();
 	let fullGistHistory = $state<any[]>([]);
 	let isLoading = $state(false);
@@ -103,6 +104,7 @@
 
 		// Clear current content to show loading state
 		gistData = '{}';
+		gistSchema = null;
 
 		isLoading = true;
 		try {
@@ -121,6 +123,16 @@
 			}
 
 			const content = data.files[filename].content;
+
+			// Check for schema.json
+			if (data.files['schema.json']) {
+				try {
+					gistSchema = JSON.parse(data.files['schema.json'].content);
+				} catch (e) {
+					console.error('Failed to parse schema.json', e);
+					toast.warning('Found schema.json but failed to parse it');
+				}
+			}
 
 			// Validate and format JSON
 			const validation = GitHubGistAPI.validateJSON(content);
@@ -247,6 +259,7 @@
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo
+			schema={gistSchema}
 			onFormatJson={formatJson}
 			onResetEditor={resetEditor}
 			onSaveGist={saveGist}

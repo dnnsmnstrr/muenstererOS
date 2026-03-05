@@ -1,0 +1,154 @@
+<script lang="ts">
+	import { Input } from '$lib/components/ui/input';
+	import { Checkbox } from '$lib/components/ui/checkbox';
+	import { Label } from '$lib/components/ui/label';
+	import { Button } from '$lib/components/ui/button';
+	import { Plus, Trash2 } from 'lucide-svelte';
+
+	let { schema, data = $bindable() } = $props();
+
+	function getInitialValue(s: any) {
+		if (s.default !== undefined) return JSON.parse(JSON.stringify(s.default));
+		switch (s.type) {
+			case 'object':
+				const obj: any = {};
+				if (s.properties) {
+					for (const [k, v] of Object.entries<any>(s.properties)) {
+						obj[k] = getInitialValue(v);
+					}
+				}
+				return obj;
+			case 'array':
+				return [];
+			case 'string':
+				return '';
+			case 'number':
+				return 0;
+			case 'boolean':
+				return false;
+			default:
+				return null;
+		}
+	}
+
+	// Initialize missing data based on schema
+	function initializeData(s: any, d: any) {
+		if (!s || !d) return;
+
+		if (s.type === 'object' && s.properties) {
+			for (const [key, propSchema] of Object.entries<any>(s.properties)) {
+				if (d[key] === undefined) {
+					d[key] = getInitialValue(propSchema);
+				}
+				initializeData(propSchema, d[key]);
+			}
+		} else if (s.type === 'array' && Array.isArray(d) && s.items) {
+			for (const item of d) {
+				initializeData(s.items, item);
+			}
+		}
+	}
+
+	$effect(() => {
+		if (schema && data) {
+			initializeData(schema, data);
+		}
+	});
+</script>
+
+{#snippet renderField(s: any, obj: any, key: string | number, label: string, path: string)}
+	{#if obj}
+		<div class="space-y-2">
+			{#if s.type === 'object'}
+				<div class="space-y-4 rounded-lg border p-4">
+					<div class="flex items-center justify-between">
+						<h3 class="text-sm font-semibold capitalize">{label}</h3>
+					</div>
+					<div class="grid gap-4">
+						{#if obj[key]}
+							{#each Object.entries(s.properties || {}) as [subKey, subSchema]}
+								{@render renderField(subSchema, obj[key], subKey, subKey, `${path}.${subKey}`)}
+							{/each}
+						{/if}
+					</div>
+				</div>
+			{:else if s.type === 'array'}
+				<div class="space-y-4 rounded-lg border p-4">
+					<div class="flex items-center justify-between">
+						<h3 class="text-sm font-semibold capitalize">{label}</h3>
+						<Button
+							variant="outline"
+							size="sm"
+							onclick={() => {
+								if (!obj[key]) obj[key] = [];
+								obj[key].push(getInitialValue(s.items));
+							}}
+						>
+							<Plus class="mr-1 h-4 w-4" /> Add
+						</Button>
+					</div>
+					<div class="space-y-4">
+						{#if obj[key] && Array.isArray(obj[key])}
+							{#each obj[key] as _, index}
+								<div class="relative ml-2 space-y-2 border-l-2 pl-6">
+									<Button
+										variant="ghost"
+										size="icon"
+										class="absolute -left-3 top-0 h-6 w-6 text-destructive hover:bg-destructive/10"
+										onclick={() => obj[key].splice(index, 1)}
+									>
+										<Trash2 class="h-4 w-4" />
+									</Button>
+									{@render renderField(s.items, obj[key], index, `${label} item ${index + 1}`, `${path}[${index}]`)}
+								</div>
+							{/each}
+						{/if}
+					</div>
+				</div>
+			{:else}
+				<div class="grid gap-1.5">
+					<Label class="capitalize" for={path}>{label}</Label>
+					{#if s.type === 'string'}
+						{#if s.enum}
+							<select
+								id={path}
+								bind:value={obj[key]}
+								class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+							>
+								{#each s.enum as option}
+									<option value={option}>{option}</option>
+								{/each}
+							</select>
+						{:else}
+							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
+						{/if}
+					{:else if s.type === 'number'}
+						<Input id={path} type="number" bind:value={obj[key]} />
+					{:else if s.type === 'boolean'}
+						<div class="flex items-center space-x-2 py-2">
+							<Checkbox id={path} bind:checked={obj[key]} />
+							<Label for={path} class="cursor-pointer text-sm font-medium leading-none">
+								{s.description || label}
+							</Label>
+						</div>
+					{/if}
+					{#if s.description && s.type !== 'boolean'}
+						<p class="text-xs text-muted-foreground">{s.description}</p>
+					{/if}
+				</div>
+			{/if}
+		</div>
+	{/if}
+{/snippet}
+
+<div class="space-y-6">
+	{#if schema && schema.type === 'object' && data}
+		<div class="grid gap-6">
+			{#each Object.entries(schema.properties || {}) as [key, s]}
+				{@render renderField(s, data, key, key, key)}
+			{/each}
+		</div>
+	{:else if schema}
+		<p class="text-destructive">Only object-type root schemas are supported currently.</p>
+	{/if}
+</div>
