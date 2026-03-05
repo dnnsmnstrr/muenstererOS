@@ -17,10 +17,12 @@
 </script>
 
 <Sheet.Root {open} onOpenChange={(value) => (open = value)}>
-	<Sheet.Trigger>
-		<Button variant="outline">
-			<MenuIcon />
-		</Button>
+	<Sheet.Trigger aria-label="Open menu">
+		{#snippet child({ props })}
+			<Button variant="outline" {...props}>
+				<MenuIcon />
+			</Button>
+		{/snippet}
 	</Sheet.Trigger>
 	<Sheet.Content side="left" class="w-48 overflow-scroll">
 		<Sheet.Header>
