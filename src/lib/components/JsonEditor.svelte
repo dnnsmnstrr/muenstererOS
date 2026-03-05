@@ -3,11 +3,12 @@
 	import { browser } from '$app/environment';
 	import { mode } from 'mode-watcher';
 	import type * as Monaco from 'monaco-editor';
+	import { get } from 'svelte/store';
 	
 	let { 
 		value = $bindable('{}'),
 		language = 'json',
-		theme = $mode === 'dark' ? 'vs-dark' : 'vs',
+		theme = get(mode) === 'dark' ? 'vs-dark' : 'vs',
 		options = {},
 		height = '400px',
 		readonly = false
@@ -237,7 +238,7 @@
 			});
 
 			// Create the editor with enhanced options
-			const currentTheme = $mode === 'dark' ? 'json-dark' : 'json-light';
+			const currentTheme = get(mode) === 'dark' ? 'json-dark' : 'json-light';
 			editor = monaco.editor.create(container, {
 				value,
 				language,

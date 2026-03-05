@@ -7,8 +7,10 @@
 	import type { GistData } from '$lib/utils/github-api';
 	import DynamicForm from './DynamicForm.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { mode } from 'mode-watcher';
+	import { get } from 'svelte/store';
 
-    let {
+	let {
 		githubToken = $bindable(''),
 		gistData = $bindable('{}'),
 		gistInfo = $bindable<GistData>(),
@@ -85,7 +87,7 @@
 		{ value: 'vs', label: 'VS Light' }
 	];
 
-	let selectedTheme = $state($mode === 'dark' ? 'json-dark' : 'json-light');
+	let selectedTheme = $state(get(mode) === 'dark' ? 'json-dark' : 'json-light');
 	function handleThemeChange(value: string) {
 		selectedTheme = value;
 		jsonEditorRef?.setTheme(value);

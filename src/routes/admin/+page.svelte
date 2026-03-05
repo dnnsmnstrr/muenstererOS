@@ -124,18 +124,43 @@
 
 			const content = data.files[filename].content;
 
-			// Check for schema.json
+			// Check for schema.json as fallback
+			let fallbackSchema = null;
 			if (data.files['schema.json']) {
 				try {
-					gistSchema = JSON.parse(data.files['schema.json'].content);
+					fallbackSchema = JSON.parse(data.files['schema.json'].content);
 				} catch (e) {
 					console.error('Failed to parse schema.json', e);
-					toast.warning('Found schema.json but failed to parse it');
 				}
 			}
 
 			// Validate and format JSON
 			const validation = GitHubGistAPI.validateJSON(content);
+			if (validation.valid) {
+				try {
+					const parsedContent = JSON.parse(content);
+					if (parsedContent.$schema && typeof parsedContent.$schema === 'string') {
+						const schemaUrl = parsedContent.$schema;
+						if (schemaUrl.startsWith('http')) {
+							const schemaRes = await fetch(schemaUrl);
+							if (schemaRes.ok) {
+								gistSchema = await schemaRes.json();
+								toast.success('Loaded schema from $schema URL');
+							} else {
+								console.warn(`Failed to fetch schema from ${schemaUrl}`);
+								gistSchema = fallbackSchema;
+							}
+						}
+					} else {
+						gistSchema = fallbackSchema;
+					}
+				} catch (e) {
+					gistSchema = fallbackSchema;
+				}
+			} else {
+				gistSchema = fallbackSchema;
+			}
+
 			if (validation.valid && validation.formatted) {
 				gistData = validation.formatted;
 			} else {
