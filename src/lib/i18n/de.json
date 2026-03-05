@@ -141,5 +141,14 @@
 		"show": "Wiedergabe anzeigen",
 		"hide": "Wiedergabe ausblenden",
 		"loading": "Wird geladen..."
+	},
+	"uses": {
+		"search": "Suche...",
+		"no_results": "Keine Ergebnisse gefunden.",
+		"all_categories": "Alle Kategorien",
+		"results_found": "{count} Ergebnisse gefunden.",
+		"reset_filters": "Filter zurücksetzen",
+		"description": "Dinge, die ich jeden Tag benutze.",
+		"more_info": "Mehr Infos in meinem"
 	}
 }

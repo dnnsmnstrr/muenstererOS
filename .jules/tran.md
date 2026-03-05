@@ -22,3 +22,9 @@
 **Learning:** Automated code reviews will flag accidental inclusion of log files (e.g., dev_server.log) or environment files (.env) even if they are only in the working directory but not intended for commit.
 
 **Action:** Explicitly delete any temporary files created during verification or local testing before calling the submit tool.
+
+## 2026-03-03 - [Named export for i18n service]
+
+**Learning:** The `i18n` service in `src/lib/i18n/i18n.svelte.ts` is a named export (`export const i18n = ...`). Importing it as a default export (`import i18n from ...`) causes a runtime/build error "No matching export for import 'default'".
+
+**Action:** Always use bracketed imports `import { i18n } from '$lib/i18n/i18n.svelte'` when using the translation service.

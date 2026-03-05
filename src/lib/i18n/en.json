@@ -140,5 +140,14 @@
 		"show": "Show Now Playing",
 		"hide": "Hide Now Playing",
 		"loading": "Loading..."
+	},
+	"uses": {
+		"search": "Search...",
+		"no_results": "No results found.",
+		"all_categories": "All Categories",
+		"results_found": "{count} results found.",
+		"reset_filters": "Reset Filters",
+		"description": "Things I use every day.",
+		"more_info": "More Info in my"
 	}
 }
