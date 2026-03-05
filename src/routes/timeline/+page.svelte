@@ -3,6 +3,8 @@
 	import type { Event } from '$lib/types';
 	import Loader from '$lib/components/Loader.svelte';
 	import { formatDate, formatDuration } from '$lib/utils/helper';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	let events: Event[] = $state([]);
 	let loading = $state(true);
@@ -30,14 +32,14 @@
 </script>
 
 <svelte:head>
-	<title>Life Timeline</title>
-	<meta name="description" content="Interactive timeline of my life" />
+	<title>{i18n.t('timeline.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('timeline.description')} />
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
 	<div class="mb-8">
-		<h1 class="mb-2 text-3xl font-bold">Live Timeline</h1>
-		<p class="text-muted-foreground">A chronological view my life</p>
+		<h1 class="mb-2 text-3xl font-bold">{i18n.t('timeline.title')}</h1>
+		<p class="text-muted-foreground">{i18n.t('timeline.subheading')}</p>
 	</div>
 </div>
 {#if loading}
@@ -46,11 +48,11 @@
 	</div>
 {:else if error}
 	<div class="py-20 text-center">
-		<p class="text-lg text-red-500">Error: {error}</p>
+		<p class="text-lg text-red-500">{i18n.t('common.error')}: {error}</p>
 	</div>
 {:else if sortedEvents.length === 0}
 	<div class="py-20 text-center">
-		<p class="text-lg text-muted-foreground">No events found</p>
+		<p class="text-lg text-muted-foreground">{i18n.t('timeline.no_events')}</p>
 	</div>
 {:else}
 	<!-- Horizontal scrollable timeline -->
@@ -79,7 +81,13 @@
 
 							<div class="mb-3 text-sm text-muted-foreground">
 								<div class="mb-1 flex items-center justify-center space-x-1">
-									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<svg
+										aria-hidden="true"
+										class="h-4 w-4"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"
@@ -91,7 +99,8 @@
 								</div>
 								{#if event.endDate !== event.startDate}
 									<div class="text-xs opacity-75">
-										until {formatDate(event.endDate)} ({formatDuration(duration)})
+										{i18n.t('timeline.until')}
+										{formatDate(event.endDate)} ({formatDuration(duration)})
 									</div>
 								{/if}
 							</div>
@@ -100,7 +109,13 @@
 								<div
 									class="mb-3 flex items-center justify-center space-x-1 text-sm text-muted-foreground"
 								>
-									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<svg
+										aria-hidden="true"
+										class="h-4 w-4"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
 										<path
 											stroke-linecap="round"
 											stroke-linejoin="round"
