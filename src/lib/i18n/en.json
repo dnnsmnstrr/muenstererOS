@@ -156,5 +156,19 @@
 		"top_artists_description": "These were my top artists on Spotify over the years",
 		"preview_title": "Playlist Preview",
 		"alt_gif": "Playlist GIF"
+	},
+	"timeline": {
+		"title": "Life Timeline",
+		"description": "A chronological view of my life",
+		"view_mode": "View Mode",
+		"timeline": "Timeline",
+		"grid": "Grid",
+		"resolution": "Resolution",
+		"week": "Week",
+		"month": "Month",
+		"zoom": "Zoom",
+		"until": "until",
+		"no_events": "No events found",
+		"loading": "Loading timeline..."
 	}
 }

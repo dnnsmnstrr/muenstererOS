@@ -3,10 +3,55 @@
 	import type { Event } from '$lib/types';
 	import Loader from '$lib/components/Loader.svelte';
 	import { formatDate, formatDuration } from '$lib/utils/helper';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import * as Tabs from '$lib/components/ui/tabs';
+	import CustomSelect from '$lib/components/CustomSelect.svelte';
+	import { BIRTHDATE, PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	let events: Event[] = $state([]);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
+
+	let viewMode = $state<'timeline' | 'grid'>('timeline');
+	let resolution = $state<'week' | 'month'>('week');
+	let zoom = $state(12);
+	const targetAge = 80;
+
+	const birthDate = $derived(new Date(BIRTHDATE));
+	const now = new Date();
+
+	const gridUnits = $derived.by(() => {
+		const units = [];
+		const totalUnits = resolution === 'week' ? targetAge * 52 : targetAge * 12;
+
+		for (let i = 0; i < totalUnits; i++) {
+			const unitDate = new Date(birthDate);
+			if (resolution === 'week') {
+				unitDate.setDate(birthDate.getDate() + i * 7);
+			} else {
+				unitDate.setMonth(birthDate.getMonth() + i);
+			}
+
+			const isPast = unitDate < now;
+			const nextUnitDate = new Date(unitDate);
+			if (resolution === 'week') {
+				nextUnitDate.setDate(unitDate.getDate() + 7);
+			} else {
+				nextUnitDate.setMonth(unitDate.getMonth() + 1);
+			}
+
+			const activeEvents = parsedEvents.filter((event) => {
+				return event.start < nextUnitDate && event.end >= unitDate;
+			});
+
+			units.push({
+				date: unitDate,
+				isPast,
+				events: activeEvents
+			});
+		}
+		return units;
+	});
 
 	onMount(async () => {
 		try {
@@ -23,21 +68,65 @@
 		}
 	});
 
-	// Sort events by start date
-	let sortedEvents = $derived(
-		events.toSorted((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+	// Pre-parse event dates and sort events by start date
+	let parsedEvents = $derived(
+		events
+			.map((event) => ({
+				...event,
+				start: new Date(event.startDate),
+				end: new Date(event.endDate)
+			}))
+			.sort((a, b) => a.start.getTime() - b.start.getTime())
 	);
 </script>
 
 <svelte:head>
-	<title>Life Timeline</title>
-	<meta name="description" content="Interactive timeline of my life" />
+	<title>{i18n.t('timeline.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('timeline.description')} />
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
-	<div class="mb-8">
-		<h1 class="mb-2 text-3xl font-bold">Live Timeline</h1>
-		<p class="text-muted-foreground">A chronological view my life</p>
+	<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+		<div>
+			<h1 class="mb-2 text-3xl font-bold">{i18n.t('timeline.title')}</h1>
+			<p class="text-muted-foreground">{i18n.t('timeline.description')}</p>
+		</div>
+
+		<div class="flex flex-wrap items-center gap-4">
+			<Tabs.Root value={viewMode} onValueChange={(v) => (viewMode = v as 'timeline' | 'grid')}>
+				<Tabs.List>
+					<Tabs.Trigger value="timeline">{i18n.t('timeline.timeline')}</Tabs.Trigger>
+					<Tabs.Trigger value="grid">{i18n.t('timeline.grid')}</Tabs.Trigger>
+				</Tabs.List>
+			</Tabs.Root>
+
+			{#if viewMode === 'grid'}
+				<div class="flex items-center gap-2">
+					<span class="text-sm font-medium">{i18n.t('timeline.resolution')}:</span>
+					<CustomSelect
+						name="resolution"
+						value={resolution}
+						onValueChange={(v) => (resolution = v as 'week' | 'month')}
+						options={[
+							{ value: 'week', label: i18n.t('timeline.week') },
+							{ value: 'month', label: i18n.t('timeline.month') }
+						]}
+						class="w-32"
+					/>
+				</div>
+
+				<div class="flex items-center gap-2">
+					<span class="text-sm font-medium">{i18n.t('timeline.zoom')}:</span>
+					<input
+						type="range"
+						min="4"
+						max="32"
+						bind:value={zoom}
+						class="h-2 w-24 cursor-pointer appearance-none rounded-lg bg-secondary"
+					/>
+				</div>
+			{/if}
+		</div>
 	</div>
 </div>
 {#if loading}
@@ -48,11 +137,11 @@
 	<div class="py-20 text-center">
 		<p class="text-lg text-red-500">Error: {error}</p>
 	</div>
-{:else if sortedEvents.length === 0}
+{:else if parsedEvents.length === 0}
 	<div class="py-20 text-center">
-		<p class="text-lg text-muted-foreground">No events found</p>
+		<p class="text-lg text-muted-foreground">{i18n.t('timeline.no_events')}</p>
 	</div>
-{:else}
+{:else if viewMode === 'timeline'}
 	<!-- Horizontal scrollable timeline -->
 	<div class="">
 		<!-- Timeline line -->
@@ -62,13 +151,11 @@
 
 		<!-- Timeline container -->
 		<div
-			class="absolute inset-0 top-48 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 overflow-x-auto flex items-center"
+			class="absolute inset-0 top-48 overflow-x-auto flex items-center scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800"
 		>
 			<div class="flex min-w-max space-x-8 px-4 h-4/6 sm:max-h-80 sm:px-20">
-				{#each sortedEvents as event, index}
-					{@const duration = Math.round(
-						new Date(event.endDate).getTime() - new Date(event.startDate).getTime()
-					)}
+				{#each parsedEvents as event, index}
+					{@const duration = Math.round(event.end.getTime() - event.start.getTime())}
 					<div class="relative flex min-w-64 flex-col">
 						<!-- Event card -->
 						<div
@@ -91,7 +178,8 @@
 								</div>
 								{#if event.endDate !== event.startDate}
 									<div class="text-xs opacity-75">
-										until {formatDate(event.endDate)} ({formatDuration(duration)})
+										{i18n.t('timeline.until')}
+										{formatDate(event.endDate)} ({formatDuration(duration)})
 									</div>
 								{/if}
 							</div>
@@ -121,6 +209,30 @@
 					</div>
 				{/each}
 			</div>
+		</div>
+	</div>
+{:else}
+	<!-- Grid view -->
+	<div class="container mx-auto px-4 pb-20">
+		<div
+			class="grid gap-1"
+			style="grid-template-columns: repeat(auto-fill, minmax({zoom}px, 1fr));"
+		>
+			{#each gridUnits as unit}
+				{@const primaryEvent = unit.events[0]}
+				{@const title = `${formatDate(unit.date.toISOString())}${unit.events.length > 0 ? '\n' + unit.events.map((e) => e.name).join(', ') : ''}`}
+				<div
+					{title}
+					class="aspect-square rounded-sm border"
+					style="
+                                width: {zoom}px;
+                                height: {zoom}px;
+                                background-color: {primaryEvent?.color || 'transparent'};
+                                opacity: {unit.isPast ? 1 : 0.2};
+                                border-color: {primaryEvent ? 'rgba(0,0,0,0.1)' : 'var(--border)'};
+                            "
+				></div>
+			{/each}
 		</div>
 	</div>
 {/if}

@@ -157,5 +157,19 @@
 		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
 		"preview_title": "Playlist-Vorschau",
 		"alt_gif": "Playlist GIF"
+	},
+	"timeline": {
+		"title": "Lebens-Zeitstrahl",
+		"description": "Ein chronologischer Blick auf mein Leben",
+		"view_mode": "Ansichtsmodus",
+		"timeline": "Zeitstrahl",
+		"grid": "Gitter",
+		"resolution": "Auflösung",
+		"week": "Woche",
+		"month": "Monat",
+		"zoom": "Zoom",
+		"until": "bis",
+		"no_events": "Keine Ereignisse gefunden",
+		"loading": "Zeitstrahl wird geladen..."
 	}
 }
