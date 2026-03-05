@@ -3,7 +3,8 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import { Plus, Trash2 } from 'lucide-svelte';
+	import { Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-svelte';
+	import * as Collapsible from '$lib/components/ui/collapsible';
 
 	let { schema, data = $bindable() } = $props();
 
@@ -91,54 +92,89 @@
 		{@const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'))}
 		<div class="space-y-2">
 			{#if type === 'object'}
-				<div class="space-y-4 rounded-lg border p-4">
-					<div class="flex items-center justify-between">
-						<h3 class="text-sm font-semibold capitalize">{label}</h3>
+				{@const objectState = { open: true }}
+				<Collapsible.Root bind:open={objectState.open} class="rounded-lg border">
+					<div class="flex items-center justify-between p-4">
+						<Collapsible.Trigger class="flex flex-1 items-center gap-2 text-left">
+							{#snippet child({ props })}
+								<button {...props} class="flex flex-1 items-center gap-2">
+									{#if objectState.open}
+										<ChevronDown class="h-4 w-4" />
+									{:else}
+										<ChevronRight class="h-4 w-4" />
+									{/if}
+									<h3 class="text-sm font-semibold capitalize">{label}</h3>
+								</button>
+							{/snippet}
+						</Collapsible.Trigger>
 					</div>
-					<div class="grid gap-4">
-						{#if obj[key]}
-							{#each Object.entries(s.properties || {}) as [subKey, subSchema]}
-								{@render renderField(subSchema, obj[key], subKey, subKey, `${path}.${subKey}`)}
-							{/each}
-						{/if}
-					</div>
-				</div>
+					<Collapsible.Content class="px-4 pb-4">
+						<div class="grid gap-4">
+							{#if obj[key]}
+								{#each Object.entries(s.properties || {}) as [subKey, subSchema]}
+									{@render renderField(subSchema, obj[key], subKey, subKey, `${path}.${subKey}`)}
+								{/each}
+							{/if}
+						</div>
+					</Collapsible.Content>
+				</Collapsible.Root>
 			{:else if type === 'array'}
-				<div class="space-y-4 rounded-lg border p-4">
-					<div class="flex items-center justify-between">
-						<h3 class="text-sm font-semibold capitalize">{label}</h3>
-						<Button
-							variant="outline"
-							size="sm"
-                            data-add-button={label}
-							onclick={() => {
-								if (!obj[key]) obj[key] = [];
-								obj[key].push(getInitialValue(s.items));
-							}}
-						>
-							<Plus class="mr-1 h-4 w-4" /> Add
-						</Button>
-					</div>
-					<div class="space-y-4">
-						{#if obj[key] && Array.isArray(obj[key])}
-							{#each obj[key] as _, index}
-								<div class="relative ml-2 space-y-2 border-l-2 pl-6">
-									<Button
-										variant="ghost"
-										size="icon"
-										class="absolute -left-3 top-0 h-6 w-6 text-destructive hover:bg-destructive/10"
-										onclick={() => {
-											obj[key].splice(index, 1);
-										}}
-									>
-										<Trash2 class="h-4 w-4" />
-									</Button>
-									{@render renderField(s.items, obj[key], index, `${label} item ${index + 1}`, `${path}[${index}]`)}
-								</div>
-							{/each}
-						{/if}
-					</div>
-				</div>
+				{@const arrayState = { open: true }}
+				<Collapsible.Root bind:open={arrayState.open} class="rounded-lg border">
+					<div class="flex items-center justify-between p-4">
+						<Collapsible.Trigger class="flex flex-1 items-center gap-2 text-left">
+							{#snippet child({ props })}
+								<button {...props} class="flex flex-1 items-center gap-2">
+									{#if arrayState.open}
+										<ChevronDown class="h-4 w-4" />
+									{:else}
+										<ChevronRight class="h-4 w-4" />
+									{/if}
+									<h3 class="text-sm font-semibold capitalize">{label}</h3>
+								</button>
+							{/snippet}
+						</Collapsible.Trigger>
+							<Button
+								variant="outline"
+								size="sm"
+								data-add-button={label}
+								onclick={(e) => {
+									e.stopPropagation();
+									if (!obj[key]) obj[key] = [];
+									obj[key].push(getInitialValue(s.items));
+								}}
+							>
+								<Plus class="mr-1 h-4 w-4" /> Add
+							</Button>
+						</div>
+					<Collapsible.Content class="px-4 pb-4">
+						<div class="space-y-4">
+							{#if obj[key] && Array.isArray(obj[key])}
+								{#each obj[key] as _, index}
+									<div class="relative ml-2 space-y-2 border-l-2 pl-6">
+										<Button
+											variant="ghost"
+											size="icon"
+											class="absolute -left-3 top-0 h-6 w-6 text-destructive hover:bg-destructive/10"
+											onclick={() => {
+												obj[key].splice(index, 1);
+											}}
+										>
+											<Trash2 class="h-4 w-4" />
+										</Button>
+										{@render renderField(
+											s.items,
+											obj[key],
+											index,
+											`${label} item ${index + 1}`,
+											`${path}[${index}]`
+										)}
+									</div>
+								{/each}
+							{/if}
+						</div>
+					</Collapsible.Content>
+				</Collapsible.Root>
 			{:else}
 				<div class="grid gap-1.5">
 					<Label class="capitalize" for={path}>{label}</Label>
