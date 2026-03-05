@@ -31,6 +31,7 @@
 	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 
 	let showGifs = $state(false);
@@ -170,8 +171,8 @@
 	<Dialog.Root open={showTopArtists} onOpenChange={(value) => (showTopArtists = value)}>
 		<Dialog.Content>
 			<Dialog.Header>
-				<Dialog.Title>Top Artists</Dialog.Title>
-				<Dialog.Description>These were my top artists on Spotify over the years</Dialog.Description>
+				<Dialog.Title>{i18n.t('playlists.top_artists')}</Dialog.Title>
+				<Dialog.Description>{i18n.t('playlists.top_artists_description')}</Dialog.Description>
 			</Dialog.Header>
 			<TopArtists />
 		</Dialog.Content>
@@ -186,7 +187,7 @@
 		>
 			{#if selectedPlaylistUri}
 				<iframe
-					title="Playlist Preview"
+					title={i18n.t('playlists.preview_title')}
 					src="https://open.spotify.com/embed/playlist/{selectedPlaylistUri}"
 					width="100%"
 					height="100%"
@@ -215,10 +216,10 @@
 	</Dialog.Root>
 
 	<div class="mb-4 flex flex-col items-start sm:items-center justify-between gap-4 sm:mb-6 sm:flex-row">
-		<Heading class="mb-0">My Playlists</Heading>
+		<Heading class="mb-0">{i18n.t('playlists.title')}</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
 			<Button
-				title="I'm feeling lucky"
+				title={i18n.t('playlists.feeling_lucky')}
 				variant="outline"
 				size="icon"
 				class="shrink-0"
@@ -227,7 +228,7 @@
 				🎲
 			</Button>
 			<Input
-				placeholder="Search playlists..."
+				placeholder={i18n.t('playlists.search_placeholder')}
 				type="search"
 				class="w-full text-base sm:w-52"
 				bind:value={filterQuery}
@@ -237,9 +238,9 @@
 
 	{#if filterQuery && !filteredPlaylists.length}
 		<div class="text-center opacity-50">
-			No matching playlists found.
+			{i18n.t('playlists.no_results')}
 			<br /><br />
-			Check out my <Link href={links.spotify + '/playlists'}>Spotify profile</Link> for more playlists.
+			{i18n.t('playlists.spotify_profile_prefix')} <Link href={links.spotify + '/playlists'}>{i18n.t('playlists.spotify_profile_link')}</Link> {i18n.t('playlists.spotify_profile_suffix')}
 		</div>
 	{/if}
 
@@ -259,7 +260,7 @@
 	{#if !filterQuery}
 		<div class="">
 			{#if aggregatedPlaylists.length}
-				<h2 class="my-4 text-2xl font-semibold">Season Playlists</h2>
+				<h2 class="my-4 text-2xl font-semibold">{i18n.t('playlists.season_playlists')}</h2>
 			{/if}
 			<div class="grid grid-cols-4 gap-6">
 				{#each aggregatedPlaylists as seasonPlaylist}
@@ -280,9 +281,9 @@
 		<div class="mt-12">
 			{#if otherPlaylists.length}
 				<div class="flex justify-between items-center">
-					<h2 class="my-4 text-2xl font-semibold">Other Playlists</h2>
+					<h2 class="my-4 text-2xl font-semibold">{i18n.t('playlists.other_playlists')}</h2>
 					<div class="flex items-center">
-						<Switch bind:checked={showGifs} class="mr-2"/> <span class="opacity-70">Show GIFs</span>
+						<Switch bind:checked={showGifs} class="mr-2"/> <span class="opacity-70">{i18n.t('playlists.show_gifs')}</span>
 					</div>
 				</div>
 			{/if}
@@ -304,7 +305,7 @@
 										src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 										data-gif-src={otherPlaylist.gif}
 										data-gif-lazy
-										alt="otherPlaylist GIF"
+										alt={i18n.t('playlists.alt_gif')}
 										class="w-16 aspect-square object-cover pb-2 transition-opacity duration-300"
 										class:opacity-0={!showGifs}
 									/>
@@ -321,7 +322,7 @@
 		<div class="my-8 flex w-full justify-center">
 			<Button onclick={() => (showTopArtists = true)} variant="secondary">
 				<Users class="mr-2 w-4" />
-				Top Artists
+				{i18n.t('playlists.top_artists')}
 			</Button>
 		</div>
 	{/if}

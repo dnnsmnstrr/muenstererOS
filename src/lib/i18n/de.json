@@ -141,5 +141,21 @@
 		"show": "Wiedergabe anzeigen",
 		"hide": "Wiedergabe ausblenden",
 		"loading": "Wird geladen..."
+	},
+	"playlists": {
+		"title": "Meine Playlists",
+		"feeling_lucky": "Auf gut Glück",
+		"search_placeholder": "Playlists suchen...",
+		"no_results": "Keine passenden Playlists gefunden.",
+		"spotify_profile_prefix": "Besuche mein",
+		"spotify_profile_link": "Spotify-Profil",
+		"spotify_profile_suffix": "für weitere Playlists.",
+		"season_playlists": "Saisonale Playlists",
+		"other_playlists": "Andere Playlists",
+		"show_gifs": "GIFs anzeigen",
+		"top_artists": "Top-Künstler",
+		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
+		"preview_title": "Playlist-Vorschau",
+		"alt_gif": "Playlist GIF"
 	}
 }
