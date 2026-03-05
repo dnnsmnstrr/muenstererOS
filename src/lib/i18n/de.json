@@ -16,6 +16,7 @@
 		"api": "API",
 		"contact": "Kontakt",
 		"status": "Status",
+		"error": "Fehler",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -141,5 +142,12 @@
 		"show": "Wiedergabe anzeigen",
 		"hide": "Wiedergabe ausblenden",
 		"loading": "Wird geladen..."
+	},
+	"timeline": {
+		"title": "Lebens-Timeline",
+		"description": "Interaktive Timeline meines Lebens",
+		"subheading": "Eine chronologische Ansicht meines Lebens",
+		"until": "bis",
+		"no_events": "Keine Ereignisse gefunden"
 	}
 }

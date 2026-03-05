@@ -16,6 +16,7 @@
 		"api": "API",
 		"contact": "Contact",
 		"status": "Status",
+		"error": "Error",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -140,5 +141,12 @@
 		"show": "Show Now Playing",
 		"hide": "Hide Now Playing",
 		"loading": "Loading..."
+	},
+	"timeline": {
+		"title": "Life Timeline",
+		"description": "Interactive timeline of my life",
+		"subheading": "A chronological view of my life",
+		"until": "until",
+		"no_events": "No events found"
 	}
 }
