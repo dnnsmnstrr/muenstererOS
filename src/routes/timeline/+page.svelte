@@ -56,7 +56,8 @@
 				date: unitDate,
 				isPast,
 				events: activeEvents,
-				isBirthday: resolution === 'week' ? i % 52 === 0 : i % 12 === 0
+				isBirthday: resolution === 'week' ? i % 52 === 0 : i % 12 === 0,
+				age: resolution === 'week' ? Math.floor(i / 52) : Math.floor(i / 12)
 			});
 		}
 		return units;
@@ -292,7 +293,7 @@
 							class="absolute inset-0 flex items-center justify-center pointer-events-none"
 						>
 							<div
-								class="rounded-full bg-white shadow-sm"
+								class="rounded-full bg-black shadow-sm dark:bg-white"
 								style="width: {Math.max(3, zoom / 3)}px; height: {Math.max(3, zoom / 3)}px;"
 							></div>
 						</div>
@@ -311,7 +312,10 @@
 			{#if displayUnit!.isBirthday}
 				<div class="mt-1 flex items-center gap-2">
 					<div class="h-2 w-2 rounded-full bg-primary"></div>
-					<div class="text-xs font-semibold">{i18n.t('timeline.birthday')}</div>
+					<div class="text-xs font-semibold">
+						{i18n.t('timeline.birthday')}
+						({i18n.t('timeline.age')}: {displayUnit!.age})
+					</div>
 				</div>
 			{/if}
 			{#if displayUnit!.events.length > 0}
