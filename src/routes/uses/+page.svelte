@@ -282,7 +282,9 @@
 			<Table.Root>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="w-[80px]"></Table.Head>
+						<Table.Head class="w-[80px]">
+							<span class="sr-only">Icon</span>
+						</Table.Head>
 						<Table.Head>
 							<button
 								class="flex items-center gap-1 hover:text-foreground"
