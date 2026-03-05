@@ -5,6 +5,7 @@
 	import { formatDate, formatDuration } from '$lib/utils/helper';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import { Calendar, Grid } from 'lucide-svelte';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import { BIRTHDATE, PAGE_TITLE_SUFFIX } from '$lib/config';
 
@@ -86,23 +87,31 @@
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
-	<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-		<div>
-			<h1 class="mb-2 text-3xl font-bold">{i18n.t('timeline.title')}</h1>
-			<p class="text-muted-foreground">{i18n.t('timeline.description')}</p>
-		</div>
+	<div class="mb-8 flex flex-col gap-6">
+		<div class="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+			<div>
+				<h1 class="mb-2 text-3xl font-bold">{i18n.t('timeline.title')}</h1>
+				<p class="text-muted-foreground">{i18n.t('timeline.description')}</p>
+			</div>
 
-		<div class="flex flex-wrap items-center gap-4">
 			<Tabs.Root value={viewMode} onValueChange={(v) => (viewMode = v as 'timeline' | 'grid')}>
 				<Tabs.List>
-					<Tabs.Trigger value="timeline">{i18n.t('timeline.timeline')}</Tabs.Trigger>
-					<Tabs.Trigger value="grid">{i18n.t('timeline.grid')}</Tabs.Trigger>
+					<Tabs.Trigger value="timeline" class="flex items-center gap-2">
+						<Calendar class="h-4 w-4" />
+						{i18n.t('timeline.timeline')}
+					</Tabs.Trigger>
+					<Tabs.Trigger value="grid" class="flex items-center gap-2">
+						<Grid class="h-4 w-4" />
+						{i18n.t('timeline.grid')}
+					</Tabs.Trigger>
 				</Tabs.List>
 			</Tabs.Root>
+		</div>
 
-			{#if viewMode === 'grid'}
-				<div class="flex items-center gap-2">
-					<span class="text-sm font-medium">{i18n.t('timeline.resolution')}:</span>
+		{#if viewMode === 'grid'}
+			<div class="flex flex-wrap items-center gap-6 border-t pt-4">
+				<div class="flex items-center gap-3">
+					<span class="text-sm font-semibold">{i18n.t('timeline.resolution')}:</span>
 					<CustomSelect
 						name="resolution"
 						value={resolution}
@@ -115,18 +124,18 @@
 					/>
 				</div>
 
-				<div class="flex items-center gap-2">
-					<span class="text-sm font-medium">{i18n.t('timeline.zoom')}:</span>
+				<div class="flex items-center gap-3">
+					<span class="text-sm font-semibold">{i18n.t('timeline.zoom')}:</span>
 					<input
 						type="range"
 						min="4"
 						max="32"
 						bind:value={zoom}
-						class="h-2 w-24 cursor-pointer appearance-none rounded-lg bg-secondary"
+						class="h-1.5 w-32 cursor-pointer appearance-none rounded-lg bg-secondary accent-primary"
 					/>
 				</div>
-			{/if}
-		</div>
+			</div>
+		{/if}
 	</div>
 </div>
 {#if loading}
