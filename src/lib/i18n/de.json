@@ -16,7 +16,6 @@
 		"api": "API",
 		"contact": "Kontakt",
 		"status": "Status",
-		"error": "Fehler",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -143,22 +142,6 @@
 		"hide": "Wiedergabe ausblenden",
 		"loading": "Wird geladen..."
 	},
-	"uses": {
-		"search": "Suche...",
-		"no_results": "Keine Ergebnisse.",
-		"all_categories": "Alle Kategorien",
-		"results_found": "{count} Ergebnisse.",
-		"reset_filters": "Filter zurücksetzen",
-		"description": "Dinge, die ich jeden Tag benutze.",
-		"more_info": "Mehr Infos in meinem"
-  },
-	"timeline": {
-		"title": "Lebens-Timeline",
-		"description": "Interaktive Timeline meines Lebens",
-		"subheading": "Eine chronologische Ansicht meines Lebens",
-		"until": "bis",
-		"no_events": "Keine Ereignisse gefunden"
-  },
 	"playlists": {
 		"title": "Meine Playlists",
 		"feeling_lucky": "Auf gut Glück",
@@ -174,5 +157,22 @@
 		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
 		"preview_title": "Playlist-Vorschau",
 		"alt_gif": "Playlist GIF"
+	},
+	"timeline": {
+		"title": "Lebens-Zeitstrahl",
+		"description": "Ein chronologischer Blick auf mein Leben",
+		"view_mode": "Ansichtsmodus",
+		"timeline": "Zeitstrahl",
+		"grid": "Gitter",
+		"resolution": "Auflösung",
+		"week": "Woche",
+		"month": "Monat",
+		"zoom": "Zoom",
+		"until": "bis",
+		"until_now": "bis heute",
+		"no_events": "Keine Ereignisse gefunden",
+		"loading": "Zeitstrahl wird geladen...",
+		"show_future": "Zukunft anzeigen",
+		"life_expectancy": "Lebenserwartung"
 	}
 }
