@@ -5,8 +5,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
+	import { cn } from '$lib/utils/utils';
 
 	let { schema, data = $bindable() } = $props();
+
+	let openStates = $state<Record<string, boolean>>({});
 
 	function resolveSchema(s: any): any {
 		if (!s || !s.$ref) return s;
@@ -90,15 +93,21 @@
 	{@const s = resolveSchema(s_raw)}
 	{#if obj && s}
 		{@const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'))}
+		{#if openStates[path] === undefined}
+			{(openStates[path] = true)}
+		{/if}
 		<div class="space-y-2">
 			{#if type === 'object'}
-				{@const objectState = { open: true }}
-				<Collapsible.Root bind:open={objectState.open} class="rounded-lg border">
+				<Collapsible.Root bind:open={openStates[path]} class="rounded-lg border">
 					<div class="flex items-center justify-between p-4">
 						<Collapsible.Trigger class="flex flex-1 items-center gap-2 text-left">
 							{#snippet child({ props })}
-								<button {...props} class="flex flex-1 items-center gap-2">
-									{#if objectState.open}
+								<button
+									{...props}
+									type="button"
+									class={cn('flex flex-1 items-center gap-2', props.class as string)}
+								>
+									{#if openStates[path]}
 										<ChevronDown class="h-4 w-4" />
 									{:else}
 										<ChevronRight class="h-4 w-4" />
@@ -119,13 +128,16 @@
 					</Collapsible.Content>
 				</Collapsible.Root>
 			{:else if type === 'array'}
-				{@const arrayState = { open: true }}
-				<Collapsible.Root bind:open={arrayState.open} class="rounded-lg border">
+				<Collapsible.Root bind:open={openStates[path]} class="rounded-lg border">
 					<div class="flex items-center justify-between p-4">
 						<Collapsible.Trigger class="flex flex-1 items-center gap-2 text-left">
 							{#snippet child({ props })}
-								<button {...props} class="flex flex-1 items-center gap-2">
-									{#if arrayState.open}
+								<button
+									{...props}
+									type="button"
+									class={cn('flex flex-1 items-center gap-2', props.class as string)}
+								>
+									{#if openStates[path]}
 										<ChevronDown class="h-4 w-4" />
 									{:else}
 										<ChevronRight class="h-4 w-4" />
