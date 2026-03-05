@@ -5,7 +5,6 @@
 	import { Save, Code, FormInput } from 'lucide-svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import type { GistData } from '$lib/utils/github-api';
-	import { mode } from 'mode-watcher';
 	import DynamicForm from './DynamicForm.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
 
@@ -23,16 +22,14 @@
 	let jsonEditorRef = $state<JsonEditor | null>(null);
 	let viewMode = $state<'editor' | 'form'>('editor');
 	let formData = $state<any>(null);
+	let lastSyncedGistData = $state('');
 
 	$effect(() => {
-		if (viewMode === 'form') {
+		// Sync from editor to form only when gistData changes from outside (Load/Reset)
+		if (viewMode === 'form' && gistData !== lastSyncedGistData) {
 			try {
-				const currentDataStr = JSON.stringify(formData);
-				// Only re-parse if gistData actually differs from current formData
-				// or if formData hasn't been initialized yet
-				if (!formData || currentDataStr !== gistData) {
-					formData = JSON.parse(gistData);
-				}
+				formData = JSON.parse(gistData);
+				lastSyncedGistData = gistData;
 			} catch (e) {
 				console.error('Failed to parse gistData for form view', e);
 			}
@@ -44,11 +41,14 @@
 
 		if (viewMode === 'form' && value === 'editor') {
 			// Sync form data back to editor
-			gistData = JSON.stringify(formData, null, 2);
+			const newGistData = JSON.stringify(formData, null, 2);
+			gistData = newGistData;
+			lastSyncedGistData = newGistData;
 		} else if (viewMode === 'editor' && value === 'form') {
 			// Sync editor data to form
 			try {
 				formData = JSON.parse(gistData);
+				lastSyncedGistData = gistData;
 			} catch (e) {
 				console.error('Invalid JSON in editor, cannot switch to form', e);
 				return;

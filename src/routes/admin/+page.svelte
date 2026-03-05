@@ -221,6 +221,7 @@
 			const originalContent = gistInfo.files[filename]?.content || '{}';
 
 			// Use setValue to properly update the editor
+			gistData = originalContent;
 			jsonEditor?.setValue(originalContent);
 			toast.success('Editor reset to original content');
 		}

@@ -8,8 +8,12 @@
 	let { schema, data = $bindable() } = $props();
 
 	function getInitialValue(s: any) {
+		if (!s) return null;
 		if (s.default !== undefined) return JSON.parse(JSON.stringify(s.default));
-		switch (s.type) {
+
+		const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'));
+
+		switch (type) {
 			case 'object':
 				const obj: any = {};
 				if (s.properties) {
@@ -27,7 +31,7 @@
 			case 'boolean':
 				return false;
 			default:
-				return null;
+				return '';
 		}
 	}
 
@@ -35,14 +39,17 @@
 	function initializeData(s: any, d: any) {
 		if (!s || !d) return;
 
-		if (s.type === 'object' && s.properties) {
+		const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'));
+
+		if (type === 'object' && s.properties) {
 			for (const [key, propSchema] of Object.entries<any>(s.properties)) {
 				if (d[key] === undefined) {
 					d[key] = getInitialValue(propSchema);
+				} else {
+					initializeData(propSchema, d[key]);
 				}
-				initializeData(propSchema, d[key]);
 			}
-		} else if (s.type === 'array' && Array.isArray(d) && s.items) {
+		} else if (type === 'array' && Array.isArray(d) && s.items) {
 			for (const item of d) {
 				initializeData(s.items, item);
 			}
@@ -57,9 +64,10 @@
 </script>
 
 {#snippet renderField(s: any, obj: any, key: string | number, label: string, path: string)}
-	{#if obj}
+	{#if obj && s}
+		{@const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'))}
 		<div class="space-y-2">
-			{#if s.type === 'object'}
+			{#if type === 'object'}
 				<div class="space-y-4 rounded-lg border p-4">
 					<div class="flex items-center justify-between">
 						<h3 class="text-sm font-semibold capitalize">{label}</h3>
@@ -72,13 +80,14 @@
 						{/if}
 					</div>
 				</div>
-			{:else if s.type === 'array'}
+			{:else if type === 'array'}
 				<div class="space-y-4 rounded-lg border p-4">
 					<div class="flex items-center justify-between">
 						<h3 class="text-sm font-semibold capitalize">{label}</h3>
 						<Button
 							variant="outline"
 							size="sm"
+                            data-add-button={label}
 							onclick={() => {
 								if (!obj[key]) obj[key] = [];
 								obj[key].push(getInitialValue(s.items));
@@ -95,7 +104,9 @@
 										variant="ghost"
 										size="icon"
 										class="absolute -left-3 top-0 h-6 w-6 text-destructive hover:bg-destructive/10"
-										onclick={() => obj[key].splice(index, 1)}
+										onclick={() => {
+											obj[key].splice(index, 1);
+										}}
 									>
 										<Trash2 class="h-4 w-4" />
 									</Button>
@@ -108,7 +119,7 @@
 			{:else}
 				<div class="grid gap-1.5">
 					<Label class="capitalize" for={path}>{label}</Label>
-					{#if s.type === 'string'}
+					{#if type === 'string'}
 						{#if s.enum}
 							<select
 								id={path}
@@ -122,9 +133,9 @@
 						{:else}
 							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
 						{/if}
-					{:else if s.type === 'number'}
+					{:else if type === 'number'}
 						<Input id={path} type="number" bind:value={obj[key]} />
-					{:else if s.type === 'boolean'}
+					{:else if type === 'boolean'}
 						<div class="flex items-center space-x-2 py-2">
 							<Checkbox id={path} bind:checked={obj[key]} />
 							<Label for={path} class="cursor-pointer text-sm font-medium leading-none">
@@ -132,7 +143,7 @@
 							</Label>
 						</div>
 					{/if}
-					{#if s.description && s.type !== 'boolean'}
+					{#if s.description && type !== 'boolean'}
 						<p class="text-xs text-muted-foreground">{s.description}</p>
 					{/if}
 				</div>
@@ -142,7 +153,7 @@
 {/snippet}
 
 <div class="space-y-6">
-	{#if schema && schema.type === 'object' && data}
+	{#if schema && (schema.type === 'object' || schema.properties) && data}
 		<div class="grid gap-6">
 			{#each Object.entries(schema.properties || {}) as [key, s]}
 				{@render renderField(s, data, key, key, key)}
