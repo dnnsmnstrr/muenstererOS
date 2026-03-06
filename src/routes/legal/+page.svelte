@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { i18n } from './../../lib/i18n/i18n.svelte.ts';
   import { MdSvelte } from '@jazzymcjazz/mdsvelte';
   import legalText from "./impressum.md?raw";
+  import legalTextEN from "./legal-notice.md?raw";
 	import { renderers } from "$lib/components/typography";
 	import type { TypographyContext } from '$lib/components/typography';
   import * as Card from "$lib/components/ui/card";
@@ -30,7 +32,7 @@
 <div class="container overflow-y-scroll p-4 card">
   <Card.Root>
     <Card.Content class="pt-6">
-      <MdSvelte source={legalText} renderers={renderers} />
+      <MdSvelte source={i18n.lang === 'de' ? legalText : legalTextEN} renderers={renderers} />
     </Card.Content>
   </Card.Root>
 </div>

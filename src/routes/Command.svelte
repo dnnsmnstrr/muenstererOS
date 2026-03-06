@@ -432,7 +432,7 @@
 		system: [
 			{
 				name: i18n.t('command.toggle_dark_mode'),
-				value: 'toggle dark mode, theme',
+				value: 'toggle dark mode, theme, light',
 				icon: $mode === 'light' ? Sun : Moon,
 				action: toggleMode
 			},

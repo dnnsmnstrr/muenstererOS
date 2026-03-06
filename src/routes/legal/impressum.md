@@ -2,29 +2,17 @@
 
 __Dennis Münsterer__, Fachinformatiker für Anwendungsentwicklung
 
-- Phone: *+49 157 30967248*
 - E-Mail: `dennismuensterer@gmail.com`
 
 ## Datenschutzerklärung (DSGVO)
 Auf dieser Webseite werden keine personenbezogenen Daten erhoben, gespeichert oder verarbeitet. 
 
-Es werden keine Tracking-Cookies verwendet.
-
-## Data Protection Policy (GDPR)
-This website does not collect, store or process Personally Identifiable Information (PII).  
-
-Cookies or other types of tracking are not being used.
+Es werden keine Tracking-Cookies verwendet (siehe [Nutzungsstatistik](#Nutzungsstatistik) für mehr Informationen).
 
 ## Verweis auf Dritte
 Diese Website wird mit [Vercel](https://vercel.com/) betrieben. Deren Datenschutzerklärung befindet sich [hier](https://vercel.com/legal/privacy-policy).
 
-Teile dieser Website werden auf [GitHub](https://www.github.com/) mit [GitHub Pages](https://help.github.com/articles/what-is-github-pages/) gehostet. Die GitHub Datenschutzerklärung ist [hier](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement) hinterlegt.
-
-## Third Party Inclusion
-This website runs on [Vercel](https://vercel.com/). Their privacy policy can be found [here](https://vercel.com/legal/privacy-policy).
-
-Parts of the website are hosted on [GitHub](https://www.github.com/) using [GitHub Pages](https://help.github.com/articles/what-is-github-pages/). The GitHub Privacy Statement can be found [here](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
-
+Teile dieser Website und deren Quellcode werden auf [GitHub](https://www.github.com/) mit [GitHub Pages](https://help.github.com/articles/what-is-github-pages/) gehostet. Die GitHub Datenschutzerklärung ist [hier](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement) hinterlegt.
 
 ## Haftungsausschluss
 
@@ -45,6 +33,13 @@ Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unt
 Die Nutzung meiner Webseite ist ohne Angabe personenbezogener Daten möglich. Soweit auf meinen Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.
 Ich weise darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
 Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Der Betreiber der Seiten behält sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.
+
+### Nutzungsstatistik
+
+Diese Webseite verwendet [Counter.dev](https://counter.dev/), um Seitenaufrufe zu verfolgen und zu analysieren. Dieses Tool hilft uns, zu verstehen, wie Besucher mit unseren Inhalten interagieren, was es uns ermöglicht, die Benutzererfahrung zu verbessern und unsere Dienstleistungen zu optimieren. Counter.dev sammelt Informationen wie die Anzahl der Aufrufe, Seitenbesuche und Nutzerengagement-Metriken anonymisiert und ohne die Verwendung von Cookies.
+Für weitere Informationen darüber, wie Counter.dev Daten erhebt und verarbeitet, besuchen Sie bitte deren [Datenschutzerklärung](https://counter.dev/pages/privacy.html).  
+
+Durch die Nutzung dieser Website stimmen Sie der Erhebung und Verarbeitung Ihrer Daten gemäß dieser Beschreibung zu.
 
 ## Social Media
 
