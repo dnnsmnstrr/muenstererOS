@@ -100,7 +100,7 @@
 			<div class="flex w-full items-center justify-between gap-4 sm:w-auto">
 				<span class="font-semibold">Editor</span>
 				{#if schema}
-					<Tabs.Root bind:value={viewMode} onValueChange={handleViewChange} class="w-auto">
+					<Tabs.Root value={viewMode} onValueChange={handleViewChange} class="w-auto">
 						<Tabs.List>
 							<Tabs.Trigger value="editor" class="flex items-center gap-1.5">
 								<Code class="h-4 w-4" />

@@ -93,12 +93,13 @@
 	{@const s = resolveSchema(s_raw)}
 	{#if obj && s}
 		{@const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'))}
-		{#if openStates[path] === undefined}
-			{(openStates[path] = true)}
-		{/if}
 		<div class="space-y-2">
 			{#if type === 'object'}
-				<Collapsible.Root bind:open={openStates[path]} class="rounded-lg border">
+				<Collapsible.Root
+					open={openStates[path] ?? true}
+					onOpenChange={(v) => (openStates[path] = v)}
+					class="rounded-lg border"
+				>
 					<div class="flex items-center justify-between p-4">
 						<Collapsible.Trigger class="flex flex-1 items-center gap-2 text-left">
 							{#snippet child({ props })}
@@ -107,7 +108,7 @@
 									type="button"
 									class={cn('flex flex-1 items-center gap-2', props.class as string)}
 								>
-									{#if openStates[path]}
+									{#if openStates[path] ?? true}
 										<ChevronDown class="h-4 w-4" />
 									{:else}
 										<ChevronRight class="h-4 w-4" />
@@ -128,7 +129,11 @@
 					</Collapsible.Content>
 				</Collapsible.Root>
 			{:else if type === 'array'}
-				<Collapsible.Root bind:open={openStates[path]} class="rounded-lg border">
+				<Collapsible.Root
+					open={openStates[path] ?? true}
+					onOpenChange={(v) => (openStates[path] = v)}
+					class="rounded-lg border"
+				>
 					<div class="flex items-center justify-between p-4">
 						<Collapsible.Trigger class="flex flex-1 items-center gap-2 text-left">
 							{#snippet child({ props })}
@@ -137,7 +142,7 @@
 									type="button"
 									class={cn('flex flex-1 items-center gap-2', props.class as string)}
 								>
-									{#if openStates[path]}
+									{#if openStates[path] ?? true}
 										<ChevronDown class="h-4 w-4" />
 									{:else}
 										<ChevronRight class="h-4 w-4" />
