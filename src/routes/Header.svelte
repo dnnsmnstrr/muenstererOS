@@ -1,18 +1,11 @@
 <script lang="ts">
 	import {
-		FileQuestion,
 		Home,
 		Instagram,
-		LayoutGrid,
 		Settings,
-		Signpost,
 		X,
-		ListMusic,
 		Gavel,
-		TabletSmartphone,
-		Icon,
 	} from 'lucide-svelte';
-	import { elephant, elephantFace } from '@lucide/lab';
 
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import BatteryIndicator from '$lib/components/BatteryIndicator.svelte';
@@ -20,8 +13,10 @@
 	import CommandButton from '$lib/components/CommandButton.svelte';
 	import { links } from '$lib/config';
 	import MobileMenu from './MobileMenu.svelte';
-	import logo from '$lib/assets/muenstererOS.png';
+	import logo from '../../static/images/muenstererOS.png';
+	import logoDark from '../../static/images/muenstererOS-dark.png';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { mode } from 'mode-watcher';
 
 
 	interface Props {
