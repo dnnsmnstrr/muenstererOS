@@ -3,13 +3,42 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import { Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-svelte';
+	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink } from 'lucide-svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { cn } from '$lib/utils/utils';
 
 	let { schema, data = $bindable() } = $props();
 
+	let defaultOpen = $state(true);
 	let openStates = $state<Record<string, boolean>>({});
+
+	function setAllOpen(open: boolean) {
+		openStates = {};
+		defaultOpen = open;
+	}
+
+	function isValidUrl(str: string) {
+		try {
+			new URL(str);
+			return true;
+		} catch (_) {
+			return false;
+		}
+	}
+
+	function isUrlField(s: any, key: string | number, label: string) {
+		if (s.format === 'uri' || s.format === 'url') return true;
+		const keyStr = String(key).toLowerCase();
+		const labelStr = String(label).toLowerCase();
+		return (
+			keyStr.includes('url') ||
+			keyStr.includes('link') ||
+			keyStr.includes('href') ||
+			labelStr.includes('url') ||
+			labelStr.includes('link') ||
+			labelStr.includes('href')
+		);
+	}
 
 	function formatForDateTimeLocal(val: string) {
 		if (!val) return '';
@@ -64,6 +93,7 @@
 			case 'string':
 				return '';
 			case 'number':
+			case 'integer':
 				return 0;
 			case 'boolean':
 				return false;
@@ -115,7 +145,7 @@
 		<div class="space-y-2">
 			{#if type === 'object'}
 				<Collapsible.Root
-					open={openStates[path] ?? true}
+					open={openStates[path] ?? defaultOpen}
 					onOpenChange={(v) => (openStates[path] = v)}
 					class="rounded-lg border"
 				>
@@ -127,12 +157,22 @@
 									type="button"
 									class={cn('flex flex-1 items-center gap-2', props.class as string)}
 								>
-									{#if openStates[path] ?? true}
+									{#if openStates[path] ?? defaultOpen}
 										<ChevronDown class="h-4 w-4" />
 									{:else}
 										<ChevronRight class="h-4 w-4" />
 									{/if}
-									<h3 class="text-sm font-semibold capitalize">{label}</h3>
+									<div class="flex flex-col">
+										<h3 class="text-sm font-semibold capitalize">{label}</h3>
+										{#if !(openStates[path] ?? defaultOpen) && obj[key]}
+											{@const preview = obj[key].name || obj[key].title}
+											{#if preview}
+												<span class="text-xs text-muted-foreground line-clamp-1">
+													{preview}
+												</span>
+											{/if}
+										{/if}
+									</div>
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
@@ -162,7 +202,7 @@
 				</Collapsible.Root>
 			{:else if type === 'array'}
 				<Collapsible.Root
-					open={openStates[path] ?? true}
+					open={openStates[path] ?? defaultOpen}
 					onOpenChange={(v) => (openStates[path] = v)}
 					class="rounded-lg border"
 				>
@@ -174,7 +214,7 @@
 									type="button"
 									class={cn('flex flex-1 items-center gap-2', props.class as string)}
 								>
-									{#if openStates[path] ?? true}
+									{#if openStates[path] ?? defaultOpen}
 										<ChevronDown class="h-4 w-4" />
 									{:else}
 										<ChevronRight class="h-4 w-4" />
@@ -269,11 +309,32 @@
 								value={formatForDateTimeLocal(obj[key])}
 								oninput={(e) => (obj[key] = (e.target as HTMLInputElement).value)}
 							/>
+						{:else if isUrlField(s, key, label)}
+							<div class="flex gap-2">
+								<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
+								<Button
+									variant="outline"
+									size="icon"
+									disabled={!isValidUrl(obj[key])}
+									onclick={() => window.open(obj[key], '_blank', 'noopener,noreferrer')}
+									title="Open Link"
+								>
+									<ExternalLink class="h-4 w-4" />
+								</Button>
+							</div>
+							{#if obj[key] && !isValidUrl(obj[key])}
+								<p class="text-xs text-destructive">Please enter a valid URL.</p>
+							{/if}
 						{:else}
 							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
 						{/if}
-					{:else if type === 'number'}
-						<Input id={path} type="number" bind:value={obj[key]} />
+					{:else if type === 'number' || type === 'integer'}
+						<Input
+							id={path}
+							type="number"
+							bind:value={obj[key]}
+							step={type === 'integer' ? '1' : 'any'}
+						/>
 					{:else if type === 'boolean'}
 						<div class="flex items-center space-x-2 py-2">
 							<Checkbox id={path} bind:checked={obj[key]} />
@@ -293,6 +354,16 @@
 
 <div class="space-y-6">
 	{#if schema && (schema.type === 'object' || schema.properties) && data}
+		<div class="flex justify-end gap-2">
+			<Button variant="outline" size="sm" onclick={() => setAllOpen(true)}>
+				<ChevronsDown class="mr-2 h-4 w-4" />
+				Expand All
+			</Button>
+			<Button variant="outline" size="sm" onclick={() => setAllOpen(false)}>
+				<ChevronsUp class="mr-2 h-4 w-4" />
+				Collapse All
+			</Button>
+		</div>
 		<div class="grid gap-6">
 			{#each Object.entries(schema.properties || {}) as [key, s]}
 				{@render renderField(s, data, key, key, key)}
