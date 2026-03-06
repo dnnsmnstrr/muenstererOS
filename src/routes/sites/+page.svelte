@@ -278,6 +278,7 @@
 											: 4}
 									fill={getNodeColor(node.type)}
 									class="transition-transform duration-200 hover:scale-125"
+									stroke="rgba(255,255,255,0.1)"
 									style="transform-origin: {node.x}px {node.y}px;"
 									data-url={node.url}
 								/>

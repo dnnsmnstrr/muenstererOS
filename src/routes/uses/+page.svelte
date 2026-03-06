@@ -17,6 +17,8 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Select from '$lib/components/ui/select';
+	import * as Tabs from '$lib/components/ui/tabs/index.js';
+
 	import { capitalize } from '$lib/utils/index';
 	import {
 		RotateCcw,
@@ -146,29 +148,19 @@
 		</div>
 
 		<div class="flex items-center gap-4">
-			<div class="flex items-center rounded-md border p-1">
-				<Button
-					variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
-					size="icon"
-					class="h-8 w-8"
-					onclick={() => (viewMode = 'grid')}
-					title="Grid View"
-				>
-					<LayoutGrid class="h-4 w-4" />
-				</Button>
-				<Button
-					variant={viewMode === 'table' ? 'secondary' : 'ghost'}
-					size="icon"
-					class="h-8 w-8"
-					onclick={() => (viewMode = 'table')}
-					title="Table View"
-				>
-					<List class="h-4 w-4" />
-				</Button>
-			</div>
 			<p class="hidden text-sm text-muted-foreground sm:block">
 				Inspired by <Link href="https://uses.tech" target="_blank">uses.tech</Link>
 			</p>
+			<Tabs.Root bind:value={viewMode}>
+				<Tabs.List>
+					<Tabs.Trigger value="grid">
+						<LayoutGrid class="h-4 w-4" />
+					</Tabs.Trigger>
+					<Tabs.Trigger value="table">
+						<List class="h-4 w-4" />
+					</Tabs.Trigger>
+				</Tabs.List>
+			</Tabs.Root>
 		</div>
 	</div>
 
@@ -196,7 +188,7 @@
 				<button
 					class="rounded-full px-3 py-1 text-sm transition-colors {selectedTag === tag
 						? 'bg-primary text-primary-foreground'
-						: 'bg-primary/10'}"
+						: 'bg-secondary'}"
 					onclick={() => toggleTag(tag)}
 				>
 					{capitalize(tag)}
@@ -235,20 +227,22 @@
 					<Card.Content class="flex h-full flex-col justify-between pt-6">
 						<div>
 							<img
-								src={item.image && item.image.includes('/') ? item.image : SvgIcons[item.image || item.title]}
+								src={item.image && item.image.includes('/')
+									? item.image
+									: SvgIcons[item.image || item.title]}
 								alt={item.title}
 								class="mb-4 h-48 w-full rounded-t-lg object-contain"
 							/>
 							<h2 class="mb-2 flex items-center text-xl font-semibold">
 								{#if item.url}
-								<a
-									class="hover:underline"
-									href={item.url}
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{item.title}
-								</a>
+									<a
+										class="hover:underline"
+										href={item.url}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{item.title}
+									</a>
 								{:else}
 									{item.title}
 								{/if}
@@ -264,9 +258,9 @@
 									{#if item.tags}
 										<div class="flex flex-wrap gap-2">
 											{#each item.tags as tag}
-											<Badge variant="secondary" class="text-xs font-normal">
+												<Badge variant="secondary" class="text-xs font-normal">
 													{capitalize(tag)}
-											</Badge>
+												</Badge>
 											{/each}
 										</div>
 									{/if}
@@ -337,7 +331,12 @@
 							</Table.Cell>
 							<Table.Cell class="font-medium">
 								{#if item.url}
-									<a class="hover:underline" href={item.url} target="_blank" rel="noopener noreferrer">
+									<a
+										class="hover:underline"
+										href={item.url}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
 										{item.title}
 									</a>
 								{:else}
