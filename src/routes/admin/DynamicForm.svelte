@@ -93,6 +93,7 @@
 			case 'string':
 				return '';
 			case 'number':
+			case 'integer':
 				return 0;
 			case 'boolean':
 				return false;
@@ -317,8 +318,13 @@
 						{:else}
 							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
 						{/if}
-					{:else if type === 'number'}
-						<Input id={path} type="number" bind:value={obj[key]} />
+					{:else if type === 'number' || type === 'integer'}
+						<Input
+							id={path}
+							type="number"
+							bind:value={obj[key]}
+							step={type === 'integer' ? '1' : 'any'}
+						/>
 					{:else if type === 'boolean'}
 						<div class="flex items-center space-x-2 py-2">
 							<Checkbox id={path} bind:checked={obj[key]} />

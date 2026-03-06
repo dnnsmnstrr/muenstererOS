@@ -58,6 +58,18 @@
 		}
 		viewMode = value as 'editor' | 'form';
 	}
+
+	function handleReset() {
+		onResetEditor();
+		if (viewMode === 'form') {
+			try {
+				formData = JSON.parse(gistData);
+				lastSyncedGistData = gistData;
+			} catch (e) {
+				console.error('Failed to parse gistData for form view after reset', e);
+			}
+		}
+	}
 	
 	// Re-export methods from JsonEditor
 	export function setValue(value: string) {
@@ -129,7 +141,7 @@
 					{#if viewMode === 'editor'}
 						<Button onclick={onFormatJson} variant="outline">Format</Button>
 					{/if}
-					<Button onclick={onResetEditor} variant="outline">Reset</Button>
+					<Button onclick={handleReset} variant="outline">Reset</Button>
 				</div>
 				<Button
 					onclick={() => {
