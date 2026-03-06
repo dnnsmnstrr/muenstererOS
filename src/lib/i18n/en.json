@@ -50,7 +50,8 @@
 		"help": "Help",
 		"battery": "Battery",
 		"charging": "Charging",
-		"discharging": "Discharging"
+		"discharging": "Discharging",
+		"download_logo": "Download Logo"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"

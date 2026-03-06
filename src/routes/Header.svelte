@@ -5,8 +5,12 @@
 		Settings,
 		X,
 		Gavel,
+		TabletSmartphone,
+		Icon,
+		Download,
 	} from 'lucide-svelte';
 
+	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import BatteryIndicator from '$lib/components/BatteryIndicator.svelte';
 	import Menu, { type BookmarkItem } from './Menu.svelte';
@@ -24,6 +28,15 @@
 	}
 
 	let { pages = [] }: Props = $props();
+
+	function downloadLogo() {
+		const link = document.createElement('a');
+		link.href = logo;
+		link.download = 'muenstererOS.png';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
 
 	const bookmarks: Array<BookmarkItem | BookmarkItem[]> = $derived([
 		[
@@ -52,14 +65,34 @@
 <header class="flex justify-between gap-4">
 	<nav class="flex items-center sm:hidden">
 		<MobileMenu {bookmarks} />
-		<a href="/" class="ml-4" aria-label={i18n.t('common.home')}>
-			<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
-		</a>
+		<ContextMenu.Root>
+			<ContextMenu.Trigger>
+				<a href="/" class="ml-4" aria-label={i18n.t('common.home')}>
+					<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
+				</a>
+			</ContextMenu.Trigger>
+			<ContextMenu.Content>
+				<ContextMenu.Item onclick={downloadLogo}>
+					<Download class="mr-2 h-4 w-4" />
+					{i18n.t('header.download_logo')}
+				</ContextMenu.Item>
+			</ContextMenu.Content>
+		</ContextMenu.Root>
 	</nav>
 	<nav class="hidden items-center sm:flex">
-		<a href="/" aria-label={i18n.t('common.home')}>
-			<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
-		</a>
+		<ContextMenu.Root>
+			<ContextMenu.Trigger>
+				<a href="/" aria-label={i18n.t('common.home')}>
+					<img src={logo} alt="muenstererOS" class="w-8 min-w-6" />
+				</a>
+			</ContextMenu.Trigger>
+			<ContextMenu.Content>
+				<ContextMenu.Item onclick={downloadLogo}>
+					<Download class="mr-2 h-4 w-4" />
+					{i18n.t('header.download_logo')}
+				</ContextMenu.Item>
+			</ContextMenu.Content>
+		</ContextMenu.Root>
 		<Menu {bookmarks} />
 	</nav>
 
