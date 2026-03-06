@@ -36,8 +36,6 @@ const SOCIAL_DOMAINS = [
 	'amazon.com',
 	'google.com',
 	'reddit.com',
-	'tiktok.v',
-	'tiktokcdn.com',
 	'mastodon.social',
 	'bsky.app',
 	'threads.net',
@@ -92,12 +90,23 @@ async function getLinks(url: string): Promise<string[]> {
 			signal: AbortSignal.timeout(3000)
 		});
 		if (!response.ok) return [];
-		const html = await response.text();
+		let html = await response.text();
+
+		// Ignore content in header and footer
+		html = html.replace(/<header[^>]*>[\s\S]*?<\/header>/gi, '');
+		html = html.replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, '');
+		html = html.replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, '');
+
 		const linkRegex = /href=["'](https?:\/\/[^"']+)["']/g;
 		const links = new Set<string>();
 		let match;
 		while ((match = linkRegex.exec(html)) !== null) {
-			links.add(match[1]);
+			const link = match[1];
+			// Only follow links that look like site/people pages
+			const path = new URL(link).pathname.toLowerCase();
+			if (path.includes('/sites') || path.includes('/people') || path.includes('/links') || path.includes('/blogroll') || path === '/') {
+				links.add(link);
+			}
 		}
 		return Array.from(links);
 	} catch (e) {
@@ -142,7 +151,7 @@ export async function GET() {
 				});
 				edges.push({ source: rootUrl, target: baseDomain });
 				visited.add(baseDomain);
-				queue.push({ url: baseDomain, depth: 1 });
+				queue.push({ url: seedUrl, depth: 1 }); // Use the full URL for crawling
 			} catch {
 				// Invalid seed URL
 			}
@@ -166,7 +175,7 @@ export async function GET() {
 			});
 			edges.push({ source: rootUrl, target: baseDomain });
 			visited.add(baseDomain);
-			queue.push({ url: baseDomain, depth: 1 });
+			queue.push({ url: seedUrl, depth: 1 }); // Use the full URL for crawling
 		}
 	}
 
@@ -197,14 +206,14 @@ export async function GET() {
 							type: personal ? 'personal' : 'external'
 						});
 						visited.add(normalizedLink);
-						queue.push({ url: normalizedLink, depth: depth + 1 });
+						queue.push({ url: link, depth: depth + 1 }); // Use the specific page URL for crawling
 					}
 				}
 
-				if (visited.has(normalizedLink) && normalizedLink !== url) {
+				if (visited.has(normalizedLink) && normalizedLink !== getBaseDomain(url)) {
 					// Add edge if not already present
-					if (!edges.find(e => (e.source === url && e.target === normalizedLink) || (e.source === normalizedLink && e.target === url))) {
-						edges.push({ source: url, target: normalizedLink });
+					if (!edges.find(e => (e.source === getBaseDomain(url) && e.target === normalizedLink) || (e.source === normalizedLink && e.target === getBaseDomain(url)))) {
+						edges.push({ source: getBaseDomain(url), target: normalizedLink });
 					}
 				}
 			} catch {
