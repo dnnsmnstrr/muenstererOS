@@ -181,7 +181,12 @@
 		"top_artists": "Top Artists",
 		"top_artists_description": "These were my top artists on Spotify over the years",
 		"preview_title": "Playlist Preview",
-		"alt_gif": "Playlist GIF"
+		"alt_gif": "Playlist GIF",
+		"stats": "Stats",
+		"artist_frequency": "Artist Frequency",
+		"appearances": "Appearances",
+		"next": "Next",
+		"previous": "Previous"
 	},
 	"timeline": {
 		"title": "Life Timeline",

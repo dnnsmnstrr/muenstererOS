@@ -182,7 +182,12 @@
 		"top_artists": "Top-Künstler",
 		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
 		"preview_title": "Playlist-Vorschau",
-		"alt_gif": "Playlist GIF"
+		"alt_gif": "Playlist GIF",
+		"stats": "Statistiken",
+		"artist_frequency": "Künstler-Frequenz",
+		"appearances": "Auftritte",
+		"next": "Weiter",
+		"previous": "Zurück"
 	},
 	"timeline": {
 		"title": "Lebens-Zeitstrahl",
