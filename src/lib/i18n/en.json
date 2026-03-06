@@ -84,6 +84,8 @@
 		"links": "Links",
 		"system": "System",
 		"fun": "Fun",
+		"dark_mode": "Dark Mode",
+		"light_mode": "Light Mode",
 		"search_zettelkasten": "Search Zettelkasten",
 		"keyboard_shortcuts": "Keyboard Shortcuts",
 		"go_forward": "Go Forward",
