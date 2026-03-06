@@ -16,7 +16,7 @@ interface Edge {
 }
 
 const MAX_DEPTH = 3; // 3 levels deep as requested
-const MAX_NODES = 30; // Limit nodes to avoid timeouts
+const MAX_NODES = 50; // Limit nodes to avoid timeouts
 
 const SOCIAL_DOMAINS = [
 	'twitter.com',
@@ -67,7 +67,20 @@ function isPersonal(url: string): boolean {
 		'.me',
 		'.tech',
 		'.com',
-		'.de'
+		'.de',
+		'.net',
+		'.org',
+		'.at',
+		'.ch',
+		'.uk',
+		'.ca',
+		'.dev',
+		'.bio',
+		'.nl',
+		'.im',
+		'.io',
+		'.app',
+		'.space'
 	];
 	try {
 		const urlObj = new URL(url);
@@ -198,7 +211,13 @@ export async function GET() {
 		const { url, depth } = queue[head++];
 		if (depth >= MAX_DEPTH) continue;
 
-		const discoveredLinks = await getLinks(url);
+		let discoveredLinks = await getLinks(url);
+		// Limit links per page to 20 to avoid one seed exhausting the limit
+		// and shuffle them to ensure diversity
+		discoveredLinks = discoveredLinks
+			.sort(() => Math.random() - 0.5)
+			.slice(0, 20);
+
 		for (const link of discoveredLinks) {
 			if (nodes.length >= MAX_NODES) break;
 
