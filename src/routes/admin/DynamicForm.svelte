@@ -89,7 +89,14 @@
 	});
 </script>
 
-{#snippet renderField(s_raw: any, obj: any, key: string | number, label: string, path: string)}
+{#snippet renderField(
+	s_raw: any,
+	obj: any,
+	key: string | number,
+	label: string,
+	path: string,
+	onDelete?: () => void
+)}
 	{@const s = resolveSchema(s_raw)}
 	{#if obj && s}
 		{@const type = s.type || (s.properties ? 'object' : (s.items ? 'array' : 'string'))}
@@ -117,6 +124,19 @@
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
+						{#if onDelete}
+							<Button
+								variant="ghost"
+								size="icon"
+								class="h-8 w-8 text-destructive hover:bg-destructive/10"
+								onclick={(e) => {
+									e.stopPropagation();
+									onDelete();
+								}}
+							>
+								<Trash2 class="h-4 w-4" />
+							</Button>
+						{/if}
 					</div>
 					<Collapsible.Content class="px-4 pb-4">
 						<div class="grid gap-4">
@@ -151,6 +171,7 @@
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
+						<div class="flex items-center gap-2">
 							<Button
 								variant="outline"
 								size="sm"
@@ -163,28 +184,35 @@
 							>
 								<Plus class="mr-1 h-4 w-4" /> Add
 							</Button>
+							{#if onDelete}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8 text-destructive hover:bg-destructive/10"
+									onclick={(e) => {
+										e.stopPropagation();
+										onDelete();
+									}}
+								>
+									<Trash2 class="h-4 w-4" />
+								</Button>
+							{/if}
 						</div>
+					</div>
 					<Collapsible.Content class="px-4 pb-4">
 						<div class="space-y-4">
 							{#if obj[key] && Array.isArray(obj[key])}
 								{#each obj[key] as _, index}
-									<div class="relative ml-2 space-y-2 border-l-2 pl-6">
-										<Button
-											variant="ghost"
-											size="icon"
-											class="absolute -left-3 top-0 h-6 w-6 text-destructive hover:bg-destructive/10"
-											onclick={() => {
-												obj[key].splice(index, 1);
-											}}
-										>
-											<Trash2 class="h-4 w-4" />
-										</Button>
+									<div class="relative ml-2 space-y-2 border-l-2 pl-4">
 										{@render renderField(
 											s.items,
 											obj[key],
 											index,
 											`${label} item ${index + 1}`,
-											`${path}[${index}]`
+											`${path}[${index}]`,
+											() => {
+												obj[key].splice(index, 1);
+											}
 										)}
 									</div>
 								{/each}
@@ -194,7 +222,22 @@
 				</Collapsible.Root>
 			{:else}
 				<div class="grid gap-1.5">
-					<Label class="capitalize" for={path}>{label}</Label>
+					<div class="flex items-center justify-between">
+						<Label class="capitalize" for={path}>{label}</Label>
+						{#if onDelete}
+							<Button
+								variant="ghost"
+								size="icon"
+								class="h-8 w-8 text-destructive hover:bg-destructive/10"
+								onclick={(e) => {
+									e.stopPropagation();
+									onDelete();
+								}}
+							>
+								<Trash2 class="h-4 w-4" />
+							</Button>
+						{/if}
+					</div>
 					{#if type === 'string'}
 						{#if s.enum}
 							<select
@@ -206,6 +249,8 @@
 									<option value={option}>{option}</option>
 								{/each}
 							</select>
+						{:else if s.format === 'date-time'}
+							<Input id={path} type="datetime-local" bind:value={obj[key]} />
 						{:else}
 							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
 						{/if}
