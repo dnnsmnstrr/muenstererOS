@@ -5,6 +5,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { isAppleDevice } from '$lib/utils/browser';
 
 	interface Node {
 		id: string;
@@ -200,7 +201,7 @@
 		<div>
 			<Heading>{i18n.t('common.sites')}</Heading>
 			<p class="text-muted-foreground">
-				A visualization of my personal website network and its connections.
+				A visualization of my personal website network and its connections. ({isAppleDevice() ? '⌘' : '^'} + click to open links)
 			</p>
 		</div>
 
@@ -210,8 +211,8 @@
 				variant="ghost"
 				size="icon"
 				class="h-8 w-8"
-				onclick={() => (displayDepth = Math.max(0, displayDepth - 1))}
-				disabled={displayDepth <= 0}
+				onclick={() => (displayDepth = Math.max(1, displayDepth - 1))}
+				disabled={displayDepth <= 1}
 				aria-label="Decrease depth"
 			>
 				<Minus class="h-4 w-4" />
@@ -268,10 +269,17 @@
 								<circle
 									cx={node.x}
 									cy={node.y}
-									r={node.type === 'root' ? 8 : node.type === 'personal' ? 6 : 4}
+									r={node.type === 'root'
+										? 8
+										: node.type === 'personal'
+											? node.depth > 2
+												? 4
+												: 6
+											: 4}
 									fill={getNodeColor(node.type)}
 									class="transition-transform duration-200 hover:scale-125"
 									style="transform-origin: {node.x}px {node.y}px;"
+									data-url={node.url}
 								/>
 								<text
 									x={node.x}

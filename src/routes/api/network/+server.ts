@@ -16,7 +16,7 @@ interface Edge {
 }
 
 const MAX_DEPTH = 3; // 3 levels deep as requested
-const MAX_NODES = 150; // Limit nodes to avoid timeouts
+const MAX_NODES = 100; // Limit nodes to avoid timeouts
 
 const EXCLUDED_DOMAINS = [
 	'github.com',
