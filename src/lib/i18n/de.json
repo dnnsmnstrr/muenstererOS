@@ -51,7 +51,10 @@
 		"battery": "Batterie",
 		"charging": "Lädt",
 		"discharging": "Entlädt",
-		"download_logo": "Logo herunterladen"
+		"download_logo": "Logo herunterladen",
+		"download_logo_png": "PNG herunterladen",
+		"download_logo_svg": "SVG herunterladen",
+		"copy_logo_url": "Bild-URL kopieren"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
@@ -147,8 +150,8 @@
 		"changes_many": "{count} Änderungen",
 		"version_marker": "Version vom {date}",
 		"load": "Laden"
-  },
-  "status": {
+	},
+	"status": {
 		"title": "Systemstatus",
 		"metric": "Metrik",
 		"value": "Wert",
@@ -158,7 +161,7 @@
 		"cv_status": "CV-Status",
 		"online": "online",
 		"offline": "offline"
-  },
+	},
 	"now_playing": {
 		"title": "Aktuelle Wiedergabe",
 		"show": "Wiedergabe anzeigen",

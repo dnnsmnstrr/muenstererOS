@@ -51,7 +51,10 @@
 		"battery": "Battery",
 		"charging": "Charging",
 		"discharging": "Discharging",
-		"download_logo": "Download Logo"
+		"download_logo": "Download Logo",
+		"download_logo_png": "Download PNG",
+		"download_logo_svg": "Download SVG",
+		"copy_logo_url": "Copy image URL"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"
