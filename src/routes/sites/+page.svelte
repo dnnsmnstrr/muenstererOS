@@ -69,8 +69,8 @@
 
 	function updateSimulation() {
 		const charge = -200;
-		const springLength = 100;
-		const springConstant = 0.05;
+		const springLength = 80;
+		const springConstant = 0.08;
 		const damping = 0.9;
 
 		const activeNodes = filteredNodes;
@@ -109,12 +109,12 @@
 			}
 		}
 
-		// Center gravity
+		// Center gravity (reduced)
 		for (const node of activeNodes) {
 			const dx = width / 2 - node.x;
 			const dy = height / 2 - node.y;
-			node.vx += dx * 0.01;
-			node.vy += dy * 0.01;
+			node.vx += dx * 0.002;
+			node.vy += dy * 0.002;
 		}
 
 		// Update positions
@@ -130,10 +130,6 @@
 			node.y += node.vy;
 			node.vx *= damping;
 			node.vy *= damping;
-
-			// Boundary constraints
-			node.x = Math.max(20, Math.min(width - 20, node.x));
-			node.y = Math.max(20, Math.min(height - 20, node.y));
 		}
 	}
 
