@@ -18,6 +18,33 @@ interface Edge {
 const MAX_DEPTH = 3; // 3 levels deep as requested
 const MAX_NODES = 30; // Limit nodes to avoid timeouts
 
+const SOCIAL_DOMAINS = [
+	'twitter.com',
+	'x.com',
+	'instagram.com',
+	'facebook.com',
+	'linkedin.com',
+	'github.com',
+	'gitlab.com',
+	'youtube.com',
+	't.me',
+	'signal.me',
+	'spotify.com',
+	'apple.com',
+	'amazon.com',
+	'google.com',
+	'reddit.com',
+	'mastodon.social',
+	'bsky.app',
+	'threads.net',
+	'printables.com',
+	'kickstarter.com',
+	'onuniverse.com',
+	'tiktokcdn-us.com',
+	'googleapis.com',
+	'gstatic.com'
+];
+
 function isPersonal(url: string): boolean {
 	const personalPatterns = [
 		'github.io',
@@ -28,10 +55,18 @@ function isPersonal(url: string): boolean {
 		'felixmuensterer.com',
 		'linus3d.de',
 		'.me',
-		'.tech'
+		'.tech',
+		'.com',
+		'.de'
 	];
 	try {
-		const domain = new URL(url).hostname;
+		const urlObj = new URL(url);
+		const domain = urlObj.hostname;
+
+		if (SOCIAL_DOMAINS.some(social => domain.endsWith(social))) {
+			return false;
+		}
+
 		return personalPatterns.some((pattern) => domain.endsWith(pattern));
 	} catch {
 		return false;
@@ -66,20 +101,30 @@ export async function GET() {
 	const visited = new Set<string>([rootUrl]);
 	const queue: { url: string; depth: number }[] = [{ url: rootUrl, depth: 0 }];
 
+	function getBaseDomain(url: string): string {
+		try {
+			const urlObj = new URL(url);
+			return urlObj.origin + '/';
+		} catch {
+			return url;
+		}
+	}
+
 	// Add seeds from the config file
 	for (const seedUrl of networkSeeds) {
-		if (!visited.has(seedUrl)) {
+		const baseDomain = getBaseDomain(seedUrl);
+		if (!visited.has(baseDomain)) {
 			try {
-				const urlObj = new URL(seedUrl);
+				const urlObj = new URL(baseDomain);
 				nodes.push({
-					id: seedUrl,
+					id: baseDomain,
 					label: urlObj.hostname,
 					depth: 1,
 					type: 'personal'
 				});
-				edges.push({ source: rootUrl, target: seedUrl });
-				visited.add(seedUrl);
-				queue.push({ url: seedUrl, depth: 1 });
+				edges.push({ source: rootUrl, target: baseDomain });
+				visited.add(baseDomain);
+				queue.push({ url: baseDomain, depth: 1 });
 			} catch {
 				// Invalid seed URL
 			}
@@ -92,16 +137,18 @@ export async function GET() {
 		.slice(0, 5);
 
 	for (const seed of redirectsSeeds) {
-		if (seed.url && !visited.has(seed.url)) {
+		const seedUrl = seed.url!;
+		const baseDomain = getBaseDomain(seedUrl);
+		if (!visited.has(baseDomain)) {
 			nodes.push({
-				id: seed.url,
+				id: baseDomain,
 				label: seed.name,
 				depth: 1,
 				type: 'personal'
 			});
-			edges.push({ source: rootUrl, target: seed.url });
-			visited.add(seed.url);
-			queue.push({ url: seed.url, depth: 1 });
+			edges.push({ source: rootUrl, target: baseDomain });
+			visited.add(baseDomain);
+			queue.push({ url: baseDomain, depth: 1 });
 		}
 	}
 
@@ -110,17 +157,17 @@ export async function GET() {
 		const { url, depth } = queue[head++];
 		if (depth >= MAX_DEPTH) continue;
 
-		// Limit the number of concurrent requests if needed, but for now
-		// let's at least process a batch of nodes from the same depth together
-		// to improve performance. For simplicity, we keep the sequential logic
-		// but reduce MAX_NODES if it takes too long.
 		const discoveredLinks = await getLinks(url);
 		for (const link of discoveredLinks) {
 			if (nodes.length >= MAX_NODES) break;
 
 			try {
 				const linkUrl = new URL(link);
-				const normalizedLink = linkUrl.origin + linkUrl.pathname;
+				const normalizedLink = linkUrl.origin + '/';
+
+				if (SOCIAL_DOMAINS.some(social => linkUrl.hostname.endsWith(social))) {
+					continue;
+				}
 
 				if (!visited.has(normalizedLink)) {
 					const personal = isPersonal(normalizedLink);
