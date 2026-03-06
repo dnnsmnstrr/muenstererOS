@@ -50,7 +50,8 @@
 		"help": "Hilfe",
 		"battery": "Batterie",
 		"charging": "Lädt",
-		"discharging": "Entlädt"
+		"discharging": "Entlädt",
+		"download_logo": "Logo herunterladen"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
