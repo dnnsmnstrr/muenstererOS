@@ -1,7 +1,6 @@
 import {
 	API_URL,
 	CURRENT_DOMAIN,
-	DEFAULT_URL,
 	NOW_GIST_ID,
 	USERNAME,
 	USERNAME_SHORT,
@@ -18,7 +17,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'homepage',
 		description: 'My Homepage, hosted on GitHub Pages',
-		url: DEFAULT_URL, //required to override default behaviour
+		url: links.pages, //required to override default behaviour
 		aliases: ['home', 'main', 'root', 'landing', '🏠']
 	},
 	{
@@ -388,6 +387,12 @@ export const redirects: Redirect[] = [
 		description: 'a file with information about this website (more info at https://humanstxt.org/)',
 		url: 'humans.txt',
 		aliases: ['humans', 'human', 'humanstxt']
+	},
+	{
+		name: 'logo',
+		url: '/.well-known/logo',
+		description: 'The Logo/Favicon of this Website',
+		aliases: ['favicon']
 	},
 	{
 		name: 'edit-info',

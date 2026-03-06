@@ -35,6 +35,9 @@
 		"de": "Deutsch",
 		"en": "Englisch"
 	},
+	"error": {
+		"404": "Keine Seite verfügbar unter:"
+	},
 	"header": {
 		"pages": "Seiten",
 		"social": "Social Media",

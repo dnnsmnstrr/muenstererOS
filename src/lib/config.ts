@@ -7,7 +7,6 @@ export const RESUME_GIST_ID = '548256752a08213eded1c5c90dbe7767';
 export const EMAIL_PROVIDER = 'gmail';
 export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
-export const DEFAULT_URL = 'https://dnnsmnstrr.github.io';
 
 // Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);
@@ -60,7 +59,8 @@ export const links = {
 	applemusic: 'https://music.apple.com/profile/' + USERNAME_SHORT,
 	email: EMAIL,
 	mailto: 'mailto:' + EMAIL,
-    cv: "https://cv.muensterer.tech"
+    cv: "https://cv.muensterer.tech",
+	pages: `https://${USERNAME_SHORT}.github.io`,
 } as const;
 
 export const gists = {

@@ -36,6 +36,9 @@
 		"de": "German",
 		"en": "English"
 	},
+	"error": {
+		"404": "No page or redirect found for:"
+	},
 	"header": {
 		"pages": "Pages",
 		"social": "Social",
