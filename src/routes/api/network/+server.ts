@@ -1,10 +1,10 @@
-import { redirects } from '$lib/redirects';
 import { json } from '@sveltejs/kit';
 import { CURRENT_DOMAIN } from '$lib/config';
 import networkSeeds from '../../../data/network_seeds.json';
 
 interface Node {
 	id: string;
+	url: string;
 	label: string;
 	depth: number;
 	type: 'root' | 'personal' | 'external';
@@ -16,21 +16,21 @@ interface Edge {
 }
 
 const MAX_DEPTH = 3; // 3 levels deep as requested
-const MAX_NODES = 50; // Limit nodes to avoid timeouts
+const MAX_NODES = 150; // Limit nodes to avoid timeouts
 
-const SOCIAL_DOMAINS = [
+const EXCLUDED_DOMAINS = [
+	'github.com',
+	'gitlab.com',
 	'twitter.com',
-	'x.com',
 	'instagram.com',
 	'facebook.com',
 	'linkedin.com',
-	'github.com',
-	'gitlab.com',
 	'youtube.com',
+	'x.com',
 	't.me',
-	'telegram.org',
 	'signal.me',
 	'signal.org',
+	'telegram.org',
 	'spotify.com',
 	'apple.com',
 	'amazon.com',
@@ -39,46 +39,48 @@ const SOCIAL_DOMAINS = [
 	'mastodon.social',
 	'bsky.app',
 	'threads.net',
-	'printables.com',
 	'kickstarter.com',
 	'onuniverse.com',
-	'tiktokcdn-us.com',
 	'googleapis.com',
 	'gstatic.com',
 	'getkirby.com',
 	'paypal.com',
-	'paypalobjects.com',
-	'google-analytics.com',
-	'pypl.com',
-	'paypal-corp.com',
-	'synchronycredit.com',
-	'synchronybankterms.com'
+	'paddle.com',
+	'vercel.com',
+	'linear.app',
+	'cursor.com',
+	'wordpress.com',
+	'squarespace.com',
+	'supabase.com',
+	'11ty.dev',
+	'codepen.io',
+	'nextjs.org',
+	'blogroll.org',
+	'schema.org',
 ];
 
 function isPersonal(url: string): boolean {
 	const personalPatterns = [
+		'.com',
+		'.net',
+		'.org',
+		'.dev',
+		'.tech',
+		// services
 		'github.io',
 		'vercel.app',
 		'netlify.app',
-		'pages.dev',
-		'muensterer.tech',
-		'felixmuensterer.com',
-		'linus3d.de',
-		'.me',
-		'.tech',
-		'.com',
+		// countries
 		'.de',
-		'.net',
-		'.org',
 		'.at',
 		'.ch',
 		'.uk',
 		'.ca',
-		'.dev',
-		'.bio',
 		'.nl',
-		'.im',
+		// other
+		'.me',
 		'.io',
+		'.bio',
 		'.app',
 		'.space'
 	];
@@ -86,7 +88,7 @@ function isPersonal(url: string): boolean {
 		const urlObj = new URL(url);
 		const domain = urlObj.hostname;
 
-		if (SOCIAL_DOMAINS.some(social => domain.endsWith(social))) {
+		if (EXCLUDED_DOMAINS.some(social => domain.endsWith(social))) {
 			return false;
 		}
 
@@ -163,19 +165,31 @@ async function getLinks(url: string): Promise<string[]> {
 }
 
 function getBaseDomain(url: string): string {
-	try {
-		const urlObj = new URL(url);
-		const parts = urlObj.hostname.split('.');
-		// Very basic registered domain heuristic (works for .com, .de, .tech, .me etc.)
-		if (parts.length >= 2) {
-			const base = parts.slice(-2).join('.');
-			return `${urlObj.protocol}//${base}/`;
-		}
-		return urlObj.origin + '/';
-	} catch {
-		return url;
-	}
+    try {
+        const urlObj = new URL(url);
+        const parts = urlObj.hostname.split('.');
+        
+        // Handle specific second-level domains
+        if (parts.length >= 2) {
+            // Check for .co.uk and similar domains
+            const secondLevelDomains = ['co.uk', 'gov.uk', 'ac.uk', 'org.uk'];
+            const lastTwoParts = parts.slice(-2).join('.');
+            
+            // Determine if the last two parts or last three parts form a known second-level domain
+            if (secondLevelDomains.includes(lastTwoParts)) {
+                const base = parts.slice(-3).join('.');
+                return `${urlObj.protocol}//${base}/`;
+            } else {
+                const base = parts.slice(-2).join('.');
+                return `${urlObj.protocol}//${base}/`;
+            }
+        }
+        return urlObj.origin + '/';
+    } catch {
+        return url;
+    }
 }
+
 
 export async function GET() {
 	const rootUrl = getBaseDomain(`https://${CURRENT_DOMAIN}/`);
@@ -193,6 +207,7 @@ export async function GET() {
 				nodes.push({
 					id: baseDomain,
 					label: urlObj.hostname,
+					url: seedUrl,
 					depth: 1,
 					type: 'personal'
 				});
@@ -220,11 +235,11 @@ export async function GET() {
 		const nextLevel: { url: string; depth: number }[] = [];
 
 		for (const { url, depth, discoveredLinks } of results) {
-			// Limit links per page to 20 to avoid one seed exhausting the limit
+			// Limit links per page to avoid one seed exhausting the limit
 			// and shuffle them to ensure diversity
 			const shuffledLinks = discoveredLinks
 				.sort(() => Math.random() - 0.5)
-				.slice(0, 20);
+				.slice(0, 25);
 
 			for (const link of shuffledLinks) {
 				if (nodes.length >= MAX_NODES) break;
@@ -233,7 +248,7 @@ export async function GET() {
 					const linkUrl = new URL(link);
 					const normalizedLink = getBaseDomain(link);
 
-					if (SOCIAL_DOMAINS.some((social) => linkUrl.hostname.endsWith(social))) {
+					if (EXCLUDED_DOMAINS.some((social) => linkUrl.hostname.endsWith(social))) {
 						continue;
 					}
 
@@ -244,6 +259,7 @@ export async function GET() {
 							nodes.push({
 								id: normalizedLink,
 								label: new URL(normalizedLink).hostname,
+								url: link,
 								depth: depth + 1,
 								type: personal ? 'personal' : 'external'
 							});

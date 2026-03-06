@@ -9,6 +9,7 @@
 	interface Node {
 		id: string;
 		label: string;
+		url: string;
 		depth: number;
 		type: 'root' | 'personal' | 'external';
 		x: number;
@@ -48,7 +49,10 @@
 				source: nodesById.get(e.source),
 				target: nodesById.get(e.target)
 			}))
-			.filter((e) => e.source && e.target && e.source.depth <= displayDepth && e.target.depth <= displayDepth)
+			.filter(
+				(e) =>
+					e.source && e.target && e.source.depth <= displayDepth && e.target.depth <= displayDepth
+			)
 	);
 
 	async function fetchData() {
@@ -113,11 +117,12 @@
 		}
 
 		// Center gravity (reduced)
+		const gravityFactor = 0.025;
 		for (const node of activeNodes) {
 			const dx = width / 2 - node.x;
 			const dy = height / 2 - node.y;
-			node.vx += dx * 0.002;
-			node.vy += dy * 0.002;
+			node.vx += dx * gravityFactor;
+			node.vy += dy * gravityFactor;
 		}
 
 		// Update positions
@@ -137,6 +142,11 @@
 	}
 
 	function handlePointerDown(e: PointerEvent) {
+		const url = e?.target?.dataset?.url;
+		if (e.metaKey && url) {
+			window.open(url, '_blank');
+			return;
+		}
 		isPanning = true;
 		startPanX = e.clientX - offsetX;
 		startPanY = e.clientY - offsetY;
@@ -206,7 +216,7 @@
 			>
 				<Minus class="h-4 w-4" />
 			</Button>
-			<span class="w-4 text-center text-sm font-mono">{displayDepth}</span>
+			<span class="w-4 text-center font-mono text-sm">{displayDepth}</span>
 			<Button
 				variant="ghost"
 				size="icon"
@@ -270,7 +280,9 @@
 									font-size="10"
 									class="fill-muted-foreground"
 								>
-									{node.label}
+									<a href={node.url} data-url={node.url}>
+										{node.label}
+									</a>
 								</text>
 							</g>
 						{/each}
