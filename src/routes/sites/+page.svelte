@@ -37,15 +37,18 @@
 	let startPanY = 0;
 
 	// Depth control
-	let displayDepth = $state(3);
+	let displayDepth = $state(2);
+
+	let nodesById = $derived(new Map(nodes.map((n) => [n.id, n])));
 
 	let filteredNodes = $derived(nodes.filter((n) => n.depth <= displayDepth));
 	let filteredEdges = $derived(
-		edges.filter((e) => {
-			const source = nodes.find((n) => n.id === e.source);
-			const target = nodes.find((n) => n.id === e.target);
-			return source && target && source.depth <= displayDepth && target.depth <= displayDepth;
-		})
+		edges
+			.map((e) => ({
+				source: nodesById.get(e.source),
+				target: nodesById.get(e.target)
+			}))
+			.filter((e) => e.source && e.target && e.source.depth <= displayDepth && e.target.depth <= displayDepth)
 	);
 
 	async function fetchData() {
@@ -93,8 +96,8 @@
 
 		// Attraction (Hooke's Law)
 		for (const edge of filteredEdges) {
-			const source = activeNodes.find((n) => n.id === edge.source);
-			const target = activeNodes.find((n) => n.id === edge.target);
+			const source = edge.source;
+			const target = edge.target;
 			if (source && target) {
 				const dx = target.x - source.x;
 				const dy = target.y - source.y;
@@ -237,19 +240,15 @@
 				<g style="transform: translate({offsetX}px, {offsetY}px)">
 					<g>
 						{#each filteredEdges as edge}
-							{@const source = nodes.find((n) => n.id === edge.source)}
-							{@const target = nodes.find((n) => n.id === edge.target)}
-							{#if source && target}
-								<line
-									x1={source.x}
-									y1={source.y}
-									x2={target.x}
-									y2={target.y}
-									stroke="currentColor"
-									stroke-width="1"
-									class="text-border"
-								/>
-							{/if}
+							<line
+								x1={edge.source!.x}
+								y1={edge.source!.y}
+								x2={edge.target!.x}
+								y2={edge.target!.y}
+								stroke="currentColor"
+								stroke-width="1"
+								class="text-border"
+							/>
 						{/each}
 					</g>
 					<g>
@@ -261,7 +260,7 @@
 									cy={node.y}
 									r={node.type === 'root' ? 8 : node.type === 'personal' ? 6 : 4}
 									fill={getNodeColor(node.type)}
-									class="transition-all hover:scale-125"
+									class="transition-transform duration-200 hover:scale-125"
 									style="transform-origin: {node.x}px {node.y}px;"
 								/>
 								<text

@@ -206,53 +206,72 @@ export async function GET() {
 	}
 
 
-	let head = 0;
-	while (head < queue.length && nodes.length < MAX_NODES) {
-		const { url, depth } = queue[head++];
-		if (depth >= MAX_DEPTH) continue;
+	let currentLevel = queue;
+	let currentDepth = 1;
 
-		let discoveredLinks = await getLinks(url);
-		// Limit links per page to 20 to avoid one seed exhausting the limit
-		// and shuffle them to ensure diversity
-		discoveredLinks = discoveredLinks
-			.sort(() => Math.random() - 0.5)
-			.slice(0, 20);
+	while (currentLevel.length > 0 && currentDepth < MAX_DEPTH && nodes.length < MAX_NODES) {
+		const results = await Promise.all(
+			currentLevel.map(async ({ url, depth }) => {
+				const discoveredLinks = await getLinks(url);
+				return { url, depth, discoveredLinks };
+			})
+		);
 
-		for (const link of discoveredLinks) {
-			if (nodes.length >= MAX_NODES) break;
+		const nextLevel: { url: string; depth: number }[] = [];
 
-			try {
-				const linkUrl = new URL(link);
-				const normalizedLink = getBaseDomain(link);
+		for (const { url, depth, discoveredLinks } of results) {
+			// Limit links per page to 20 to avoid one seed exhausting the limit
+			// and shuffle them to ensure diversity
+			const shuffledLinks = discoveredLinks
+				.sort(() => Math.random() - 0.5)
+				.slice(0, 20);
 
-				if (SOCIAL_DOMAINS.some(social => linkUrl.hostname.endsWith(social))) {
-					continue;
-				}
+			for (const link of shuffledLinks) {
+				if (nodes.length >= MAX_NODES) break;
 
-				if (!visited.has(normalizedLink)) {
-					const personal = isPersonal(normalizedLink);
-					if (personal || depth < 1) { // Only go deep for personal sites or if we are at root
-						nodes.push({
-							id: normalizedLink,
-							label: new URL(normalizedLink).hostname,
-							depth: depth + 1,
-							type: personal ? 'personal' : 'external'
-						});
-						visited.add(normalizedLink);
-						queue.push({ url: link, depth: depth + 1 }); // Use the specific page URL for crawling
+				try {
+					const linkUrl = new URL(link);
+					const normalizedLink = getBaseDomain(link);
+
+					if (SOCIAL_DOMAINS.some((social) => linkUrl.hostname.endsWith(social))) {
+						continue;
 					}
-				}
 
-				if (visited.has(normalizedLink) && normalizedLink !== getBaseDomain(url)) {
-					// Add edge if not already present
-					if (!edges.find(e => (e.source === getBaseDomain(url) && e.target === normalizedLink) || (e.source === normalizedLink && e.target === getBaseDomain(url)))) {
-						edges.push({ source: getBaseDomain(url), target: normalizedLink });
+					if (!visited.has(normalizedLink)) {
+						const personal = isPersonal(normalizedLink);
+						if (personal || depth < 1) {
+							// Only go deep for personal sites or if we are at root
+							nodes.push({
+								id: normalizedLink,
+								label: new URL(normalizedLink).hostname,
+								depth: depth + 1,
+								type: personal ? 'personal' : 'external'
+							});
+							visited.add(normalizedLink);
+							nextLevel.push({ url: link, depth: depth + 1 });
+						}
 					}
+
+					if (visited.has(normalizedLink) && normalizedLink !== getBaseDomain(url)) {
+						// Add edge if not already present
+						if (
+							!edges.find(
+								(e) =>
+									(e.source === getBaseDomain(url) && e.target === normalizedLink) ||
+									(e.source === normalizedLink && e.target === getBaseDomain(url))
+							)
+						) {
+							edges.push({ source: getBaseDomain(url), target: normalizedLink });
+						}
+					}
+				} catch {
+					// Invalid URL
 				}
-			} catch {
-				// Invalid URL
 			}
 		}
+
+		currentLevel = nextLevel;
+		currentDepth++;
 	}
 
 	return json({ nodes, edges });
