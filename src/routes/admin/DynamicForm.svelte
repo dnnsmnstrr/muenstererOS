@@ -265,6 +265,7 @@
 							<Input
 								id={path}
 								type="datetime-local"
+								class="h-10 w-full min-w-0"
 								value={formatForDateTimeLocal(obj[key])}
 								oninput={(e) => (obj[key] = (e.target as HTMLInputElement).value)}
 							/>
