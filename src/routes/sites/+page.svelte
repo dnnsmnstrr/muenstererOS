@@ -4,6 +4,7 @@
 	import { Loader2, Minus, Plus } from 'lucide-svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	interface Node {
 		id: string;
@@ -182,7 +183,7 @@
 </script>
 
 <svelte:head>
-	<title>{i18n.t('common.sites')}{i18n.t('common.page_title_suffix')}</title>
+	<title>{i18n.t('common.sites')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <div class="flex h-full flex-col p-4 md:p-8">

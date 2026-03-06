@@ -86,26 +86,60 @@ function isPersonal(url: string): boolean {
 async function getLinks(url: string): Promise<string[]> {
 	try {
 		const response = await fetch(url, {
-			headers: { 'User-Agent': 'muenstererOS-NetworkCrawler/1.0' },
-			signal: AbortSignal.timeout(3000)
+			headers: {
+				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+				'Accept': 'text/html'
+			},
+			signal: AbortSignal.timeout(5000)
 		});
 		if (!response.ok) return [];
 		let html = await response.text();
 
 		// Ignore content in header and footer
-		html = html.replace(/<header[^>]*>[\s\S]*?<\/header>/gi, '');
-		html = html.replace(/<footer[^>]*>[\s\S]*?<\/footer>/gi, '');
-		html = html.replace(/<nav[^>]*>[\s\S]*?<\/nav>/gi, '');
+		html = html.replace(/<(header|footer|nav)[^>]*>[\s\S]*?<\/\1>/gi, '');
 
-		const linkRegex = /href=["'](https?:\/\/[^"']+)["']/g;
+		const urlRegex = /https?:\/\/[^\s"\\<>]+/g;
 		const links = new Set<string>();
 		let match;
-		while ((match = linkRegex.exec(html)) !== null) {
-			const link = match[1];
-			// Only follow links that look like site/people pages
-			const path = new URL(link).pathname.toLowerCase();
-			if (path.includes('/sites') || path.includes('/people') || path.includes('/links') || path.includes('/blogroll') || path === '/') {
-				links.add(link);
+		while ((match = urlRegex.exec(html)) !== null) {
+			try {
+				let foundUrl = match[0];
+				if (foundUrl.endsWith('\\')) foundUrl = foundUrl.slice(0, -1);
+				const linkUrl = new URL(foundUrl);
+
+				if (!['http:', 'https:'].includes(linkUrl.protocol)) continue;
+
+				const path = linkUrl.pathname.toLowerCase();
+				const isRoot = path === '/' || path === '';
+				const isDirectory = path.includes('/sites') || path.includes('/people') || path.includes('/links') || path.includes('/blogroll');
+
+				// Follow if it's a directory we're interested in, OR if it's a root link to a different domain (likely a personal site)
+				if (isDirectory || (isRoot && getBaseDomain(foundUrl) !== getBaseDomain(url))) {
+					links.add(foundUrl);
+				}
+			} catch {
+				// Invalid URL
+			}
+		}
+
+		// Also try standard href extraction for relative links
+		const hrefRegex = /href=["']([^"']+)["']/g;
+		while ((match = hrefRegex.exec(html)) !== null) {
+			try {
+				const resolvedUrl = new URL(match[1], url).toString();
+				const linkUrl = new URL(resolvedUrl);
+
+				if (!['http:', 'https:'].includes(linkUrl.protocol)) continue;
+
+				const path = linkUrl.pathname.toLowerCase();
+				const isRoot = path === '/' || path === '';
+				const isDirectory = path.includes('/sites') || path.includes('/people') || path.includes('/links') || path.includes('/blogroll');
+
+				if (isDirectory || (isRoot && getBaseDomain(resolvedUrl) !== getBaseDomain(url))) {
+					links.add(resolvedUrl);
+				}
+			} catch {
+				// Invalid URL
 			}
 		}
 		return Array.from(links);
@@ -135,7 +169,7 @@ export async function GET() {
 	const nodes: Node[] = [{ id: rootUrl, label: CURRENT_DOMAIN, depth: 0, type: 'root' }];
 	const edges: Edge[] = [];
 	const visited = new Set<string>([rootUrl]);
-	const queue: { url: string; depth: number }[] = [{ url: rootUrl, depth: 0 }];
+	const queue: { url: string; depth: number }[] = [];
 
 	// Add seeds from the config file
 	for (const seedUrl of networkSeeds) {
@@ -158,26 +192,6 @@ export async function GET() {
 		}
 	}
 
-	// Add some seeds from redirects
-	const redirectsSeeds = redirects
-		.filter((r) => r.url && r.url.startsWith('http') && isPersonal(r.url))
-		.slice(0, 5);
-
-	for (const seed of redirectsSeeds) {
-		const seedUrl = seed.url!;
-		const baseDomain = getBaseDomain(seedUrl);
-		if (!visited.has(baseDomain)) {
-			nodes.push({
-				id: baseDomain,
-				label: seed.name,
-				depth: 1,
-				type: 'personal'
-			});
-			edges.push({ source: rootUrl, target: baseDomain });
-			visited.add(baseDomain);
-			queue.push({ url: seedUrl, depth: 1 }); // Use the full URL for crawling
-		}
-	}
 
 	let head = 0;
 	while (head < queue.length && nodes.length < MAX_NODES) {
