@@ -15,6 +15,7 @@
 	let githubToken = $state('');
 	let selectedGist = $state(gists.now.id);
 	let gistData = $state('{}');
+	let gistSchema = $state<any>(null);
 	let gistInfo = $state<GistData>();
 	let fullGistHistory = $state<any[]>([]);
 	let isLoading = $state(false);
@@ -103,6 +104,7 @@
 
 		// Clear current content to show loading state
 		gistData = '{}';
+		gistSchema = null;
 
 		isLoading = true;
 		try {
@@ -122,8 +124,43 @@
 
 			const content = data.files[filename].content;
 
+			// Check for schema.json as fallback
+			let fallbackSchema = null;
+			if (data.files['schema.json']) {
+				try {
+					fallbackSchema = JSON.parse(data.files['schema.json'].content);
+				} catch (e) {
+					console.error('Failed to parse schema.json', e);
+				}
+			}
+
 			// Validate and format JSON
 			const validation = GitHubGistAPI.validateJSON(content);
+			if (validation.valid) {
+				try {
+					const parsedContent = JSON.parse(content);
+					if (parsedContent.$schema && typeof parsedContent.$schema === 'string') {
+						const schemaUrl = parsedContent.$schema;
+						if (schemaUrl.startsWith('http')) {
+							const schemaRes = await fetch(schemaUrl);
+							if (schemaRes.ok) {
+								gistSchema = await schemaRes.json();
+								toast.success('Loaded schema from $schema URL');
+							} else {
+								console.warn(`Failed to fetch schema from ${schemaUrl}`);
+								gistSchema = fallbackSchema;
+							}
+						}
+					} else {
+						gistSchema = fallbackSchema;
+					}
+				} catch (e) {
+					gistSchema = fallbackSchema;
+				}
+			} else {
+				gistSchema = fallbackSchema;
+			}
+
 			if (validation.valid && validation.formatted) {
 				gistData = validation.formatted;
 			} else {
@@ -209,6 +246,7 @@
 			const originalContent = gistInfo.files[filename]?.content || '{}';
 
 			// Use setValue to properly update the editor
+			gistData = originalContent;
 			jsonEditor?.setValue(originalContent);
 			toast.success('Editor reset to original content');
 		}
@@ -247,6 +285,7 @@
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo
+			schema={gistSchema}
 			onFormatJson={formatJson}
 			onResetEditor={resetEditor}
 			onSaveGist={saveGist}
