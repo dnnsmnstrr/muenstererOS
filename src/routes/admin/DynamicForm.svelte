@@ -11,6 +11,18 @@
 
 	let openStates = $state<Record<string, boolean>>({});
 
+	function formatForDateTimeLocal(val: string) {
+		if (!val) return '';
+		try {
+			const d = new Date(val);
+			if (isNaN(d.getTime())) return '';
+			// Returns YYYY-MM-DDTHH:mm
+			return d.toISOString().slice(0, 16);
+		} catch (e) {
+			return '';
+		}
+	}
+
 	function resolveSchema(s: any): any {
 		if (!s || !s.$ref) return s;
 
@@ -250,7 +262,12 @@
 								{/each}
 							</select>
 						{:else if s.format === 'date-time'}
-							<Input id={path} type="datetime-local" bind:value={obj[key]} />
+							<Input
+								id={path}
+								type="datetime-local"
+								value={formatForDateTimeLocal(obj[key])}
+								oninput={(e) => (obj[key] = (e.target as HTMLInputElement).value)}
+							/>
 						{:else}
 							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
 						{/if}
