@@ -162,7 +162,17 @@
 									{:else}
 										<ChevronRight class="h-4 w-4" />
 									{/if}
-									<h3 class="text-sm font-semibold capitalize">{label}</h3>
+									<div class="flex flex-col">
+										<h3 class="text-sm font-semibold capitalize">{label}</h3>
+										{#if !(openStates[path] ?? defaultOpen) && obj[key]}
+											{@const preview = obj[key].name || obj[key].title}
+											{#if preview}
+												<span class="text-xs text-muted-foreground line-clamp-1">
+													{preview}
+												</span>
+											{/if}
+										{/if}
+									</div>
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
