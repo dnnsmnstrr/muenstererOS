@@ -28,12 +28,16 @@ const SOCIAL_DOMAINS = [
 	'gitlab.com',
 	'youtube.com',
 	't.me',
+	'telegram.org',
 	'signal.me',
+	'signal.org',
 	'spotify.com',
 	'apple.com',
 	'amazon.com',
 	'google.com',
 	'reddit.com',
+	'tiktok.v',
+	'tiktokcdn.com',
 	'mastodon.social',
 	'bsky.app',
 	'threads.net',
@@ -42,7 +46,15 @@ const SOCIAL_DOMAINS = [
 	'onuniverse.com',
 	'tiktokcdn-us.com',
 	'googleapis.com',
-	'gstatic.com'
+	'gstatic.com',
+	'getkirby.com',
+	'paypal.com',
+	'paypalobjects.com',
+	'google-analytics.com',
+	'pypl.com',
+	'paypal-corp.com',
+	'synchronycredit.com',
+	'synchronybankterms.com'
 ];
 
 function isPersonal(url: string): boolean {
@@ -94,21 +106,27 @@ async function getLinks(url: string): Promise<string[]> {
 	}
 }
 
+function getBaseDomain(url: string): string {
+	try {
+		const urlObj = new URL(url);
+		const parts = urlObj.hostname.split('.');
+		// Very basic registered domain heuristic (works for .com, .de, .tech, .me etc.)
+		if (parts.length >= 2) {
+			const base = parts.slice(-2).join('.');
+			return `${urlObj.protocol}//${base}/`;
+		}
+		return urlObj.origin + '/';
+	} catch {
+		return url;
+	}
+}
+
 export async function GET() {
-	const rootUrl = `https://${CURRENT_DOMAIN}/`;
+	const rootUrl = getBaseDomain(`https://${CURRENT_DOMAIN}/`);
 	const nodes: Node[] = [{ id: rootUrl, label: CURRENT_DOMAIN, depth: 0, type: 'root' }];
 	const edges: Edge[] = [];
 	const visited = new Set<string>([rootUrl]);
 	const queue: { url: string; depth: number }[] = [{ url: rootUrl, depth: 0 }];
-
-	function getBaseDomain(url: string): string {
-		try {
-			const urlObj = new URL(url);
-			return urlObj.origin + '/';
-		} catch {
-			return url;
-		}
-	}
 
 	// Add seeds from the config file
 	for (const seedUrl of networkSeeds) {
@@ -163,7 +181,7 @@ export async function GET() {
 
 			try {
 				const linkUrl = new URL(link);
-				const normalizedLink = linkUrl.origin + '/';
+				const normalizedLink = getBaseDomain(link);
 
 				if (SOCIAL_DOMAINS.some(social => linkUrl.hostname.endsWith(social))) {
 					continue;
@@ -174,7 +192,7 @@ export async function GET() {
 					if (personal || depth < 1) { // Only go deep for personal sites or if we are at root
 						nodes.push({
 							id: normalizedLink,
-							label: linkUrl.hostname,
+							label: new URL(normalizedLink).hostname,
 							depth: depth + 1,
 							type: personal ? 'personal' : 'external'
 						});
