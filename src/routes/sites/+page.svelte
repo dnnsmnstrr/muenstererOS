@@ -142,12 +142,12 @@
 </script>
 
 <svelte:head>
-	<title>Network {i18n.t('common.page_title_suffix')}</title>
+	<title>{i18n.t('common.sites')}{i18n.t('common.page_title_suffix')}</title>
 </svelte:head>
 
 <div class="flex h-full flex-col p-4 md:p-8">
 	<div class="mb-6">
-		<Heading>Network</Heading>
+		<Heading>{i18n.t('common.sites')}</Heading>
 		<p class="text-muted-foreground">
 			A visualization of my personal website network and its connections.
 		</p>

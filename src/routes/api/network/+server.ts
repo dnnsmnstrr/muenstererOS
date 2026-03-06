@@ -1,6 +1,7 @@
 import { redirects } from '$lib/redirects';
 import { json } from '@sveltejs/kit';
 import { CURRENT_DOMAIN } from '$lib/config';
+import networkSeeds from '../../../data/network_seeds.json';
 
 interface Node {
 	id: string;
@@ -14,8 +15,8 @@ interface Edge {
 	target: string;
 }
 
-const MAX_DEPTH = 2; // Reduced depth to avoid timeouts
-const MAX_NODES = 30; // Reduced nodes to avoid timeouts
+const MAX_DEPTH = 3; // 3 levels deep as requested
+const MAX_NODES = 30; // Limit nodes to avoid timeouts
 
 function isPersonal(url: string): boolean {
 	const personalPatterns = [
@@ -65,12 +66,32 @@ export async function GET() {
 	const visited = new Set<string>([rootUrl]);
 	const queue: { url: string; depth: number }[] = [{ url: rootUrl, depth: 0 }];
 
+	// Add seeds from the config file
+	for (const seedUrl of networkSeeds) {
+		if (!visited.has(seedUrl)) {
+			try {
+				const urlObj = new URL(seedUrl);
+				nodes.push({
+					id: seedUrl,
+					label: urlObj.hostname,
+					depth: 1,
+					type: 'personal'
+				});
+				edges.push({ source: rootUrl, target: seedUrl });
+				visited.add(seedUrl);
+				queue.push({ url: seedUrl, depth: 1 });
+			} catch {
+				// Invalid seed URL
+			}
+		}
+	}
+
 	// Add some seeds from redirects
-	const seeds = redirects
+	const redirectsSeeds = redirects
 		.filter((r) => r.url && r.url.startsWith('http') && isPersonal(r.url))
 		.slice(0, 5);
 
-	for (const seed of seeds) {
+	for (const seed of redirectsSeeds) {
 		if (seed.url && !visited.has(seed.url)) {
 			nodes.push({
 				id: seed.url,
