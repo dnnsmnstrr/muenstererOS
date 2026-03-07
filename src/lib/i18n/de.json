@@ -203,5 +203,12 @@
 		"birthday": "Geburtstag",
 		"age": "Alter",
 		"life_expectancy": "Lebenserwartung"
+	},
+	"projects": {
+		"title": "Meine Projekte",
+		"description": "Eine Sammlung meiner Arbeiten und Nebenprojekte",
+		"website": "Webseite",
+		"app": "App",
+		"github": "GitHub"
 	}
 }

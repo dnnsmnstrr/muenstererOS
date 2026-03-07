@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Heading } from '$lib/components/typography';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 	import projects from '../../data/projects.json' ;
 
 	type Project = {
@@ -14,8 +15,12 @@
 	};
 </script>
 
+<svelte:head>
+	<meta name="description" content={i18n.t('projects.description')} />
+</svelte:head>
+
 <div class="container">
-	<Heading>My Projects</Heading>
+	<Heading>{i18n.t('projects.title')}</Heading>
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each projects as project}
@@ -47,7 +52,7 @@
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								Website →
+								{i18n.t('projects.website')} →
 							</a>
 						{/if}
 						{#if project.appUrl}
@@ -57,7 +62,7 @@
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								App →
+								{i18n.t('projects.app')} →
 							</a>
 						{/if}
 						{#if project.githubUrl}
@@ -67,7 +72,7 @@
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								GitHub →
+								{i18n.t('projects.github')} →
 							</a>
 						{/if}
 					</div>
