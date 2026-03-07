@@ -1,8 +1,9 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+  import * as Select from '$lib/components/ui/select';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Heading } from '$lib/components/typography';
-	import * as Select from '$lib/components/ui/select';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { capitalize } from '$lib/utils/index';
 	import projects from '../../data/projects.json';
 
@@ -26,9 +27,13 @@
 	const triggerContent = $derived(selectedTag === '' ? 'All Tags' : capitalize(selectedTag));
 </script>
 
+<svelte:head>
+	<meta name="description" content={i18n.t('projects.description')} />
+</svelte:head>
+
 <div class="container">
 	<div class="mb-6 flex items-center justify-between">
-		<Heading class="mb-0">My Projects</Heading>
+		<Heading class="mb-0">{i18n.t('projects.title')}</Heading>
 
 		<Select.Root type="single" bind:value={selectedTag}>
 			<Select.Trigger class="w-[180px]">
@@ -80,7 +85,7 @@
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								Website →
+								{i18n.t('projects.website')} →
 							</a>
 						{/if}
 						{#if project.appUrl}
@@ -90,7 +95,7 @@
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								App →
+								{i18n.t('projects.app')} →
 							</a>
 						{/if}
 						{#if project.githubUrl}
@@ -100,7 +105,7 @@
 								rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
-								GitHub →
+								{i18n.t('projects.github')} →
 							</a>
 						{/if}
 					</div>
