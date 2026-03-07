@@ -106,7 +106,7 @@
                         <div class="space-y-1">
                             <div class="flex justify-between text-sm">
                                 <span>{name}</span>
-                                <span class="text-muted-foreground">{count} {count === 1 ? i18n.t('playlists.appearance') : i18n.t('playlists.appearances')}</span>
+                                <span class="text-muted-foreground font-mono">{count}</span>
                             </div>
                             <div class="h-4 w-full bg-secondary rounded-full overflow-hidden">
                                 <div
