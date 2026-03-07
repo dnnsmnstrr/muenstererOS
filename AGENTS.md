@@ -1,6 +1,6 @@
 # AGENTS.md
 
-This file provides guidance to Claude Code and other AI agents when working with code in this repository.
+This file provides guidance to AI agents when working with code in this repository.
 
 ## Development Commands
 
@@ -16,7 +16,7 @@ This file provides guidance to Claude Code and other AI agents when working with
 
 ## Architecture Overview
 
-This is a SvelteKit-based personal website called "muenstererOS" with a unique interactive desktop-like UI.
+This is a SvelteKit-based personal website called "muenstererOS" with a unique interactive desktop operating system like UI.
 
 ### Core Technologies
 - **SvelteKit 2** with Svelte 5 - Full-stack framework
@@ -39,7 +39,7 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 - Component library in `src/lib/components/ui/` following shadcn-ui patterns
 - Custom components in `src/lib/components/`
 - Theming system with CSS custom properties and multiple theme variants
-- Interactive cursor-following mask effect controlled by mouse movement
+- Interactive cursor-following mask effect controlled by mouse movement on the homepage with predefined positioning for other pages
 
 #### Routing Structure
 - File-based routing with SvelteKit conventions
@@ -63,7 +63,11 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 - Environment variables: `PUBLIC_ALGOLIA_API_ID`, `PUBLIC_ALGOLIA_API_KEY`
 
 ### Content Management
-- Changes tracked in `static/data/changes.json`
+- Major changes and features tracked in `static/data/changes.json`
 - Run `npm run xml` after updating changes to regenerate RSS feed
 - Static assets in `static/images/`
 - Page content primarily in route components
+
+### i18n
+- Translations for English and German 
+- Date and Number formatting based on locale

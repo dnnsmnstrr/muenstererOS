@@ -11,7 +11,7 @@
     Standards: svelte, typescript, vite                         
     Components: shadcn-svelte, lucide-icons
     Hosting: Vercel, Github
-    IDE: VSCode, Cursor
+    IDE: VSCode
                                 
     /* THANKS */						
     Paula, Felix
