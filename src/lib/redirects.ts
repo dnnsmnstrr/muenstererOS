@@ -188,7 +188,7 @@ export const redirects: Redirect[] = [
 	// Projects
 	{
 		name: 'ToolShare',
-		aliases: ['tool', 'tools', 'toolshare', '🧰']
+		aliases: ['tool', 'tools', '🧰']
 	},
 	{
 		name: 'progressions-web',
@@ -198,7 +198,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'progressions',
 		url: 'https://progressions.expo.app/',
-		aliases: ['progressions', 'progression', 'progressions-app', '🎹']
+		aliases: ['progression', 'progressions-app', '🎹']
 	},
 	{
 		name: 'humblekeys',
@@ -334,7 +334,7 @@ export const redirects: Redirect[] = [
 		name: 'it-talents',
 		description: 'an interview about a scholarship I received',
 		url: 'https://it-talents.de/partnerunternehmen/dennis-erhaelt-ein-it-stipendium/',
-		aliases: ['stipendium', 'interview', 'scholarship', '📰']
+		aliases: ['stipendium', 'interview', 'scholarship']
 	},
 	{
 		name: 'grepper',
@@ -414,7 +414,7 @@ export const redirects: Redirect[] = [
 		url: 'github/muenstererOS/edit/master/src/lib/redirects.ts',
 		aliases: ['↪️', '↩️', '🔃', 'edit-redirect']
 	}, //link to these redirects
-	{ name: 'feed', url: '/feed.xml', aliases: ['rss', '📰', 'atom', 'subscribe'] },
+	{ name: 'feed', url: '/feed.xml', aliases: ['rss', 'atom', 'subscribe'] },
 	{ name: 'help', aliases: ['?', 'available', 'urls', 'list', '🆘', '❔', '❓'] }
 ];
 

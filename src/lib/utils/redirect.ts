@@ -23,12 +23,12 @@ export function getRedirect (query: string, redirects: Redirect[], options?: Red
       break
     default:
       // search for redirect
-      const foundRedirect = redirects.find(({name = '', aliases = [], url}) => {
-        if (!name) {
-          console.log('missing name for', url, aliases)
-          return false
-        }
-        return name === query.toLowerCase() || aliases.includes(query.toLowerCase())
+      const foundRedirect = redirects.find(({ name = '', aliases = [] }) => {
+        const lowerCaseQuery = query.toLowerCase();
+        return (
+          name.toLowerCase() === lowerCaseQuery ||
+          aliases.some((alias) => alias.toLowerCase() === lowerCaseQuery)
+        );
       })
       if (foundRedirect) {
         redirect = foundRedirect
