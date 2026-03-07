@@ -1,7 +1,9 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Heading } from '$lib/components/typography';
-	import projects from '../../data/projects.json' ;
+	import * as Select from '$lib/components/ui/select';
+	import { capitalize } from '$lib/utils/index';
+	import projects from '../../data/projects.json';
 
 	type Project = {
 		title: string;
@@ -12,13 +14,35 @@
 		githubUrl?: string;
 		image: string;
 	};
+
+	let selectedTag = $state('');
+	const allTags = $derived([...new Set(projects.flatMap((p) => p.tags))].sort());
+	const filteredProjects = $derived(
+		selectedTag === '' ? projects : projects.filter((p) => p.tags.includes(selectedTag))
+	);
+
+	const triggerContent = $derived(selectedTag === '' ? 'All Tags' : capitalize(selectedTag));
 </script>
 
 <div class="container">
-	<Heading>My Projects</Heading>
+	<div class="mb-6 flex items-center justify-between">
+		<Heading class="mb-0">My Projects</Heading>
+
+		<Select.Root type="single" bind:value={selectedTag}>
+			<Select.Trigger class="w-[180px]">
+				{triggerContent}
+			</Select.Trigger>
+			<Select.Content>
+				<Select.Item value="">All Tags</Select.Item>
+				{#each allTags as tag}
+					<Select.Item value={tag}>{capitalize(tag)}</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</div>
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each projects as project}
+		{#each filteredProjects as project}
 			<Card.Root>
 				<Card.Content class="pt-6">
 					{#if project.image}
