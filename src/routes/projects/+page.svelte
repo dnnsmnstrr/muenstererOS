@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+	import { Badge } from '$lib/components/ui/badge';
 	import { Heading } from '$lib/components/typography';
 	import * as Select from '$lib/components/ui/select';
 	import { capitalize } from '$lib/utils/index';
@@ -9,6 +10,7 @@
 		title: string;
 		description: string;
 		tags: string[];
+		badge?: string;
 		webUrl?: string;
 		appUrl?: string;
 		githubUrl?: string;
@@ -46,11 +48,18 @@
 			<Card.Root>
 				<Card.Content class="pt-6">
 					{#if project.image}
-						<img
-							src={project.image}
-							alt={project.title}
-							class="mb-4 h-48 w-full rounded-t-lg object-contain"
-						/>
+						<div class="relative mb-4">
+							<img
+								src={project.image}
+								alt={project.title}
+								class="h-48 w-full rounded-t-lg object-contain"
+							/>
+							{#if project.badge}
+								<Badge class="absolute bottom-2 right-2">
+									{project.badge}
+								</Badge>
+							{/if}
+						</div>
 					{/if}
 					<h2 class="mb-2 text-xl font-semibold">{project.title}</h2>
 					<p class="mb-4 text-muted-foreground">{project.description}</p>

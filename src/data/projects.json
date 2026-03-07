@@ -27,7 +27,8 @@
     {
         "title": "BetterTouchTool Extension",
         "description": "A custom extension to search and execute named triggers in BTT directly from Raycast",
-        "tags": ["Raycast", "2k+ Installs", "TypeScript"],
+        "tags": ["Raycast", "TypeScript"],
+        "badge": "2k+ Installs",
         "webUrl": "https://www.raycast.com/dnnsmnstrr/bettertouchtool",
         "githubUrl": "https://github.com/raycast/extensions/tree/main/extensions/bettertouchtool/",
         "image": "https://files.raycast.com/9scaxngh5f31po57vd2mrxsnubaz"
