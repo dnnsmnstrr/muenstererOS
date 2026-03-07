@@ -75,7 +75,11 @@
             onclick={nextYear}
             disabled={viewMode === 'stats'}
         >
-            {i18n.t('playlists.next')}
+            {#if viewMode === 'years' && isLastYear}
+                {i18n.t('playlists.stats')}
+            {:else}
+                {i18n.t('playlists.next')}
+            {/if}
         </button>
     </div>
 
@@ -97,12 +101,12 @@
         {:else}
             <div in:fade={{ duration: 300 }} class="space-y-6">
                 <h3 class="text-xl font-semibold mb-4">{i18n.t('playlists.artist_frequency')}</h3>
-                <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                <div class="space-y-4 max-h-[280px] overflow-y-auto pr-2">
                     {#each artistStats as { name, count }}
                         <div class="space-y-1">
                             <div class="flex justify-between text-sm">
                                 <span>{name}</span>
-                                <span class="text-muted-foreground">{count} {i18n.t('playlists.appearances')}</span>
+                                <span class="text-muted-foreground">{count} {count === 1 ? i18n.t('playlists.appearance') : i18n.t('playlists.appearances')}</span>
                             </div>
                             <div class="h-4 w-full bg-secondary rounded-full overflow-hidden">
                                 <div
