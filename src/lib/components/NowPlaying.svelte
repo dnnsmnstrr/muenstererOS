@@ -20,7 +20,7 @@
 		imageUrl?: string;
 	}
 
-	let { side = 'right', expanded = false } = $props<{
+	let { side = 'right', expanded = $bindable(false) } = $props<{
 		side?: 'left' | 'right';
 		expanded?: boolean;
 	}>();
@@ -39,11 +39,13 @@
 			return bSeason - aSeason;
 		})[0];
 
-	function handleClick() {
-		goto('/playlists');
+	function handleClick(e: MouseEvent) {
+		e.stopPropagation();
+		goto('/playlists?current');
 	}
 
-	function toggleExpanded() {
+	function toggleExpanded(e: MouseEvent) {
+		e.stopPropagation();
 		expanded = !expanded;
 	}
 </script>
