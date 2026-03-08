@@ -73,18 +73,6 @@
 		isDragging = false;
 	}
 
-	$effect(() => {
-		// Save state whenever expansion changes
-		const isExpanded = nowPlayingExpanded;
-		untrack(() => {
-			nowPlayingStore.saveToStorage({
-				y: nowPlayingY,
-				side: nowPlayingSide,
-				expanded: isExpanded
-			});
-		});
-	});
-
 	function handleClickCapture(e: MouseEvent) {
 		// Allow drag gesture to prevent expansion toggle
 		if (hasDragged || (Date.now() - lastDragEndTime < 100)) {
@@ -135,6 +123,18 @@
 
 		return unsubscribe;
 	});
+
+	$effect(() => {
+		// Save state whenever expansion changes
+		const isExpanded = nowPlayingExpanded;
+		untrack(() => {
+			nowPlayingStore.saveToStorage({
+				y: nowPlayingY,
+				side: nowPlayingSide,
+				expanded: isExpanded
+			});
+		});
+	});
 </script>
 
 <svelte:head>
@@ -161,7 +161,7 @@
 		onpointercancel={handlePointerUp}
 		onclickcapture={handleClickCapture}
 	>
-		<NowPlaying side={nowPlayingSide} expanded={nowPlayingExpanded} />
+		<NowPlaying side={nowPlayingSide} bind:expanded={nowPlayingExpanded} />
 	</div>
 
 	<Dock />
