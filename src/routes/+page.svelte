@@ -7,7 +7,7 @@
 	import { initializeFiles } from '$lib/stores/desktop';
 	import { nowPlayingStore } from '$lib/stores/nowplaying';
 	import Dock from './Dock.svelte';
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import { cn } from '$lib/utils';
 	import { goto } from '$app/navigation';
 
@@ -73,12 +73,26 @@
 		isDragging = false;
 	}
 
+	$effect(() => {
+		// Save state whenever expansion changes
+		const isExpanded = nowPlayingExpanded;
+		untrack(() => {
+			nowPlayingStore.saveToStorage({
+				y: nowPlayingY,
+				side: nowPlayingSide,
+				expanded: isExpanded
+			});
+		});
+	});
+
 	function handleClickCapture(e: MouseEvent) {
 		// Allow drag gesture to prevent expansion toggle
 		if (hasDragged || (Date.now() - lastDragEndTime < 100)) {
 			e.stopPropagation();
 			e.preventDefault();
-			hasDragged = false;
+			if (e.type === 'click') {
+				hasDragged = false;
+			}
 			return;
 		}
 
@@ -91,11 +105,6 @@
 
 		if (isNearActiveSide || !nowPlayingExpanded) {
 			nowPlayingExpanded = !nowPlayingExpanded;
-			nowPlayingStore.saveToStorage({
-				y: nowPlayingY,
-				side: nowPlayingSide,
-				expanded: nowPlayingExpanded
-			});
 		} else {
 			goto('/playlists?current');
 		}
