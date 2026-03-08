@@ -35,6 +35,12 @@
 	import * as Table from '$lib/components/ui/table';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Badge } from '$lib/components/ui/badge';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+
+	/**
+	 * Localization optimization: Replace hardcoded UI strings with i18n.t() calls.
+	 * This makes the Uses page accessible in multiple languages (English and German).
+	 */
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
@@ -118,18 +124,20 @@
 	});
 
 	const triggerContent = $derived(
-		capitalize(categories.find((category) => category === selectedCategory) ?? 'All Categories')
+		capitalize(
+			categories.find((category) => category === selectedCategory) ?? i18n.t('uses.all_categories')
+		)
 	);
 </script>
 
 <svelte:head>
-	<meta name="description" content="Tech I use" />
+	<meta name="description" content={i18n.t('uses.description')} />
 </svelte:head>
 
 <div class="container">
 	<div class="mb-6 flex items-center justify-between">
 		<div class="flex items-center gap-2">
-			<Heading class="mb-0">Uses</Heading>
+			<Heading class="mb-0">{i18n.t('uses.title')}</Heading>
 			<Popover.Root>
 				<Popover.Trigger class={buttonVariants({ variant: 'ghost', size: 'icon' })}>
 					<HelpCircle />
@@ -137,9 +145,11 @@
 				<Popover.Content>
 					<div class="grid gap-4">
 						<div class="space-y-2">
-							<h4 class="font-medium leading-none">Things I use every day.</h4>
+							<h4 class="font-medium leading-none">{i18n.t('uses.info_title')}</h4>
 							<p class="text-sm text-muted-foreground">
-								More Info in my <Link href="/zettelkasten/uses" target="_blank">Zettelkasten</Link>
+								{i18n.t('uses.more_info_prefix')}<Link href="/zettelkasten/uses" target="_blank"
+									>{i18n.t('uses.more_info_link')}</Link
+								>
 							</p>
 						</div>
 					</div>
@@ -149,7 +159,8 @@
 
 		<div class="flex items-center gap-4">
 			<p class="hidden text-sm text-muted-foreground sm:block">
-				Inspired by <Link href="https://uses.tech" target="_blank">uses.tech</Link>
+				{i18n.t('uses.inspired_by')}
+				<Link href="https://uses.tech" target="_blank">uses.tech</Link>
 			</p>
 			<Tabs.Root bind:value={viewMode}>
 				<Tabs.List>
@@ -166,7 +177,7 @@
 
 	<div class="mb-8 space-y-4">
 		<div class="flex flex-col items-center gap-4 sm:flex-row">
-			<Input placeholder="Search..." type="search" bind:value={searchQuery} />
+			<Input placeholder={i18n.t('uses.search_placeholder')} type="search" bind:value={searchQuery} />
 
 			<Select.Root type="single" bind:value={selectedCategory}>
 				<Select.Trigger class="min-w-40">
@@ -174,7 +185,7 @@
 				</Select.Trigger>
 				<Select.Content>
 					<Select.Group>
-						<Select.Item value="">All Categories</Select.Item>
+						<Select.Item value="">{i18n.t('uses.all_categories')}</Select.Item>
 						{#each categories as category}
 							<Select.Item value={category}>{capitalize(category)}</Select.Item>
 						{/each}
@@ -201,7 +212,7 @@
 					onclick={handleReset}
 				>
 					<RotateCcw class="h-4" />
-					Reset Filters
+					{i18n.t('uses.reset_filters')}
 				</button>
 			{/if}
 		</div>
@@ -209,13 +220,13 @@
 
 	{#if filteredUses.length === 0}
 		<div class="text-center text-muted-foreground">
-			No results found.
+			{i18n.t('uses.no_results')}
 			<br />
 			<button
 				class="hover:bg-primary-500 mt-4 rounded-md bg-secondary px-4 py-2 transition duration-300 ease-in-out"
 				onclick={handleReset}
 			>
-				Reset filters
+				{i18n.t('uses.reset_filters')}
 			</button>
 		</div>
 	{/if}
@@ -277,14 +288,14 @@
 				<Table.Header>
 					<Table.Row>
 						<Table.Head class="w-[80px]">
-							<span class="sr-only">Icon</span>
+							<span class="sr-only">{i18n.t('uses.table.icon')}</span>
 						</Table.Head>
 						<Table.Head>
 							<button
 								class="flex items-center gap-1 hover:text-foreground"
 								onclick={() => toggleSort('title')}
 							>
-								Title
+								{i18n.t('uses.table.title')}
 								{#if sortConfig.field === 'title'}
 									{#if sortConfig.direction === 'asc'}
 										<ArrowUp class="h-3 w-3" />
@@ -296,13 +307,13 @@
 								{/if}
 							</button>
 						</Table.Head>
-						<Table.Head class="hidden md:table-cell">Description</Table.Head>
+						<Table.Head class="hidden md:table-cell">{i18n.t('uses.table.description')}</Table.Head>
 						<Table.Head>
 							<button
 								class="flex items-center gap-1 hover:text-foreground"
 								onclick={() => toggleSort('category')}
 							>
-								Category
+								{i18n.t('uses.table.category')}
 								{#if sortConfig.field === 'category'}
 									{#if sortConfig.direction === 'asc'}
 										<ArrowUp class="h-3 w-3" />
@@ -314,7 +325,7 @@
 								{/if}
 							</button>
 						</Table.Head>
-						<Table.Head>Tags</Table.Head>
+						<Table.Head>{i18n.t('uses.table.tags')}</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -371,7 +382,9 @@
 
 	{#if filteredUses.length > 0}
 		<div class="my-4 text-center text-sm text-muted-foreground">
-			{filteredUses.length} results found.
+			{filteredUses.length === 1
+				? i18n.t('uses.results_found_one')
+				: i18n.t('uses.results_found_many', { count: filteredUses.length.toString() })}
 		</div>
 	{/if}
 </div>

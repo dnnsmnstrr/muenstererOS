@@ -4,6 +4,11 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { Heading } from '$lib/components/typography';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+
+	/**
+	 * Localization: Localize the "All Tags" string for consistency across all filterable pages.
+	 */
+
 	import { capitalize } from '$lib/utils/index';
 	import projects from '../../data/projects.json';
 
@@ -24,7 +29,9 @@
 		selectedTag === '' ? projects : projects.filter((p) => p.tags.includes(selectedTag))
 	);
 
-	const triggerContent = $derived(selectedTag === '' ? 'All Tags' : capitalize(selectedTag));
+	const triggerContent = $derived(
+		selectedTag === '' ? i18n.t('projects.all_tags') : capitalize(selectedTag)
+	);
 </script>
 
 <svelte:head>
@@ -40,7 +47,7 @@
 				{triggerContent}
 			</Select.Trigger>
 			<Select.Content>
-				<Select.Item value="">All Tags</Select.Item>
+				<Select.Item value="">{i18n.t('projects.all_tags')}</Select.Item>
 				{#each allTags as tag}
 					<Select.Item value={tag}>{capitalize(tag)}</Select.Item>
 				{/each}
