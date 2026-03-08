@@ -263,7 +263,7 @@
 		</div>
 
 		<div class="flex flex-wrap items-center gap-2">
-			<div class="flex items-center gap-2 rounded-lg border bg-card p-1">
+			<div class="flex items-center rounded-lg border bg-card p-1">
 				<span class="px-2 text-xs font-medium text-muted-foreground">Depth</span>
 				<Button
 					variant="ghost"
@@ -288,7 +288,7 @@
 				</Button>
 			</div>
 
-			<div class="flex items-center gap-2 rounded-lg border bg-card p-1">
+			<div class="flex items-center rounded-lg border bg-card p-1">
 				<span class="px-2 text-xs font-medium text-muted-foreground">Zoom</span>
 				<Button
 					variant="ghost"
@@ -312,7 +312,7 @@
 				>
 					<ZoomOut class="h-4 w-4" />
 				</Button>
-				<span class="w-12 text-center font-mono text-sm">{Math.round(scale * 100)}%</span>
+				<span class="w-10 text-center font-mono text-sm">{Math.round(scale * 100)}%</span>
 				<Button
 					variant="ghost"
 					size="icon"
@@ -340,7 +340,7 @@
 			<Button
 				variant="outline"
 				size="icon"
-				class="h-10 w-10"
+				class="hidden h-10 w-10 md:inline-flex"
 				onclick={toggleContainerFullscreen}
 				aria-label={isFullscreen ? i18n.t('common.exit_fullscreen') : i18n.t('common.enter_fullscreen')}
 			>
