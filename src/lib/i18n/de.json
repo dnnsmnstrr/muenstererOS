@@ -216,6 +216,28 @@
 		"description": "Eine Sammlung meiner Arbeiten und Nebenprojekte",
 		"website": "Webseite",
 		"app": "App",
-		"github": "GitHub"
+		"github": "GitHub",
+		"all_tags": "Alle Tags"
+	},
+	"uses": {
+		"title": "Tech Stack",
+		"description": "Technologien, die ich verwende",
+		"info_title": "Dinge, die ich jeden Tag benutze.",
+		"more_info_prefix": "Mehr Infos in meinem ",
+		"more_info_link": "Zettelkasten",
+		"inspired_by": "Inspiriert von",
+		"search_placeholder": "Suchen...",
+		"all_categories": "Alle Kategorien",
+		"reset_filters": "Filter zurücksetzen",
+		"no_results": "Keine Ergebnisse gefunden.",
+		"results_found_one": "1 Ergebnis gefunden.",
+		"results_found_many": "{count} Ergebnisse gefunden.",
+		"table": {
+			"icon": "Icon",
+			"title": "Titel",
+			"description": "Beschreibung",
+			"category": "Kategorie",
+			"tags": "Tags"
+		}
 	}
 }

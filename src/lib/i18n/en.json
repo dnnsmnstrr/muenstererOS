@@ -215,6 +215,28 @@
 		"description": "A collection of my work and side projects",
 		"website": "Website",
 		"app": "App",
-		"github": "GitHub"
+		"github": "GitHub",
+		"all_tags": "All Tags"
+	},
+	"uses": {
+		"title": "Uses",
+		"description": "Tech I use",
+		"info_title": "Things I use every day.",
+		"more_info_prefix": "More Info in my ",
+		"more_info_link": "Zettelkasten",
+		"inspired_by": "Inspired by",
+		"search_placeholder": "Search...",
+		"all_categories": "All Categories",
+		"reset_filters": "Reset Filters",
+		"no_results": "No results found.",
+		"results_found_one": "1 result found.",
+		"results_found_many": "{count} results found.",
+		"table": {
+			"icon": "Icon",
+			"title": "Title",
+			"description": "Description",
+			"category": "Category",
+			"tags": "Tags"
+		}
 	}
 }

@@ -36,3 +36,9 @@
 **Learning:** The project's i18n service uses Svelte 5's $state for the current language. Components that import this service (e.g., i18n.svelte.ts) automatically become reactive to language changes when they use i18n.t(). No manual subscription or onDestroy logic is needed.
 
 **Action:** When localizing Svelte 5 components, simply import the i18n service and use i18n.t('key') directly in the markup or in $derived runes for clean, reactive translations.
+
+## 2026-03-04 - Localizing Text with Embedded Components
+
+**Learning:** When localizing sentences that contain components (like `<Link>`), the established pattern in this repository is to split the sentence into prefix, link text, and suffix keys in the i18n files, then use them sequentially in the template.
+
+**Action:** Avoid complex template literals for localizing components; use multiple `i18n.t()` calls instead.
