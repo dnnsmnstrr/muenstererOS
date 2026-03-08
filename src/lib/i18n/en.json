@@ -33,6 +33,7 @@
 		"reload": "Reload",
 		"zoom_in": "Zoom In",
 		"zoom_out": "Zoom Out",
+		"recenter": "Recenter",
 		"enter_fullscreen": "Enter Full Screen",
 		"exit_fullscreen": "Exit Full Screen",
 		"de": "German",

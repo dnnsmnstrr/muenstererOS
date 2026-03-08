@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Heading from '$lib/components/typography/Heading.svelte';
-	import { Loader2, Minus, Plus, Minimize, ZoomIn, ZoomOut, Expand } from 'lucide-svelte';
+	import { Loader2, Minus, Plus, Minimize, ZoomIn, ZoomOut, Expand, Focus } from 'lucide-svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
@@ -44,6 +44,15 @@
 
 	// Depth control
 	let displayDepth = $state(2);
+
+	let showRecenter = $derived.by(() => {
+		if (filteredNodes.length === 0) return false;
+		return filteredNodes.every((node) => {
+			const screenX = node.x * scale + offsetX;
+			const screenY = node.y * scale + offsetY;
+			return screenX < 0 || screenX > width || screenY < 0 || screenY > height;
+		});
+	});
 
 	let nodesById = $derived(new Map(nodes.map((n) => [n.id, n])));
 
@@ -237,6 +246,12 @@
 		return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
 	});
 
+	function recenter() {
+		scale = 1;
+		offsetX = 0;
+		offsetY = 0;
+	}
+
 	function getNodeColor(type: string) {
 		switch (type) {
 			case 'root':
@@ -253,6 +268,98 @@
 	<title>{i18n.t('common.sites')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
+{#snippet controls(extraClasses = '')}
+	<div class="flex flex-wrap items-center gap-2 {extraClasses}">
+		<div class="flex items-center rounded-lg border bg-card p-1">
+			<span class="px-2 text-xs font-medium text-muted-foreground">Depth</span>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8"
+				onclick={() => (displayDepth = Math.max(1, displayDepth - 1))}
+				disabled={displayDepth <= 1}
+				aria-label="Decrease depth"
+			>
+				<Minus class="h-4 w-4" />
+			</Button>
+			<span class="w-4 text-center font-mono text-sm">{displayDepth}</span>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8"
+				onclick={() => (displayDepth = Math.min(3, displayDepth + 1))}
+				disabled={displayDepth >= 3}
+				aria-label="Increase depth"
+			>
+				<Plus class="h-4 w-4" />
+			</Button>
+		</div>
+
+		<div class="flex items-center rounded-lg border bg-card p-1">
+			<span class="px-2 text-xs font-medium text-muted-foreground">Zoom</span>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8"
+				onclick={() => {
+					const newScale = Math.max(0.1, scale / 1.1);
+					if (container) {
+						const rect = container.getBoundingClientRect();
+						const centerX = rect.width / 2;
+						const centerY = rect.height / 2;
+						const worldX = (centerX - offsetX) / scale;
+						const worldY = (centerY - offsetY) / scale;
+						offsetX = centerX - worldX * newScale;
+						offsetY = centerY - worldY * newScale;
+						scale = newScale;
+					}
+				}}
+				disabled={scale <= 0.1}
+				aria-label={i18n.t('common.zoom_out')}
+			>
+				<ZoomOut class="h-4 w-4" />
+			</Button>
+			<span class="w-10 text-center font-mono text-sm">{Math.round(scale * 100)}%</span>
+			<Button
+				variant="ghost"
+				size="icon"
+				class="h-8 w-8"
+				onclick={() => {
+					const newScale = Math.min(5, scale * 1.1);
+					if (container) {
+						const rect = container.getBoundingClientRect();
+						const centerX = rect.width / 2;
+						const centerY = rect.height / 2;
+						const worldX = (centerX - offsetX) / scale;
+						const worldY = (centerY - offsetY) / scale;
+						offsetX = centerX - worldX * newScale;
+						offsetY = centerY - worldY * newScale;
+						scale = newScale;
+					}
+				}}
+				disabled={scale >= 5}
+				aria-label={i18n.t('common.zoom_in')}
+			>
+				<ZoomIn class="h-4 w-4" />
+			</Button>
+		</div>
+
+		<Button
+			variant="outline"
+			size="icon"
+			class="{isFullscreen ? 'inline-flex' : 'hidden md:inline-flex'} h-10 w-10"
+			onclick={toggleContainerFullscreen}
+			aria-label={isFullscreen ? i18n.t('common.exit_fullscreen') : i18n.t('common.enter_fullscreen')}
+		>
+			{#if isFullscreen}
+				<Minimize class="h-4 w-4" />
+			{:else}
+				<Expand class="h-4 w-4" />
+			{/if}
+		</Button>
+	</div>
+{/snippet}
+
 <div class="flex h-full flex-col p-4 md:p-8">
 	<div class="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
 		<div>
@@ -262,95 +369,9 @@
 			</p>
 		</div>
 
-		<div class="flex flex-wrap items-center gap-2">
-			<div class="flex items-center rounded-lg border bg-card p-1">
-				<span class="px-2 text-xs font-medium text-muted-foreground">Depth</span>
-				<Button
-					variant="ghost"
-					size="icon"
-					class="h-8 w-8"
-					onclick={() => (displayDepth = Math.max(1, displayDepth - 1))}
-					disabled={displayDepth <= 1}
-					aria-label="Decrease depth"
-				>
-					<Minus class="h-4 w-4" />
-				</Button>
-				<span class="w-4 text-center font-mono text-sm">{displayDepth}</span>
-				<Button
-					variant="ghost"
-					size="icon"
-					class="h-8 w-8"
-					onclick={() => (displayDepth = Math.min(3, displayDepth + 1))}
-					disabled={displayDepth >= 3}
-					aria-label="Increase depth"
-				>
-					<Plus class="h-4 w-4" />
-				</Button>
-			</div>
-
-			<div class="flex items-center rounded-lg border bg-card p-1">
-				<span class="px-2 text-xs font-medium text-muted-foreground">Zoom</span>
-				<Button
-					variant="ghost"
-					size="icon"
-					class="h-8 w-8"
-					onclick={() => {
-						const newScale = Math.max(0.1, scale / 1.1);
-						if (container) {
-							const rect = container.getBoundingClientRect();
-							const centerX = rect.width / 2;
-							const centerY = rect.height / 2;
-							const worldX = (centerX - offsetX) / scale;
-							const worldY = (centerY - offsetY) / scale;
-							offsetX = centerX - worldX * newScale;
-							offsetY = centerY - worldY * newScale;
-							scale = newScale;
-						}
-					}}
-					disabled={scale <= 0.1}
-					aria-label={i18n.t('common.zoom_out')}
-				>
-					<ZoomOut class="h-4 w-4" />
-				</Button>
-				<span class="w-10 text-center font-mono text-sm">{Math.round(scale * 100)}%</span>
-				<Button
-					variant="ghost"
-					size="icon"
-					class="h-8 w-8"
-					onclick={() => {
-						const newScale = Math.min(5, scale * 1.1);
-						if (container) {
-							const rect = container.getBoundingClientRect();
-							const centerX = rect.width / 2;
-							const centerY = rect.height / 2;
-							const worldX = (centerX - offsetX) / scale;
-							const worldY = (centerY - offsetY) / scale;
-							offsetX = centerX - worldX * newScale;
-							offsetY = centerY - worldY * newScale;
-							scale = newScale;
-						}
-					}}
-					disabled={scale >= 5}
-					aria-label={i18n.t('common.zoom_in')}
-				>
-					<ZoomIn class="h-4 w-4" />
-				</Button>
-			</div>
-
-			<Button
-				variant="outline"
-				size="icon"
-				class="hidden h-10 w-10 md:inline-flex"
-				onclick={toggleContainerFullscreen}
-				aria-label={isFullscreen ? i18n.t('common.exit_fullscreen') : i18n.t('common.enter_fullscreen')}
-			>
-				{#if isFullscreen}
-					<Minimize class="h-4 w-4" />
-				{:else}
-					<Expand class="h-4 w-4" />
-				{/if}
-			</Button>
-		</div>
+		{#if !isFullscreen}
+			{@render controls()}
+		{/if}
 	</div>
 
 	<div
@@ -364,6 +385,26 @@
 		onpointercancel={handlePointerUp}
 		style="cursor: {isPanning ? 'grabbing' : 'grab'}"
 	>
+		{#if isFullscreen}
+			<div class="absolute bottom-8 right-8 z-10" onpointerdown={(e) => e.stopPropagation()}>
+				{@render controls()}
+			</div>
+		{/if}
+
+		{#if showRecenter}
+			<div class="absolute bottom-8 left-8 z-10" onpointerdown={(e) => e.stopPropagation()}>
+				<Button
+					variant="outline"
+					size="icon"
+					class="h-10 w-10 shadow-lg"
+					onclick={recenter}
+					aria-label={i18n.t('common.recenter')}
+				>
+					<Focus class="h-4 w-4" />
+				</Button>
+			</div>
+		{/if}
+
 		{#if loading}
 			<div class="flex h-full items-center justify-center">
 				<Loader2 class="h-8 w-8 animate-spin text-primary" />
