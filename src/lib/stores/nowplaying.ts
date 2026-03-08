@@ -37,6 +37,7 @@ function createNowPlayingStore() {
 		saveToStorage: (state: NowPlayingState) => {
 			if (typeof window !== 'undefined') {
 				localStorage.setItem('nowplaying-state', JSON.stringify(state));
+				update((s) => ({ ...s, ...state }));
 			}
 		}
 	};
