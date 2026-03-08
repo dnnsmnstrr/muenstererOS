@@ -31,6 +31,8 @@
 		"deselect_all": "Deselect All",
 		"emoji_symbols": "Emoji & Symbols",
 		"reload": "Reload",
+		"zoom_in": "Zoom In",
+		"zoom_out": "Zoom Out",
 		"enter_fullscreen": "Enter Full Screen",
 		"exit_fullscreen": "Exit Full Screen",
 		"de": "German",
