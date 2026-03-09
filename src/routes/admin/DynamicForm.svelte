@@ -3,7 +3,7 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink } from 'lucide-svelte';
+	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink, ArrowUp, ArrowDown } from 'lucide-svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { cn } from '$lib/utils/utils';
 
@@ -138,7 +138,9 @@
 	label: string,
 	path: string,
 	required = false,
-	onDelete?: () => void
+	onDelete?: () => void,
+	onMoveUp?: () => void,
+	onMoveDown?: () => void
 )}
 	{@const s = resolveSchema(s_raw)}
 	{#if obj && s}
@@ -179,19 +181,50 @@
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
-						{#if onDelete}
-							<Button
-								variant="ghost"
-								size="icon"
-								class="h-8 w-8 text-destructive hover:bg-destructive/10"
-								onclick={(e) => {
-									e.stopPropagation();
-									onDelete();
-								}}
-							>
-								<Trash2 class="h-4 w-4" />
-							</Button>
-						{/if}
+						<div class="flex items-center gap-1">
+							{#if onMoveUp}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onMoveUp();
+									}}
+									title="Move Up"
+								>
+									<ArrowUp class="h-4 w-4" />
+								</Button>
+							{/if}
+							{#if onMoveDown}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onMoveDown();
+									}}
+									title="Move Down"
+								>
+									<ArrowDown class="h-4 w-4" />
+								</Button>
+							{/if}
+							{#if onDelete}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8 text-destructive hover:bg-destructive/10"
+									onclick={(e) => {
+										e.stopPropagation();
+										onDelete();
+									}}
+									title="Delete"
+								>
+									<Trash2 class="h-4 w-4" />
+								</Button>
+							{/if}
+						</div>
 					</div>
 					<Collapsible.Content class="px-4 pb-4">
 						<div class="grid gap-4">
@@ -235,7 +268,7 @@
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
-						<div class="flex items-center gap-2">
+						<div class="flex items-center gap-1">
 							<Button
 								variant="outline"
 								size="sm"
@@ -243,11 +276,39 @@
 								onclick={(e) => {
 									e.stopPropagation();
 									if (!obj[key]) obj[key] = [];
-									obj[key].push(getInitialValue(s.items));
+									obj[key] = [...obj[key], getInitialValue(s.items)];
 								}}
 							>
 								<Plus class="mr-1 h-4 w-4" /> Add
 							</Button>
+							{#if onMoveUp}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onMoveUp();
+									}}
+									title="Move Up"
+								>
+									<ArrowUp class="h-4 w-4" />
+								</Button>
+							{/if}
+							{#if onMoveDown}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onMoveDown();
+									}}
+									title="Move Down"
+								>
+									<ArrowDown class="h-4 w-4" />
+								</Button>
+							{/if}
 							{#if onDelete}
 								<Button
 									variant="ghost"
@@ -257,6 +318,7 @@
 										e.stopPropagation();
 										onDelete();
 									}}
+									title="Delete"
 								>
 									<Trash2 class="h-4 w-4" />
 								</Button>
@@ -276,8 +338,22 @@
 											`${path}[${index}]`,
 											false,
 											() => {
-												obj[key].splice(index, 1);
-											}
+												obj[key] = obj[key].filter((_: any, i: number) => i !== index);
+											},
+											index > 0
+												? () => {
+														const newArr = [...obj[key]];
+														[newArr[index - 1], newArr[index]] = [newArr[index], newArr[index - 1]];
+														obj[key] = newArr;
+													}
+												: undefined,
+											index < obj[key].length - 1
+												? () => {
+														const newArr = [...obj[key]];
+														[newArr[index + 1], newArr[index]] = [newArr[index], newArr[index + 1]];
+														obj[key] = newArr;
+													}
+												: undefined
 										)}
 									</div>
 								{/each}
@@ -291,19 +367,50 @@
 						<Label class="capitalize" for={path}>
 							{label}{#if required}<span class="ml-0.5 text-destructive">*</span>{/if}
 						</Label>
-						{#if onDelete}
-							<Button
-								variant="ghost"
-								size="icon"
-								class="h-8 w-8 text-destructive hover:bg-destructive/10"
-								onclick={(e) => {
-									e.stopPropagation();
-									onDelete();
-								}}
-							>
-								<Trash2 class="h-4 w-4" />
-							</Button>
-						{/if}
+						<div class="flex items-center gap-1">
+							{#if onMoveUp}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onMoveUp();
+									}}
+									title="Move Up"
+								>
+									<ArrowUp class="h-4 w-4" />
+								</Button>
+							{/if}
+							{#if onMoveDown}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onMoveDown();
+									}}
+									title="Move Down"
+								>
+									<ArrowDown class="h-4 w-4" />
+								</Button>
+							{/if}
+							{#if onDelete}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8 text-destructive hover:bg-destructive/10"
+									onclick={(e) => {
+										e.stopPropagation();
+										onDelete();
+									}}
+									title="Delete"
+								>
+									<Trash2 class="h-4 w-4" />
+								</Button>
+							{/if}
+						</div>
 					</div>
 					{#if type === 'string'}
 						{#if s.enum}
