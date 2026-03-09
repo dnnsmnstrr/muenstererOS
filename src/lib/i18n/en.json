@@ -238,5 +238,22 @@
 			"category": "Category",
 			"tags": "Tags"
 		}
+	},
+	"redirects": {
+		"search_placeholder": "Type to search...",
+		"matching_one": "1 matching redirect",
+		"matching_many": "{count} matching redirects",
+		"total": "Total: {count}",
+		"name": "Name",
+		"description": "Description",
+		"aliases": "Aliases",
+		"url": "URL",
+		"open_redirect": "Open redirect {name}",
+		"favicon": "favicon",
+		"local_favicon": "local favicon",
+		"actions": "Actions",
+		"copy_url": "Copy URL",
+		"open": "Open",
+		"copy_success": "Copied redirect URL"
 	}
 }

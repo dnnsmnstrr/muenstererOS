@@ -10,7 +10,7 @@
 		"uses": "Uses (Tech Stack)",
 		"playlists": "Playlists",
 		"hotkeys": "Hotkeys",
-		"redirects": "Weiterleitungen",
+		"redirects": "Redirects",
 		"terminal": "Terminal",
 		"changelog": "Änderungsprotokoll",
 		"playlist": "Playlist",
@@ -239,5 +239,22 @@
 			"category": "Kategorie",
 			"tags": "Tags"
 		}
+	},
+	"redirects": {
+		"search_placeholder": "Suchen...",
+		"matching_one": "1 passender Redirect",
+		"matching_many": "{count} passende Redirects",
+		"total": "Gesamt: {count}",
+		"name": "Name",
+		"description": "Beschreibung",
+		"aliases": "Aliase",
+		"url": "URL",
+		"open_redirect": "Redirect {name} öffnen",
+		"favicon": "Favicon",
+		"local_favicon": "Lokales Favicon",
+		"actions": "Aktionen",
+		"copy_url": "URL kopieren",
+		"open": "Öffnen",
+		"copy_success": "Redirect-URL kopiert"
 	}
 }
