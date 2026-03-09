@@ -24,7 +24,7 @@
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
 	let gistSelectionOpen = $state(true);
 	let gistInfoOpen = $state(false);
-	let jsonEditor = $state<JsonEditor | null>(null);
+	let jsonEditor = $state<any>(null);
 
 	// Predefined gists
 	const knownGists = [...Object.values(gists), { id: '', name: 'Custom Gist...', filename: '' }];
@@ -282,6 +282,7 @@
 	<!-- JSON Editor -->
 	{#if gistData !== '{}'}
 		<GistEditor
+			bind:this={jsonEditor}
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo

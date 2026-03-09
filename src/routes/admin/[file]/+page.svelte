@@ -15,7 +15,7 @@
 
 	// State management
 	let githubToken = $state('');
-	let selectedGist = $state(gists[data.file || 'now'].id);
+	let selectedGist = $state(gists[(data.file as keyof typeof gists) || 'now'].id);
 	let gistData = $state('{}');
 	let gistInfo = $state<GistData>();
 	let fullGistHistory = $state<any[]>([]);
@@ -27,7 +27,7 @@
 	let gistInfoOpen = $state(false);
 	let jsonViewerOpen = $state(false);
 
-	let gistEditorComponent = $state<GistEditor | null>(null);
+	let gistEditorComponent = $state<any>(null);
 
 	// Predefined gists
 	const knownGists = [
