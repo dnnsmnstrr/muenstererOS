@@ -9,7 +9,6 @@
 	import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '$lib/components/ui/dropdown-menu';
 	import { MoreHorizontal, Copy, ExternalLink } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	// 🌐 Localization: use i18n for text and PAGE_TITLE_SUFFIX for window titles
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
@@ -127,7 +126,6 @@ function handleFaviconError(event: Event) {
 	function copyRedirectUrl(redirect: Redirect) {
 		const url = getRedirectURL(redirect);
 		navigator.clipboard.writeText(url).then(() => {
-			// 🌐 Localization: use i18n.t for toast messages
 			toast.success(i18n.t('redirects.copy_success'), { description: url });
 		});
 	}
@@ -138,7 +136,6 @@ function handleFaviconError(event: Event) {
 </svelte:head>
 
 <div class="container">
-	<!-- 🌐 Localization: use i18n.t for translating labels and placeholders -->
 	<div class="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 		<Heading class="mb-0">{i18n.t('common.redirects')}</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
@@ -161,7 +158,6 @@ function handleFaviconError(event: Event) {
 	</div>
 
 	<Card.Root class="hidden max-h-[75vh] overflow-scroll sm:block">
-		<!-- 🌐 Localization: use manual pluralization for results count and translate table headers -->
 		<Table.Root class="mb-4">
 			<Table.Caption>
 				{#if filterQuery}
