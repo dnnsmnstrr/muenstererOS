@@ -9,6 +9,8 @@
 	import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '$lib/components/ui/dropdown-menu';
 	import { MoreHorizontal, Copy, ExternalLink } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	let { data } = $props();
 	function handleRedirect(redirect: Redirect) {
@@ -124,17 +126,21 @@ function handleFaviconError(event: Event) {
 	function copyRedirectUrl(redirect: Redirect) {
 		const url = getRedirectURL(redirect);
 		navigator.clipboard.writeText(url).then(() => {
-			toast.success('Copied redirect URL', { description: url });
+			toast.success(i18n.t('redirects.copy_success'), { description: url });
 		});
 	}
 </script>
 
+<svelte:head>
+	<title>{i18n.t('common.redirects')}{PAGE_TITLE_SUFFIX}</title>
+</svelte:head>
+
 <div class="container">
 	<div class="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-		<Heading class="mb-0">Redirects</Heading>
+		<Heading class="mb-0">{i18n.t('common.redirects')}</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
 			<Button
-				title="I'm feeling lucky"
+				title={i18n.t('playlists.feeling_lucky')}
 				variant="outline"
 				size="icon"
 				class="shrink-0"
@@ -143,7 +149,7 @@ function handleFaviconError(event: Event) {
 				{shuffleEmoji}
 			</Button>
 			<Input
-				placeholder="Type to search..."
+				placeholder={i18n.t('redirects.search_placeholder')}
 				type="search"
 				class="w-full text-base sm:w-52"
 				bind:value={filterQuery}
@@ -153,16 +159,20 @@ function handleFaviconError(event: Event) {
 
 	<Card.Root class="hidden max-h-[75vh] overflow-scroll sm:block">
 		<Table.Root class="mb-4">
-			<Table.Caption
-				>{filterQuery ? `Matching redirects: ${filteredRedirects.length}, ` : ''}Total: {data
-					.redirects.length}</Table.Caption
-			>
+			<Table.Caption>
+				{#if filterQuery}
+					{filteredRedirects.length === 1
+						? i18n.t('redirects.matching_one')
+						: i18n.t('redirects.matching_many', { count: filteredRedirects.length.toString() })},
+				{/if}
+				{i18n.t('redirects.total', { count: data.redirects.length.toString() })}
+			</Table.Caption>
 			<Table.Header class="sticky top-0 bg-card">
 				<Table.Row>
-					<Table.Head class="w-[100px]">Name</Table.Head>
-					<Table.Head>Description</Table.Head>
-					<Table.Head>Aliases</Table.Head>
-					<Table.Head class="text-right">URL</Table.Head>
+					<Table.Head class="w-[100px]">{i18n.t('redirects.name')}</Table.Head>
+					<Table.Head>{i18n.t('redirects.description')}</Table.Head>
+					<Table.Head>{i18n.t('redirects.aliases')}</Table.Head>
+					<Table.Head class="text-right">{i18n.t('redirects.url')}</Table.Head>
 					<Table.Head class="w-[50px]"></Table.Head>
 				</Table.Row>
 			</Table.Header>
@@ -171,7 +181,7 @@ function handleFaviconError(event: Event) {
 					<Table.Row
 						tabindex={0}
 						role="button"
-						aria-label={`Open redirect ${redirect.name}`}
+						aria-label={i18n.t('redirects.open_redirect', { name: redirect.name })}
 						onclick={() => handleRedirect(redirect)}
 						onkeydown={(e) => {
 							if (e.key === 'Enter' || e.key === ' ') {
@@ -185,7 +195,7 @@ function handleFaviconError(event: Event) {
 							{#if isAbsoluteUrl(redirect.url)}
 								<img
 									src={getFaviconUrl(redirect.url)}
-									alt="favicon"
+									alt={i18n.t('redirects.favicon')}
 									width="16"
 									height="16"
 									style="vertical-align: middle"
@@ -194,7 +204,7 @@ function handleFaviconError(event: Event) {
 							{:else}
 								<img
 									src="/images/muenstererOS.png"
-									alt="local favicon"
+									alt={i18n.t('redirects.local_favicon')}
 									width="16"
 									height="16"
 									style="vertical-align: middle"
@@ -211,17 +221,17 @@ function handleFaviconError(event: Event) {
 							<DropdownMenu>
 								<DropdownMenuTrigger>
 									{#snippet child({ props })}
-										<Button {...props} variant="ghost" size="icon" title="Actions" onclick={(e) => e.stopPropagation()}>
+										<Button {...props} variant="ghost" size="icon" title={i18n.t('redirects.actions')} onclick={(e) => e.stopPropagation()}>
 											<MoreHorizontal />
 										</Button>
 									{/snippet}
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuItem onclick={() => copyRedirectUrl(redirect)}>
-										<Copy /> Copy URL
+										<Copy /> {i18n.t('redirects.copy_url')}
 									</DropdownMenuItem>
 									<DropdownMenuItem onclick={() => handleRedirect(redirect)}>
-										<ExternalLink /> Open
+										<ExternalLink /> {i18n.t('redirects.open')}
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
@@ -237,7 +247,7 @@ function handleFaviconError(event: Event) {
 			<Card.Root
 				tabindex={0}
 				role="button"
-				aria-label={`Open redirect ${redirect.name}`}
+				aria-label={i18n.t('redirects.open_redirect', { name: redirect.name })}
 				class="mb-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
 				onclick={() => handleRedirect(redirect)}
 				onkeydown={(e) => {
@@ -252,7 +262,7 @@ function handleFaviconError(event: Event) {
 						{#if isAbsoluteUrl(redirect.url)}
 							<img
 								src={getFaviconUrl(redirect.url)}
-								alt="favicon"
+								alt={i18n.t('redirects.favicon')}
 								width="16"
 								height="16"
 								style="vertical-align: middle"
@@ -261,7 +271,7 @@ function handleFaviconError(event: Event) {
 						{:else}
 							<img
 								src="/favicon.ico"
-								alt="local favicon"
+								alt={i18n.t('redirects.local_favicon')}
 								width="16"
 								height="16"
 								style="vertical-align: middle"
@@ -285,17 +295,17 @@ function handleFaviconError(event: Event) {
 					  	<DropdownMenu>
 					  		<DropdownMenuTrigger>
 					  			{#snippet child({ props })}
-					  				<Button {...props} variant="ghost" size="icon" title="Actions" onclick={(e) => e.stopPropagation()}>
+									<Button {...props} variant="ghost" size="icon" title={i18n.t('redirects.actions')} onclick={(e) => e.stopPropagation()}>
 					  					<MoreHorizontal />
 					  				</Button>
 					  			{/snippet}
 					  		</DropdownMenuTrigger>
 					  		<DropdownMenuContent align="end">
 					  			<DropdownMenuItem onclick={() => copyRedirectUrl(redirect)}>
-					  				<Copy /> Copy URL
+									<Copy /> {i18n.t('redirects.copy_url')}
 					  			</DropdownMenuItem>
 					  			<DropdownMenuItem onclick={() => handleRedirect(redirect)}>
-					  				<ExternalLink /> Open
+									<ExternalLink /> {i18n.t('redirects.open')}
 					  			</DropdownMenuItem>
 					  		</DropdownMenuContent>
 					  	</DropdownMenu>
