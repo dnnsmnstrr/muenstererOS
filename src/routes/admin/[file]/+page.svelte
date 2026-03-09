@@ -15,7 +15,7 @@
 
 	// State management
 	let githubToken = $state('');
-	let selectedGist = $state(gists[data.file || 'now'].id);
+	let selectedGist = $state(gists[(data.file as keyof typeof gists) || 'now'].id);
 	let gistData = $state('{}');
 	let gistInfo = $state<GistData>();
 	let fullGistHistory = $state<any[]>([]);
@@ -27,7 +27,7 @@
 	let gistInfoOpen = $state(false);
 	let jsonViewerOpen = $state(false);
 
-	let gistEditorComponent = $state<GistEditor | null>(null);
+	let gistEditorComponent = $state<any>(null);
 
 	// Predefined gists
 	const knownGists = [
@@ -169,7 +169,19 @@
 
 		isSaving = true;
 		try {
-			const currentValue = gistEditorComponent?.getValue() || '';
+			let currentValue = gistEditorComponent?.getValue() || '';
+
+			// Update updatedAt timestamp if it exists in the JSON
+			try {
+				const parsed = JSON.parse(currentValue);
+				if (parsed && typeof parsed === 'object' && 'updatedAt' in parsed) {
+					parsed.updatedAt = new Date().toISOString();
+					currentValue = JSON.stringify(parsed, null, 2);
+					gistEditorComponent?.setValue(currentValue);
+				}
+			} catch (e) {
+				console.warn('Could not parse JSON to update updatedAt', e);
+			}
 
 			const api = new GitHubGistAPI(githubToken);
 			const updatedData = await api.updateGist(gistId, {

@@ -24,7 +24,7 @@
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
 	let gistSelectionOpen = $state(true);
 	let gistInfoOpen = $state(false);
-	let jsonEditor = $state<JsonEditor | null>(null);
+	let jsonEditor = $state<any>(null);
 
 	// Predefined gists
 	const knownGists = [...Object.values(gists), { id: '', name: 'Custom Gist...', filename: '' }];
@@ -204,7 +204,19 @@
 
 		isSaving = true;
 		try {
-			const currentValue = jsonEditor?.getValue() || '';
+			let currentValue = jsonEditor?.getValue() || '';
+
+			// Update updatedAt timestamp if it exists in the JSON
+			try {
+				const parsed = JSON.parse(currentValue);
+				if (parsed && typeof parsed === 'object' && 'updatedAt' in parsed) {
+					parsed.updatedAt = new Date().toISOString();
+					currentValue = JSON.stringify(parsed, null, 2);
+					jsonEditor?.setValue(currentValue);
+				}
+			} catch (e) {
+				console.warn('Could not parse JSON to update updatedAt', e);
+			}
 
 			const api = new GitHubGistAPI(githubToken);
 			const updatedData = await api.updateGist(gistId, {
@@ -282,6 +294,7 @@
 	<!-- JSON Editor -->
 	{#if gistData !== '{}'}
 		<GistEditor
+			bind:this={jsonEditor}
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo

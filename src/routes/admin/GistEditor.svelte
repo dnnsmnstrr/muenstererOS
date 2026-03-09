@@ -73,18 +73,39 @@
 	
 	// Re-export methods from JsonEditor
 	export function setValue(value: string) {
-		jsonEditorRef?.setValue(value);
+		if (viewMode === 'form') {
+			try {
+				formData = JSON.parse(value);
+				gistData = value;
+				lastSyncedGistData = value;
+			} catch (e) {
+				console.error('Failed to set value in form mode', e);
+			}
+		} else {
+			jsonEditorRef?.setValue(value);
+		}
 	}
 	
 	export function getValue() {
-		return jsonEditorRef?.getValue();
+		if (viewMode === 'form') {
+			return JSON.stringify(formData, null, 2);
+		}
+		return jsonEditorRef?.getValue() || gistData;
 	}
 	
 	export function validateJson() {
-		return jsonEditorRef?.validateJson();
+		if (viewMode === 'form') {
+			// Form data is inherently valid JSON when stringified
+			return { valid: true };
+		}
+		return jsonEditorRef?.validateJson() || { valid: true };
 	}
 	
 	export function formatJson() {
+		if (viewMode === 'form') {
+			// Already "formatted" by stringify in getValue
+			return true;
+		}
 		return jsonEditorRef?.formatJson();
 	}
 	
