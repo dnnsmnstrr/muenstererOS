@@ -3,13 +3,16 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink, ArrowUp, ArrowDown } from 'lucide-svelte';
+	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink, ArrowUp, ArrowDown, FileJson } from 'lucide-svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { cn } from '$lib/utils/utils';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import JsonView from '$lib/components/JsonView.svelte';
 
 	let { schema, data = $bindable() } = $props();
 
 	let defaultOpen = $state(true);
+	let schemaInspectorOpen = $state(false);
 	let openStates = $state<Record<string, boolean>>({});
 
 	function setAllOpen(open: boolean) {
@@ -27,7 +30,7 @@
 	}
 
 	function isUrlField(s: any, key: string | number, label: string) {
-		if (s.format === 'uri' || s.format === 'url') return true;
+		if (s.format === 'uri' || s.format === 'url' || key === '$schema') return true;
 		const keyStr = String(key).toLowerCase();
 		const labelStr = String(label).toLowerCase();
 		return (
@@ -434,6 +437,16 @@
 						{:else if isUrlField(s, key, label)}
 							<div class="flex gap-2">
 								<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
+								{#if key === '$schema'}
+									<Button
+										variant="outline"
+										size="icon"
+										onclick={() => (schemaInspectorOpen = true)}
+										title="Inspect Schema"
+									>
+										<FileJson class="h-4 w-4" />
+									</Button>
+								{/if}
 								<Button
 									variant="outline"
 									size="icon"
@@ -487,7 +500,7 @@
 			</Button>
 		</div>
 		<div class="grid gap-6">
-			{#each Object.entries(schema.properties || {}) as [key, s]}
+			{#each Object.entries(schema.properties || {}).sort(([a], [b]) => (a === '$schema' ? 1 : b === '$schema' ? -1 : 0)) as [key, s]}
 				{@render renderField(
 					s,
 					data,
@@ -501,4 +514,18 @@
 	{:else if schema}
 		<p class="text-destructive">Only object-type root schemas are supported currently.</p>
 	{/if}
+
+	<Dialog.Root bind:open={schemaInspectorOpen}>
+		<Dialog.Content class="max-w-3xl">
+			<Dialog.Header>
+				<Dialog.Title>Schema Inspector</Dialog.Title>
+			</Dialog.Header>
+			<div class="max-h-[60vh] overflow-y-auto rounded-md border p-4">
+				<JsonView data={schema} />
+			</div>
+			<Dialog.Footer>
+				<Button variant="outline" onclick={() => (schemaInspectorOpen = false)}>Close</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 </div>
