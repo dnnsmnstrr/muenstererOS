@@ -137,6 +137,7 @@
 	key: string | number,
 	label: string,
 	path: string,
+	required = false,
 	onDelete?: () => void
 )}
 	{@const s = resolveSchema(s_raw)}
@@ -163,7 +164,9 @@
 										<ChevronRight class="h-4 w-4" />
 									{/if}
 									<div class="flex flex-col">
-										<h3 class="text-sm font-semibold capitalize">{label}</h3>
+										<h3 class="text-sm font-semibold capitalize">
+											{label}{#if required}<span class="ml-0.5 text-destructive">*</span>{/if}
+										</h3>
 										{#if !(openStates[path] ?? defaultOpen) && obj[key]}
 											{@const preview = obj[key].name || obj[key].title}
 											{#if preview}
@@ -194,7 +197,14 @@
 						<div class="grid gap-4">
 							{#if obj[key]}
 								{#each Object.entries(s.properties || {}) as [subKey, subSchema]}
-									{@render renderField(subSchema, obj[key], subKey, subKey, `${path}.${subKey}`)}
+									{@render renderField(
+										subSchema,
+										obj[key],
+										subKey,
+										subKey,
+										`${path}.${subKey}`,
+										Array.isArray(s.required) && s.required.includes(subKey)
+									)}
 								{/each}
 							{/if}
 						</div>
@@ -219,7 +229,9 @@
 									{:else}
 										<ChevronRight class="h-4 w-4" />
 									{/if}
-									<h3 class="text-sm font-semibold capitalize">{label}</h3>
+									<h3 class="text-sm font-semibold capitalize">
+										{label}{#if required}<span class="ml-0.5 text-destructive">*</span>{/if}
+									</h3>
 								</button>
 							{/snippet}
 						</Collapsible.Trigger>
@@ -262,6 +274,7 @@
 											index,
 											`${label} item ${index + 1}`,
 											`${path}[${index}]`,
+											false,
 											() => {
 												obj[key].splice(index, 1);
 											}
@@ -275,7 +288,9 @@
 			{:else}
 				<div class="grid gap-1.5">
 					<div class="flex items-center justify-between">
-						<Label class="capitalize" for={path}>{label}</Label>
+						<Label class="capitalize" for={path}>
+							{label}{#if required}<span class="ml-0.5 text-destructive">*</span>{/if}
+						</Label>
 						{#if onDelete}
 							<Button
 								variant="ghost"
@@ -366,7 +381,14 @@
 		</div>
 		<div class="grid gap-6">
 			{#each Object.entries(schema.properties || {}) as [key, s]}
-				{@render renderField(s, data, key, key, key)}
+				{@render renderField(
+					s,
+					data,
+					key,
+					key,
+					key,
+					Array.isArray(schema.required) && schema.required.includes(key)
+				)}
 			{/each}
 		</div>
 	{:else if schema}
