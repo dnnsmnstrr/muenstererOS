@@ -43,6 +43,13 @@
 		);
 	}
 
+	function isColorField(s: any, key: string | number, label: string) {
+		if (s.format === 'color') return true;
+		const keyStr = String(key).toLowerCase();
+		const labelStr = String(label).toLowerCase();
+		return keyStr.includes('color') || labelStr.includes('color');
+	}
+
 	function formatForDateTimeLocal(val: string) {
 		if (!val) return '';
 		try {
@@ -460,6 +467,20 @@
 							{#if obj[key] && !isValidUrl(obj[key])}
 								<p class="text-xs text-destructive">Please enter a valid URL.</p>
 							{/if}
+						{:else if isColorField(s, key, label)}
+							<div class="flex gap-2">
+								<Input
+									id={path}
+									type="color"
+									bind:value={obj[key]}
+									class="h-10 w-12 px-1 py-1"
+								/>
+								<Input
+									bind:value={obj[key]}
+									placeholder="#000000"
+									class="flex-1"
+								/>
+							</div>
 						{:else}
 							<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
 						{/if}
