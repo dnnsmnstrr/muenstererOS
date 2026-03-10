@@ -73,7 +73,10 @@
 		{#if isValidatingToken}
 			Validating...
 		{:else if tokenValidation}
-			{tokenValidation.valid ? '✓ Valid Token' : '✗ Invalid Token'}
+			<span class="mr-1.5 {tokenValidation.valid ? 'text-green-500' : 'text-red-500'}">
+				{tokenValidation.valid ? '✓' : '✗'}
+			</span>
+			{tokenValidation.valid ? 'Valid Token' : 'Invalid Token'}
 		{:else}
 			{githubToken ? 'Token Set' : 'No Token'}
 		{/if}
@@ -99,10 +102,13 @@
 							type="password"
 							placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
 							bind:value={githubToken}
-                            onsubmit={(e) => {
-                                e.preventDefault();
-                                saveTokenToStorage();
-                            }}
+							onkeypress={(e) => {
+								console.log(e)
+								if (e.key === 'Enter') {
+									e.preventDefault();
+									saveTokenToStorage();
+								}
+							}}
 							class="flex-1"
 						/>
 					</div>

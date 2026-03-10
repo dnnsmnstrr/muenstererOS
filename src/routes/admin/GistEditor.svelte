@@ -143,7 +143,6 @@
 	<CardHeader>
 		<CardTitle class="flex flex-col items-center justify-between gap-2 text-lg sm:flex-row">
 			<div class="flex w-full items-center justify-between gap-4 sm:w-auto">
-				<span class="font-semibold">Editor</span>
 				{#if schema}
 					<Tabs.Root value={viewMode} onValueChange={handleViewChange} class="w-auto">
 						<Tabs.List>
@@ -160,7 +159,7 @@
 				{/if}
 				{#if viewMode === 'editor'}
 					<CustomSelect
-						class="w-[130px]"
+						class="w-[130px] hidden lg:flex"
 						value={selectedTheme}
 						name="theme"
 						placeholder="Select theme"

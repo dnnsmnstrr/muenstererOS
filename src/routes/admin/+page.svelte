@@ -10,6 +10,7 @@
 	import GistEditor from './GistEditor.svelte';
 	import GistInfo from './GistInfo.svelte';
 	import GistSelection from './GistSelection.svelte';
+	import { page } from '$app/state';
 
 	// State management
 	let githubToken = $state('');
@@ -43,6 +44,7 @@
 			if (savedGistId) {
 				selectedGist = savedGistId;
 			}
+			initializeFromUrl();
 
 			if (savedToken) {
 				githubToken = savedToken;
@@ -53,6 +55,15 @@
 		}
 	});
 
+	function initializeFromUrl() {
+		if (!browser) return;
+		const fileParam = page.url.searchParams.get('file');
+		if (fileParam && gists[fileParam]) {
+			selectedGist = gists[fileParam].id
+		}
+		return false; // No URL parameter found
+	}
+	
 	async function validateToken() {
 		if (!githubToken) {
 			tokenValidation = null;
