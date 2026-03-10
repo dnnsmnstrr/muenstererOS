@@ -271,14 +271,14 @@
 {#snippet controls(extraClasses = '')}
 	<div class="flex flex-wrap items-center gap-2 {extraClasses}">
 		<div class="flex items-center rounded-lg border bg-card p-1">
-			<span class="px-2 text-xs font-medium text-muted-foreground">Depth</span>
+			<span class="px-2 text-xs font-medium text-muted-foreground">{i18n.t('sites.depth')}</span>
 			<Button
 				variant="ghost"
 				size="icon"
 				class="h-8 w-8"
 				onclick={() => (displayDepth = Math.max(1, displayDepth - 1))}
 				disabled={displayDepth <= 1}
-				aria-label="Decrease depth"
+				aria-label={i18n.t('sites.decrease_depth')}
 			>
 				<Minus class="h-4 w-4" />
 			</Button>
@@ -289,14 +289,14 @@
 				class="h-8 w-8"
 				onclick={() => (displayDepth = Math.min(3, displayDepth + 1))}
 				disabled={displayDepth >= 3}
-				aria-label="Increase depth"
+				aria-label={i18n.t('sites.increase_depth')}
 			>
 				<Plus class="h-4 w-4" />
 			</Button>
 		</div>
 
 		<div class="flex items-center rounded-lg border bg-card p-1">
-			<span class="px-2 text-xs font-medium text-muted-foreground">Zoom</span>
+			<span class="px-2 text-xs font-medium text-muted-foreground">{i18n.t('sites.zoom')}</span>
 			<Button
 				variant="ghost"
 				size="icon"
@@ -365,7 +365,7 @@
 		<div>
 			<Heading>{i18n.t('common.sites')}</Heading>
 			<p class="text-muted-foreground">
-				A visualization of my personal website network and its connections. ({isAppleDevice() ? '⌘' : '^'} + click to open links)
+				{i18n.t('sites.description', { shortcut: isAppleDevice() ? '⌘' : '^' })}
 			</p>
 		</div>
 
@@ -378,7 +378,7 @@
 		bind:this={container}
 		class="relative flex-1 overflow-hidden rounded-xl border bg-card/50 backdrop-blur-sm {isFullscreen ? 'fixed inset-0 z-50 rounded-none bg-background' : ''}"
 		role="application"
-		aria-label="Interactive site network graph"
+		aria-label={i18n.t('sites.graph_label')}
 		onpointerdown={handlePointerDown}
 		onpointermove={handlePointerMove}
 		onpointerup={handlePointerUp}
