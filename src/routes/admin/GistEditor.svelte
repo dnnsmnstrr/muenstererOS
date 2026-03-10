@@ -9,6 +9,8 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { mode } from 'mode-watcher';
 	import { get } from 'svelte/store';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 
 	let {
 		githubToken = $bindable(''),
@@ -22,9 +24,32 @@
 	} = $props();
     
 	let jsonEditorRef = $state<JsonEditor | null>(null);
-	let viewMode = $state<'editor' | 'form'>('editor');
+	let viewMode = $derived(
+		(page.url.searchParams.get('mode') as 'editor' | 'form') || (schema ? 'form' : 'editor')
+	);
 	let formData = $state<any>(null);
 	let lastSyncedGistData = $state('');
+	let lastViewMode = $state(viewMode);
+
+	$effect(() => {
+		if (lastViewMode === 'form' && viewMode === 'editor') {
+			// Sync form data back to editor
+			const newGistData = JSON.stringify(formData, null, 2);
+			if (newGistData !== gistData) {
+				gistData = newGistData;
+				lastSyncedGistData = newGistData;
+			}
+		}
+		lastViewMode = viewMode;
+	});
+
+	$effect(() => {
+		if (schema && !page.url.searchParams.has('mode')) {
+			const url = new URL(page.url);
+			url.searchParams.set('mode', 'form');
+			goto(url, { replaceState: true, noScroll: true, keepFocus: true });
+		}
+	});
 
 	$effect(() => {
 		// Sync from editor to form only when gistData changes from outside (Load/Reset)
@@ -39,24 +64,11 @@
 	});
 
 	function handleViewChange(value: string | undefined) {
-		if (!value) return;
+		if (!value || value === viewMode) return;
 
-		if (viewMode === 'form' && value === 'editor') {
-			// Sync form data back to editor
-			const newGistData = JSON.stringify(formData, null, 2);
-			gistData = newGistData;
-			lastSyncedGistData = newGistData;
-		} else if (viewMode === 'editor' && value === 'form') {
-			// Sync editor data to form
-			try {
-				formData = JSON.parse(gistData);
-				lastSyncedGistData = gistData;
-			} catch (e) {
-				console.error('Invalid JSON in editor, cannot switch to form', e);
-				return;
-			}
-		}
-		viewMode = value as 'editor' | 'form';
+		const url = new URL(page.url);
+		url.searchParams.set('mode', value);
+		goto(url, { replaceState: false, noScroll: true, keepFocus: true });
 	}
 
 	function handleReset() {
