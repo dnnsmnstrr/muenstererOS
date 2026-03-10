@@ -10,6 +10,8 @@
 	import GistEditor from './GistEditor.svelte';
 	import GistInfo from './GistInfo.svelte';
 	import GistSelection from './GistSelection.svelte';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 
 	// State management
 	let githubToken = $state('');
@@ -44,6 +46,8 @@
 				selectedGist = savedGistId;
 			}
 
+			initializeFromUrl();
+			
 			if (savedToken) {
 				githubToken = savedToken;
 				validateToken(); // Validate the loaded token
@@ -52,6 +56,15 @@
 			}
 		}
 	});
+
+	function initializeFromUrl() {
+		if (!browser) return;
+		const fileParam = page.url.searchParams.get('file');
+		if (fileParam && gists[fileParam]) {
+			selectedGist = gists[fileParam].id;
+		}
+		return false; // No URL parameter found
+	}
 
 	async function validateToken() {
 		if (!githubToken) {
@@ -100,6 +113,8 @@
 		// Save the current gist selection to localStorage
 		if (browser) {
 			localStorage.setItem('github_admin_last_gist', selectedGist);
+			page.url.searchParams.set('file', filename.replace('.json', '').toString());
+			goto(page.url.toString(), { replaceState: true, noScroll: true });
 		}
 
 		// Clear current content to show loading state
@@ -276,12 +291,12 @@
 	</div>
 
 	<!-- Gist Selection Section -->
-	<GistSelection 
-		bind:open={gistSelectionOpen} 
+	<GistSelection
+		bind:open={gistSelectionOpen}
 		bind:selectedGist
 		bind:customGistId
 		bind:customFilename
-		availableGists={knownGists} 
+		availableGists={knownGists}
 		onLoadGist={loadGist}
 		loading={isLoading}
 	/>
