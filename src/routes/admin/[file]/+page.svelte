@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	import JsonEditor from '$lib/components/JsonEditor.svelte';
-	import AdminSettings from './AdminSettings.svelte';
+	import AdminSettings from '../AdminSettings.svelte';
 	import { toast } from 'svelte-sonner';
-	import { gists } from '$lib/config';
+	import { gists  } from '$lib/config';
 	import { GitHubGistAPI, type GistData } from '$lib/utils/github-api';
 	import { Heading } from '$lib/components/typography';
-	import GistEditor from './GistEditor.svelte';
-	import GistInfo from './GistInfo.svelte';
-	import GistSelection from './GistSelection.svelte';
+	import type { PageProps } from './$types';
+	import GistInfo from '../GistInfo.svelte';
+	import GistEditor from '../GistEditor.svelte';
+	import { capitalize } from '$lib/utils/helper';
+
+	let { data }: PageProps = $props();
 
 	// State management
 	let githubToken = $state('');
-	let selectedGist = $state(gists.now.id);
+	let selectedGist = $state(gists[(data.file as keyof typeof gists) || 'now'].id);
 	let gistData = $state('{}');
 	let gistSchema = $state<any>(null);
 	let gistInfo = $state<GistData>();
@@ -24,10 +26,15 @@
 	let tokenValidation = $state<{ valid: boolean; scopes?: string[]; error?: string } | null>(null);
 	let gistSelectionOpen = $state(true);
 	let gistInfoOpen = $state(false);
-	let jsonEditor = $state<any>(null);
+	let jsonViewerOpen = $state(false);
+
+	let gistEditorComponent = $state<any>(null);
 
 	// Predefined gists
-	const knownGists = [...Object.values(gists), { id: '', name: 'Custom Gist...', filename: '' }];
+	const knownGists = [
+		...Object.values(gists),
+		{ id: '', name: 'Custom Gist...', filename: '' }
+	];
 
 	// Custom gist fields for when user selects "Custom Gist..."
 	let customGistId = $state('');
@@ -38,11 +45,6 @@
 		if (browser) {
 			const savedToken = localStorage.getItem('github_admin_token');
 			const savedGistId = localStorage.getItem('github_admin_last_gist');
-
-			// Restore last gist selection if available
-			if (savedGistId) {
-				selectedGist = savedGistId;
-			}
 
 			if (savedToken) {
 				githubToken = savedToken;
@@ -171,7 +173,7 @@
 				}
 			}
 
-			jsonEditor?.setValue(gistData);
+			gistEditorComponent?.setValue(gistData);
 			toast.success('Gist loaded successfully');
 		} catch (error) {
 			console.error('Error loading gist:', error);
@@ -190,7 +192,7 @@
 		}
 
 		// Validate JSON before saving
-		const validation = jsonEditor?.validateJson();
+		const validation = gistEditorComponent?.validateJson();
 		if (!validation?.valid) {
 			toast.error(`Invalid JSON: ${validation?.error || 'Unknown error'}`);
 			return;
@@ -204,7 +206,7 @@
 
 		isSaving = true;
 		try {
-			let currentValue = jsonEditor?.getValue() || '';
+			let currentValue = gistEditorComponent?.getValue() || '';
 
 			// Update updatedAt timestamp if it exists in the JSON
 			try {
@@ -212,7 +214,7 @@
 				if (parsed && typeof parsed === 'object' && 'updatedAt' in parsed) {
 					parsed.updatedAt = new Date().toISOString();
 					currentValue = JSON.stringify(parsed, null, 2);
-					jsonEditor?.setValue(currentValue);
+					gistEditorComponent?.setValue(currentValue);
 				}
 			} catch (e) {
 				console.warn('Could not parse JSON to update updatedAt', e);
@@ -241,7 +243,7 @@
 	}
 
 	function formatJson() {
-		const success = jsonEditor?.formatJson();
+		const success = gistEditorComponent?.formatJson();
 		if (success) {
 			toast.success('JSON formatted');
 		} else {
@@ -258,8 +260,7 @@
 			const originalContent = gistInfo.files[filename]?.content || '{}';
 
 			// Use setValue to properly update the editor
-			gistData = originalContent;
-			jsonEditor?.setValue(originalContent);
+			gistEditorComponent?.setValue(originalContent);
 			toast.success('Editor reset to original content');
 		}
 	}
@@ -271,30 +272,17 @@
 
 <div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
-		<Heading class="mb-0">Gist Admin</Heading>
+		<Heading class="mb-0">{capitalize(data.file || 'Gist')} Admin</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
 
-	<!-- Gist Selection Section -->
-	<GistSelection 
-		bind:open={gistSelectionOpen} 
-		bind:selectedGist
-		bind:customGistId
-		bind:customFilename
-		availableGists={knownGists} 
-		onLoadGist={loadGist}
-		loading={isLoading}
-	/>
-
-	<!-- Gist Info Display -->
 	{#if gistInfo}
 		<GistInfo {gistInfo} history={fullGistHistory} bind:isOpen={gistInfoOpen} />
 	{/if}
 
-	<!-- JSON Editor -->
 	{#if gistData !== '{}'}
 		<GistEditor
-			bind:this={jsonEditor}
+			bind:this={gistEditorComponent}
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo

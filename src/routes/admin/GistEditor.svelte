@@ -48,6 +48,10 @@
 			const url = new URL(page.url);
 			url.searchParams.set('mode', 'form');
 			goto(url, { replaceState: true, noScroll: true, keepFocus: true });
+		} else if (!schema && viewMode === 'form') {
+			const url = new URL(page.url);
+			url.searchParams.set('mode', 'editor');
+			goto(url, { replaceState: true, noScroll: true, keepFocus: true });
 		}
 	});
 
@@ -143,6 +147,7 @@
 	<CardHeader>
 		<CardTitle class="flex flex-col items-center justify-between gap-2 text-lg sm:flex-row">
 			<div class="flex w-full items-center justify-between gap-4 sm:w-auto">
+				<span class="font-semibold">Editor</span>
 				{#if schema}
 					<Tabs.Root value={viewMode} onValueChange={handleViewChange} class="w-auto">
 						<Tabs.List>
@@ -159,7 +164,7 @@
 				{/if}
 				{#if viewMode === 'editor'}
 					<CustomSelect
-						class="w-[130px] hidden lg:flex"
+						class="w-[130px]"
 						value={selectedTheme}
 						name="theme"
 						placeholder="Select theme"
