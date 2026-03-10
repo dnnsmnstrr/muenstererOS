@@ -256,5 +256,13 @@
 		"copy_url": "URL kopieren",
 		"open": "Öffnen",
 		"copy_success": "Redirect-URL kopiert"
+	},
+	"sites": {
+		"description": "Eine Visualisierung meines persönlichen Website-Netzwerks und seiner Verbindungen. ({shortcut} + Klick zum Öffnen von Links)",
+		"depth": "Tiefe",
+		"decrease_depth": "Tiefe verringern",
+		"increase_depth": "Tiefe erhöhen",
+		"zoom": "Zoom",
+		"graph_label": "Interaktive Grafik des Website-Netzwerks"
 	}
 }

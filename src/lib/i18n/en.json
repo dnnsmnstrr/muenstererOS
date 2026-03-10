@@ -257,5 +257,13 @@
 		"copy_url": "Copy URL",
 		"open": "Open",
 		"copy_success": "Copied redirect URL"
+	},
+	"sites": {
+		"description": "A visualization of my personal website network and its connections. ({shortcut} + click to open links)",
+		"depth": "Depth",
+		"decrease_depth": "Decrease depth",
+		"increase_depth": "Increase depth",
+		"zoom": "Zoom",
+		"graph_label": "Interactive site network graph"
 	}
 }
