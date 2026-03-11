@@ -73,6 +73,8 @@
 	let initialY = 0;
 	let hasDragged = false;
 	const dragThreshold = 5; // pixels to move before considering it a drag
+	let longPressTimeout: ReturnType<typeof setTimeout> | null = null;
+	let longPressTriggered = false;
 
 	// Maximize/restore function
 	function toggleMaximize() {
@@ -322,6 +324,26 @@
 			initialX = fileX;
 			initialY = fileY;
 			hasDragged = false;
+			longPressTriggered = false;
+
+			// Handle long press on touch
+			if (e.pointerType === 'touch') {
+				longPressTimeout = setTimeout(() => {
+					if (!hasDragged) {
+						longPressTriggered = true;
+						hasDragged = true; // Prevent navigation on up
+						const event = new MouseEvent('contextmenu', {
+							bubbles: true,
+							cancelable: true,
+							clientX: e.clientX,
+							clientY: e.clientY,
+							button: 2
+						});
+						e.target?.dispatchEvent(event);
+					}
+				}, 500);
+			}
+
 			(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
 		};
 	}
@@ -335,9 +357,13 @@
 		// Check if moved beyond threshold
 		if (!hasDragged && (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold)) {
 			hasDragged = true;
+			if (longPressTimeout) {
+				clearTimeout(longPressTimeout);
+				longPressTimeout = null;
+			}
 		}
 
-		if (hasDragged) {
+		if (hasDragged && !longPressTriggered) {
 			let newX = initialX + deltaX;
 			let newY = initialY + deltaY;
 
@@ -351,13 +377,19 @@
 
 	function handleFilePointerUp(fileData: any) {
 		return (e: PointerEvent) => {
+			if (longPressTimeout) {
+				clearTimeout(longPressTimeout);
+				longPressTimeout = null;
+			}
+
 			// Only navigate on left-click without drag
-			if (!hasDragged && fileData?.href && e.button === 0) {
+			if (!hasDragged && !longPressTriggered && fileData?.href && e.button === 0) {
 				// This was a click, not a drag - navigate to the href
 				goto(fileData.href);
 			}
 			draggingFileId = null;
 			hasDragged = false;
+			longPressTriggered = false;
 			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 		};
 	}
