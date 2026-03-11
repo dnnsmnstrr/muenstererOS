@@ -264,5 +264,27 @@
 		"increase_depth": "Tiefe erhöhen",
 		"zoom": "Zoom",
 		"graph_label": "Interaktive Grafik des Website-Netzwerks"
+	},
+	"about": {
+		"title": "Über diese Seite",
+		"source_code": "Quellcode",
+		"description_prefix": "Diese Seite wurde von",
+		"description_suffix": "erstellt.",
+		"changelog_prefix": "Sieh dir das",
+		"changelog_link": "Änderungsprotokoll",
+		"changelog_suffix": "an, um zu sehen, wie sie sich im Laufe der Zeit entwickelt hat.",
+		"built_with_prefix": "Sie wurde mit",
+		"built_with_and": "und",
+		"hosted_on": "Gehostet auf",
+		"projects_used": "Einige der anderen verwendeten Projekte:",
+		"last_deployment": "Letztes Deployment:",
+		"just_now": "gerade eben",
+		"m_ago": "vor {count}m",
+		"h_ago": "vor {count}h",
+		"d_ago": "vor {count}d"
+	},
+	"contact": {
+		"title": "Kontakt",
+		"description": "Du kannst mich unter"
 	}
 }

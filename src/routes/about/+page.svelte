@@ -8,6 +8,8 @@
 	import { OWNER_NAME, links } from '$lib/config';
 	import { Github } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { formatDate } from '$lib/utils/helper';
 
 	interface Status {
 		lastDeployment: string;
@@ -29,13 +31,13 @@
 	function getFriendlyTime(date: Date) {
 		const now = new Date();
 		const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-		if (diffInSeconds < 60) return 'just now';
+		if (diffInSeconds < 60) return i18n.t('about.just_now');
 		const diffInMinutes = Math.floor(diffInSeconds / 60);
-		if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+		if (diffInMinutes < 60) return i18n.t('about.m_ago', { count: diffInMinutes.toString() });
 		const diffInHours = Math.floor(diffInMinutes / 60);
-		if (diffInHours < 24) return `${diffInHours}h ago`;
+		if (diffInHours < 24) return i18n.t('about.h_ago', { count: diffInHours.toString() });
 		const diffInDays = Math.floor(diffInHours / 24);
-		return `${diffInDays}d ago`;
+		return i18n.t('about.d_ago', { count: diffInDays.toString() });
 	}
 
 	let lastDeploymentDate = $derived(status ? new Date(status.lastDeployment) : null);
@@ -48,7 +50,7 @@
 	let displayTime = $derived.by(() => {
 		if (!lastDeploymentDate) return '';
 		if (isRecent) return getFriendlyTime(lastDeploymentDate);
-		return lastDeploymentDate.toLocaleDateString();
+		return formatDate(lastDeploymentDate.toISOString());
 	});
 
 	let titleTime = $derived.by(() => {
@@ -59,39 +61,42 @@
 </script>
 
 <svelte:head>
-	<meta name="description" content="About this app" />
+	<title>{i18n.t('about.title')}</title>
+	<meta name="description" content={i18n.t('about.title')} />
 </svelte:head>
 
 <div class="container pb-8 md:p-12">
 	<div class="mb-6 flex max-w-xl flex-row justify-between gap-4">
-		<Heading>About</Heading>
+		<Heading>{i18n.t('about.title')}</Heading>
 		<Button href={links.source}>
 			<Github class="mr-2 h-5 w-5" />
-			Source Code
+			{i18n.t('about.source_code')}
 		</Button>
 	</div>
 	<Card.Root class="max-w-xl">
 		<Card.Header>
 			<p>
-				This is page was created by <Button
-					href={links.cv}
-					size="sm"
-					variant="outline"
-					class="ml-1 mt-2">{OWNER_NAME}</Button
-				>
+				{i18n.t('about.description_prefix')}
+				<Button href={links.cv} size="sm" variant="outline" class="ml-1 mt-2">{OWNER_NAME}</Button>
+				{i18n.t('about.description_suffix')}
 				<br />
 				<br />
-				Check out the <Link href="/log">Changelog</Link> to see how it has evolved over time.
+				{i18n.t('about.changelog_prefix')}
+				<Link href="/log">{i18n.t('about.changelog_link')}</Link>
+				{i18n.t('about.changelog_suffix')}
 				<br />
 				<br />
 
-				It is built with <Link href="https://kit.svelte.dev" target="_blank">SvelteKit</Link>
-				and <Link href="https://www.shadcn-svelte.com/" target="_blank">shadcn-svelte</Link>. Hosted
-				on <Link href="https://vercel.com/">Vercel</Link>
+				{i18n.t('about.built_with_prefix')}
+				<Link href="https://kit.svelte.dev" target="_blank">SvelteKit</Link>
+				{i18n.t('about.built_with_and')}
+				<Link href="https://www.shadcn-svelte.com/" target="_blank">shadcn-svelte</Link>.
+				{i18n.t('about.hosted_on')}
+				<Link href="https://vercel.com/">Vercel</Link>
 			</p>
 		</Card.Header>
 		<Card.Content>
-			<span> Some other the projects being used: </span>
+			<span> {i18n.t('about.projects_used')} </span>
 			<ScrollArea class="mt-4 h-32 rounded-md border md:h-36">
 				<List class="my-0">
 					<li><Link href="https://tailwindcss.com/">TailwindCSS</Link></li>
@@ -115,7 +120,8 @@
 					class="flex flex-col items-end gap-1 font-normal text-muted-foreground decoration-muted-foreground/50 transition-colors hover:text-foreground"
 				>
 					<span title={titleTime}>
-						Last deployment: {displayTime}
+						{i18n.t('about.last_deployment')}
+						{displayTime}
 					</span>
 				</Link>
 			{/if}
