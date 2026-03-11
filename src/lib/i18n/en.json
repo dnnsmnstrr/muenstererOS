@@ -265,5 +265,27 @@
 		"increase_depth": "Increase depth",
 		"zoom": "Zoom",
 		"graph_label": "Interactive site network graph"
+	},
+	"about": {
+		"title": "About",
+		"source_code": "Source Code",
+		"description_prefix": "This page was created by",
+		"description_suffix": "",
+		"changelog_prefix": "Check out the",
+		"changelog_link": "Changelog",
+		"changelog_suffix": "to see how it has evolved over time.",
+		"built_with_prefix": "It is built with",
+		"built_with_and": "and",
+		"hosted_on": "Hosted on",
+		"projects_used": "Some of the other projects being used:",
+		"last_deployment": "Last deployment:",
+		"just_now": "just now",
+		"m_ago": "{count}m ago",
+		"h_ago": "{count}h ago",
+		"d_ago": "{count}d ago"
+	},
+	"contact": {
+		"title": "Contact",
+		"description": "You can contact me at"
 	}
 }
