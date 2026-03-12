@@ -38,7 +38,7 @@
 		const dx = e.clientX - startX;
 		const dy = e.clientY - startY;
 
-		if (!hasDragged && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+		if (!hasDragged && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
 			hasDragged = true;
 		}
 
@@ -82,19 +82,6 @@
 				hasDragged = false;
 			}
 			return;
-		}
-
-		// Check if click is outside of the expanded area
-		const clickX = e.clientX;
-		const toggleThreshold = 70;
-		const isNearActiveSide = 
-			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
-			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
-
-		if (isNearActiveSide || !nowPlayingExpanded) {
-			nowPlayingExpanded = !nowPlayingExpanded;
-		} else {
-			goto('/playlists?current');
 		}
 	}
 
