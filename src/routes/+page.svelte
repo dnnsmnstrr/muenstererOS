@@ -83,6 +83,21 @@
 			}
 			return;
 		}
+
+		// Handle interaction via target instead of coordinates
+		const target = e.target as HTMLElement;
+		const isButtonClick = target.closest('button');
+		const isLinkOrCardClick = target.closest('a, .cursor-pointer');
+
+		if (isButtonClick || !nowPlayingExpanded) {
+			nowPlayingExpanded = !nowPlayingExpanded;
+			e.stopPropagation();
+			e.preventDefault();
+		} else if (isLinkOrCardClick) {
+			goto('/playlists?current');
+			e.stopPropagation();
+			e.preventDefault();
+		}
 	}
 
 	$effect(() => {
