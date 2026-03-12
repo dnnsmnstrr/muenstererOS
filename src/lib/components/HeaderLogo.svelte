@@ -20,10 +20,71 @@
     function copyLogoUrl() {
         navigator.clipboard.writeText(window.location.origin + logoPath + 'png')
     }
+
+	let longPressTimeout: ReturnType<typeof setTimeout> | null = null;
+	let longPressTriggered = false;
+	let dragStartX = 0;
+	let dragStartY = 0;
+	const dragThreshold = 5;
+
+	function handlePointerDown(e: PointerEvent) {
+		if (longPressTimeout) {
+			clearTimeout(longPressTimeout);
+		}
+		longPressTriggered = false;
+
+		if (e.pointerType === 'touch') {
+			dragStartX = e.clientX;
+			dragStartY = e.clientY;
+			longPressTimeout = setTimeout(() => {
+				longPressTriggered = true;
+				const event = new MouseEvent('contextmenu', {
+					bubbles: true,
+					cancelable: true,
+					clientX: e.clientX,
+					clientY: e.clientY,
+					button: 2
+				});
+				e.target?.dispatchEvent(event);
+			}, 500);
+		}
+	}
+
+	function handlePointerUp() {
+		if (longPressTimeout) {
+			clearTimeout(longPressTimeout);
+			longPressTimeout = null;
+		}
+	}
+
+	function handlePointerMove(e: PointerEvent) {
+		if (longPressTimeout) {
+			const deltaX = e.clientX - dragStartX;
+			const deltaY = e.clientY - dragStartY;
+			if (Math.abs(deltaX) > dragThreshold || Math.abs(deltaY) > dragThreshold) {
+				clearTimeout(longPressTimeout);
+				longPressTimeout = null;
+			}
+		}
+	}
+
+	function handleClick(e: MouseEvent) {
+		if (longPressTriggered) {
+			e.preventDefault();
+			longPressTriggered = false;
+		}
+	}
 </script>
 
 <ContextMenu.Root>
-	<ContextMenu.Trigger class="flex items-center">
+	<ContextMenu.Trigger
+		class="flex items-center"
+		onpointerdown={handlePointerDown}
+		onpointerup={handlePointerUp}
+		onpointermove={handlePointerMove}
+		onpointercancel={handlePointerUp}
+		onclick={handleClick}
+	>
 		<a href="/" class="ml-4" aria-label={i18n.t('common.home')}>
 			<img src={logoPath + defaultFileType} alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
