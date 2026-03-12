@@ -26,7 +26,8 @@
 </script>
 
 <svelte:head>
-	<title>Legal Notice</title>
+	<!-- Localization: Use localized title for legal page -->
+	<title>{i18n.t('common.legal')}</title>
 </svelte:head>
 
 <div class="container overflow-y-scroll p-4 card">
