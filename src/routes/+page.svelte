@@ -38,7 +38,7 @@
 		const dx = e.clientX - startX;
 		const dy = e.clientY - startY;
 
-		if (!hasDragged && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+		if (!hasDragged && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
 			hasDragged = true;
 		}
 
@@ -84,17 +84,19 @@
 			return;
 		}
 
-		// Check if click is outside of the expanded area
-		const clickX = e.clientX;
-		const toggleThreshold = 70;
-		const isNearActiveSide = 
-			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
-			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
+		// Handle interaction via target instead of coordinates
+		const target = e.target as HTMLElement;
+		const isButtonClick = target.closest('button');
+		const isLinkOrCardClick = target.closest('a, .cursor-pointer');
 
-		if (isNearActiveSide || !nowPlayingExpanded) {
+		if (isButtonClick || !nowPlayingExpanded) {
 			nowPlayingExpanded = !nowPlayingExpanded;
-		} else {
+			e.stopPropagation();
+			e.preventDefault();
+		} else if (isLinkOrCardClick) {
 			goto('/playlists?current');
+			e.stopPropagation();
+			e.preventDefault();
 		}
 	}
 
