@@ -158,7 +158,7 @@
 	});
 
 	let isLightMode = $derived($mode === 'light');
-	let isFullWidth = $derived(page.url.pathname === '/experiment');
+	let isFullWidth = $derived(page.url.pathname === '/experiment' || page.url.pathname === '/slashes');
 	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
 		switch ($backgroundTexture) {
