@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { i18n } from './../../lib/i18n/i18n.svelte.ts';
-  import { MdSvelte } from '@jazzymcjazz/mdsvelte';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
   import legalText from "./impressum.md?raw";
   import legalTextEN from "./legal-notice.md?raw";
 	import { renderers } from "$lib/components/typography";
@@ -26,7 +27,8 @@
 </script>
 
 <svelte:head>
-	<title>Legal Notice</title>
+	<title>{i18n.t('common.legal')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('common.legal')} />
 </svelte:head>
 
 <div class="container overflow-y-scroll p-4 card">
