@@ -361,10 +361,10 @@
 {/snippet}
 
 <div class="flex h-full flex-col p-4 md:p-8">
-	<div class="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+	<div class="mb-6 flex flex-col justify-between gap-4 lg:flex-row md:items-end">
 		<div>
 			<Heading>{i18n.t('common.sites')}</Heading>
-			<p class="text-muted-foreground">
+			<p class="text-muted-foreground lg:max-w-[500px]">
 				{i18n.t('sites.description', { shortcut: isAppleDevice() ? '⌘' : '^' })}
 			</p>
 		</div>
