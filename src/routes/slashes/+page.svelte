@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Heading from "$lib/components/typography/Heading.svelte";
-	import Link from "$lib/components/typography/Link.svelte";
+	import Heading from '$lib/components/typography/Heading.svelte';
+	import Link from '$lib/components/typography/Link.svelte';
 	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
@@ -11,13 +11,18 @@
 	const slashes = [
 		{ label: '/about', href: '/about', description: '' },
 		{ label: '/contact', href: '/contact', description: 'how to reach me' },
-		{ label: '/defaults', href: '/defaults', description: 'my main apps on iOS and macOS (more at defaults.rknight.me)' },
+		{
+			label: '/defaults',
+			href: '/defaults',
+			description: 'my main apps on iOS and macOS (more at defaults.rknight.me)'
+		},
 		{ label: '/interests', href: '/zettelkasten/interests', description: "what I'm interested in" },
 		{ label: '/log', href: '/log', description: 'a changelog for this website' },
 		{ label: '/now', href: '/now', description: "what i'm doing right now" },
 		{ label: '/slashes', href: '/slashes', description: 'this page' },
 		{ label: '/uses', href: '/uses', description: 'things I use' },
-		{ label: '/where', href: '/where', description: "where I spend most of my time" }
+		{ label: '/where', href: '/where', description: 'where I spend most of my time' },
+		{ label: '/playlists', href: '/playlists', description: 'my favorite songs' }
 	];
 
 	let rotation = $state(0);
@@ -123,7 +128,7 @@
 	const winningIndex = $derived.by(() => {
 		const r = displayRotation;
 		// Pointer is at the top (270 degrees)
-		return Math.floor(((270 - r) % 360 + 360) % 360 / segmentAngle);
+		return Math.floor(((((270 - r) % 360) + 360) % 360) / segmentAngle);
 	});
 
 	onMount(() => {
@@ -133,99 +138,118 @@
 	});
 </script>
 
-<div class="relative w-full flex flex-col items-center pb-20">
-	<!-- Wheel at the Top -->
-	<div class="relative w-full h-[50vw] sm:h-[40vw] overflow-hidden pointer-events-none z-0 mb-8">
-        <!-- Pointer/Arrow at the Top -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-            <div class="w-0 h-0 border-l-[15px] sm:border-l-[30px] border-l-transparent border-r-[15px] sm:border-r-[30px] border-r-transparent border-t-[25px] sm:border-t-[50px] border-t-primary drop-shadow-2xl"></div>
-        </div>
+<div class="relative flex w-full flex-col items-center pb-20">
+	<div class="container mt-4 flex items-start justify-between gap-4 flex-row">
 
-		<div
-            bind:this={wheelElement}
-            role="button"
-            tabindex="0"
-            aria-label="Wheel of Fortune"
-            class="absolute top-0 left-1/2 aspect-square h-[100vw] sm:h-[80vw] cursor-grab active:cursor-grabbing touch-none select-none pointer-events-auto"
-            style="transform: translateX(-50%) rotate({displayRotation}deg); transform-origin: center center;"
-            onpointerdown={handlePointerDown}
-            onpointermove={handlePointerMove}
-            onpointerup={handlePointerUp}
-            onpointercancel={handlePointerUp}
-            onkeydown={handleKeyDown}
-        >
-            <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-2xl overflow-visible">
-                <circle cx="50" cy="50" r="49" class="fill-border" />
-                <circle cx="50" cy="50" r="48" class="fill-card" />
+			<Heading>Slashes
+                <p class="mt-2 max-w-md text-sm opacity-80 sm:text-base">
+                    <Link href="https://slashpages.net/" target="_blank">my slash pages</Link>
+                </p>
+            </Heading>
 
-                {#each slashes as slash, i}
-                    {@const groupAngle = i * segmentAngle}
-                    <g transform="rotate({groupAngle} 50 50)">
-                        <path
-                            d="M 50 50 L 98 50 A 48 48 0 0 1 {50 + 48 * Math.cos(Math.PI * segmentAngle / 180)} {50 + 48 * Math.sin(Math.PI * segmentAngle / 180)} Z"
-                            class={cn("stroke-border/10 transition-colors duration-300",
-                                winningIndex === i ? "fill-primary/20" : (i % 2 === 0 ? "fill-muted" : "fill-card")
-                            )}
-                            stroke-width="0.2"
-                        />
-                        <text
-                            transform="rotate({segmentAngle / 2} 50 50)"
-                            x="95"
-                            y="50"
-                            text-anchor="end"
-                            alignment-baseline="middle"
-                            class={cn("text-[3px] sm:text-[4px] font-black transition-all duration-300 uppercase tracking-tighter",
-                                winningIndex === i ? "fill-primary scale-110" : "fill-foreground/40"
-                            )}
-                            style="transform-box: fill-box; transform-origin: center;"
-                        >
-                            {slash.label.replace('/', '')}
-                        </text>
-                    </g>
-                {/each}
-
-                <!-- Center piece -->
-                <circle cx="50" cy="50" r="6" class="fill-card stroke-border shadow-inner" stroke-width="0.5" />
-                <circle cx="50" cy="50" r="2" class="fill-primary" />
-            </svg>
-        </div>
+		<Button
+			onclick={spin}
+			disabled={isSpinning}
+			class="transition-all hover:scale-105 active:scale-95"
+		>
+			{isSpinning ? 'Good Luck!' : 'SPIN'}
+		</Button>
 	</div>
 
-    <!-- Page Content -->
-    <div class="w-full flex flex-col items-center text-center px-4">
-        <div class="mb-4 sm:mb-8">
-            <Heading>Slashes</Heading>
-            <p class="max-w-md mx-auto opacity-80 mt-2 text-sm sm:text-base">
-                This is a meta-collection of /slashes – a list of all my <Link href="https://slashpages.net/" target="_blank">slash pages</Link>.
-                Spin the wheel or drag it!
-            </p>
-        </div>
+	<div class="flex w-full flex-col px-4 text-center min-h-60 min-h-48">
+		<div
+			class={cn(
+				'flex w-full flex-1 flex-col items-center justify-center transition-all duration-300',
+				isSpinning ? 'scale-95 opacity-20' : 'scale-100 opacity-100'
+			)}
+		>
+			<div
+				class="break-all text-5xl font-black uppercase leading-none tracking-tighter text-primary sm:text-8xl"
+			>
+				{slashes[winningIndex].label.replace('/', '')}
+			</div>
+			{#if slashes[winningIndex].description}
+				<p class="mx-auto mt-4 max-w-lg text-base italic text-muted-foreground sm:text-xl">
+					{slashes[winningIndex].description}
+				</p>
+			{/if}
+		</div>
+	</div>
 
-        <div
-            class={cn(
-                "flex-1 flex flex-col items-center justify-center transition-all duration-300 w-full",
-                isSpinning ? "opacity-20 scale-95" : "opacity-100 scale-100"
-            )}
-        >
-            <div class="text-5xl sm:text-8xl font-black uppercase tracking-tighter text-primary break-all leading-none">
-                {slashes[winningIndex].label}
-            </div>
-            {#if slashes[winningIndex].description}
-                <p class="text-base sm:text-xl italic text-muted-foreground mt-4 max-w-lg mx-auto">
-                    {slashes[winningIndex].description}
-                </p>
-            {/if}
-        </div>
+	<!-- Wheel at the Top -->
+	<div class="pointer-events-none relative z-0 mb-8 h-[50vw] w-full overflow-visible sm:h-[40vw]">
+		<!-- Pointer/Arrow at the Top -->
+		<div class="pointer-events-none absolute left-1/2 top-0 z-20 -translate-x-1/2">
+			<div
+				class="h-0 w-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-transparent border-r-transparent border-t-primary drop-shadow-2xl sm:border-l-[30px] sm:border-r-[30px] sm:border-t-[50px]"
+			></div>
+		</div>
 
-        <div class="pb-12 pt-8">
-            <Button
-                size="lg"
-                onclick={spin}
-                disabled={isSpinning}
-                class="h-16 px-12 text-2xl font-bold shadow-xl hover:scale-105 active:scale-95 transition-all"
-            >
-                {isSpinning ? 'Good Luck!' : 'SPIN'}
-            </Button>
-        </div>
-    </div>
+		<div
+			bind:this={wheelElement}
+			role="button"
+			tabindex="0"
+			aria-label="Wheel of Fortune"
+			class="pointer-events-auto absolute left-1/2 top-0 aspect-square h-[100vw] cursor-grab touch-none select-none active:cursor-grabbing sm:h-[80vw]"
+			style="transform: translateX(-50%) rotate({displayRotation}deg); transform-origin: center center;"
+			onpointerdown={handlePointerDown}
+			onpointermove={handlePointerMove}
+			onpointerup={handlePointerUp}
+			onpointercancel={handlePointerUp}
+			onkeydown={handleKeyDown}
+		>
+			<svg viewBox="0 0 100 100" class="h-full w-full overflow-visible drop-shadow-2xl">
+				<circle cx="50" cy="50" r="49" class="fill-border" />
+				<circle cx="50" cy="50" r="48" class="fill-card" />
+
+				{#each slashes as slash, i}
+					{@const groupAngle = i * segmentAngle}
+					{@const textAngle = segmentAngle / 2}
+					<!-- Midpoint of the slice (local coordinates) -->
+					{@const radius = 48}
+					<!-- Radius of the circle -->
+					{@const textRadius = radius * 0.7}
+					{@const textX = 50 + textRadius * Math.cos((Math.PI * textAngle) / 180)}
+					{@const textY = 50 + textRadius * Math.sin((Math.PI * textAngle) / 180)}
+
+					<g transform="rotate({groupAngle} 50 50)">
+						<path
+							d="M 50 50 L 98 50 A 48 48 0 0 1 {50 +
+								radius * Math.cos((Math.PI * segmentAngle) / 180)} {50 +
+								radius * Math.sin((Math.PI * segmentAngle) / 180)} Z"
+							class={cn(
+								'stroke-border/10 transition-colors duration-300',
+								i % 2 === 0 ? 'fill-muted' : 'fill-card'
+							)}
+							stroke-width="0.2"
+						/>
+
+						<text
+							x={textX}
+							y={textY}
+							transform="rotate(17, 28, 0)"
+							text-anchor="middle"
+							alignment-baseline="middle"
+							class={cn(
+								'origin-center text-[4px] font-black uppercase tracking-tighter transition-all duration-300 sm:text-[5px]',
+								winningIndex === i ? 'fill-primary' : 'fill-foreground'
+							)}
+						>
+							{slash.label.replace('/', '')}
+						</text>
+					</g>
+				{/each}
+
+				<!-- Center piece -->
+				<circle
+					cx="50"
+					cy="50"
+					r="6"
+					class="fill-card stroke-border shadow-inner"
+					stroke-width="0.5"
+				/>
+				<circle cx="50" cy="50" r="2" class="fill-primary" />
+			</svg>
+		</div>
+	</div>
 </div>
