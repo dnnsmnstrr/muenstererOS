@@ -47,16 +47,11 @@
 		return Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
 	}
 
-	let startAngle = 0;
-	let startRotation = 0;
-
 	function handlePointerDown(e: PointerEvent) {
 		if (isSpinning) return;
 		if (momentumId) cancelAnimationFrame(momentumId);
 		isDragging = true;
-		startAngle = getAngle(e.clientX, e.clientY);
-		startRotation = rotation;
-		lastAngle = startAngle;
+		lastAngle = getAngle(e.clientX, e.clientY);
 		lastTime = performance.now();
 		velocity = 0;
 		(e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -68,12 +63,10 @@
 		const currentTime = performance.now();
 
 		let deltaAngle = currentAngle - lastAngle;
-		// Handle discontinuity at -180/180
 		if (deltaAngle > 180) deltaAngle -= 360;
 		if (deltaAngle < -180) deltaAngle += 360;
 
 		const deltaTime = currentTime - lastTime;
-
 		if (deltaTime > 0) {
 			velocity = deltaAngle / deltaTime;
 		}
@@ -91,9 +84,8 @@
 	}
 
 	function applyMomentum() {
-		rotation += velocity * 16; // rough estimate for one frame
-		velocity *= 0.95; // decay
-
+		rotation += velocity * 16;
+		velocity *= 0.95;
 		if (Math.abs(velocity) > 0.01) {
 			momentumId = requestAnimationFrame(applyMomentum);
 		} else {
@@ -113,17 +105,14 @@
 
 		isSpinning = true;
 		await spinTween.set(rotation, { duration: 0 });
-
 		const extraRotations = 5 + Math.random() * 5;
 		const targetRotation = rotation + extraRotations * 360;
-
 		await spinTween.set(targetRotation);
 
 		rotation = targetRotation % 360;
 		isSpinning = false;
 
 		const winner = slashes[winningIndex];
-
 		if (winner.href !== '/slashes') {
 			setTimeout(() => {
 				goto(winner.href);
@@ -133,6 +122,7 @@
 
 	const winningIndex = $derived.by(() => {
 		const r = displayRotation;
+		// Pointer is at the top (270 degrees)
 		return Math.floor(((270 - r + segmentAngle / 2) % 360 + 360) % 360 / segmentAngle);
 	});
 
@@ -146,22 +136,6 @@
 </script>
 
 <div class="fixed inset-0 overflow-hidden bg-background">
-    <!-- Header/Nav remains visible but potentially overlaid -->
-    <div class="absolute top-4 left-4 sm:top-8 sm:left-8 z-10 pointer-events-none">
-        <Heading>Slashes</Heading>
-        <div class="max-w-xs sm:max-w-md opacity-80 pointer-events-auto">
-			<p class="text-xs sm:text-base">
-				This is a meta-collection of /slashes – a list of all my <Link href="https://slashpages.net/" target="_blank">slash pages</Link>.
-				Spin the wheel or drag it!
-			</p>
-			{#if slashes[winningIndex].description}
-				<p class="text-[10px] sm:text-sm italic text-muted-foreground mt-1 sm:mt-2">
-					{slashes[winningIndex].description}
-				</p>
-			{/if}
-		</div>
-    </div>
-
     <!-- Spin Button in Top Right -->
     <div class="fixed top-4 right-4 sm:top-8 sm:right-8 z-50">
         <Button
@@ -174,21 +148,11 @@
         </Button>
     </div>
 
-	<!-- Full Screen Wheel Container -->
-	<div class="absolute inset-0 flex items-end justify-center">
-		<!-- Result Preview in the center of the screen -->
-		<div
-			class={cn(
-				"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl sm:text-8xl font-black transition-all duration-300 uppercase tracking-tighter text-center z-0 pointer-events-none",
-				isSpinning ? "opacity-10 scale-90" : "opacity-30 scale-110 text-primary"
-			)}
-		>
-			{slashes[winningIndex].label}
-		</div>
-
-		<div class="relative w-screen h-[50vw]">
+	<!-- Wheel at the Top -->
+	<div class="absolute top-0 left-0 w-full h-[50vw] overflow-hidden flex justify-center pointer-events-none">
+		<div class="relative w-screen h-[50vw] pointer-events-auto">
             <div class="absolute inset-0 overflow-hidden">
-                <!-- Pointer/Arrow -->
+                <!-- Pointer/Arrow at the top edge -->
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 z-20">
                     <div class="w-0 h-0 border-l-[15px] sm:border-l-[30px] border-l-transparent border-r-[15px] sm:border-r-[30px] border-r-transparent border-t-[25px] sm:border-t-[50px] border-t-primary drop-shadow-2xl"></div>
                 </div>
@@ -199,7 +163,7 @@
                     role="button"
                     tabindex="0"
                     aria-label="Wheel of Fortune"
-                    class="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-screen cursor-grab active:cursor-grabbing touch-none select-none"
+                    class="absolute top-0 left-1/2 -translate-x-1/2 w-screen h-[100vw] cursor-grab active:cursor-grabbing touch-none select-none"
                     style="transform: rotate({displayRotation}deg); transform-origin: center center;"
                     onpointerdown={handlePointerDown}
                     onpointermove={handlePointerMove}
@@ -246,6 +210,32 @@
 		</div>
 	</div>
 
+    <!-- Info at the bottom -->
+    <div class="absolute bottom-20 left-4 sm:bottom-24 sm:left-8 z-10 pointer-events-none">
+        <Heading>Slashes</Heading>
+        <div class="max-w-xs sm:max-w-md opacity-80 pointer-events-auto">
+			<p class="text-xs sm:text-base">
+				This is a meta-collection of /slashes – a list of all my <Link href="https://slashpages.net/" target="_blank">slash pages</Link>.
+				Spin the wheel or drag it!
+			</p>
+			{#if slashes[winningIndex].description}
+				<p class="text-[10px] sm:text-sm italic text-muted-foreground mt-1 sm:mt-2">
+					{slashes[winningIndex].description}
+				</p>
+			{/if}
+		</div>
+    </div>
+
+	<!-- Result Preview in the center of the remaining space -->
+	<div
+		class={cn(
+			"absolute top-[65vh] left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl sm:text-8xl font-black transition-all duration-300 uppercase tracking-tighter text-center z-0 pointer-events-none",
+			isSpinning ? "opacity-10 scale-90" : "opacity-30 scale-110 text-primary"
+		)}
+	>
+		{slashes[winningIndex].label}
+	</div>
+
     <!-- Bottom Links -->
     <div class="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 opacity-40 text-[8px] sm:text-xs z-10 overflow-x-auto w-full px-4 flex justify-center pointer-events-none">
         <ul class="flex flex-wrap justify-center gap-2 sm:gap-6 whitespace-nowrap uppercase font-bold tracking-widest pointer-events-auto">
@@ -255,4 +245,3 @@
         </ul>
     </div>
 </div>
-
