@@ -187,6 +187,14 @@
 		"top_artists_description": "These were my top artists on Spotify over the years",
 		"preview_title": "Playlist Preview",
 		"alt_gif": "Playlist GIF",
+		"alt_cover": "Playlist cover",
+		"all_years": "All Years",
+		"seasons": {
+			"spring": "Spring",
+			"summer": "Summer",
+			"autumn": "Autumn",
+			"winter": "Winter"
+		},
 		"stats": "Stats",
 		"artist_frequency": "Artist Frequency",
 		"next": "Next",

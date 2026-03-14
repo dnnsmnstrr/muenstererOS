@@ -186,6 +186,14 @@
 		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
 		"preview_title": "Playlist-Vorschau",
 		"alt_gif": "Playlist GIF",
+		"alt_cover": "Playlist-Cover",
+		"all_years": "Alle Jahre",
+		"seasons": {
+			"spring": "Frühling",
+			"summer": "Sommer",
+			"autumn": "Herbst",
+			"winter": "Winter"
+		},
 		"stats": "Statistiken",
 		"artist_frequency": "Künstler-Frequenz",
 		"next": "Weiter",
