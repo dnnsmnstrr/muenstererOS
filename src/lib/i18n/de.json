@@ -87,6 +87,7 @@
 		"dots": "Punkte",
 		"grid": "Gitter",
 		"diagonal": "Diagonal",
+		"none": "Keine",
 		"themes": {
 			"zinc": "Zink",
 			"slate": "Schiefer",

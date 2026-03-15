@@ -87,6 +87,7 @@
 		"dots": "Dots",
 		"grid": "Grid",
 		"diagonal": "Diagonal",
+		"none": "None",
 		"themes": {
 			"zinc": "Zinc",
 			"slate": "Slate",

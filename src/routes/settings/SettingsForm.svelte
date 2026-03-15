@@ -181,6 +181,7 @@
 									<Select.Item value="dots" label={i18n.t('settings.dots')} />
 									<Select.Item value="grid" label={i18n.t('settings.grid')} />
 									<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
+									<Select.Item value="none" label={i18n.t('settings.none')} />
 								</Select.Content>
 							</Select.Root>
 						</div>

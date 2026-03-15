@@ -166,6 +166,8 @@
 				return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
 			case 'diagonal':
 				return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
+			case 'none':
+				return '';
 			case 'dots':
 			default:
 				return `background-image: radial-gradient(${color} 1px, transparent 1px); background-size: 16px 16px;`;
