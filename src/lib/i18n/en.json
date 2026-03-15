@@ -86,7 +86,21 @@
 		"texture": "Background Texture",
 		"dots": "Dots",
 		"grid": "Grid",
-		"diagonal": "Diagonal"
+		"diagonal": "Diagonal",
+		"themes": {
+			"zinc": "Zinc",
+			"slate": "Slate",
+			"stone": "Stone",
+			"gray": "Gray",
+			"neutral": "Neutral",
+			"red": "Red",
+			"rose": "Rose",
+			"orange": "Orange",
+			"green": "Green",
+			"blue": "Blue",
+			"yellow": "Yellow",
+			"violet": "Violet"
+		}
 	},
 	"command": {
 		"placeholder": "Type a command or search...",

@@ -209,7 +209,7 @@
 							<Check class="h-4 w-4 text-white" />
 						{/if}
 					</span>
-					{theme.label}
+					{i18n.t(`settings.themes.${theme.name}`)}
 				</Button>
 			{/each}
 		</div>

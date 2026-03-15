@@ -86,7 +86,21 @@
 		"texture": "Hintergrundstruktur",
 		"dots": "Punkte",
 		"grid": "Gitter",
-		"diagonal": "Diagonal"
+		"diagonal": "Diagonal",
+		"themes": {
+			"zinc": "Zink",
+			"slate": "Schiefer",
+			"stone": "Stein",
+			"gray": "Grau",
+			"neutral": "Neutral",
+			"red": "Rot",
+			"rose": "Rose",
+			"orange": "Orange",
+			"green": "Grün",
+			"blue": "Blau",
+			"yellow": "Gelb",
+			"violet": "Violett"
+		}
 	},
 	"command": {
 		"placeholder": "Befehl eingeben oder suchen...",
