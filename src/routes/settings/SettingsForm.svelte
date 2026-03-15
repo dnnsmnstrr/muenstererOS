@@ -181,6 +181,7 @@
 									<Select.Item value="dots" label={i18n.t('settings.dots')} />
 									<Select.Item value="grid" label={i18n.t('settings.grid')} />
 									<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
+									<Select.Item value="none" label={i18n.t('settings.none')} />
 								</Select.Content>
 							</Select.Root>
 						</div>
@@ -209,7 +210,7 @@
 							<Check class="h-4 w-4 text-white" />
 						{/if}
 					</span>
-					{theme.label}
+					{i18n.t(`settings.themes.${theme.name}`)}
 				</Button>
 			{/each}
 		</div>
