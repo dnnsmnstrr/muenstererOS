@@ -71,6 +71,7 @@
 
 	let selected = 0;
 	let response: any = null;
+	let schema: any = null;
 	let loading = false;
 	let error: string | null = null;
 	let queryParams: Record<string, string> = {};
@@ -92,6 +93,7 @@
 		loading = true;
 		error = null;
 		response = null;
+		schema = null;
 		try {
 			const url = buildUrl(endpoint.url, queryParams);
 			const res = await fetch(url, {
@@ -100,6 +102,18 @@
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
 			response = await res.json();
+
+			if (response?.$schema && typeof response.$schema === 'string') {
+				try {
+					const schemaUrl = new URL(response.$schema, new URL(url, window.location.origin)).toString();
+					const schemaRes = await fetch(schemaUrl);
+					if (schemaRes.ok) {
+						schema = await schemaRes.json();
+					}
+				} catch (e) {
+					console.error('Failed to fetch schema:', e);
+				}
+			}
 		} catch (e: any) {
 			error = e.message;
 		}
@@ -259,6 +273,9 @@
 				<Tabs.List class="flex">
 					<Tabs.Trigger value="response">Response</Tabs.Trigger>
 					<Tabs.Trigger value="json">JSON Viewer</Tabs.Trigger>
+					{#if schema}
+						<Tabs.Trigger value="schema">Schema</Tabs.Trigger>
+					{/if}
 				</Tabs.List>
 				<Tabs.Content value="response">
 					<Card.Content class="max-h-80 overflow-auto rounded-lg text-sm">
@@ -272,6 +289,13 @@
 						<JsonView data={response} />
 					</Card.Content>
 				</Tabs.Content>
+				{#if schema}
+					<Tabs.Content value="schema">
+						<Card.Content class="max-h-80 overflow-auto pb-4">
+							<JsonView data={schema} />
+						</Card.Content>
+					</Tabs.Content>
+				{/if}
 			</Tabs.Root>
 		</Card.Root>
 	{/if}
