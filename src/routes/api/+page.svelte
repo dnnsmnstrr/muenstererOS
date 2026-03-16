@@ -105,7 +105,11 @@
 
 			if (response?.$schema && typeof response.$schema === 'string') {
 				try {
-					const schemaUrl = new URL(response.$schema, new URL(url, window.location.origin)).toString();
+					let schemaUrl = new URL(response.$schema, new URL(url, window.location.origin)).toString();
+					// Transform gist.github.com raw URLs to gist.githubusercontent.com to avoid CORS issues
+					if (schemaUrl.includes('gist.github.com') && schemaUrl.includes('/raw/')) {
+						schemaUrl = schemaUrl.replace('gist.github.com', 'gist.githubusercontent.com');
+					}
 					const schemaRes = await fetch(schemaUrl);
 					if (schemaRes.ok) {
 						schema = await schemaRes.json();
