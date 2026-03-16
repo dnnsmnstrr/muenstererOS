@@ -1,0 +1,32 @@
+[
+	{
+		"src": "/images/buttons/humanstxt.png",
+		"alt": "humans.txt",
+		"href": "/humans.txt"
+	},
+	{
+		"src": "/images/buttons/vercel.png",
+		"alt": "Hosted on Vercel",
+		"href": "https://vercel.com/"
+	},
+	{
+		"src": "/images/buttons/vscode.gif",
+		"alt": "Visual Studio Code",
+		"href": "https://code.visualstudio.com/"
+	},
+	{
+		"src": "/images/buttons/svelte.png",
+		"alt": "Svelte",
+		"href": "https://svelte.dev"
+	},
+	{
+		"src": "/images/buttons/tailwind.gif",
+		"alt": "Styled with Tailwind",
+		"href": "https://tailwindcss.com/"
+	},
+	{
+		"src": "/images/buttons/macmade.gif",
+		"alt": "Made on a Mac",
+		"href": "https://apple.com/mac"
+	}
+]

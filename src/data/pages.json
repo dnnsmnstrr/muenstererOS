@@ -76,9 +76,9 @@
 	},
 	{
 		"title": "Contact",
-        "path": "/contact",
-        "date": "2025-01-01"
-    },
+		"path": "/contact",
+		"date": "2025-01-01"
+	},
 	{
 		"title": "About",
 		"path": "/about",

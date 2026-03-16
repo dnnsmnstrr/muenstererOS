@@ -30,10 +30,13 @@ export interface GistData {
 
 export interface GistUpdatePayload {
 	description?: string;
-	files: Record<string, {
-		content?: string;
-		filename?: string;
-	}>;
+	files: Record<
+		string,
+		{
+			content?: string;
+			filename?: string;
+		}
+	>;
 }
 
 export class GitHubGistAPI {
@@ -46,8 +49,8 @@ export class GitHubGistAPI {
 
 	private get headers() {
 		return {
-			'Authorization': `token ${this.token}`,
-			'Accept': 'application/vnd.github.v3+json',
+			Authorization: `token ${this.token}`,
+			Accept: 'application/vnd.github.v3+json',
 			'Content-Type': 'application/json'
 		};
 	}
@@ -68,19 +71,20 @@ export class GitHubGistAPI {
 		return response.json();
 	}
 
-
 	/**
 	 * Fetch gist history/revisions
 	 */
-	async fetchGistHistory(gistId: string): Promise<Array<{
-		version: string;
-		committed_at: string;
-		change_status: {
-			total: number;
-			additions: number;
-			deletions: number;
-		};
-	}>> {
+	async fetchGistHistory(gistId: string): Promise<
+		Array<{
+			version: string;
+			committed_at: string;
+			change_status: {
+				total: number;
+				additions: number;
+				deletions: number;
+			};
+		}>
+	> {
 		let page = 1;
 		const perPage = 100;
 		let allCommits: Array<{
@@ -94,13 +98,18 @@ export class GitHubGistAPI {
 		}> = [];
 
 		while (true) {
-			const response = await fetch(`${this.baseUrl}/${gistId}/commits?per_page=${perPage}&page=${page}`, {
-				headers: this.headers
-			});
+			const response = await fetch(
+				`${this.baseUrl}/${gistId}/commits?per_page=${perPage}&page=${page}`,
+				{
+					headers: this.headers
+				}
+			);
 
 			if (!response.ok) {
 				const errorText = await response.text();
-				throw new Error(`GitHub API error: ${response.status} ${response.statusText}\n${errorText}`);
+				throw new Error(
+					`GitHub API error: ${response.status} ${response.statusText}\n${errorText}`
+				);
 			}
 
 			const commits = await response.json();
@@ -151,7 +160,11 @@ export class GitHubGistAPI {
 	/**
 	 * Create a new gist
 	 */
-	async createGist(description: string, files: Record<string, { content: string }>, isPublic = false): Promise<GistData> {
+	async createGist(
+		description: string,
+		files: Record<string, { content: string }>,
+		isPublic = false
+	): Promise<GistData> {
 		const payload = {
 			description,
 			public: isPublic,
@@ -195,8 +208,8 @@ export class GitHubGistAPI {
 		try {
 			const response = await fetch('https://api.github.com/user', {
 				headers: {
-					'Authorization': `token ${this.token}`,
-					'Accept': 'application/vnd.github.v3+json'
+					Authorization: `token ${this.token}`,
+					Accept: 'application/vnd.github.v3+json'
 				}
 			});
 
@@ -229,9 +242,9 @@ export class GitHubGistAPI {
  */
 export function getGitHubAPI(): GitHubGistAPI | null {
 	if (typeof window === 'undefined') return null;
-	
+
 	const token = localStorage.getItem('github_admin_token');
 	if (!token) return null;
-	
+
 	return new GitHubGistAPI(token);
 }

@@ -1,4 +1,3 @@
-
 # Tran's Journal - Localization Learnings
 
 ## 2026-02-14 - [Avoid polluting repository with environmental files and lockfiles]

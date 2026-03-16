@@ -5,19 +5,13 @@ import List from './List.svelte';
 
 export type TypographyContext = {
 	renderHeadingAnchors?: boolean;
-  externalLinks?: boolean;
+	externalLinks?: boolean;
 };
 
 const renderers = {
-  heading: Heading,
-  link: Link,
-  list: List
-}
-
-export {
-  renderers,
-	Heading,
-  Kbd,
-  Link,
-  List,
+	heading: Heading,
+	link: Link,
+	list: List
 };
+
+export { renderers, Heading, Kbd, Link, List };

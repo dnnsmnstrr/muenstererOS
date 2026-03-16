@@ -1,11 +1,4 @@
-import {
-	API_URL,
-	CURRENT_DOMAIN,
-	NOW_GIST_ID,
-	USERNAME,
-	USERNAME_SHORT,
-	links
-} from '$lib/config';
+import { API_URL, CURRENT_DOMAIN, NOW_GIST_ID, USERNAME, USERNAME_SHORT, links } from '$lib/config';
 import type { Redirect } from './utils/redirect';
 
 // no url means the redirect will be built out of the default url and the name
@@ -244,7 +237,7 @@ export const redirects: Redirect[] = [
 		url: 'https://felixmuensterer.com/',
 		aliases: ['brother', 'bro', 'fdp', 'lindner-junior', 'dumbass', '🤑']
 	},
-	{ name: 'outmark', url: 'https://outmark.ca/' },                                                                                                                                                      
+	{ name: 'outmark', url: 'https://outmark.ca/' },
 	{
 		name: 'farm',
 		url: 'http://beaver-river-oil-mill.com/',
@@ -366,7 +359,11 @@ export const redirects: Redirect[] = [
 		aliases: ['next-cv']
 	},
 	{ name: 'edit-cv', url: 'https://github.com/dnnsmnstrr/cv/blob/main/src/data/resume-data.tsx' },
-	{ name: 'timeline', description: 'Interactive timeline of events in my life', aliases: ['events', '📅'] },
+	{
+		name: 'timeline',
+		description: 'Interactive timeline of events in my life',
+		aliases: ['events', '📅']
+	},
 	{ name: 'life', description: 'My life in weeks', aliases: ['weeks', 'biography'] },
 	// meta
 	{

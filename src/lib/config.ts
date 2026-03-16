@@ -1,4 +1,4 @@
-import { disemvowel } from "./utils/helper";
+import { disemvowel } from './utils/helper';
 
 export const FIRST_NAME = 'Dennis';
 export const LAST_NAME = 'Muensterer';
@@ -29,8 +29,8 @@ export const user = {
 	familyName: LAST_NAME,
 	username: USERNAME_SHORT,
 	birthDate: BIRTHDATE,
-	occupation: 'Software Developer',
-}
+	occupation: 'Software Developer'
+};
 
 export const links = {
 	yat: 'https://y.at/🤖💻📱⌚🎧',
@@ -59,8 +59,8 @@ export const links = {
 	applemusic: 'https://music.apple.com/profile/' + USERNAME_SHORT,
 	email: EMAIL,
 	mailto: 'mailto:' + EMAIL,
-    cv: "https://cv.muensterer.tech",
-	pages: `https://${USERNAME_SHORT}.github.io`,
+	cv: 'https://cv.muensterer.tech',
+	pages: `https://${USERNAME_SHORT}.github.io`
 } as const;
 
 export const gists = {
@@ -92,16 +92,16 @@ export const gists = {
 };
 
 export const descriptions = [
-    { name: '🤖💻📱⌚🎧', href: links.yat },
+	{ name: '🤖💻📱⌚🎧', href: links.yat },
 	{ name: '💻 ' + user.occupation, href: links.cv },
 	{ name: '🤖 Builder of Things', href: links.makerer },
 	'📱 Coder of Apps',
 	'🍕 Pizza lover',
-    { name: '💚 Backer of Projects', href: links.kickstarter },
-    { name: '🎧 Music enthusiast', href: links.spotify},
-    { name: '📺 Watcher of Movies', href: links.imdb},
-    { name: '🧡 Printer of Objects', href: links.printables},
-    { name: '🌟 Stargazer', href: links.github + '?tab=stars'},
+	{ name: '💚 Backer of Projects', href: links.kickstarter },
+	{ name: '🎧 Music enthusiast', href: links.spotify },
+	{ name: '📺 Watcher of Movies', href: links.imdb },
+	{ name: '🧡 Printer of Objects', href: links.printables },
+	{ name: '🌟 Stargazer', href: links.github + '?tab=stars' }
 ];
 
 export const defaultColors = {
@@ -116,10 +116,10 @@ export const defaultColors = {
 };
 
 export const breakpoints = {
-    sm: 768,
-    md: 1024,
-    lg: 1280,
-    xl: 1920
-}
+	sm: 768,
+	md: 1024,
+	lg: 1280,
+	xl: 1920
+};
 
 export const INACTIVITY_TIMEOUT = 1 * 60 * 1000; // 1 minute in milliseconds
