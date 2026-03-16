@@ -17,10 +17,8 @@ function createNowPlayingStore() {
 
 	return {
 		subscribe,
-		setPosition: (y: number, side: 'left' | 'right') =>
-			update((state) => ({ ...state, y, side })),
-		setExpanded: (expanded: boolean) =>
-			update((state) => ({ ...state, expanded })),
+		setPosition: (y: number, side: 'left' | 'right') => update((state) => ({ ...state, y, side })),
+		setExpanded: (expanded: boolean) => update((state) => ({ ...state, expanded })),
 		reset: () => set(defaultState),
 		loadFromStorage: () => {
 			if (typeof window !== 'undefined') {

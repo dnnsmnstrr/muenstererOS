@@ -13,9 +13,15 @@ export async function load({
 	const urls = result.urlset.url.map((url: { loc: string[] }) => ({
 		href: url.loc[0].replace(`https://${CURRENT_DOMAIN}`, ''),
 		lastModified: url.lastmod[0],
-        title: url.loc[0].split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()),
+		title: url.loc[0]
+			.split('/')
+			.pop()
+			?.replace(/-/g, ' ')
+			.replace(/\b\w/g, (char) => char.toUpperCase())
 	}));
-	const sortedUrls = urls.sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()).reverse();
+	const sortedUrls = urls
+		.sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime())
+		.reverse();
 
 	return {
 		urls: sortedUrls

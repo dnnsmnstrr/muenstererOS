@@ -12,18 +12,18 @@ import VSCode from './vscode.svg';
 import Zen from './zen.svg';
 
 const icons: Record<string, string> = {
-    Arc,
-    Bitwarden,
-    GitHub,
-    GitLab,
-    JavaScript,
-    Obsidian,
-    Raycast,
-    React,
-    Spotify,
-    SvelteKit,
-    VSCode,
-    Zen,
-}
+	Arc,
+	Bitwarden,
+	GitHub,
+	GitLab,
+	JavaScript,
+	Obsidian,
+	Raycast,
+	React,
+	Spotify,
+	SvelteKit,
+	VSCode,
+	Zen
+};
 
-export default icons
+export default icons;

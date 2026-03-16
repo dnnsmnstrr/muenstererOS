@@ -1,15 +1,17 @@
 # Legal Notice / Impressum
 
-__Dennis Münsterer__, Fachinformatiker für Anwendungsentwicklung
+**Dennis Münsterer**, Fachinformatiker für Anwendungsentwicklung
 
 - E-Mail: `dennismuensterer@gmail.com`
 
 ## Datenschutzerklärung (DSGVO)
-Auf dieser Webseite werden keine personenbezogenen Daten erhoben, gespeichert oder verarbeitet. 
+
+Auf dieser Webseite werden keine personenbezogenen Daten erhoben, gespeichert oder verarbeitet.
 
 Es werden keine Tracking-Cookies verwendet (siehe [Nutzungsstatistik](#Nutzungsstatistik) für mehr Informationen).
 
 ## Verweis auf Dritte
+
 Diese Website wird mit [Vercel](https://vercel.com/) betrieben. Deren Datenschutzerklärung befindet sich [hier](https://vercel.com/legal/privacy-policy).
 
 Teile dieser Website und deren Quellcode werden auf [GitHub](https://www.github.com/) mit [GitHub Pages](https://help.github.com/articles/what-is-github-pages/) gehostet. Die GitHub Datenschutzerklärung ist [hier](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement) hinterlegt.
@@ -37,13 +39,14 @@ Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten d
 ### Nutzungsstatistik
 
 Diese Webseite verwendet [Counter.dev](https://counter.dev/), um Seitenaufrufe zu verfolgen und zu analysieren. Dieses Tool hilft uns, zu verstehen, wie Besucher mit unseren Inhalten interagieren, was es uns ermöglicht, die Benutzererfahrung zu verbessern und unsere Dienstleistungen zu optimieren. Counter.dev sammelt Informationen wie die Anzahl der Aufrufe, Seitenbesuche und Nutzerengagement-Metriken anonymisiert und ohne die Verwendung von Cookies.
-Für weitere Informationen darüber, wie Counter.dev Daten erhebt und verarbeitet, besuchen Sie bitte deren [Datenschutzerklärung](https://counter.dev/pages/privacy.html).  
+Für weitere Informationen darüber, wie Counter.dev Daten erhebt und verarbeitet, besuchen Sie bitte deren [Datenschutzerklärung](https://counter.dev/pages/privacy.html).
 
 Durch die Nutzung dieser Website stimmen Sie der Erhebung und Verarbeitung Ihrer Daten gemäß dieser Beschreibung zu.
 
 ## Social Media
 
 Dieses Impressum gilt auch für die Inhalte folgender Social-Media-Präsenzen und Onlineprofile:
+
 - Facebook ([dennismuensterer](https://facebook.com/dennismuensterer))
 - LinkedIn ([dennismuensterer](https://www.linkedin.com/in/dennismuensterer))
 - Twitter ([dnnsmnstrr](https://twitter.com/dnnsmnstrr))

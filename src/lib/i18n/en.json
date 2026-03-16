@@ -169,8 +169,8 @@
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
 		"load": "Load"
-  },
-  "status": {
+	},
+	"status": {
 		"title": "System Status",
 		"metric": "Metric",
 		"value": "Value",
@@ -181,7 +181,7 @@
 		"online": "online",
 		"offline": "offline",
 		"unknown": "unknown"
-  },
+	},
 	"now_playing": {
 		"title": "Now Playing",
 		"show": "Show Now Playing",

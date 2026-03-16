@@ -1,7 +1,7 @@
 {
 	"name": "muenstererOS",
 	"short_name": "mOS",
-  "lang": "en-US",
+	"lang": "en-US",
 	"start_url": "/",
 	"scope": "/",
 	"display": "standalone",
@@ -22,12 +22,12 @@
 	"shortcuts": [
 		{
 			"name": "Now",
-      "description": "What is Dennis currently up to?",
+			"description": "What is Dennis currently up to?",
 			"url": "/now"
 		},
 		{
-      "name": "Uses",
-      "description": "What tech stack is Dennis using?",
+			"name": "Uses",
+			"description": "What tech stack is Dennis using?",
 			"url": "/uses"
 		}
 	]
