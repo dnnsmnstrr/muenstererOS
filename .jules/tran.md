@@ -42,3 +42,9 @@
 **Learning:** When localizing sentences that contain components (like `<Link>`), the established pattern in this repository is to split the sentence into prefix, link text, and suffix keys in the i18n files, then use them sequentially in the template.
 
 **Action:** Avoid complex template literals for localizing components; use multiple `i18n.t()` calls instead.
+
+## 2026-03-16 - [Localizing Pages with Complex SVG Elements]
+
+**Learning:** When localizing pages that feature complex SVG elements (like the Slashes wheel), accessibility labels like `aria-label` are as important as the visible text. Furthermore, it is critical to use the `PAGE_TITLE_SUFFIX` for localized page titles to maintain brand consistency.
+
+**Action:** Always check for `aria-label` in SVG or interactive elements when localizing a page. Use `PAGE_TITLE_SUFFIX` from `$lib/config` when setting localized titles in `<svelte:head>`.

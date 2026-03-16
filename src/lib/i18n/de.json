@@ -18,6 +18,7 @@
 		"contact": "Kontakt",
 		"status": "Status",
 		"sites": "Sites",
+		"slashes": "Slashes",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -309,5 +310,12 @@
 	"contact": {
 		"title": "Kontakt",
 		"description": "Du kannst mich unter"
+	},
+	"slashes": {
+		"title": "Slashes",
+		"description": "meine Slash-Seiten",
+		"spin": "DREHEN",
+		"good_luck": "Viel Glück!",
+		"wheel_label": "Glücksrad"
 	}
 }
