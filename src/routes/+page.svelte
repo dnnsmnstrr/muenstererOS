@@ -44,7 +44,7 @@
 
 		if (hasDragged) {
 			// Update Y position with clamping
-			const minY = 80;
+			const minY = 160;
 			const maxY = height - 80;
 			nowPlayingY = Math.max(minY, Math.min(e.clientY, maxY));
 
@@ -58,16 +58,20 @@
 	}
 
 	function handlePointerUp(e: PointerEvent) {
+		console.log(e, isDragging);
 		if (isDragging) {
 			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 			if (hasDragged) {
 				lastDragEndTime = Date.now();
-				// Save state when drag ends
 				nowPlayingStore.saveToStorage({
 					y: nowPlayingY,
 					side: nowPlayingSide,
 					expanded: nowPlayingExpanded
 				});
+			} else {
+				// console.log(nowPlayingExpanded);
+				// nowPlayingExpanded = !nowPlayingExpanded;
+				// console.log(nowPlayingExpanded);
 			}
 		}
 		isDragging = false;
@@ -75,7 +79,7 @@
 
 	function handleClickCapture(e: MouseEvent) {
 		// Allow drag gesture to prevent expansion toggle
-		if (hasDragged || (Date.now() - lastDragEndTime < 100)) {
+		if (hasDragged || Date.now() - lastDragEndTime < 100) {
 			e.stopPropagation();
 			e.preventDefault();
 			if (e.type === 'click') {
@@ -89,11 +93,18 @@
 		const isButtonClick = target.closest('button');
 		const isLinkOrCardClick = target.closest('a, .cursor-pointer');
 
-		if (isButtonClick || !nowPlayingExpanded) {
-			nowPlayingExpanded = !nowPlayingExpanded;
-			e.stopPropagation();
-			e.preventDefault();
-		} else if (isLinkOrCardClick) {
+		// Check if click is outside of the expanded area
+		const clickX = e.clientX;
+		const toggleThreshold = 70;
+		const isNearActiveSide = 
+			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
+			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
+
+		if (isNearActiveSide) {
+				nowPlayingExpanded = !nowPlayingExpanded;
+				e.stopPropagation();
+				e.preventDefault();
+		} else {
 			goto('/playlists?current');
 			e.stopPropagation();
 			e.preventDefault();
@@ -115,7 +126,7 @@
 	onMount(() => {
 		initializeFiles();
 		nowPlayingStore.loadFromStorage();
-		
+
 		// Subscribe to store changes to sync local state
 		const unsubscribe = nowPlayingStore.subscribe((state) => {
 			nowPlayingY = state.y;
@@ -152,10 +163,7 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		data-testid="now-playing-wrapper"
-		class={cn(
-			"fixed z-40 touch-none select-none",
-			isDragging ? "cursor-grabbing" : "cursor-grab"
-		)}
+		class={cn('fixed z-40 touch-none select-none', isDragging ? 'cursor-grabbing' : 'cursor-grab')}
 		style="top: {nowPlayingY}px; {nowPlayingSide}: 0; transform: translateY(-50%);"
 		onpointerdown={handlePointerDown}
 		onpointermove={handlePointerMove}

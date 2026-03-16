@@ -7,7 +7,6 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button';
 	import { GalleryVertical } from 'lucide-svelte';
-	// 🌐 Localization: use i18n for text and helper for locale-aware date formatting
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { formatDate } from '$lib/utils/helper';
 
