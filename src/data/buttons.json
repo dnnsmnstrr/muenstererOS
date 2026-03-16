@@ -18,5 +18,10 @@
 		"src": "/images/buttons/svelte.png",
 		"alt": "Svelte",
 		"href": "https://svelte.dev"
+	},
+	{
+		"src": "/images/buttons/tailwind.gif",
+		"alt": "Styled with Tailwind",
+		"href": "https://tailwindcss.com/"
 	}
 ]

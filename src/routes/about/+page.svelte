@@ -3,6 +3,7 @@
 	import Link from '$lib/components/typography/Link.svelte';
 	import List from '$lib/components/typography/List.svelte';
 	import ButtonMarquee from '$lib/components/ButtonMarquee.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { OWNER_NAME, links } from '$lib/config';
