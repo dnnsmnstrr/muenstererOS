@@ -58,7 +58,6 @@
 	}
 
 	function handlePointerUp(e: PointerEvent) {
-		console.log(e, isDragging);
 		if (isDragging) {
 			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 			if (hasDragged) {
@@ -68,12 +67,7 @@
 					side: nowPlayingSide,
 					expanded: nowPlayingExpanded
 				});
-			} else {
-				// console.log(nowPlayingExpanded);
-				// nowPlayingExpanded = !nowPlayingExpanded;
-				// console.log(nowPlayingExpanded);
 			}
-		}
 		isDragging = false;
 	}
 
