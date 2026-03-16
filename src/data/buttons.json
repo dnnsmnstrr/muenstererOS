@@ -23,5 +23,10 @@
 		"src": "/images/buttons/tailwind.gif",
 		"alt": "Styled with Tailwind",
 		"href": "https://tailwindcss.com/"
+	},
+	{
+		"src": "/images/buttons/macmade.gif",
+		"alt": "Made on a Mac",
+		"href": "https://apple.com/mac"
 	}
 ]
