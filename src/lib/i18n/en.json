@@ -10,6 +10,7 @@
 		"uses": "Uses",
 		"playlists": "Playlists",
 		"sites": "Sites",
+		"slashes": "Slashes",
 		"hotkeys": "Hotkeys",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
@@ -310,5 +311,12 @@
 	"contact": {
 		"title": "Contact",
 		"description": "You can contact me at"
+	},
+	"slashes": {
+		"title": "Slashes",
+		"description": "my slash pages",
+		"spin": "SPIN",
+		"good_luck": "Good Luck!",
+		"wheel_label": "Wheel of Fortune"
 	}
 }

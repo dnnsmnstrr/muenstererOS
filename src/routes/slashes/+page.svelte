@@ -7,6 +7,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils/utils';
 	import { onMount } from 'svelte';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	const slashes = [
 		{ label: '/about', href: '/about', description: '' },
@@ -138,21 +140,26 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{i18n.t('slashes.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('slashes.description')} />
+</svelte:head>
+
 <div class="relative flex w-full flex-col items-center pb-20">
 	<div class="container mt-4 flex items-start justify-between gap-4 flex-row">
-
-			<Heading>Slashes
-                <p class="mt-2 max-w-md text-sm opacity-80 sm:text-base">
-                    <Link href="https://slashpages.net/" target="_blank">my slash pages</Link>
-                </p>
-            </Heading>
+		<Heading
+			>{i18n.t('slashes.title')}
+			<p class="mt-2 max-w-md text-sm opacity-80 sm:text-base">
+				<Link href="https://slashpages.net/" target="_blank">{i18n.t('slashes.description')}</Link>
+			</p>
+		</Heading>
 
 		<Button
 			onclick={spin}
 			disabled={isSpinning}
 			class="transition-all hover:scale-105 active:scale-95"
 		>
-			{isSpinning ? 'Good Luck!' : 'SPIN'}
+			{isSpinning ? i18n.t('slashes.good_luck') : i18n.t('slashes.spin')}
 		</Button>
 	</div>
 
@@ -189,7 +196,7 @@
 			bind:this={wheelElement}
 			role="button"
 			tabindex="0"
-			aria-label="Wheel of Fortune"
+			aria-label={i18n.t('slashes.wheel_label')}
 			class="pointer-events-auto absolute left-1/2 top-0 aspect-square h-[100vw] cursor-grab touch-none select-none active:cursor-grabbing sm:h-[80vw]"
 			style="transform: translateX(-50%) rotate({displayRotation}deg); transform-origin: center center;"
 			onpointerdown={handlePointerDown}
