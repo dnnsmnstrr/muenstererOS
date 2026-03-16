@@ -227,11 +227,11 @@
 						<text
 							x={textX}
 							y={textY}
-							transform="rotate(17, 28, 0)"
+							transform="rotate({textAngle} {textX} {textY})"
 							text-anchor="middle"
-							alignment-baseline="middle"
+							dominant-baseline="central"
 							class={cn(
-								'origin-center text-[4px] font-black uppercase tracking-tighter transition-all duration-300 sm:text-[5px]',
+								'text-[4px] font-black uppercase tracking-tighter transition-colors duration-300 sm:text-[5px]',
 								winningIndex === i ? 'fill-primary' : 'fill-foreground'
 							)}
 						>
