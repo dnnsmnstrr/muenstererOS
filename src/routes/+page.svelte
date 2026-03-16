@@ -68,7 +68,8 @@
 					expanded: nowPlayingExpanded
 				});
 			}
-		isDragging = false;
+			isDragging = false;
+		}
 	}
 
 	function handleClickCapture(e: MouseEvent) {
@@ -82,22 +83,17 @@
 			return;
 		}
 
-		// Handle interaction via target instead of coordinates
-		const target = e.target as HTMLElement;
-		const isButtonClick = target.closest('button');
-		const isLinkOrCardClick = target.closest('a, .cursor-pointer');
-
 		// Check if click is outside of the expanded area
 		const clickX = e.clientX;
 		const toggleThreshold = 70;
-		const isNearActiveSide = 
+		const isNearActiveSide =
 			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
 			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
 
 		if (isNearActiveSide) {
-				nowPlayingExpanded = !nowPlayingExpanded;
-				e.stopPropagation();
-				e.preventDefault();
+			nowPlayingExpanded = !nowPlayingExpanded;
+			e.stopPropagation();
+			e.preventDefault();
 		} else {
 			goto('/playlists?current');
 			e.stopPropagation();
