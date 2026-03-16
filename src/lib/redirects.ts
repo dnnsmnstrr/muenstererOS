@@ -380,6 +380,12 @@ export const redirects: Redirect[] = [
 		aliases: ['info', 'stats', 'personal-data', 'aboutme', 'ℹ']
 	},
 	{
+		name: 'colophon',
+		description: 'how this website is built',
+		url: 'about',
+		aliases: ['meta']
+	},
+	{
 		name: 'humans.txt',
 		description: 'a file with information about this website (more info at https://humanstxt.org/)',
 		url: 'humans.txt',
