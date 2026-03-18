@@ -166,6 +166,8 @@
 				return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
 			case 'diagonal':
 				return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
+			case 'wave':
+				return `background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpath d='M0 5 Q 5 0 10 5 T 20 5' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='1'/%3E%3C/svg%3E"); background-size: 20px 10px;`;
 			case 'none':
 				return '';
 			case 'dots':
