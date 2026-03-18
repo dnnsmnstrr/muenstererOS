@@ -39,24 +39,35 @@
 		"src": "https://eightyeightthirty.one/88x31.png",
 		"alt": "eightyeightthirty.one",
 		"href": "https://eightyeightthirty.one/",
-		"category": "tech"
-	},
-	{
-		"src": "https://eightyeightthirty.one/notnite.png",
-		"alt": "notnite",
-		"href": "https://notnite.com/",
-		"category": "personal"
-	},
-	{
-		"src": "https://cyber.dabamos.de/88x31/24fun.gif",
-		"alt": "24fun",
-		"href": "https://cyber.dabamos.de/88x31/",
 		"category": "fun"
 	},
 	{
-		"src": "https://cyber.dabamos.de/88x31/antifa.gif",
-		"alt": "antifa",
-		"href": "https://cyber.dabamos.de/88x31/",
+		"src": "/images/buttons/88x31.gif",
+		"alt": "eightyeight x thirtyone",
+		"href": "https://matdoes.dev/buttons#/",
+		"category": "fun"
+	},
+	{
+		"src": "/images/buttons/steam.gif",
+		"alt": "Steam",
+		"href": "https://steampowered.com",
+		"category": "gaming"
+	},
+	{
+		"src": "/images/buttons/deck.gif",
+		"alt": "Steam Deck",
+		"href": "https://store.steampowered.com/steamdeck",
+		"category": "gaming"
+	},
+	{
+		"src": "/images/buttons/right2repair.gif",
+		"alt": "Right to Repair",
+		"href": "https://repair.eu/",
+		"category": "political"
+	},
+	{
+		"src": "images/buttons/slava-ukraini.gif",
+		"alt": "Slava Ukraini",
 		"category": "political"
 	}
 ]

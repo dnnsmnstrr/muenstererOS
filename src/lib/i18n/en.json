@@ -322,12 +322,12 @@
 		"description": "A collection of 88x31 buttons.",
 		"all_categories": "All Categories",
 		"categories": {
-			"tech": "Tech",
 			"personal": "Personal",
 			"fun": "Fun",
-			"political": "Political"
+			"political": "Political",
+			"other": "Other"
 		},
-		"external_link_text": "Find more at eightyeightthirty.one"
+		"external_link_text": "Explore at eightyeightthirty.one"
 	},
 	"contact": {
 		"title": "Contact",

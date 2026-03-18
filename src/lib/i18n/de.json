@@ -293,8 +293,8 @@
 	"sites": {
 		"description": "Eine Visualisierung meines persönlichen Website-Netzwerks und seiner Verbindungen. ({shortcut} + Klick zum Öffnen von Links)",
 		"depth": "Tiefe",
-		"decrease_depth": "Depth verringern",
-		"increase_depth": "Depth erhöhen",
+		"decrease_depth": "Tiefe verringern",
+		"increase_depth": "Tiefe erhöhen",
 		"zoom": "Zoom",
 		"graph_label": "Interaktive Grafik des Website-Netzwerks"
 	},
@@ -321,12 +321,12 @@
 		"description": "Eine Sammlung von 88x31 Buttons.",
 		"all_categories": "Alle Kategorien",
 		"categories": {
-			"tech": "Tech",
 			"personal": "Persönlich",
 			"fun": "Spaß",
-			"political": "Politisch"
+			"political": "Politisch",
+			"other": "Andere"
 		},
-		"external_link_text": "Mehr auf eightyeightthirty.one finden"
+		"external_link_text": "Mehr auf eightyeightthirty.one entdecken"
 	},
 	"contact": {
 		"title": "Kontakt",
