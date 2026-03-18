@@ -2,31 +2,61 @@
 	{
 		"src": "/images/buttons/humanstxt.png",
 		"alt": "humans.txt",
-		"href": "/humans.txt"
+		"href": "/humans.txt",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/vercel.png",
 		"alt": "Hosted on Vercel",
-		"href": "https://vercel.com/"
+		"href": "https://vercel.com/",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/vscode.gif",
 		"alt": "Visual Studio Code",
-		"href": "https://code.visualstudio.com/"
+		"href": "https://code.visualstudio.com/",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/svelte.png",
 		"alt": "Svelte",
-		"href": "https://svelte.dev"
+		"href": "https://svelte.dev",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/tailwind.gif",
 		"alt": "Styled with Tailwind",
-		"href": "https://tailwindcss.com/"
+		"href": "https://tailwindcss.com/",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/macmade.gif",
 		"alt": "Made on a Mac",
-		"href": "https://apple.com/mac"
+		"href": "https://apple.com/mac",
+		"category": "tech"
+	},
+	{
+		"src": "https://eightyeightthirty.one/88x31.png",
+		"alt": "eightyeightthirty.one",
+		"href": "https://eightyeightthirty.one/",
+		"category": "tech"
+	},
+	{
+		"src": "https://eightyeightthirty.one/notnite.png",
+		"alt": "notnite",
+		"href": "https://notnite.com/",
+		"category": "personal"
+	},
+	{
+		"src": "https://cyber.dabamos.de/88x31/24fun.gif",
+		"alt": "24fun",
+		"href": "https://cyber.dabamos.de/88x31/",
+		"category": "fun"
+	},
+	{
+		"src": "https://cyber.dabamos.de/88x31/antifa.gif",
+		"alt": "antifa",
+		"href": "https://cyber.dabamos.de/88x31/",
+		"category": "political"
 	}
 ]

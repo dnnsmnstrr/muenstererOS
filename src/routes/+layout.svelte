@@ -181,6 +181,7 @@
 		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
 		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
+		{ name: 'Buttons', href: '/buttons', icon: LayoutGrid, hidden: true },
 		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
 		{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },

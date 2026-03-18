@@ -5,6 +5,7 @@
 		"legal": "Legal Notice",
 		"admin": "Admin",
 		"about": "About",
+		"buttons": "Buttons",
 		"projects": "Projects",
 		"now": "Now",
 		"where": "Where",
@@ -315,6 +316,18 @@
 		"m_ago": "{count}m ago",
 		"h_ago": "{count}h ago",
 		"d_ago": "{count}d ago"
+	},
+	"buttons": {
+		"title": "Buttons",
+		"description": "A collection of 88x31 buttons.",
+		"all_categories": "All Categories",
+		"categories": {
+			"tech": "Tech",
+			"personal": "Personal",
+			"fun": "Fun",
+			"political": "Political"
+		},
+		"external_link_text": "Find more at eightyeightthirty.one"
 	},
 	"contact": {
 		"title": "Contact",

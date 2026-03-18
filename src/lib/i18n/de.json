@@ -5,6 +5,7 @@
 		"legal": "Impressum",
 		"admin": "Admin",
 		"about": "Über diese Webseite",
+		"buttons": "Buttons",
 		"projects": "Projekte",
 		"now": "Jetzt (Now Page)",
 		"where": "Standort",
@@ -292,8 +293,8 @@
 	"sites": {
 		"description": "Eine Visualisierung meines persönlichen Website-Netzwerks und seiner Verbindungen. ({shortcut} + Klick zum Öffnen von Links)",
 		"depth": "Tiefe",
-		"decrease_depth": "Tiefe verringern",
-		"increase_depth": "Tiefe erhöhen",
+		"decrease_depth": "Depth verringern",
+		"increase_depth": "Depth erhöhen",
 		"zoom": "Zoom",
 		"graph_label": "Interaktive Grafik des Website-Netzwerks"
 	},
@@ -314,6 +315,18 @@
 		"m_ago": "vor {count}m",
 		"h_ago": "vor {count}h",
 		"d_ago": "vor {count}d"
+	},
+	"buttons": {
+		"title": "Buttons",
+		"description": "Eine Sammlung von 88x31 Buttons.",
+		"all_categories": "Alle Kategorien",
+		"categories": {
+			"tech": "Tech",
+			"personal": "Persönlich",
+			"fun": "Spaß",
+			"political": "Politisch"
+		},
+		"external_link_text": "Mehr auf eightyeightthirty.one finden"
 	},
 	"contact": {
 		"title": "Kontakt",

@@ -33,6 +33,7 @@
 		Search,
 		Github,
 		Link,
+		LayoutGrid,
 		RotateCcw,
 		Monitor,
 		Plus,
@@ -105,6 +106,7 @@
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
+		b: '/buttons',
 		e: '/experiment',
 		i: '/legal', // impressum
 		l: '/legal',
@@ -393,7 +395,8 @@
 		navigation: [
 			{ name: i18n.t('common.home'), icon: Home, href: '/' },
 			{ name: i18n.t('common.about'), icon: User, href: '/about' },
-			...pages.filter((page) => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
+			{ name: i18n.t('common.buttons'), icon: LayoutGrid, href: '/buttons' },
+			...pages.filter((page) => !['/', '/about', '/settings', '/buttons'].includes(page.href || '')), // avoid duplicates with static navigation links
 			{
 				name: i18n.t('command.search_zettelkasten'),
 				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
