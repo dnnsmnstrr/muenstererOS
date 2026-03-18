@@ -252,6 +252,12 @@
 		"inspired_by": "Inspiriert von",
 		"search_placeholder": "Suchen...",
 		"all_categories": "Alle Kategorien",
+		"categories": {
+			"hardware": "Hardware",
+			"software": "Software",
+			"development": "Entwicklung",
+			"services": "Dienste"
+		},
 		"reset_filters": "Filter zurücksetzen",
 		"no_results": "Keine Ergebnisse gefunden.",
 		"results_found_one": "1 Ergebnis gefunden.",
