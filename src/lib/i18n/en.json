@@ -7,6 +7,7 @@
 		"about": "About",
 		"projects": "Projects",
 		"now": "Now",
+		"where": "Where",
 		"uses": "Uses",
 		"playlists": "Playlists",
 		"sites": "Sites",
@@ -318,5 +319,10 @@
 		"spin": "SPIN",
 		"good_luck": "Good Luck!",
 		"wheel_label": "Wheel of Fortune"
+	},
+	"where": {
+		"title": "Where I am right now",
+		"description": "My current location",
+		"roughly": "(roughly)"
 	}
 }
