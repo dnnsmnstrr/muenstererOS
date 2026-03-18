@@ -7,6 +7,7 @@
 		"about": "Über diese Webseite",
 		"projects": "Projekte",
 		"now": "Jetzt (Now Page)",
+		"where": "Standort",
 		"uses": "Uses (Tech Stack)",
 		"playlists": "Playlists",
 		"hotkeys": "Hotkeys",
@@ -324,5 +325,10 @@
 		"spin": "DREHEN",
 		"good_luck": "Viel Glück!",
 		"wheel_label": "Glücksrad"
+	},
+	"where": {
+		"title": "Wo ich mich gerade befinde",
+		"description": "Mein aktueller Standort",
+		"roughly": "(ungefähr)"
 	}
 }
