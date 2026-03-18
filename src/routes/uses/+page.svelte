@@ -1,5 +1,5 @@
 <script module lang="ts">
-	const categories = ['hardware', 'software', 'development'] as const;
+	const categories = ['hardware', 'software', 'development', 'services'] as const;
 	export type UsesItem = {
 		name: string;
 		description?: string;
@@ -36,6 +36,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	/**
 	 * Localization optimization: Replace hardcoded UI strings with i18n.t() calls.
@@ -124,13 +125,14 @@
 	});
 
 	const triggerContent = $derived(
-		capitalize(
-			categories.find((category) => category === selectedCategory) ?? i18n.t('uses.all_categories')
-		)
+		selectedCategory
+			? i18n.t('uses.categories.' + selectedCategory)
+			: i18n.t('uses.all_categories')
 	);
 </script>
 
 <svelte:head>
+	<title>{i18n.t('uses.title') + PAGE_TITLE_SUFFIX}</title>
 	<meta name="description" content={i18n.t('uses.description')} />
 </svelte:head>
 
@@ -187,7 +189,7 @@
 					<Select.Group>
 						<Select.Item value="">{i18n.t('uses.all_categories')}</Select.Item>
 						{#each categories as category}
-							<Select.Item value={category}>{capitalize(category)}</Select.Item>
+							<Select.Item value={category}>{i18n.t('uses.categories.' + category)}</Select.Item>
 						{/each}
 					</Select.Group>
 				</Select.Content>
@@ -360,7 +362,7 @@
 								</p>
 							</Table.Cell>
 							<Table.Cell>
-								<Badge variant="outline">{capitalize(item.category)}</Badge>
+								<Badge variant="outline">{i18n.t('uses.categories.' + item.category)}</Badge>
 							</Table.Cell>
 							<Table.Cell>
 								<div class="flex flex-wrap gap-1">
