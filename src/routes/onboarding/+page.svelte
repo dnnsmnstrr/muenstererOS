@@ -57,23 +57,21 @@
 	</div>
 
 	<Stepper.Root bind:step>
-		<Stepper.Nav class="px-4">
+		<Stepper.Nav orientation="horizontal" class="w-10/12 px-4">
 			{#each steps as item, i (item.id)}
-				<Stepper.Item class="flex-1">
-					<Stepper.Trigger class="flex flex-col items-center gap-2">
+				<Stepper.Item>
+					<Stepper.Trigger class="flex flex-col items-center lg:w-[150px]">
 						<Stepper.Indicator>
-							<item.icon class="size-4" />
+							<item.icon />
 						</Stepper.Indicator>
-						<Stepper.Title class="hidden sm:block">{item.title}</Stepper.Title>
+						<Stepper.Title class="hidden flex-col lg:flex">{item.title}</Stepper.Title>
 					</Stepper.Trigger>
-					{#if i < steps.length - 1}
-						<Stepper.Separator />
-					{/if}
+					<Stepper.Separator class="lg:left-[calc(90px)]" />
 				</Stepper.Item>
 			{/each}
 		</Stepper.Nav>
 
-		<div class="mt-10 min-h-[300px] rounded-xl border bg-card p-8 shadow-sm">
+		<div class="mt-10 min-h-[300px] rounded-xl border bg-card p-8 shadow-sm flex flex-col items-center justify-center">
 			{#if step === 1}
 				<div class="flex flex-col items-center justify-center space-y-4 text-center">
 					<PartyPopper class="size-16 text-primary" />
@@ -180,21 +178,21 @@
 					></div>
 				</div>
 			{/if}
+			<div class="mt-8 flex justify-between gap-4">
+				<Stepper.Previous variant="outline" class="min-w-24">
+					{i18n.t('playlists.previous')}
+				</Stepper.Previous>
+				{#if step < steps.length}
+					<Stepper.Next class="min-w-24">
+						{i18n.t('playlists.next')}
+					</Stepper.Next>
+				{:else}
+					<Button size="sm" onclick={finish} style="min-w-24">
+						{i18n.t('onboarding.finish')}
+					</Button>
+				{/if}
+			</div>
 		</div>
 
-		<div class="mt-8 flex justify-between">
-			<Stepper.Previous variant="outline">
-				{i18n.t('playlists.previous')}
-			</Stepper.Previous>
-			{#if step < steps.length}
-				<Stepper.Next>
-					{i18n.t('playlists.next')}
-				</Stepper.Next>
-			{:else}
-				<Button onclick={finish}>
-					{i18n.t('onboarding.finish')}
-				</Button>
-			{/if}
-		</div>
 	</Stepper.Root>
 </div>
