@@ -6,7 +6,6 @@
 	import { mode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import * as Select from '$lib/components/ui/select';
 	import { Check, Languages, Palette, Layout, PartyPopper } from 'lucide-svelte';
 	import { cn } from '$lib/utils';
 	import { goto } from '$app/navigation';
@@ -57,23 +56,23 @@
 	</div>
 
 	<Stepper.Root bind:step>
-		<Stepper.Nav class="px-4">
+		<Stepper.Nav class="px-4 justify-between">
 			{#each steps as item, i (item.id)}
-				<Stepper.Item class="flex-1">
-					<Stepper.Trigger class="flex flex-col items-center gap-2">
+				<Stepper.Item>
+					<Stepper.Trigger class="flex flex-col items-center z-10">
 						<Stepper.Indicator>
 							<item.icon class="size-4" />
 						</Stepper.Indicator>
 						<Stepper.Title class="hidden sm:block">{item.title}</Stepper.Title>
 					</Stepper.Trigger>
-					{#if i < steps.length - 1}
-						<Stepper.Separator />
-					{/if}
+					<Stepper.Separator class="sm:left-[calc(40px)] lg:left-[calc(40px)]" />
 				</Stepper.Item>
 			{/each}
 		</Stepper.Nav>
 
-		<div class="mt-10 min-h-[300px] rounded-xl border bg-card p-8 shadow-sm">
+		<div
+			class="mt-4 flex min-h-[300px] items-center justify-center rounded-xl border bg-card p-8 shadow-sm flex-col"
+		>
 			{#if step === 1}
 				<div class="flex flex-col items-center justify-center space-y-4 text-center">
 					<PartyPopper class="size-16 text-primary" />
@@ -141,7 +140,7 @@
 					</div>
 				</div>
 			{:else if step === 4}
-				<div class="flex flex-col items-center space-y-6">
+				<div class="flex flex-col items-center space-y-6 w-full">
 					<h2 class="text-xl font-semibold">{i18n.t('settings.texture')}</h2>
 					<div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-3">
 						{#each backgroundTextures as texture}
@@ -149,7 +148,7 @@
 							<button
 								onclick={() => ($backgroundTexture = texture.value)}
 								class={cn(
-									'flex flex-col items-center gap-2 rounded-lg border-2 p-2 transition-all hover:bg-accent',
+									'flex flex-col items-center gap-2 rounded-lg border-2 p-2 transition-all hover:bg-accent w-full',
 									isActive ? 'border-primary bg-accent' : 'border-muted'
 								)}
 							>
@@ -163,21 +162,21 @@
 					</div>
 				</div>
 			{/if}
-		</div>
 
-		<div class="mt-8 flex justify-between">
-			<Stepper.Previous variant="outline">
-				{i18n.t('playlists.previous')}
-			</Stepper.Previous>
-			{#if step < steps.length}
-				<Stepper.Next>
-					{i18n.t('playlists.next')}
-				</Stepper.Next>
-			{:else}
-				<Button onclick={finish}>
-					{i18n.t('onboarding.finish')}
-				</Button>
-			{/if}
+			<div class="mt-8 flex justify-between gap-4">
+				<Stepper.Previous variant="outline" class="min-w-24">
+					{i18n.t('playlists.previous')}
+				</Stepper.Previous>
+				{#if step < steps.length}
+					<Stepper.Next class="min-w-24">
+						{i18n.t('playlists.next')}
+					</Stepper.Next>
+				{:else}
+					<Button size="sm" onclick={finish} style="min-w-24">
+						{i18n.t('onboarding.finish')}
+					</Button>
+				{/if}
+			</div>
 		</div>
 	</Stepper.Root>
 </div>
