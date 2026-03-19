@@ -25,6 +25,7 @@ export type StepperButtonPropsWithoutHTML = WithChild<{
 	disabled?: boolean;
 	variant?: ButtonVariant;
 	size?: ButtonSize;
+	class?: string;
 }>;
 
 export type StepperNextButtonProps = StepperButtonPropsWithoutHTML;
