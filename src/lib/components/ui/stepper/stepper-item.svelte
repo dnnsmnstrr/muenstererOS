@@ -5,7 +5,7 @@
 
 	let { id, class: className, children, ...rest }: StepperItemProps = $props();
 
-	const uid = id ?? crypto.randomUUID();
+	const uid = $props.id?.() ?? crypto.randomUUID();
 	id = id ?? uid;
 
 	const stepperItemState = useStepperItem({ id });

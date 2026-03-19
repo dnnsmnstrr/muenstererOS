@@ -10,7 +10,7 @@
 	import { Check, Languages, Palette, Layout, PartyPopper } from 'lucide-svelte';
 	import { cn } from '$lib/utils';
 	import { goto } from '$app/navigation';
-	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { PAGE_TITLE_SUFFIX, backgroundTextures } from '$lib/config';
 	import { browser } from '$app/environment';
 
 	let step = $state(1);
@@ -57,21 +57,23 @@
 	</div>
 
 	<Stepper.Root bind:step>
-		<Stepper.Nav orientation="horizontal" class="w-10/12 px-4">
+		<Stepper.Nav class="px-4">
 			{#each steps as item, i (item.id)}
-				<Stepper.Item>
-					<Stepper.Trigger class="flex flex-col items-center lg:w-[150px]">
+				<Stepper.Item class="flex-1">
+					<Stepper.Trigger class="flex flex-col items-center gap-2">
 						<Stepper.Indicator>
-							<item.icon />
+							<item.icon class="size-4" />
 						</Stepper.Indicator>
-						<Stepper.Title class="hidden flex-col lg:flex">{item.title}</Stepper.Title>
+						<Stepper.Title class="hidden sm:block">{item.title}</Stepper.Title>
 					</Stepper.Trigger>
-					<Stepper.Separator class="lg:left-[calc(90px)]" />
+					{#if i < steps.length - 1}
+						<Stepper.Separator />
+					{/if}
 				</Stepper.Item>
 			{/each}
 		</Stepper.Nav>
 
-		<div class="mt-10 min-h-[300px] rounded-xl border bg-card p-8 shadow-sm flex flex-col items-center justify-center">
+		<div class="mt-10 min-h-[300px] rounded-xl border bg-card p-8 shadow-sm">
 			{#if step === 1}
 				<div class="flex flex-col items-center justify-center space-y-4 text-center">
 					<PartyPopper class="size-16 text-primary" />
@@ -141,58 +143,41 @@
 			{:else if step === 4}
 				<div class="flex flex-col items-center space-y-6">
 					<h2 class="text-xl font-semibold">{i18n.t('settings.texture')}</h2>
-					<div class="w-full max-w-xs">
-						<Select.Root type="single" bind:value={$backgroundTexture}>
-							<Select.Trigger class="w-full">
-								{$backgroundTexture
-									? i18n.t(`settings.${$backgroundTexture}`)
-									: i18n.t('settings.texture')}
-							</Select.Trigger>
-							<Select.Content>
-								<Select.Item value="dots" label={i18n.t('settings.dots')} />
-								<Select.Item value="grid" label={i18n.t('settings.grid')} />
-								<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
-								<Select.Item value="wave" label={i18n.t('settings.wave')} />
-								<Select.Item value="none" label={i18n.t('settings.none')} />
-							</Select.Content>
-						</Select.Root>
+					<div class="grid w-full grid-cols-2 gap-4 sm:grid-cols-3">
+						{#each backgroundTextures as texture}
+							{@const isActive = $backgroundTexture === texture.value}
+							<button
+								onclick={() => ($backgroundTexture = texture.value)}
+								class={cn(
+									'flex flex-col items-center gap-2 rounded-lg border-2 p-2 transition-all hover:bg-accent',
+									isActive ? 'border-primary bg-accent' : 'border-muted'
+								)}
+							>
+								<div
+									class="h-20 w-full rounded-md border bg-card"
+									style={texture.getStyle($mode === 'light' ? '#e5e5e5' : '#222222')}
+								></div>
+								<span class="text-sm font-medium">{i18n.t(`settings.${texture.name}`)}</span>
+							</button>
+						{/each}
 					</div>
-					<div
-						class="h-32 w-full rounded-md border"
-						style={(() => {
-							const color = $mode === 'light' ? '#e5e5e5' : '#222222';
-							switch ($backgroundTexture) {
-								case 'grid':
-									return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
-								case 'diagonal':
-									return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
-								case 'wave':
-									return `background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpath d='M0 5 Q 5 0 10 5 T 20 5' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='1'/%3E%3C/svg%3E"); background-size: 20px 10px;`;
-								case 'none':
-									return '';
-								case 'dots':
-								default:
-									return `background-image: radial-gradient(${color} 1px, transparent 1px); background-size: 16px 16px;`;
-							}
-						})()}
-					></div>
 				</div>
 			{/if}
-			<div class="mt-8 flex justify-between gap-4">
-				<Stepper.Previous variant="outline" class="min-w-24">
-					{i18n.t('playlists.previous')}
-				</Stepper.Previous>
-				{#if step < steps.length}
-					<Stepper.Next class="min-w-24">
-						{i18n.t('playlists.next')}
-					</Stepper.Next>
-				{:else}
-					<Button size="sm" onclick={finish} style="min-w-24">
-						{i18n.t('onboarding.finish')}
-					</Button>
-				{/if}
-			</div>
 		</div>
 
+		<div class="mt-8 flex justify-between">
+			<Stepper.Previous variant="outline">
+				{i18n.t('playlists.previous')}
+			</Stepper.Previous>
+			{#if step < steps.length}
+				<Stepper.Next>
+					{i18n.t('playlists.next')}
+				</Stepper.Next>
+			{:else}
+				<Button onclick={finish}>
+					{i18n.t('onboarding.finish')}
+				</Button>
+			{/if}
+		</div>
 	</Stepper.Root>
 </div>
