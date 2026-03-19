@@ -10,6 +10,8 @@
 	import { onMount, untrack } from 'svelte';
 	import { cn } from '$lib/utils';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	let element: HTMLElement | null = $state(null);
 	let width = $state(0);
@@ -116,6 +118,22 @@
 	onMount(() => {
 		initializeFiles();
 		nowPlayingStore.loadFromStorage();
+
+		const onboardingComplete = localStorage.getItem('onboardingComplete');
+		if (!onboardingComplete) {
+			const timer = setTimeout(() => {
+				toast(i18n.t('onboarding.notification'), {
+					action: {
+						label: i18n.t('onboarding.notification_link'),
+						onClick: () => goto('/onboarding')
+					},
+					duration: 10000
+				});
+			}, 30000);
+			return () => {
+				clearTimeout(timer);
+			};
+		}
 
 		// Subscribe to store changes to sync local state
 		const unsubscribe = nowPlayingStore.subscribe((state) => {

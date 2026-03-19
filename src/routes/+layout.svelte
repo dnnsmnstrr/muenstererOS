@@ -19,6 +19,7 @@
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
 
 	interface Props {
@@ -161,19 +162,8 @@
 	let isFullWidth = $derived(page.url.pathname === '/experiment' || page.url.pathname === '/slashes');
 	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
-		switch ($backgroundTexture) {
-			case 'grid':
-				return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
-			case 'diagonal':
-				return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
-			case 'wave':
-				return `background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpath d='M0 5 Q 5 0 10 5 T 20 5' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='1'/%3E%3C/svg%3E"); background-size: 20px 10px;`;
-			case 'none':
-				return '';
-			case 'dots':
-			default:
-				return `background-image: radial-gradient(${color} 1px, transparent 1px); background-size: 16px 16px;`;
-		}
+		const texture = backgroundTextures.find((t) => t.value === $backgroundTexture) || backgroundTextures[0];
+		return texture.getStyle(color);
 	});
 
 	const bookmarksRaw: BookmarkItem[] = [

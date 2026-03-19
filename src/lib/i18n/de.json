@@ -343,5 +343,17 @@
 		"title": "Wo ich mich gerade befinde",
 		"description": "Mein aktueller Standort",
 		"roughly": "(ungefähr)"
+	},
+	"onboarding": {
+		"title": "Willkommen!",
+		"description": "Lass uns dein Erlebnis einrichten.",
+		"welcome": "Willkommen auf meiner Webseite! Dieses schnelle Setup hilft dir dabei, das Aussehen nach deinen Wünschen anzupassen.",
+		"step_welcome": "Willkommen",
+		"step_language": "Sprache",
+		"step_theme": "Design",
+		"step_texture": "Struktur",
+		"finish": "Setup abschließen",
+		"notification": "Willkommen! Möchtest du dein Erlebnis anpassen?",
+		"notification_link": "Onboarding starten"
 	}
 }

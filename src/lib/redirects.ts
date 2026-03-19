@@ -383,7 +383,7 @@ export const redirects: Redirect[] = [
 		name: 'colophon',
 		description: 'how this website is built',
 		url: 'about',
-		aliases: ['meta']
+		aliases: []
 	},
 	{
 		name: 'humans.txt',

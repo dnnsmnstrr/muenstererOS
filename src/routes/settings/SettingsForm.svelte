@@ -28,7 +28,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { INACTIVITY_TIMEOUT } from '$lib/config';
+	import { INACTIVITY_TIMEOUT, backgroundTextures } from '$lib/config';
 
 	let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
 	const form = superForm(
@@ -178,11 +178,9 @@
 										: i18n.t('settings.texture')}
 								</Select.Trigger>
 								<Select.Content>
-									<Select.Item value="dots" label={i18n.t('settings.dots')} />
-									<Select.Item value="grid" label={i18n.t('settings.grid')} />
-									<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
-									<Select.Item value="wave" label={i18n.t('settings.wave')} />
-									<Select.Item value="none" label={i18n.t('settings.none')} />
+									{#each backgroundTextures as texture}
+										<Select.Item value={texture.value} label={i18n.t(`settings.${texture.name}`)} />
+									{/each}
 								</Select.Content>
 							</Select.Root>
 						</div>
