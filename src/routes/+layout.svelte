@@ -205,13 +205,24 @@
 		};
 	}));
 	const allPages = $derived([...bookmarks, ...otherBookmarks]);
+
+	/**
+	 * Optimized page title logic that updates automatically when the language changes.
+	 * It attempts to find a translation for the current route segment in the 'common' namespace.
+	 */
+	const pageTitle = $derived.by(() => {
+		if (page.url.pathname === '/') return i18n.t('common.home');
+		const segment = page.url.pathname.split('/')[1];
+		const translated = i18n.t(`common.${segment}`);
+		return translated !== `common.${segment}` ? translated : capitalize(segment);
+	});
 </script>
 
 <svelte:head>
 	<style>
 		@import '/themes.css';
 	</style>
-	<title>{page.url.pathname === '/' ? i18n.t('common.home') : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
+	<title>{pageTitle}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <ModeWatcher />

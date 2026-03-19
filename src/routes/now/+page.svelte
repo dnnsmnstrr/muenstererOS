@@ -139,9 +139,10 @@
 			{#if nowData.playlist}
 				<div class="flex flex-col items-center space-y-2">
 					{#if playlistImage}
+						<!-- Localization: Use localized alt text for accessibility and consistency -->
 						<img
 							src={playlistImage}
-							alt="Playlist cover"
+							alt={i18n.t('playlists.alt_cover')}
 							class="aspect-square w-full rounded-md object-cover"
 						/>
 					{/if}

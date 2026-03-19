@@ -47,3 +47,9 @@
 **Learning:** When localizing pages that feature complex SVG elements (like the Slashes wheel), accessibility labels like `aria-label` are as important as the visible text. Furthermore, it is critical to use the `PAGE_TITLE_SUFFIX` for localized page titles to maintain brand consistency.
 
 **Action:** Always check for `aria-label` in SVG or interactive elements when localizing a page. Use `PAGE_TITLE_SUFFIX` from `$lib/config` when setting localized titles in `<svelte:head>`.
+
+## 2026-03-19 - [Redirect Aliases and Shared Namespaces]
+
+**Learning:** When adding redirects, it's easy to create duplicate aliases (e.g., 'meta') that may conflict with existing names or other aliases, causing test failures. Additionally, using a central namespace for common route titles in the root layout simplifies site-wide localization but requires consistent key naming in `en.json` and `de.json`.
+
+**Action:** Before submitting, run `pnpm test` to catch duplicate redirect aliases. Use `$derived.by` in root layouts to reactive handle localized page titles across the entire application.

@@ -61,7 +61,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'facebook',
 		url: links.facebook,
-		aliases: ['f', 'fb', 'book', 'gesichtsbuch', 'meta']
+		aliases: ['f', 'fb', 'book', 'gesichtsbuch']
 	},
 	{
 		name: 'reddit',
