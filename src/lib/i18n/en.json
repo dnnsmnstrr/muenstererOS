@@ -331,5 +331,17 @@
 		"title": "Where I am right now",
 		"description": "My current location",
 		"roughly": "(roughly)"
+	},
+	"onboarding": {
+		"title": "Welcome!",
+		"description": "Let's set up your experience.",
+		"welcome": "Welcome to my website! This quick setup will help you customize the look and feel to your liking.",
+		"step_welcome": "Welcome",
+		"step_language": "Language",
+		"step_theme": "Theme",
+		"step_texture": "Texture",
+		"finish": "Finish Setup",
+		"notification": "Welcome! Want to customize your experience?",
+		"notification_link": "Start Onboarding"
 	}
 }
