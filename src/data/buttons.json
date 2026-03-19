@@ -2,31 +2,133 @@
 	{
 		"src": "/images/buttons/humanstxt.png",
 		"alt": "humans.txt",
-		"href": "/humans.txt"
+		"href": "/humans.txt",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/vercel.png",
 		"alt": "Hosted on Vercel",
-		"href": "https://vercel.com/"
+		"href": "https://vercel.com/",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/vscode.gif",
 		"alt": "Visual Studio Code",
-		"href": "https://code.visualstudio.com/"
+		"href": "https://code.visualstudio.com/",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/svelte.png",
 		"alt": "Svelte",
-		"href": "https://svelte.dev"
+		"href": "https://svelte.dev",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/tailwind.gif",
 		"alt": "Styled with Tailwind",
-		"href": "https://tailwindcss.com/"
+		"href": "https://tailwindcss.com/",
+		"category": "tech"
+	},
+	{
+		"src": "/images/buttons/github.png",
+		"alt": "GitHub",
+		"href": "https://github.com/dnnsmnstrr",
+		"category": "tech"
+	},
+	{
+		"src": "/images/buttons/zen.png",
+		"alt": "Zen Browser",
+		"href": "https://zen-browser.app/",
+		"category": "tech"
+	},
+	{
+		"src": "/images/buttons/archive.png",
+		"alt": "Internet Archive",
+		"href": "https://archive.org/",
+		"category": "tech"
 	},
 	{
 		"src": "/images/buttons/macmade.gif",
 		"alt": "Made on a Mac",
-		"href": "https://apple.com/mac"
+		"href": "https://apple.com/mac",
+		"category": "tech"
+	},
+	{
+		"src": "/images/buttons/css.png",
+		"alt": "CSS is Awesome",
+		"href": "https://developer.mozilla.org/de/docs/Web/CSS",
+		"category": "tech"
+	},
+	{
+		"src": "/images/buttons/ubo.png",
+		"alt": "UBlock Origin Now!",
+		"href": "https://ublockorigin.com/",
+		"category": "tech"
+	},
+	{
+		"src": "https://eightyeightthirty.one/88x31.png",
+		"alt": "eightyeightthirty.one",
+		"href": "https://eightyeightthirty.one/",
+		"category": "fun"
+	},
+	{
+		"src": "/images/buttons/88x31.gif",
+		"alt": "eightyeight x thirtyone",
+		"href": "https://matdoes.dev/buttons#/",
+		"category": "fun"
+	},
+	{
+		"src": "/images/buttons/steam.gif",
+		"alt": "Steam",
+		"href": "https://steampowered.com",
+		"category": "gaming"
+	},
+	{
+		"src": "/images/buttons/deck.gif",
+		"alt": "Steam Deck",
+		"href": "https://store.steampowered.com/steamdeck",
+		"category": "gaming"
+	},
+	{
+		"src": "/images/buttons/wii.gif",
+		"alt": "Nintendo Wii",
+		"category": "gaming"
+	},
+	{
+		"src": "/images/buttons/right2repair.gif",
+		"alt": "Right to Repair",
+		"href": "https://repair.eu/",
+		"category": "political"
+	},
+	{
+		"src": "images/buttons/mastodon.png",
+		"alt": "Mastodon",
+		"href": "https://mastodon.social/@dnnsmnstrr",
+		"category": "personal"
+	},
+	{
+		"src": "images/buttons/pizza.png",
+		"alt": "Pizza-powered",
+		"category": "fun"
+	},
+	{
+		"src": "images/buttons/iso8601.png",
+		"alt": "ISO 8601 now! YYYY-MM-DD",
+		"category": "fun"
+	},
+	{
+		"src": "images/buttons/can_iam.gif",
+		"alt": "I am Canadian",
+		"category": "personal"
+	},
+	{
+		"src": "images/buttons/slava-ukraini.gif",
+		"alt": "Slava Ukraini",
+		"category": "political"
+	},
+	{
+		"src": "images/buttons/free-palestine.gif",
+		"alt": "Free Palestine",
+		"category": "political"
 	}
 ]

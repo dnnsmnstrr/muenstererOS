@@ -1,10 +1,11 @@
 <script lang="ts">
 	import buttons from '../../data/buttons.json';
 
-	let { class: className = '' } = $props();
+	let { class: className = '', category = 'tech' } = $props();
 
 	// We double the buttons to create a seamless loop
-	const doubledButtons = [...buttons, ...buttons];
+	const filteredButtons = buttons.filter(button => button.category === category)
+	const doubledButtons = [...filteredButtons, ...filteredButtons];
 </script>
 
 <div class="marquee-container {className}">
