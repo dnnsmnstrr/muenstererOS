@@ -65,6 +65,8 @@
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import JsonView from '$lib/components/JsonView.svelte';
 	import { Heading } from '$lib/components/typography';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
@@ -168,11 +170,16 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{i18n.t('api.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('api.description')} />
+</svelte:head>
+
 <div class="container mx-auto max-w-2xl p-4">
-	<Heading>API</Heading>
+	<Heading>{i18n.t('api.title')}</Heading>
 	<div class="mb-4">
 		<label for="endpoint-select" class="mb-2 block font-semibold">
-			Select endpoint to test the output:
+			{i18n.t('api.select_endpoint')}
 		</label>
 		<select 
 			id="endpoint-select" 
@@ -194,7 +201,7 @@
 							variant="ghost"
 							class="w-full justify-between p-6 font-semibold hover:bg-transparent"
 						>
-							Query Parameters
+							{i18n.t('api.query_parameters')}
 							<ChevronDown
 								class="h-4 w-4 transition-transform duration-200 {paramsOpen ? 'rotate-180' : ''}"
 							/>
@@ -207,7 +214,7 @@
 							{#each currentEndpoint.options as option}
 								<div>
 									<label for={option} class="mb-1 block text-sm font-medium">
-										<span class="capitalize">{option}</span>
+										<span class="capitalize">{i18n.t(`api.${option}`)}</span>
 										{#if option === 'direction'}
 											<span class="text-xs text-muted-foreground">(asc/desc)</span>
 										{:else if option === 'type' && currentEndpoint?.types}
@@ -215,7 +222,7 @@
 												>({currentEndpoint?.types?.join(', ') || ''})</span
 											>
 										{:else if option === 'page' || option === 'limit'}
-											<span class="text-xs text-muted-foreground">(number)</span>
+											<span class="text-xs text-muted-foreground">({i18n.t('api.number')})</span>
 										{/if}
 									</label>
 									{#if option === 'type' && currentEndpoint.types}
@@ -223,7 +230,7 @@
 											name="Direction"
 											value={queryParams[option]}
 											emptyItem="-"
-											placeholder={'select ' + option}
+											placeholder={i18n.t('api.select') + ' ' + i18n.t(`api.${option}`)}
 											options={currentEndpoint.types.map((type) => ({ label: type, value: type }))}
 											onValueChange={(value) => (queryParams[option] = value)}
 										/>
@@ -233,8 +240,8 @@
 											value={queryParams[option]}
 											options={[
 												{ value: '', label: '-' },
-												{ value: 'asc', label: 'Ascending' },
-												{ value: 'desc', label: 'Descending' }
+												{ value: 'asc', label: i18n.t('api.ascending') },
+												{ value: 'desc', label: i18n.t('api.descending') }
 											]}
 											onValueChange={(value) => (queryParams[option] = value)}
 										/>
@@ -246,7 +253,7 @@
 											onkeydown={(e) => {
 												if (e.key === 'Enter') callEndpoint();
 											}}
-											placeholder={option}
+											placeholder={i18n.t(`api.${option}`)}
 											class="w-full"
 										/>
 									{/if}
@@ -254,7 +261,7 @@
 							{/each}
 						</div>
 						<div class="mt-4 flex gap-2">
-							<Button onclick={clearParams} variant="outline" size="sm">Clear Parameters</Button>
+							<Button onclick={clearParams} variant="outline" size="sm">{i18n.t('api.clear_parameters')}</Button>
 						</div>
 					</Card.Content>
 				</Collapsible.Content>
@@ -264,21 +271,21 @@
 
 	<div class="mb-4">
 		<Button onclick={callEndpoint} disabled={loading} class="w-full">
-			{loading ? 'Loading...' : 'Call Endpoint'}
+			{loading ? i18n.t('api.loading') : i18n.t('api.call_endpoint')}
 		</Button>
 	</div>
 
 	{#if error}
-		<div class="mt-4 text-red-600">Error: {error}</div>
+		<div class="mt-4 text-red-600">{i18n.t('api.error')}: {error}</div>
 	{/if}
 	{#if response}
 		<Card.Root class="mt-4 max-h-96">
 			<Tabs.Root value="response">
 				<Tabs.List class="flex">
-					<Tabs.Trigger value="response">Response</Tabs.Trigger>
-					<Tabs.Trigger value="json">JSON Viewer</Tabs.Trigger>
+					<Tabs.Trigger value="response">{i18n.t('api.response')}</Tabs.Trigger>
+					<Tabs.Trigger value="json">{i18n.t('api.json_viewer')}</Tabs.Trigger>
 					{#if schema}
-						<Tabs.Trigger value="schema">Schema</Tabs.Trigger>
+						<Tabs.Trigger value="schema">{i18n.t('api.schema')}</Tabs.Trigger>
 					{/if}
 				</Tabs.List>
 				<Tabs.Content value="response">
