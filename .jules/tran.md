@@ -53,3 +53,9 @@
 **Learning:** When adding redirects, it's easy to create duplicate aliases (e.g., 'meta') that may conflict with existing names or other aliases, causing test failures. Additionally, using a central namespace for common route titles in the root layout simplifies site-wide localization but requires consistent key naming in `en.json` and `de.json`.
 
 **Action:** Before submitting, run `pnpm test` to catch duplicate redirect aliases. Use `$derived.by` in root layouts to reactive handle localized page titles across the entire application.
+
+## 2026-03-24 - [Namespace Consistency and Workflow Hygiene]
+
+**Learning:** When localizing a new page, it is critical to ensure that the keys used in the component match the namespace and keys defined in the translation files. Furthermore, automated tools like `pnpm install` can generate large files like `pnpm-lock.yaml` which should be explicitly excluded from localization PRs to maintain focus and follow the "small optimization" rule.
+
+**Action:** Double-check key mappings (e.g., `api.title` vs `common.api`) before submission. Always run `git status` and remove any unintended files (like lockfiles or temporary logs) before committing.
