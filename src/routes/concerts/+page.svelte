@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { Card } from '$lib/components/ui/card';
 	import Heading from '$lib/components/typography/Heading.svelte';
-	import { Music, MapPin, Calendar, ExternalLink, Ticket, Star } from 'lucide-svelte';
+	import {
+		Music,
+		MapPin,
+		Calendar,
+		ExternalLink,
+		Ticket,
+		Star,
+		Cloud,
+		Turntable,
+		Info
+	} from 'lucide-svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
@@ -16,7 +26,7 @@
 		venue: string;
 		location: string;
 		date: string;
-		type: 'concert' | 'festival';
+		type: 'concert' | 'festival' | 'open-air' | 'club';
 		rating?: number;
 		notes?: string;
 	}
@@ -42,7 +52,8 @@
 		{i18n.t('concerts.title')}
 		{#if data.updatedAt}
 			<Link href={data.gistUrl} class="block text-sm font-normal">
-				{i18n.t('concerts.last_updated')} {formatDate(data.updatedAt)}
+				{i18n.t('concerts.last_updated')}
+				{formatDate(data.updatedAt)}
 			</Link>
 		{/if}
 	</Heading>
@@ -61,13 +72,19 @@
 						<div class="flex items-center gap-2">
 							{#if concert.type === 'festival'}
 								<Ticket class="h-5 w-5 text-primary" />
+							{:else if concert.type === 'open-air'}
+								<Cloud class="h-5 w-5 text-primary" />
+							{:else if concert.type === 'club'}
+								<Turntable class="h-5 w-5 text-primary" />
 							{:else}
 								<Music class="h-5 w-5 text-primary" />
 							{/if}
 							<span
 								class="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium uppercase text-secondary-foreground"
 							>
-								{i18n.t(`concerts.${concert.type}`)}
+								{i18n.t(`concerts.${concert.type}`) !== `concerts.${concert.type}`
+									? i18n.t(`concerts.${concert.type}`)
+									: concert.type.charAt(0).toUpperCase() + concert.type.slice(1)}
 							</span>
 						</div>
 						{#if concert.rating}
@@ -78,8 +95,15 @@
 						{/if}
 					</div>
 
-					<Heading depth={2} class="mb-1 text-xl">
+					<Heading depth={2} class="mb-1 text-xl flex items-center gap-2">
 						{concert.artist}
+						{#if concert.mbid}
+							<div class="pt-2">
+								<a href={getMusicBrainzUrl(concert.mbid)} target="_blank">
+									<Info class="mb-1 h-3 w-3" />
+								</a>
+							</div>
+						{/if}
 					</Heading>
 
 					<div class="mt-auto space-y-2">
@@ -92,19 +116,6 @@
 							<MapPin class="mr-2 h-4 w-4" />
 							{concert.venue}, {concert.location}
 						</div>
-
-						{#if concert.mbid}
-							<div class="pt-2">
-								<Link
-									href={getMusicBrainzUrl(concert.mbid)}
-									target="_blank"
-									class="flex items-center text-xs"
-								>
-									<ExternalLink class="mr-1 h-3 w-3" />
-									{i18n.t('concerts.view_on_musicbrainz')}
-								</Link>
-							</div>
-						{/if}
 					</div>
 				</Card>
 			{/each}
