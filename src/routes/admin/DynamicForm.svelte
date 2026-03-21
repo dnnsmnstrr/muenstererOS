@@ -3,7 +3,7 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink, ArrowUp, ArrowDown, FileJson } from 'lucide-svelte';
+	import { Plus, Trash2, ChevronDown, ChevronRight, ChevronsDown, ChevronsUp, ExternalLink, ArrowUp, ArrowDown, FileJson, Copy } from 'lucide-svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { cn } from '$lib/utils/utils';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -150,7 +150,8 @@
 	required = false,
 	onDelete?: () => void,
 	onMoveUp?: () => void,
-	onMoveDown?: () => void
+	onMoveDown?: () => void,
+	onDuplicate?: () => void
 )}
 	{@const s = resolveSchema(s_raw)}
 	{#if obj && s}
@@ -192,6 +193,20 @@
 							{/snippet}
 						</Collapsible.Trigger>
 						<div class="flex items-center gap-1">
+							{#if onDuplicate}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onDuplicate();
+									}}
+									title="Duplicate"
+								>
+									<Copy class="h-4 w-4" />
+								</Button>
+							{/if}
 							{#if onMoveUp}
 								<Button
 									variant="ghost"
@@ -291,6 +306,20 @@
 							>
 								<Plus class="mr-1 h-4 w-4" /> Add
 							</Button>
+							{#if onDuplicate}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onDuplicate();
+									}}
+									title="Duplicate"
+								>
+									<Copy class="h-4 w-4" />
+								</Button>
+							{/if}
 							{#if onMoveUp}
 								<Button
 									variant="ghost"
@@ -363,7 +392,13 @@
 														[newArr[index + 1], newArr[index]] = [newArr[index], newArr[index + 1]];
 														obj[key] = newArr;
 													}
-												: undefined
+												: undefined,
+											() => {
+												const newItem = structuredClone(obj[key][index]);
+												const newArr = [...obj[key]];
+												newArr.splice(index + 1, 0, newItem);
+												obj[key] = newArr;
+											}
 										)}
 									</div>
 								{/each}
@@ -378,6 +413,20 @@
 							{label}{#if required}<span class="ml-0.5 text-destructive">*</span>{/if}
 						</Label>
 						<div class="flex items-center gap-1">
+							{#if onDuplicate}
+								<Button
+									variant="ghost"
+									size="icon"
+									class="h-8 w-8"
+									onclick={(e) => {
+										e.stopPropagation();
+										onDuplicate();
+									}}
+									title="Duplicate"
+								>
+									<Copy class="h-4 w-4" />
+								</Button>
+							{/if}
 							{#if onMoveUp}
 								<Button
 									variant="ghost"
