@@ -16,6 +16,7 @@
 		"hotkeys": "Hotkeys",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
+		"concerts": "Concerts",
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
@@ -362,6 +363,20 @@
 		"spin": "SPIN",
 		"good_luck": "Good Luck!",
 		"wheel_label": "Wheel of Fortune"
+	},
+	"concerts": {
+		"title": "Concerts & Festivals",
+		"description": "A collection of live music events I've attended.",
+		"last_updated": "Last updated:",
+		"artist": "Artist",
+		"venue": "Venue",
+		"location": "Location",
+		"date": "Date",
+		"type": "Type",
+		"concert": "Concert",
+		"festival": "Festival",
+		"no_concerts": "No concerts found.",
+		"view_on_musicbrainz": "View on MusicBrainz"
 	},
 	"where": {
 		"title": "Where I am right now",

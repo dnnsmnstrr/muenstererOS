@@ -1,5 +1,11 @@
 [
 	{
+		"date": "2025-03-10",
+		"title": "Concerts",
+		"description": "Added a page to list all the concerts and festivals I've been to.",
+		"path": "/concerts"
+	},
+	{
 		"date": "2026-02-22",
 		"title": "i18n",
 		"description": "Added german translations.",

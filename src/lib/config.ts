@@ -4,6 +4,7 @@ export const FIRST_NAME = 'Dennis';
 export const LAST_NAME = 'Muensterer';
 export const NOW_GIST_ID = 'f18bfa6e4f02dc480426d05cf7adff79';
 export const RESUME_GIST_ID = '548256752a08213eded1c5c90dbe7767';
+export const CONCERTS_GIST_ID = '00000000000000000000000000000000';
 export const EMAIL_PROVIDER = 'gmail';
 export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
@@ -88,6 +89,11 @@ export const gists = {
 		id: '2fc6578c2a8d7375af8cfd1be3131711',
 		name: 'Songs',
 		filename: 'songs.json'
+	},
+	concerts: {
+		id: CONCERTS_GIST_ID,
+		name: 'Concerts',
+		filename: 'concerts.json'
 	}
 };
 
