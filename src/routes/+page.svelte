@@ -121,15 +121,16 @@
 
 		const onboardingComplete = localStorage.getItem('onboardingComplete');
 		if (!onboardingComplete) {
+			const duration = 10 * 1000; // 10 seconds
 			const timer = setTimeout(() => {
 				toast(i18n.t('onboarding.notification'), {
 					action: {
 						label: i18n.t('onboarding.notification_link'),
 						onClick: () => goto('/onboarding')
 					},
-					duration: 10000
+					duration
 				});
-			}, 30000);
+			}, duration);
 			return () => {
 				clearTimeout(timer);
 			};

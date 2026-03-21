@@ -168,6 +168,7 @@ export function resetDesktopFiles() {
 	desktopFiles.set([]);
 	if (browser && window?.localStorage) {
 		delete window.localStorage.desktopFiles;
+		delete window.localStorage.onboardingComplete;
 	}
 	if (defaultFiles) {
 		// Reset to default files with new positions
