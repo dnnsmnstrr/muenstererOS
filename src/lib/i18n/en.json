@@ -374,7 +374,9 @@
 		"date": "Date",
 		"type": "Type",
 		"concert": "Concert",
+		"concerts": "Concerts",
 		"festival": "Festival",
+		"festivals": "Festivals",
 		"no_concerts": "No concerts found.",
 		"view_on_musicbrainz": "View on MusicBrainz"
 	},
