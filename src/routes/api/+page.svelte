@@ -52,6 +52,10 @@
 			name: 'Events',
 			url: '/api/events',
 		},
+		{
+			name: 'Concerts',
+			url: '/api/concerts'
+		}
 	];
 </script>
 
