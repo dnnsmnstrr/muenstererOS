@@ -12,6 +12,7 @@ export async function load({ fetch }) {
 	const data = await response.json();
 	return {
 		concerts: data.concerts || [],
+		festivals: data.festivals || [],
 		updatedAt: data.updatedAt,
 		gistId: CONCERTS_GIST_ID,
 		gistUrl: data.gistUrl
