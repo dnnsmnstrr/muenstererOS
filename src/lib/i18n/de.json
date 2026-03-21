@@ -89,6 +89,7 @@
 		"german": "Deutsch",
 		"texture": "Hintergrundstruktur",
 		"dots": "Punkte",
+		"offset-dots": "Versetzte Punkte",
 		"grid": "Gitter",
 		"diagonal": "Diagonal",
 		"wave": "Welle",
