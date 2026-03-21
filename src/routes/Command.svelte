@@ -37,7 +37,10 @@
 		RotateCcw,
 		Monitor,
 		Plus,
-		Globe
+		Globe,
+
+		Ticket
+
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';

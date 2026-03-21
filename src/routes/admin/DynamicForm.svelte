@@ -441,6 +441,14 @@
 								value={formatForDateTimeLocal(obj[key])}
 								oninput={(e) => (obj[key] = (e.target as HTMLInputElement).value)}
 							/>
+						{:else if s.format === 'date'}
+							<Input
+								id={path}
+								type="date"
+								class="h-10 w-full min-w-0"
+								value={obj[key]}
+								oninput={(e) => (obj[key] = (e.target as HTMLInputElement).value)}
+							/>
 						{:else if isUrlField(s, key, label)}
 							<div class="flex gap-2">
 								<Input id={path} bind:value={obj[key]} placeholder={s.description || ''} />
