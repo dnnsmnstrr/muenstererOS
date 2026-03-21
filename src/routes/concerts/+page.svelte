@@ -18,11 +18,14 @@
 	import { formatDate } from '$lib/utils/helper';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import ConcertStats from './ConcertStats.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
 	let activeTab = $state('concerts');
+	let showStats = $state(false);
 
 	interface Concert {
 		artist: string;
@@ -76,12 +79,20 @@
 				<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
 			</Tabs.List>
 
-			{#if data.updatedAt}
-				<Link href={data.gistUrl} class="block text-sm font-normal">
-					{i18n.t('concerts.last_updated')}
-					{formatDate(data.updatedAt)}
-				</Link>
-			{/if}
+			<div class="flex flex-col items-end gap-1">
+				{#if data.updatedAt}
+					<Link href={data.gistUrl} class="block text-sm font-normal">
+						{i18n.t('concerts.last_updated')}
+						{formatDate(data.updatedAt)}
+					</Link>
+				{/if}
+				<button
+					class="text-sm text-muted-foreground hover:text-primary transition-colors"
+					onclick={() => (showStats = true)}
+				>
+					{i18n.t('concerts.stats')}
+				</button>
+			</div>
 		</div>
 
 		<p class="mb-8 text-muted-foreground">{i18n.t('concerts.description')}</p>
@@ -209,4 +220,16 @@
 			</Card>
 		</Tabs.Content>
 	</Tabs.Root>
+
+	<Dialog.Root bind:open={showStats}>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Title>{i18n.t('concerts.stats')}</Dialog.Title>
+				<Dialog.Description>
+					{i18n.t('concerts.artist_frequency_description')}
+				</Dialog.Description>
+			</Dialog.Header>
+			<ConcertStats concerts={data.concerts} festivals={data.festivals} />
+		</Dialog.Content>
+	</Dialog.Root>
 </div>

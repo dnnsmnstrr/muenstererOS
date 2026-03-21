@@ -377,7 +377,10 @@
 		"festival": "Festival",
 		"festivals": "Festivals",
 		"no_concerts": "Keine Konzerte gefunden.",
-		"view_on_musicbrainz": "Auf MusicBrainz ansehen"
+		"view_on_musicbrainz": "Auf MusicBrainz ansehen",
+		"stats": "Statistiken",
+		"artist_frequency": "Künstler-Frequenz",
+		"artist_frequency_description": "Das sind die Künstler, die ich am häufigsten live gesehen habe."
 	},
 	"where": {
 		"title": "Wo ich mich gerade befinde",
