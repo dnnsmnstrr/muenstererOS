@@ -16,7 +16,7 @@
 	import Link from '$lib/components/typography/Link.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { formatDate } from '$lib/utils/helper';
-	import * as UnderlineTabs from '$lib/components/ui/underline-tabs';
+	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import type { PageProps } from './$types';
 
@@ -69,12 +69,12 @@
 </svelte:head>
 
 <div class="container mx-auto p-4">
-	<UnderlineTabs.Root bind:value={activeTab}>
+	<Tabs.Root bind:value={activeTab}>
 		<div class="mb-4 flex w-full items-center justify-between">
-			<UnderlineTabs.List class="w-fit border-none">
-				<UnderlineTabs.Trigger value="concerts">{i18n.t('concerts.concerts')}</UnderlineTabs.Trigger>
-				<UnderlineTabs.Trigger value="festivals">{i18n.t('concerts.festivals')}</UnderlineTabs.Trigger>
-			</UnderlineTabs.List>
+			<Tabs.List class="w-fit border-none py-7 px-2">
+				<Tabs.Trigger class="text-2xl" value="concerts">{i18n.t('concerts.concerts')}</Tabs.Trigger>
+				<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
+			</Tabs.List>
 
 			{#if data.updatedAt}
 				<Link href={data.gistUrl} class="block text-sm font-normal">
@@ -86,7 +86,7 @@
 
 		<p class="mb-8 text-muted-foreground">{i18n.t('concerts.description')}</p>
 
-		<UnderlineTabs.Content value="concerts">
+		<Tabs.Content value="concerts">
 			{#if concerts.length === 0}
 				<div class="py-20 text-center">
 					<p class="text-lg text-muted-foreground">{i18n.t('concerts.no_concerts')}</p>
@@ -148,8 +148,8 @@
 					{/each}
 				</div>
 			{/if}
-		</UnderlineTabs.Content>
-		<UnderlineTabs.Content value="festivals">
+		</Tabs.Content>
+		<Tabs.Content value="festivals">
 			{#if festivals.length === 0}
 				<div class="py-20 text-center">
 					<p class="text-lg text-muted-foreground">{i18n.t('concerts.no_concerts')}</p>
@@ -158,7 +158,7 @@
 				<Accordion.Root type="single" class="w-full">
 					{#each festivals as festival}
 						<Accordion.Item value={festival.name + festival.year} class="border-b">
-							<Accordion.Trigger class="hover:no-underline">
+							<Accordion.Trigger class="hover:no-">
 								<div class="flex w-full items-center justify-between pr-4">
 									<div class="flex items-center gap-3">
 										<Ticket class="h-5 w-5 text-primary" />
@@ -205,6 +205,6 @@
 					{/each}
 				</Accordion.Root>
 			{/if}
-		</UnderlineTabs.Content>
-	</UnderlineTabs.Root>
+		</Tabs.Content>
+	</Tabs.Root>
 </div>
