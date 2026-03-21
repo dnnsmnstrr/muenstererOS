@@ -9,6 +9,9 @@
 	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { createWebHaptics } from 'web-haptics/svelte';
+
+	const { trigger, destroy } = createWebHaptics();
 
 	const slashes = [
 		{ label: '/about', href: '/about', description: '' },
@@ -133,9 +136,18 @@
 		return Math.floor(((((270 - r) % 360) + 360) % 360) / segmentAngle);
 	});
 
+	let lastTriggeredIndex = $state(winningIndex);
+	$effect(() => {
+		if (winningIndex !== lastTriggeredIndex) {
+			trigger('selection');
+			lastTriggeredIndex = winningIndex;
+		}
+	});
+
 	onMount(() => {
 		return () => {
 			if (momentumId) cancelAnimationFrame(momentumId);
+			destroy();
 		};
 	});
 </script>
