@@ -10,7 +10,10 @@
 		Star,
 		Cloud,
 		Turntable,
-		Info
+		Info,
+
+		ChartBar
+
 	} from 'lucide-svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
@@ -21,6 +24,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import ConcertStats from './ConcertStats.svelte';
 	import type { PageProps } from './$types';
+	import { Button } from '$lib/components/ui/button';
 
 	let { data }: PageProps = $props();
 
@@ -73,29 +77,32 @@
 
 <div class="container mx-auto p-4">
 	<Tabs.Root bind:value={activeTab}>
-		<div class="mb-4 flex w-full items-center justify-between">
-			<Tabs.List class="w-fit border-none py-7 px-2">
-				<Tabs.Trigger class="text-2xl" value="concerts">{i18n.t('concerts.concerts')}</Tabs.Trigger>
-				<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
-			</Tabs.List>
+		<div class="mb-4 flex flex-col sm:flex-row w-full sm:items-start gap-2 justify-between">
+			<div class="flex flex-col gap-2">
+				<Tabs.List class="w-fit border-none py-7 px-2">
+					<Tabs.Trigger class="text-2xl" value="concerts">{i18n.t('concerts.concerts')}</Tabs.Trigger>
+					<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
+				</Tabs.List>
+				<p class="mb-4 text-muted-foreground">{i18n.t('concerts.description')}</p>
+			</div>
 
-			<div class="flex flex-col items-end gap-1">
+			<div class="flex items-center gap-4 justify-between sm:justify-end sm:items-end sm:flex-col-reverse">
 				{#if data.updatedAt}
-					<Link href={data.gistUrl} class="block text-sm font-normal">
+					<Link href={data.gistUrl} class="block text-xs font-normal text-muted-foreground">
 						{i18n.t('concerts.last_updated')}
 						{formatDate(data.updatedAt)}
 					</Link>
 				{/if}
-				<button
-					class="text-sm text-muted-foreground hover:text-primary transition-colors"
+				<Button
+					variant="secondary"
 					onclick={() => (showStats = true)}
 				>
+					<ChartBar class="mr-2 h-4 w-4" />
 					{i18n.t('concerts.stats')}
-				</button>
+				</Button>
 			</div>
 		</div>
 
-		<p class="mb-8 text-muted-foreground">{i18n.t('concerts.description')}</p>
 
 		<Tabs.Content value="concerts">
 			{#if concerts.length === 0}
