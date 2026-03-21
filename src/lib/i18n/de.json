@@ -88,6 +88,8 @@
 		"english": "Englisch",
 		"german": "Deutsch",
 		"texture": "Hintergrundstruktur",
+		"texture_size": "Größe",
+		"texture_spacing": "Abstand",
 		"dots": "Punkte",
 		"offset-dots": "Versetzte Punkte",
 		"grid": "Gitter",

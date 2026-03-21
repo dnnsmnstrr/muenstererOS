@@ -88,6 +88,8 @@
 		"english": "English",
 		"german": "German",
 		"texture": "Background Texture",
+		"texture_size": "Texture Size",
+		"texture_spacing": "Texture Spacing",
 		"dots": "Dots",
 		"offset-dots": "Offset Dots",
 		"grid": "Grid",

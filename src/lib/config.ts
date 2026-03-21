@@ -130,37 +130,36 @@ export const breakpoints = {
 
 export const INACTIVITY_TIMEOUT = 1 * 60 * 1000; // 1 minute in milliseconds
 
-const DOT_SIZE = 1;
-const SPACING = 16;
 export const backgroundTextures = [
 	{
 		name: 'dots',
 		value: 'dots',
-		getStyle: (color: string) => `background-image: radial-gradient(${color} ${DOT_SIZE}px, transparent ${DOT_SIZE}px); background-size: ${SPACING}px ${SPACING}px;`
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: radial-gradient(${color} ${size}px, transparent ${size}px); background-size: ${spacing}px ${spacing}px;`
 	},
 	{
 		name: 'offset-dots',
 		value: 'offset-dots',
-		getStyle: (color: string) =>
-			`background-image: radial-gradient(${color} ${DOT_SIZE}px, transparent ${DOT_SIZE}px), radial-gradient(${color} ${DOT_SIZE}px, transparent ${DOT_SIZE}px); background-size: ${SPACING}px ${SPACING}px; background-position: 0 0, ${SPACING / 2}px ${SPACING / 2}px;`
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: radial-gradient(${color} ${size}px, transparent ${size}px), radial-gradient(${color} ${size}px, transparent ${size}px); background-size: ${spacing}px ${spacing}px; background-position: 0 0, ${spacing / 2}px ${spacing / 2}px;`
 	},
 	{
 		name: 'grid',
 		value: 'grid',
-		getStyle: (color: string) =>
-			`background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: ${SPACING}px ${SPACING}px;`
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: linear-gradient(to right, ${color} ${size}px, transparent ${size}px), linear-gradient(to bottom, ${color} ${size}px, transparent ${size}px); background-size: ${spacing}px ${spacing}px;`
 	},
 	{
 		name: 'diagonal',
 		value: 'diagonal',
-		getStyle: (color: string) =>
-			`background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent ${SPACING}px); background-size: auto;`
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} ${size}px, transparent ${size}px, transparent ${spacing}px); background-size: auto;`
 	},
 	{
 		name: 'wave',
 		value: 'wave',
-		getStyle: (color: string) =>
-			`background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpath d='M0 5 Q 5 0 10 5 T 20 5' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='1'/%3E%3C/svg%3E"); background-size: ${SPACING}px ${SPACING / 2}px;`
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpath d='M0 5 Q 5 0 10 5 T 20 5' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='${size}'/%3E%3C/svg%3E"); background-size: ${spacing}px ${spacing / 2}px;`
 	},
 	{
 		name: 'none',

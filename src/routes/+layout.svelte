@@ -6,7 +6,16 @@
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
 	import { page } from '$app/state';
-	import { theme, debug, debugLog, isCommandActive, resetColors, backgroundTexture } from '$lib/stores/app';
+	import {
+		theme,
+		debug,
+		debugLog,
+		isCommandActive,
+		resetColors,
+		backgroundTexture,
+		backgroundSize,
+		backgroundSpacing
+	} from '$lib/stores/app';
 	import { onMount } from 'svelte';
 	import { Spring, Tween } from 'svelte/motion';
 
@@ -162,8 +171,9 @@
 	let isFullWidth = $derived(page.url.pathname === '/experiment' || page.url.pathname === '/slashes');
 	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
-		const texture = backgroundTextures.find((t) => t.value === $backgroundTexture) || backgroundTextures[0];
-		return texture.getStyle(color);
+		const texture =
+			backgroundTextures.find((t) => t.value === $backgroundTexture) || backgroundTextures[0];
+		return texture.getStyle(color, $backgroundSize, $backgroundSpacing);
 	});
 
 	const bookmarksRaw: BookmarkItem[] = [
