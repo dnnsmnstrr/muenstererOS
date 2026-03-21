@@ -10,7 +10,10 @@
 		Star,
 		Cloud,
 		Turntable,
-		Info
+		Info,
+
+		ChartBar
+
 	} from 'lucide-svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
@@ -18,11 +21,15 @@
 	import { formatDate } from '$lib/utils/helper';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Accordion from '$lib/components/ui/accordion';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import ConcertStats from './ConcertStats.svelte';
 	import type { PageProps } from './$types';
+	import { Button } from '$lib/components/ui/button';
 
 	let { data }: PageProps = $props();
 
 	let activeTab = $state('concerts');
+	let showStats = $state(false);
 
 	interface Concert {
 		artist: string;
@@ -70,21 +77,32 @@
 
 <div class="container mx-auto p-4">
 	<Tabs.Root bind:value={activeTab}>
-		<div class="mb-4 flex w-full items-center justify-between">
-			<Tabs.List class="w-fit border-none py-7 px-2">
-				<Tabs.Trigger class="text-2xl" value="concerts">{i18n.t('concerts.concerts')}</Tabs.Trigger>
-				<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
-			</Tabs.List>
+		<div class="mb-4 flex flex-col sm:flex-row w-full sm:items-start gap-2 justify-between">
+			<div class="flex flex-col gap-2">
+				<Tabs.List class="w-fit border-none py-7 px-2">
+					<Tabs.Trigger class="text-2xl" value="concerts">{i18n.t('concerts.concerts')}</Tabs.Trigger>
+					<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
+				</Tabs.List>
+				<p class="mb-4 text-muted-foreground">{i18n.t('concerts.description')}</p>
+			</div>
 
-			{#if data.updatedAt}
-				<Link href={data.gistUrl} class="block text-sm font-normal">
-					{i18n.t('concerts.last_updated')}
-					{formatDate(data.updatedAt)}
-				</Link>
-			{/if}
+			<div class="flex items-center gap-4 justify-between sm:justify-end sm:items-end sm:flex-col-reverse">
+				{#if data.updatedAt}
+					<Link href={data.gistUrl} class="block text-xs font-normal text-muted-foreground">
+						{i18n.t('concerts.last_updated')}
+						{formatDate(data.updatedAt)}
+					</Link>
+				{/if}
+				<Button
+					variant="secondary"
+					onclick={() => (showStats = true)}
+				>
+					<ChartBar class="mr-2 h-4 w-4" />
+					{i18n.t('concerts.stats')}
+				</Button>
+			</div>
 		</div>
 
-		<p class="mb-8 text-muted-foreground">{i18n.t('concerts.description')}</p>
 
 		<Tabs.Content value="concerts">
 			{#if concerts.length === 0}
@@ -209,4 +227,16 @@
 			</Card>
 		</Tabs.Content>
 	</Tabs.Root>
+
+	<Dialog.Root bind:open={showStats}>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Title>{i18n.t('concerts.stats')}</Dialog.Title>
+				<Dialog.Description>
+					{i18n.t('concerts.artist_frequency_description')}
+				</Dialog.Description>
+			</Dialog.Header>
+			<ConcertStats concerts={data.concerts} festivals={data.festivals} />
+		</Dialog.Content>
+	</Dialog.Root>
 </div>
