@@ -150,61 +150,63 @@
 			{/if}
 		</Tabs.Content>
 		<Tabs.Content value="festivals">
-			{#if festivals.length === 0}
-				<div class="py-20 text-center">
-					<p class="text-lg text-muted-foreground">{i18n.t('concerts.no_concerts')}</p>
-				</div>
-			{:else}
-				<Accordion.Root type="single" class="w-full">
-					{#each festivals as festival}
-						<Accordion.Item value={festival.name + festival.year} class="border-b">
-							<Accordion.Trigger class="hover:no-">
-								<div class="flex w-full items-center justify-between pr-4">
-									<div class="flex items-center gap-3">
-										<Ticket class="h-5 w-5 text-primary" />
-										<div class="flex flex-col items-start">
-											<span class="font-bold">{festival.name} {festival.year}</span>
-											{#if festival.location}
-												<span class="text-xs text-muted-foreground">{festival.location}</span>
-											{/if}
+			<Card class="w-full px-3">
+				{#if festivals.length === 0}
+					<div class="py-20 text-center">
+						<p class="text-lg text-muted-foreground">{i18n.t('concerts.no_concerts')}</p>
+					</div>
+				{:else}
+					<Accordion.Root type="single" class="w-full">
+						{#each festivals as festival}
+							<Accordion.Item value={festival.name + festival.year} class="border-b">
+								<Accordion.Trigger class="hover:no-underline">
+									<div class="flex w-full items-center justify-between pr-4">
+										<div class="flex items-center gap-3">
+											<Ticket class="h-5 w-5 text-primary" />
+											<div class="flex flex-col items-start">
+												<span class="font-bold">{festival.name} {festival.year}</span>
+												{#if festival.location}
+													<span class="text-xs text-muted-foreground">{festival.location}</span>
+												{/if}
+											</div>
 										</div>
-									</div>
-									<div class="flex items-center gap-2">
-										<span class="text-xs text-muted-foreground">
-											{festival.artists.length} artists
-										</span>
-										{#if festival.url}
-											<a
-												href={festival.url}
-												target="_blank"
-												class="text-muted-foreground hover:text-primary"
-												onclick={(e) => e.stopPropagation()}
-											>
-												<ExternalLink class="h-4 w-4" />
-											</a>
-										{/if}
-									</div>
-								</div>
-							</Accordion.Trigger>
-							<Accordion.Content>
-								<div class="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-									{#each festival.artists as artist}
-										<div class="flex items-center gap-2 rounded-md bg-secondary/50 p-2 text-sm">
-											<Music class="h-3 w-3 text-primary" />
-											<span class="flex-1 truncate">{artist.name}</span>
-											{#if artist.mbid}
-												<a href={getMusicBrainzUrl(artist.mbid)} target="_blank">
-													<Info class="h-3 w-3 text-muted-foreground hover:text-primary" />
+										<div class="flex items-center gap-2">
+											<span class="text-xs text-muted-foreground">
+												{festival.artists.length} artists
+											</span>
+											{#if festival.url}
+												<a
+													href={festival.url}
+													target="_blank"
+													class="text-muted-foreground hover:text-primary"
+													onclick={(e) => e.stopPropagation()}
+												>
+													<ExternalLink class="h-4 w-4" />
 												</a>
 											{/if}
 										</div>
-									{/each}
-								</div>
-							</Accordion.Content>
-						</Accordion.Item>
-					{/each}
-				</Accordion.Root>
-			{/if}
+									</div>
+								</Accordion.Trigger>
+								<Accordion.Content>
+									<div class="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+										{#each festival.artists as artist}
+											<div class="flex items-center gap-2 rounded-md bg-secondary/50 p-2 text-sm">
+												<Music class="h-3 w-3 text-primary" />
+												<span class="flex-1 truncate">{artist.name}</span>
+												{#if artist.mbid}
+													<a href={getMusicBrainzUrl(artist.mbid)} target="_blank">
+														<Info class="h-3 w-3 text-muted-foreground hover:text-primary" />
+													</a>
+												{/if}
+											</div>
+										{/each}
+									</div>
+								</Accordion.Content>
+							</Accordion.Item>
+						{/each}
+					</Accordion.Root>
+				{/if}
+			</Card>
 		</Tabs.Content>
 	</Tabs.Root>
 </div>
