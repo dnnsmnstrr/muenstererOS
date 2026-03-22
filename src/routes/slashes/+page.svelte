@@ -11,7 +11,7 @@
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { createWebHaptics } from 'web-haptics/svelte';
 
-	const { trigger, destroy } = createWebHaptics();
+	const { trigger, destroy } = createWebHaptics({ debug: window?.localStorage.debug, showSwitch: false });
 
 	const slashes = [
 		{ label: '/about', href: '/about', description: '' },
@@ -136,10 +136,14 @@
 		return Math.floor(((((270 - r) % 360) + 360) % 360) / segmentAngle);
 	});
 
-	let lastTriggeredIndex = $state(winningIndex);
+	let lastTriggeredIndex = $state(-1);
 	$effect(() => {
+		// Initialize lastTriggeredIndex on first run
+		if (lastTriggeredIndex === -1) {
+			lastTriggeredIndex = winningIndex;
+		}
 		if (winningIndex !== lastTriggeredIndex) {
-			trigger('selection');
+			trigger(100);
 			lastTriggeredIndex = winningIndex;
 		}
 	});
@@ -157,7 +161,7 @@
 	<meta name="description" content={i18n.t('slashes.description')} />
 </svelte:head>
 
-<div class="relative flex w-full flex-col items-center pb-20">
+<div class="relative flex w-full flex-col items-center pb-80 overflow-hidden">
 	<div class="container mt-4 flex items-start justify-between gap-4 flex-row">
 		<Heading
 			>{i18n.t('slashes.title')}
@@ -175,7 +179,7 @@
 		</Button>
 	</div>
 
-	<div class="flex w-full flex-col px-4 text-center min-h-60 min-h-48">
+	<div class="flex w-full flex-col px-4 text-center min-h-48">
 		<div
 			class={cn(
 				'flex w-full flex-1 flex-col items-center justify-center transition-all duration-300',
