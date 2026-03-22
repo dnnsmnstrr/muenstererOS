@@ -25,7 +25,9 @@
 		backgroundTexture,
 		backgroundSize,
 		backgroundSpacing,
-		theme as themeStore
+		theme as themeStore,
+		DEFAULT_BACKGROUND_SIZE,
+		DEFAULT_BACKGROUND_SPACING
 	} from '$lib/stores/app';
 	import { Bug, Check } from 'lucide-svelte';
 	import { Separator } from '$lib/components/ui/separator';
@@ -129,22 +131,29 @@
 					<div class="flex flex-col space-y-2">
 						<h2>{i18n.t('settings.mode')}</h2>
 						<RadioGroup.Root
-							class="flex flex-col space-y-1"
+							class="md: flex flex-col gap-4 space-y-1 md:flex-row"
 							value={$mode}
 							onValueChange={handleModeChange}
 							{...props}
 						>
 							<div class="flex items-center space-x-3 space-y-0">
 								<RadioGroup.Item value="light" id="light" />
-								<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
+								<Form.Label
+									for="light"
+									class="font-normal"
+									onclick={() => handleModeChange('light')}>{i18n.t('settings.light')}</Form.Label
+								>
 							</div>
 							<div class="flex items-center space-x-3 space-y-0">
 								<RadioGroup.Item value="dark" id="dark" />
-								<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
+								<Form.Label for="dark" class="font-normal" onclick={() => handleModeChange('dark')}
+									>{i18n.t('settings.dark')}</Form.Label
+								>
 							</div>
 							<div class="flex items-center space-x-3 space-y-0">
 								<RadioGroup.Item value="" id="system" />
-								<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label
+								<Form.Label for="system" class="font-normal" onclick={() => handleModeChange('')}
+									>{i18n.t('settings.system')}</Form.Label
 								>
 							</div>
 						</RadioGroup.Root>
@@ -184,7 +193,15 @@
 						{#snippet children({ props })}
 							<div class="flex flex-col space-y-2">
 								<Form.Label>{i18n.t('settings.texture')}</Form.Label>
-								<Select.Root type="single" bind:value={$backgroundTexture} name={props.name}>
+								<Select.Root
+									type="single"
+									bind:value={$backgroundTexture}
+									name={props.name}
+									onValueChange={() => {
+										$backgroundSize = DEFAULT_BACKGROUND_SIZE;
+										$backgroundSpacing = DEFAULT_BACKGROUND_SPACING;
+									}}
+								>
 									<Select.Trigger {...props} class="w-full">
 										{$backgroundTexture
 											? i18n.t(`settings.${$backgroundTexture}`)
@@ -205,18 +222,19 @@
 				</Form.Field>
 
 				{#if $backgroundTexture !== 'none'}
-					<div class="grid grid-cols-2 gap-4">
+					<div class="flex gap-4">
 						<Form.Field {form} name="backgroundSize" class="flex flex-col justify-between gap-2">
 							<Form.Control>
 								{#snippet children({ props })}
 									<Form.Label>{i18n.t('settings.texture_size')}</Form.Label>
 									<Input
 										type="number"
+										class="w-20"
 										bind:value={$backgroundSize}
 										{...props}
-										min="1"
-										max="20"
-										step="1"
+										min="0.5"
+										max="24"
+										step="0.5"
 									/>
 								{/snippet}
 							</Form.Control>
