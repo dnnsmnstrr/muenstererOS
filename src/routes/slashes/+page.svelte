@@ -11,7 +11,6 @@
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { createWebHaptics } from 'web-haptics/svelte';
 	import { Volume2, VolumeX } from 'lucide-svelte';
-	import { set } from 'zod';
 
 	let isMuted = $state(window.localStorage.getItem('slashes_muted') === 'true');
 	const { trigger, destroy, setDebug, isSupported } = createWebHaptics({
@@ -102,7 +101,10 @@
 	function applyMomentum() {
 		rotation += velocity * 16;
 		velocity *= 0.95;
-		if (Math.abs(velocity) > 0.01) {
+		const SPIN_THRESHOLD = 0.6;
+		if (Math.abs(velocity) > SPIN_THRESHOLD) {
+			spin();
+		} else if (Math.abs(velocity) > 0.01) {
 			momentumId = requestAnimationFrame(applyMomentum);
 		} else {
 			momentumId = null;
@@ -180,10 +182,8 @@
 			{#if !isSupported}
 				<Button
 					onclick={() => {
-						console.log(isMuted)
 						setDebug(!isMuted);
 						isMuted = !isMuted;
-						console.log(isMuted)
 						window.localStorage.setItem('slashes_muted', isMuted.toString());
 					}}
 					variant="secondary"
