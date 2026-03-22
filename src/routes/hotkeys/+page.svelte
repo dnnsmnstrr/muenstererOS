@@ -8,6 +8,8 @@
 	import { getRedirectByName } from '$lib/redirects';
 	import { Button } from '$lib/components/ui/button';
 	import { isCommandActive } from '$lib/stores/app';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	const raycastUrl = getRedirectByName('raycast')?.url;
 
 	// Raycast shortcuts configuration
@@ -203,34 +205,41 @@
 </script>
 
 <svelte:head>
-	<meta name="description" content="My Raycast configuration and keyboard shortcuts" />
+	<title>{i18n.t('hotkeys.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('hotkeys.description')} />
 </svelte:head>
 
 <div class="container">
 	<div class="mb-6 flex items-center justify-between">
-		<Heading class="mb-0">Hotkeys</Heading>
+		<Heading class="mb-0">{i18n.t('hotkeys.title')}</Heading>
 		<Button
 			variant="outline"
-			title="Referral link to Raycast"
+			title={i18n.t('hotkeys.referral_title')}
 			href={raycastUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 			class="flex items-center gap-2 text-sm text-muted-foreground ring-1 ring-red-500/50 mt-1"
 		>
 			<img src={Raycast} alt="Raycast" class="h-4 w-4" />
-			<span>Try Raycast</span>
+			<span>{i18n.t('hotkeys.try_raycast')}</span>
 		</Button>
 	</div>
 
 	<div class="my-8">
 		<p class="text-card-foreground leading-loose">
-			Since Raycast introduced the <Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">Hyper Key</Link>, 
-			I've become a big fan and heavy user of this additional productivity layer. 
-			<br>
-			Hyper <Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd> means all modifier keys (<Kbd class="font-bold">{hyperKeys}</Kbd>) are triggered simultaneously with a single key, usually <Kbd class="font-bold">Caps Lock</Kbd>.
-			<br>
-			Here is an overview of the hotkeys I have defined and use across multiple devices for my daily workflow. 
-			
+			{i18n.t('hotkeys.intro_1')}
+			<Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer"
+				>{i18n.t('hotkeys.hyper_key')}</Link
+			>{i18n.t('hotkeys.intro_2')}
+			<br />
+			{i18n.t('hotkeys.hyper_desc_1')}
+			<Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd>
+			{i18n.t('hotkeys.hyper_desc_2')}<Kbd class="font-bold">{hyperKeys}</Kbd>{i18n.t(
+				'hotkeys.hyper_desc_3'
+			)}
+			<Kbd class="font-bold">Caps Lock</Kbd>.
+			<br />
+			{i18n.t('hotkeys.overview')}
 		</p>
 	</div>
 
@@ -241,7 +250,7 @@
 				<VirtualKeyboard {shortcuts} />
 				<div class="mt-4 text-center">
 					<div class="text-sm text-muted-foreground">
-						Hover over highlighted keys to see their Raycast shortcuts (or try typing a key)
+						{i18n.t('hotkeys.keyboard_hint')}
 					</div>
 				</div>
 			</Card.Content>
@@ -252,9 +261,9 @@
 			<Card.Header>
 				<Card.Title class="flex items-center gap-2">
 					<Command class="h-5 w-5" />
-					Shortcuts Reference
+					{i18n.t('hotkeys.reference_title')}
 				</Card.Title>
-				<Card.Description>Some of my Raycast shortcuts. (Window management uses the arrow keys)</Card.Description>
+				<Card.Description>{i18n.t('hotkeys.reference_description')}</Card.Description>
 			</Card.Header>
 			<Card.Content>
 				<div class="space-y-3">
@@ -268,7 +277,7 @@
 										<div class="font-medium">{shortcut.action}
 											{#if shortcut.url}
 												<a href={shortcut.url} target="_blank" rel="noopener noreferrer" class="ml-1">
-													<Kbd class="text-xs">Extension</Kbd>
+													<Kbd class="text-xs">{i18n.t('hotkeys.extension')}</Kbd>
 												</a>
 											{/if}
 										</div>
@@ -295,14 +304,12 @@
 	</div>
 
 	<div class="my-8 rounded-lg border bg-muted/50 p-4">
-		<h3 class="mb-2 font-semibold">About Raycast</h3>
+		<h3 class="mb-2 font-semibold">{i18n.t('hotkeys.about_title')}</h3>
 		<p class="text-sm text-muted-foreground pb-4">
-			Raycast is a blazingly fast, totally extendable launcher for Mac. It lets you complete tasks,
-			calculate, share common links, and much more. This page showcases my personal configuration
-			and the shortcuts I use daily to boost productivity.
+			{i18n.t('hotkeys.about_description')}
 			<br><br>
-			<Link href={raycastUrl} target="_blank" rel="noopener noreferrer">Learn more about Raycast</Link> 
-			(referral link)
+			<Link href={raycastUrl} target="_blank" rel="noopener noreferrer">{i18n.t('hotkeys.learn_more')}</Link>
+			({i18n.t('hotkeys.referral_title')})
 		</p>
 	</div>
 </div>

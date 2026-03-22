@@ -399,5 +399,25 @@
 		"finish": "Setup abschließen",
 		"notification": "Willkommen! Möchtest du dein Erlebnis anpassen?",
 		"notification_link": "Onboarding starten"
+	},
+	"hotkeys": {
+		"title": "Hotkeys",
+		"description": "Meine Raycast-Konfiguration und Tastenkombinationen",
+		"try_raycast": "Raycast ausprobieren",
+		"referral_title": "Empfehlungslink zu Raycast",
+		"keyboard_hint": "Bewege die Maus über markierte Tasten, um deren Raycast-Kürzel zu sehen (oder drücke eine Taste)",
+		"reference_title": "Tastenkombinationen-Referenz",
+		"reference_description": "Einige meiner Raycast-Shortcuts. (Fenstermanagement nutzt die Pfeiltasten)",
+		"extension": "Erweiterung",
+		"about_title": "Über Raycast",
+		"about_description": "Raycast ist ein blitzschneller, vollständig erweiterbarer Launcher für Mac. Er ermöglicht es dir, Aufgaben zu erledigen, Berechnungen durchzuführen, häufig genutzte Links zu teilen und vieles mehr. Diese Seite zeigt meine persönliche Konfiguration und die Kürzel, die ich täglich verwende, um meine Produktivität zu steigern.",
+		"learn_more": "Mehr über Raycast erfahren",
+		"intro_1": "Seit Raycast den",
+		"intro_2": "eingeführt hat, bin ich ein großer Fan und intensiver Nutzer dieser zusätzlichen Produktivitätsebene geworden.",
+		"hyper_key": "Hyper Key",
+		"hyper_desc_1": "Hyper",
+		"hyper_desc_2": "bedeutet, dass alle Modifikatortasten (",
+		"hyper_desc_3": ") gleichzeitig mit einer einzigen Taste ausgelöst werden, normalerweise",
+		"overview": "Hier ist eine Übersicht über die Hotkeys, die ich für meinen täglichen Arbeitsablauf auf mehreren Geräten definiert habe und verwende."
 	}
 }

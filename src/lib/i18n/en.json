@@ -400,5 +400,25 @@
 		"finish": "Finish Setup",
 		"notification": "Welcome! Want to customize your experience?",
 		"notification_link": "Start Onboarding"
+	},
+	"hotkeys": {
+		"title": "Hotkeys",
+		"description": "My Raycast configuration and keyboard shortcuts",
+		"try_raycast": "Try Raycast",
+		"referral_title": "Referral link to Raycast",
+		"keyboard_hint": "Hover over highlighted keys to see their Raycast shortcuts (or try typing a key)",
+		"reference_title": "Shortcuts Reference",
+		"reference_description": "Some of my Raycast shortcuts. (Window management uses the arrow keys)",
+		"extension": "Extension",
+		"about_title": "About Raycast",
+		"about_description": "Raycast is a blazingly fast, totally extendable launcher for Mac. It lets you complete tasks, calculate, share common links, and much more. This page showcases my personal configuration and the shortcuts I use daily to boost productivity.",
+		"learn_more": "Learn more about Raycast",
+		"intro_1": "Since Raycast introduced the",
+		"intro_2": ", I've become a big fan and heavy user of this additional productivity layer.",
+		"hyper_key": "Hyper Key",
+		"hyper_desc_1": "Hyper",
+		"hyper_desc_2": "means all modifier keys (",
+		"hyper_desc_3": ") are triggered simultaneously with a single key, usually",
+		"overview": "Here is an overview of the hotkeys I have defined and use across multiple devices for my daily workflow."
 	}
 }
