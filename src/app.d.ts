@@ -12,4 +12,6 @@ declare global {
 	}
 }
 
+declare module 'web-haptics/svelte';
+
 export {};

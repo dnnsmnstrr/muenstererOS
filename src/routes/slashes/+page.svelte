@@ -9,6 +9,14 @@
 	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { createWebHaptics } from 'web-haptics/svelte';
+	import { Volume2, VolumeX } from 'lucide-svelte';
+
+	let isMuted = $state(window.localStorage.getItem('slashes_muted') === 'true');
+	const { trigger, destroy, setDebug, isSupported } = createWebHaptics({
+		debug: true,
+		showSwitch: false
+	});
 
 	const slashes = [
 		{ label: '/about', href: '/about', description: '' },
@@ -93,7 +101,10 @@
 	function applyMomentum() {
 		rotation += velocity * 16;
 		velocity *= 0.95;
-		if (Math.abs(velocity) > 0.01) {
+		const SPIN_THRESHOLD = 0.6;
+		if (Math.abs(velocity) > SPIN_THRESHOLD) {
+			spin();
+		} else if (Math.abs(velocity) > 0.01) {
 			momentumId = requestAnimationFrame(applyMomentum);
 		} else {
 			momentumId = null;
@@ -133,9 +144,22 @@
 		return Math.floor(((((270 - r) % 360) + 360) % 360) / segmentAngle);
 	});
 
+	let lastTriggeredIndex = $state(-1);
+	$effect(() => {
+		// Initialize lastTriggeredIndex on first run
+		if (lastTriggeredIndex === -1) {
+			lastTriggeredIndex = winningIndex;
+		}
+		if (winningIndex !== lastTriggeredIndex) {
+			trigger(100);
+			lastTriggeredIndex = winningIndex;
+		}
+	});
+
 	onMount(() => {
 		return () => {
 			if (momentumId) cancelAnimationFrame(momentumId);
+			destroy();
 		};
 	});
 </script>
@@ -145,8 +169,8 @@
 	<meta name="description" content={i18n.t('slashes.description')} />
 </svelte:head>
 
-<div class="relative flex w-full flex-col items-center pb-20">
-	<div class="container mt-4 flex items-start justify-between gap-4 flex-row">
+<div class="relative flex w-full flex-col items-center overflow-hidden pb-80">
+	<div class="container mt-4 flex flex-row items-start justify-between gap-4">
 		<Heading
 			>{i18n.t('slashes.title')}
 			<p class="mt-2 max-w-md text-sm opacity-80 sm:text-base">
@@ -154,16 +178,38 @@
 			</p>
 		</Heading>
 
-		<Button
-			onclick={spin}
-			disabled={isSpinning}
-			class="transition-all hover:scale-105 active:scale-95"
-		>
-			{isSpinning ? i18n.t('slashes.good_luck') : i18n.t('slashes.spin')}
-		</Button>
+		<div class="flex items-center gap-2">
+			{#if !isSupported}
+				<Button
+					onclick={() => {
+						setDebug(!isMuted);
+						isMuted = !isMuted;
+						window.localStorage.setItem('slashes_muted', isMuted.toString());
+					}}
+					variant="secondary"
+					aria-label={isMuted
+						? i18n.t('slashes.unmute')
+						: i18n.t('slashes.mute')}
+				>
+					{#if isMuted}
+						<Volume2 class="h-4 w-4" />
+					{:else}
+						<VolumeX class="h-4 w-4" />
+					{/if}
+				</Button>
+			{/if}
+
+			<Button
+				onclick={spin}
+				disabled={isSpinning}
+				class="transition-all hover:scale-105 active:scale-95 min-w-28"
+			>
+				{isSpinning ? i18n.t('slashes.good_luck') : i18n.t('slashes.spin')}
+			</Button>
+		</div>
 	</div>
 
-	<div class="flex w-full flex-col px-4 text-center min-h-60 min-h-48">
+	<div class="flex min-h-48 w-full flex-col px-4 text-center">
 		<div
 			class={cn(
 				'flex w-full flex-1 flex-col items-center justify-center transition-all duration-300',
