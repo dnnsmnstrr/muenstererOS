@@ -202,7 +202,7 @@
 			<Button
 				onclick={spin}
 				disabled={isSpinning}
-				class="transition-all hover:scale-105 active:scale-95"
+				class="transition-all hover:scale-105 active:scale-95 min-w-28"
 			>
 				{isSpinning ? i18n.t('slashes.good_luck') : i18n.t('slashes.spin')}
 			</Button>
