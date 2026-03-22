@@ -73,3 +73,21 @@ backgroundTexture.subscribe((value) => {
 		window.localStorage.backgroundTexture = String(value);
 	}
 });
+
+export const DEFAULT_BACKGROUND_SIZE = 1;
+const storedBackgroundSize = browser ? window?.localStorage?.backgroundSize : String(DEFAULT_BACKGROUND_SIZE);
+export const backgroundSize = writable<number>(Number(storedBackgroundSize) || DEFAULT_BACKGROUND_SIZE);
+backgroundSize.subscribe((value) => {
+	if (browser && window?.localStorage) {
+		window.localStorage.backgroundSize = String(value);
+	}
+});
+
+export const DEFAULT_BACKGROUND_SPACING = 16;
+const storedBackgroundSpacing = browser ? window?.localStorage?.backgroundSpacing : String(DEFAULT_BACKGROUND_SPACING);
+export const backgroundSpacing = writable<number>(Number(storedBackgroundSpacing) || DEFAULT_BACKGROUND_SPACING);
+backgroundSpacing.subscribe((value) => {
+	if (browser && window?.localStorage) {
+		window.localStorage.backgroundSpacing = String(value);
+	}
+});
