@@ -26,7 +26,7 @@
 			</Typewriter>
 		</Card.Description>
 		<Card.Footer class="hidden p-0 pt-2 md:block">
-			<Button href={links.cv} size="sm" class="u-url">{i18n.t('profile.find_out_more')}</Button>
+			<Button href={links.cv  + (i18n.lang === 'de' ? '#de' : '')} size="sm" class="u-url">{i18n.t('profile.find_out_more')}</Button>
 		</Card.Footer>
 	</div>
 </Card.Header>
