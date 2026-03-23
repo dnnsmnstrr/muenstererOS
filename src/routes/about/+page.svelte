@@ -10,6 +10,7 @@
 	import { Github } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { formatDate } from '$lib/utils/helper';
 
 	interface Status {
@@ -62,7 +63,7 @@
 </script>
 
 <svelte:head>
-	<title>{i18n.t('about.title')}</title>
+	<title>{i18n.t('about.title')}{PAGE_TITLE_SUFFIX}</title>
 	<meta name="description" content={i18n.t('about.title')} />
 </svelte:head>
 

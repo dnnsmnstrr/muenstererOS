@@ -4,6 +4,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { formatDateTime } from '$lib/utils/helper';
 
 	let { data } = $props();
@@ -26,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>{i18n.t('status.title')}</title>
+	<title>{i18n.t('status.title')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <div class="container mx-auto max-w-2xl p-4">
