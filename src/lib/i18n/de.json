@@ -386,7 +386,9 @@
 		"view_on_musicbrainz": "Auf MusicBrainz ansehen",
 		"stats": "Statistiken",
 		"artist_frequency": "Künstler-Frequenz",
-		"artist_frequency_description": "Das sind die Künstler, die ich am häufigsten live gesehen habe."
+		"artist_frequency_description": "Das sind die Künstler, die ich am häufigsten live gesehen habe.",
+		"artists_one": "1 Künstler",
+		"artists_many": "{count} Künstler"
 	},
 	"where": {
 		"title": "Wo ich mich gerade befinde",
