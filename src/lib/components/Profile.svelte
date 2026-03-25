@@ -1,10 +1,23 @@
 <script>
 	import * as Card from '$lib/components/ui/card';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { NAME_ABBREVIATION, OWNER_NAME, descriptions, links } from '$lib/config';
+	import { NAME_ABBREVIATION, OWNER_NAME, links } from '$lib/config';
 	import Typewriter from 'svelte-typewriter';
 	import { Button } from './ui/button';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+
+	const descriptions = $derived([
+		{ name: '🤖💻📱⌚🎧', href: links.yat },
+		{ name: '💻 ' + i18n.t('profile.descriptions.occupation'), href: links.cv },
+		{ name: '🤖 ' + i18n.t('profile.descriptions.builder'), href: links.makerer },
+		'📱 ' + i18n.t('profile.descriptions.coder'),
+		'🍕 ' + i18n.t('profile.descriptions.pizza'),
+		{ name: '💚 ' + i18n.t('profile.descriptions.backer'), href: links.kickstarter },
+		{ name: '🎧 ' + i18n.t('profile.descriptions.music'), href: links.spotify },
+		{ name: '📺 ' + i18n.t('profile.descriptions.movies'), href: links.imdb },
+		{ name: '🧡 ' + i18n.t('profile.descriptions.printer'), href: links.printables },
+		{ name: '🌟 ' + i18n.t('profile.descriptions.stargazer'), href: links.github + '?tab=stars' }
+	]);
 </script>
 
 <Card.Header class="h-card mt-4 flex flex-row flex-wrap items-center justify-start gap-6 md:mt-0">
