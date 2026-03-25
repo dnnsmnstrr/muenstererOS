@@ -15,8 +15,15 @@ interface Edge {
 	target: string;
 }
 
+interface CacheEntry {
+	links: string[];
+	timestamp: number;
+}
+
 const MAX_DEPTH = 3; // 3 levels deep as requested
 const MAX_NODES = 100; // Limit nodes to avoid timeouts
+const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 hours
+const linkCache = new Map<string, CacheEntry>();
 
 const EXCLUDED_DOMAINS = [
 	'github.com',
@@ -99,6 +106,11 @@ function isPersonal(url: string): boolean {
 }
 
 async function getLinks(url: string): Promise<string[]> {
+	const cached = linkCache.get(url);
+	if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+		return cached.links;
+	}
+
 	try {
 		const response = await fetch(url, {
 			headers: {
@@ -166,7 +178,9 @@ async function getLinks(url: string): Promise<string[]> {
 				// Invalid URL
 			}
 		}
-		return Array.from(links);
+		const result = Array.from(links);
+		linkCache.set(url, { links: result, timestamp: Date.now() });
+		return result;
 	} catch (e) {
 		console.error(`Failed to fetch links from ${url}:`, e);
 		return [];
