@@ -109,9 +109,7 @@
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
-		b: '/buttons',
 		c: '/concerts',
-		e: '/experiment',
 		i: '/legal', // impressum
 		l: '/legal',
 		p: '/projects',
@@ -399,9 +397,7 @@
 		navigation: [
 			{ name: i18n.t('common.home'), icon: Home, href: '/' },
 			{ name: i18n.t('common.about'), icon: User, href: '/about' },
-			{ name: i18n.t('common.buttons'), icon: LayoutGrid, href: '/buttons' },
-			{ name: i18n.t('common.concerts'), icon: Ticket, href: '/concerts' },
-			...pages.filter((page) => !['/', '/about', '/settings', '/buttons', '/concerts'].includes(page.href || '')), // avoid duplicates with static navigation links
+			...pages.filter((page) => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
 			{
 				name: i18n.t('command.search_zettelkasten'),
 				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],

@@ -23,7 +23,7 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard } from 'lucide-svelte';
+	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard, Ticket, IdCard, FerrisWheel, Network } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
@@ -181,14 +181,16 @@
 		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
 		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
-		{ name: 'Buttons', href: '/buttons', icon: LayoutGrid, hidden: true },
 		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
-		{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },
+		{ name: 'Slashes', href: '/slashes', icon: FerrisWheel, hidden: true },
 		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
     	{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
+		{ name: 'Buttons', href: '/buttons', icon: IdCard, hidden: true },
+		{ name: 'Concerts', href: '/concerts', icon: Ticket, hidden: true },
+		{ name: 'Sites', href: '/sites', icon: Network, hidden: true },
 	];
 	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
 		...b,
