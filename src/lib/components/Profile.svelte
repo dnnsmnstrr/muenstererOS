@@ -28,15 +28,17 @@
 	<div class="flex flex-col gap-2">
 		<Card.Title class="p-name">{OWNER_NAME}</Card.Title>
 		<Card.Description class="h-6">
-			<Typewriter mode="loopRandom" interval={100} delay={0} cursor={false}>
-				{#each descriptions as description}
-					{#if typeof description === 'object'}
-						<a href={description.href} target="_blank">{description.name}</a>
-					{:else}
-						<span>{description}</span>
-					{/if}
-				{/each}
-			</Typewriter>
+			{#key i18n.lang}
+				<Typewriter mode="loopRandom" interval={100} delay={0} cursor={false}>
+					{#each descriptions as description}
+						{#if typeof description === 'object'}
+							<a href={description.href} target="_blank">{description.name}</a>
+						{:else}
+							<span>{description}</span>
+						{/if}
+					{/each}
+				</Typewriter>
+			{/key}
 		</Card.Description>
 		<Card.Footer class="hidden p-0 pt-2 md:block">
 			<Button href={links.cv  + (i18n.lang === 'de' ? '#de' : '')} size="sm" class="u-url">{i18n.t('profile.find_out_more')}</Button>
