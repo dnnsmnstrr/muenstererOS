@@ -384,7 +384,7 @@
 		"title": "Konzerte & Festivals",
 		"description": "Eine Sammlung von Live-Musik-Events, die ich besucht habe.",
 		"last_updated": "Zuletzt aktualisiert:",
-		"artist": "Künstler",
+		"artist": "Künstler:in",
 		"venue": "Veranstaltungsort",
 		"location": "Ort",
 		"date": "Datum",
@@ -396,8 +396,10 @@
 		"no_concerts": "Keine Konzerte gefunden.",
 		"view_on_musicbrainz": "Auf MusicBrainz ansehen",
 		"stats": "Statistiken",
-		"artist_frequency": "Künstler-Frequenz",
-		"artist_frequency_description": "Das sind die Künstler, die ich am häufigsten live gesehen habe."
+		"artist_frequency": "Künstler:innen-Frequenz",
+		"artist_frequency_description": "Das sind die Künstler:innen, die ich am häufigsten live gesehen habe.",
+		"artists_one": "1 Künstler:in",
+		"artists_many": "{count} Künstler:innen"
 	},
 	"where": {
 		"title": "Wo ich mich gerade befinde",
