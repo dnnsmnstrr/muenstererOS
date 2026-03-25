@@ -119,6 +119,7 @@ export const redirects: Redirect[] = [
 	},
 	{
 		name: 'zettelkasten',
+		url: links.pages + '/zettelkasten',
 		aliases: ['z', 'n', 'zk', 'zettel', 'notes', 'slipbox', 'knowlege', '📔', '📓', '🗃️']
 	},
 	{

@@ -15,37 +15,34 @@ export function getRedirect(query: string, redirects: Redirect[], options?: Redi
 		options.log('query', query);
 	}
 	let redirect: Redirect = { name: '' };
-	switch (query) {
-		// special cases
-		case 'random':
-			redirect = redirects[Math.floor(Math.random() * redirects.length)];
-			break;
-		default:
-			// search for redirect
-			const foundRedirect = redirects.find(({ name = '', aliases = [] }) => {
-				const lowerCaseQuery = query.toLowerCase();
-				return (
-					name.toLowerCase() === lowerCaseQuery ||
-					aliases.some((alias) => alias.toLowerCase() === lowerCaseQuery)
-				);
-			});
-			if (foundRedirect) {
-				redirect = foundRedirect;
-			}
+	const [baseQuery, ...rest] = query.split('/').filter(Boolean);
+	if (baseQuery === 'random') {
+		redirect = redirects[Math.floor(Math.random() * redirects.length)];
+	} else if (baseQuery) {
+		const foundRedirect = redirects.find(({ name = '', aliases = [] }) => {
+			const lowerCaseQuery = baseQuery.toLowerCase();
+			return (
+				name.toLowerCase() === lowerCaseQuery ||
+				aliases.some((alias) => alias.toLowerCase() === lowerCaseQuery)
+			);
+		});
+		if (foundRedirect) {
+			redirect = foundRedirect;
+		}
 	}
 
-	return options?.returnObject ? redirect : getRedirectURL(redirect, { query, ...options });
+	return options?.returnObject ? redirect : getRedirectURL(redirect, { query, restPath: rest.join('/'), ...options });
 }
 
 export const getRedirectURL = (
 	{ url, name }: Redirect,
-	{ query, noReturn }: { query?: string } & RedirectOptions = {}
+	{ query, restPath, noReturn }: { query?: string; restPath?: string } & RedirectOptions = {}
 ) => {
 	let path = '';
 	if (url) {
-		path = `${url}${path}`;
+		path = `${url}${path}${restPath ? `/${restPath}` : ''}`;
 	} else if (name) {
-		path = `/${name}${path}`;
+		path = `/${name}${path}${restPath ? `/${restPath}` : ''}`;
 	} else {
 		// a failed redirect will end up back here, therefore the 'noReturn' parameter is used to avoid endless loops on redirect attempts
 		path = `/404/${!noReturn ? query : ''}`;
