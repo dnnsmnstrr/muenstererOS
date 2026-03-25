@@ -70,7 +70,18 @@
 		"rights_reserved": "Alle Rechte vorbehalten"
 	},
 	"profile": {
-		"find_out_more": "Mehr erfahren..."
+		"find_out_more": "Mehr erfahren...",
+		"descriptions": {
+			"occupation": "Softwareentwickler",
+			"builder": "Erbauer von Dingen",
+			"coder": "Programmierer von Apps",
+			"pizza": "Pizzaliebhaber",
+			"backer": "Unterstützer von Projekten",
+			"music": "Musikbegeisterter",
+			"movies": "Filmliebhaber",
+			"printer": "Drucker von Objekten",
+			"stargazer": "Sterngucker"
+		}
 	},
 	"settings": {
 		"title": "Einstellungen",

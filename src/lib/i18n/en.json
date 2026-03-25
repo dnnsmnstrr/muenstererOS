@@ -69,7 +69,18 @@
 		"rights_reserved": "All rights reserved"
 	},
 	"profile": {
-		"find_out_more": "Find out more..."
+		"find_out_more": "Find out more...",
+		"descriptions": {
+			"occupation": "Software Developer",
+			"builder": "Builder of Things",
+			"coder": "Coder of Apps",
+			"pizza": "Pizza lover",
+			"backer": "Backer of Projects",
+			"music": "Music enthusiast",
+			"movies": "Watcher of Movies",
+			"printer": "Printer of Objects",
+			"stargazer": "Stargazer"
+		}
 	},
 	"settings": {
 		"title": "Settings",
