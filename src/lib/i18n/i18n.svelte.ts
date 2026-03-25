@@ -18,11 +18,11 @@ class TranslationService {
 	}
 
 	async setLanguage(newLang: Language) {
+		await this.loadTranslations(newLang);
 		this.lang = newLang;
 		if (browser) {
 			localStorage.setItem('language', newLang);
 		}
-		await this.loadTranslations(newLang);
 	}
 
 	private async loadTranslations(l: Language) {
