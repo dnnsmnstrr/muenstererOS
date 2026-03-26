@@ -1,4 +1,13 @@
 {
+	"duration": {
+		"y": "J",
+		"mo": "M",
+		"w": "W",
+		"d": "T",
+		"h": "Std",
+		"m": "Min",
+		"s": "Sek"
+	},
 	"common": {
 		"home": "Startseite",
 		"settings": "Einstellungen",
@@ -200,7 +209,8 @@
 		"page_count": "Seitenanzahl",
 		"cv_status": "CV-Status",
 		"online": "online",
-		"offline": "offline"
+		"offline": "offline",
+		"unknown": "unbekannt"
 	},
 	"now_playing": {
 		"title": "Aktuelle Wiedergabe",
