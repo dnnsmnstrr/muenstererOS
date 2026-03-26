@@ -11,9 +11,7 @@
 		Cloud,
 		Turntable,
 		Info,
-
 		ChartBar
-
 	} from 'lucide-svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
@@ -77,32 +75,34 @@
 
 <div class="container mx-auto p-4">
 	<Tabs.Root bind:value={activeTab}>
-		<div class="mb-4 flex flex-col sm:flex-row w-full sm:items-start gap-2 justify-between">
+		<div class="mb-4 flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-start">
 			<div class="flex flex-col gap-2">
-				<Tabs.List class="w-fit border-none py-7 px-2">
-					<Tabs.Trigger class="text-2xl" value="concerts">{i18n.t('concerts.concerts')}</Tabs.Trigger>
-					<Tabs.Trigger class="text-2xl" value="festivals">{i18n.t('concerts.festivals')}</Tabs.Trigger>
+				<Tabs.List class="w-fit border-none px-2 py-7">
+					<Tabs.Trigger class="text-2xl" value="concerts"
+						>{i18n.t('concerts.concerts')}</Tabs.Trigger
+					>
+					<Tabs.Trigger class="text-2xl" value="festivals"
+						>{i18n.t('concerts.festivals')}</Tabs.Trigger
+					>
 				</Tabs.List>
 				<p class="mb-4 text-muted-foreground">{i18n.t('concerts.description')}</p>
 			</div>
 
-			<div class="flex items-center gap-4 justify-between sm:justify-end sm:items-end sm:flex-col-reverse">
+			<div
+				class="flex items-center justify-between gap-4 sm:flex-col-reverse sm:items-end sm:justify-end"
+			>
 				{#if data.updatedAt}
 					<Link href={data.gistUrl} class="block text-xs font-normal text-muted-foreground">
 						{i18n.t('concerts.last_updated')}
 						{formatDate(data.updatedAt)}
 					</Link>
 				{/if}
-				<Button
-					variant="secondary"
-					onclick={() => (showStats = true)}
-				>
+				<Button variant="secondary" onclick={() => (showStats = true)}>
 					<ChartBar class="mr-2 h-4 w-4" />
 					{i18n.t('concerts.stats')}
 				</Button>
 			</div>
 		</div>
-
 
 		<Tabs.Content value="concerts">
 			{#if concerts.length === 0}
@@ -140,7 +140,7 @@
 								{/if}
 							</div>
 
-							<Heading depth={2} class="mb-1 text-xl flex items-center gap-2">
+							<Heading depth={2} class="mb-1 flex items-center gap-2 text-xl">
 								{concert.artist}
 								{#if concert.mbid}
 									<div class="pt-2">
@@ -190,7 +190,11 @@
 										</div>
 										<div class="flex items-center gap-2">
 											<span class="text-xs text-muted-foreground">
-												{festival.artists.length} artists
+												{festival.artists.length === 1
+													? i18n.t('concerts.artists_one')
+													: i18n.t('concerts.artists_many', {
+															count: festival.artists.length.toString()
+														})}
 											</span>
 											{#if festival.url}
 												<a
@@ -206,7 +210,9 @@
 									</div>
 								</Accordion.Trigger>
 								<Accordion.Content>
-									<div class="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+									<div
+										class="grid grid-cols-1 gap-2 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+									>
 										{#each festival.artists as artist}
 											<div class="flex items-center gap-2 rounded-md bg-secondary/50 p-2 text-sm">
 												<Music class="h-3 w-3 text-primary" />

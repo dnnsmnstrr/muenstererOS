@@ -97,18 +97,6 @@ export const gists = {
 	}
 };
 
-export const descriptions = [
-	{ name: '🤖💻📱⌚🎧', href: links.yat },
-	{ name: '💻 ' + user.occupation, href: links.cv },
-	{ name: '🤖 Builder of Things', href: links.makerer },
-	'📱 Coder of Apps',
-	'🍕 Pizza lover',
-	{ name: '💚 Backer of Projects', href: links.kickstarter },
-	{ name: '🎧 Music enthusiast', href: links.spotify },
-	{ name: '📺 Watcher of Movies', href: links.imdb },
-	{ name: '🧡 Printer of Objects', href: links.printables },
-	{ name: '🌟 Stargazer', href: links.github + '?tab=stars' }
-];
 
 export const defaultColors = {
 	light: {
