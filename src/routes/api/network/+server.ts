@@ -21,7 +21,7 @@ interface CacheEntry {
 }
 
 const MAX_DEPTH = 3; // 3 levels deep as requested
-const MAX_NODES = 100; // Limit nodes to avoid timeouts
+const MAX_NODES = 50; // Limit nodes to avoid timeouts
 const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 hours
 const linkCache = new Map<string, CacheEntry>();
 
@@ -217,6 +217,9 @@ export async function GET({ url: requestUrl }) {
 	const depthParam = requestUrl.searchParams.get('depth');
 	const maxDepth = depthParam ? Math.min(Math.max(parseInt(depthParam, 10), 1), 10) : MAX_DEPTH;
 
+	const limitParam = requestUrl.searchParams.get('limit');
+	const maxNodes = limitParam ? Math.min(Math.max(parseInt(limitParam, 10), 1), 500) : MAX_NODES * MAX_DEPTH;
+
 	const rootUrl = getBaseDomain(`https://${CURRENT_DOMAIN}/`);
 	const nodes: Node[] = [{ id: rootUrl, label: CURRENT_DOMAIN, depth: 0, type: 'root' }];
 	const edges: Edge[] = [];
@@ -248,7 +251,7 @@ export async function GET({ url: requestUrl }) {
 	let currentLevel = queue;
 	let currentDepth = 1;
 
-	while (currentLevel.length > 0 && currentDepth < maxDepth && nodes.length < MAX_NODES) {
+	while (currentLevel.length > 0 && currentDepth < maxDepth && nodes.length < maxNodes) {
 		const results = await Promise.all(
 			currentLevel.map(async ({ url, depth }) => {
 				const discoveredLinks = await getLinks(url);
@@ -264,7 +267,7 @@ export async function GET({ url: requestUrl }) {
 			const shuffledLinks = discoveredLinks.sort(() => Math.random() - 0.5).slice(0, 25);
 
 			for (const link of shuffledLinks) {
-				if (nodes.length >= MAX_NODES) break;
+				if (nodes.length >= maxNodes) break;
 
 				try {
 					const linkUrl = new URL(link);
