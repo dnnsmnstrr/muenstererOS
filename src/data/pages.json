@@ -90,6 +90,11 @@
 		"date": "2025-01-01"
 	},
 	{
+		"title": "Ping",
+		"path": "/ping",
+		"date": "2025-03-20"
+	},
+	{
 		"title": "Contact",
 		"path": "/contact",
 		"date": "2025-01-01"

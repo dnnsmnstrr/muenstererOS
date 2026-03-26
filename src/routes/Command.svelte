@@ -109,6 +109,7 @@
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
+		b: '/ping',
 		c: '/concerts',
 		i: '/legal', // impressum
 		l: '/legal',

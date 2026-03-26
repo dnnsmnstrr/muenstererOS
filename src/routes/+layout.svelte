@@ -23,7 +23,7 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard, Ticket, IdCard, FerrisWheel, Network } from 'lucide-svelte';
+	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard, Ticket, IdCard, FerrisWheel, Network, Send } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
@@ -191,6 +191,7 @@
 		{ name: 'Buttons', href: '/buttons', icon: IdCard, hidden: true },
 		{ name: 'Concerts', href: '/concerts', icon: Ticket, hidden: true },
 		{ name: 'Sites', href: '/sites', icon: Network, hidden: true },
+		{ name: 'Ping', href: '/ping', icon: Send, hidden: true },
 	];
 	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
 		...b,
