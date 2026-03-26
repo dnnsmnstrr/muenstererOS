@@ -197,8 +197,8 @@
 		"last_deployment": "Last Deployment",
 		"commit_count": "Commit Count",
 		"page_count": "Page Count",
-		"monthly_views": "Monthly Views",
-		"cv_status": "CV Page Status",
+		"monthly_views": "View Count (last 30 days)",
+		"cv_status": "CV Page Availability",
 		"online": "online",
 		"offline": "offline",
 		"unknown": "unknown"

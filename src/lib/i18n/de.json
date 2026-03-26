@@ -8,7 +8,6 @@
 		"buttons": "Buttons",
 		"projects": "Projekte",
 		"now": "Jetzt (Now Page)",
-		"home": "Startseite",
 		"where": "Standort",
 		"uses": "Uses (Tech Stack)",
 		"playlists": "Playlists",
@@ -198,7 +197,7 @@
 		"last_deployment": "Letztes Deployment",
 		"commit_count": "Commit-Anzahl",
 		"page_count": "Seitenanzahl",
-		"monthly_views": "Monatliche Aufrufe",
+		"monthly_views": "Seitenaufrufe (letzter Monat)",
 		"cv_status": "CV-Status",
 		"online": "online",
 		"offline": "offline"
