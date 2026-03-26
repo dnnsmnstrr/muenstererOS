@@ -15,8 +15,12 @@
 	 */
 	const statusItems = $derived([
 		{ label: i18n.t('status.last_deployment'), value: formatDateTime(data.status.lastDeployment) },
-		{ label: i18n.t('status.commit_count'), value: data.status.commitCount },
-		{ label: i18n.t('status.page_count'), value: data.status.pageCount },
+		{ label: i18n.t('status.commit_count'), value: data.status.commitCount.toLocaleString(i18n.lang) },
+		{ label: i18n.t('status.page_count'), value: data.status.pageCount.toLocaleString(i18n.lang) },
+		{
+			label: i18n.t('status.monthly_views'),
+			value: data.status.monthlyViews.toLocaleString(i18n.lang)
+		},
 		{
 			label: i18n.t('status.cv_status'),
 			value: data.status.cvStatus,
