@@ -45,7 +45,6 @@
 
 	<Card class="mt-8">
 		<CardHeader>
-			<CardTitle>{i18n.t('ping.title')}</CardTitle>
 			<CardDescription>{i18n.t('ping.description')}</CardDescription>
 		</CardHeader>
 		<CardContent>

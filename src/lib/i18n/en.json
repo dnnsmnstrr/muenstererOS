@@ -363,7 +363,7 @@
 	},
 	"ping": {
 		"title": "Ping",
-		"description": "Send a message to my phone.",
+		"description": "Send a message to my phone. (No joke, this will actually pop up on my screen)",
 		"placeholder": "Your message...",
 		"send": "Send Message",
 		"sending": "Sending...",
