@@ -27,6 +27,7 @@
 		"changelog": "Änderungsprotokoll",
 		"playlist": "Playlist",
 		"api": "API",
+		"ping": "Ping",
 		"contact": "Kontakt",
 		"status": "Status",
 		"sites": "Sites",
@@ -359,6 +360,15 @@
 	"contact": {
 		"title": "Kontakt",
 		"description": "Du kannst mich unter"
+	},
+	"ping": {
+		"title": "Ping",
+		"description": "Sende eine Nachricht an mein Handy. (Kein Witz, das wird wirklich auf meinem Bildschirm aufploppen)",
+		"placeholder": "Deine Nachricht...",
+		"send": "Nachricht senden",
+		"sending": "Wird gesendet...",
+		"success": "Nachricht gesendet!",
+		"error": "Nachricht konnte nicht gesendet werden."
 	},
 	"api": {
 		"title": "API",

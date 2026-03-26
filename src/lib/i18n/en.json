@@ -31,6 +31,7 @@
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
+		"ping": "Ping",
 		"contact": "Contact",
 		"status": "Status",
 		"quit": "Quit",
@@ -359,6 +360,15 @@
 	"contact": {
 		"title": "Contact",
 		"description": "You can contact me at"
+	},
+	"ping": {
+		"title": "Ping",
+		"description": "Send a message to my phone. (No joke, this will actually pop up on my screen)",
+		"placeholder": "Your message...",
+		"send": "Send Message",
+		"sending": "Sending...",
+		"success": "Message sent!",
+		"error": "Failed to send message."
 	},
 	"api": {
 		"title": "API",
