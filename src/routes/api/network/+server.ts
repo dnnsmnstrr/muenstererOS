@@ -199,7 +199,10 @@ function getBaseDomain(url: string): string {
 	}
 }
 
-export async function GET() {
+export async function GET({ url: requestUrl }) {
+	const depthParam = requestUrl.searchParams.get('depth');
+	const maxDepth = depthParam ? Math.min(Math.max(parseInt(depthParam, 10), 1), 10) : MAX_DEPTH;
+
 	const rootUrl = getBaseDomain(`https://${CURRENT_DOMAIN}/`);
 	const nodes: Node[] = [{ id: rootUrl, label: CURRENT_DOMAIN, depth: 0, type: 'root' }];
 	const edges: Edge[] = [];
@@ -231,7 +234,7 @@ export async function GET() {
 	let currentLevel = queue;
 	let currentDepth = 1;
 
-	while (currentLevel.length > 0 && currentDepth < MAX_DEPTH && nodes.length < MAX_NODES) {
+	while (currentLevel.length > 0 && currentDepth < maxDepth && nodes.length < MAX_NODES) {
 		const results = await Promise.all(
 			currentLevel.map(async ({ url, depth }) => {
 				const discoveredLinks = await getLinks(url);

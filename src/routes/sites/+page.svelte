@@ -70,8 +70,9 @@
 	);
 
 	async function fetchData() {
+		loading = true;
 		try {
-			const response = await fetch('/api/network');
+			const response = await fetch('/api/network?depth=' + displayDepth);
 			const data = await response.json();
 			nodes = data.nodes.map((n: any) => ({
 				...n,
@@ -262,6 +263,8 @@
 				return 'var(--muted-foreground)';
 		}
 	}
+
+	const MAX_DEPTH = 7;
 </script>
 
 <svelte:head>
@@ -287,8 +290,8 @@
 				variant="ghost"
 				size="icon"
 				class="h-8 w-8"
-				onclick={() => (displayDepth = Math.min(3, displayDepth + 1))}
-				disabled={displayDepth >= 3}
+			onclick={() => { displayDepth = Math.min(MAX_DEPTH, displayDepth + 1); fetchData(); }}
+				disabled={displayDepth >= MAX_DEPTH}
 				aria-label={i18n.t('sites.increase_depth')}
 			>
 				<Plus class="h-4 w-4" />
