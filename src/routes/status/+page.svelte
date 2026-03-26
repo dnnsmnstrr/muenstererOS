@@ -5,20 +5,29 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
-	import { formatDateTime } from '$lib/utils/helper';
+	import { formatDateTime, getFriendlyTime } from '$lib/utils/helper';
 
 	let { data } = $props();
 
 	const statusItems = $derived([
-		{ label: i18n.t('status.last_deployment'), value: formatDateTime(data.status.lastDeployment) },
-		{ label: i18n.t('status.commit_count'), value: data.status.commitCount.toLocaleString(i18n.lang) },
-		{ label: i18n.t('status.page_count'), value: data.status.pageCount.toLocaleString(i18n.lang) },
+		{
+			label: i18n.t('status.monthly_views'),
+			value: data.status.monthlyViews.toLocaleString(i18n.lang)
+		},
 		{
 			label: i18n.t('status.cv_status'),
 			value: data.status.cvStatus,
-			isBadge: true,
+			type: 'badge',
 			displayValue: i18n.t(`status.${data.status.cvStatus}`)
-		}
+		},
+		{ label: i18n.t('status.page_count'), value: data.status.pageCount.toLocaleString(i18n.lang) },
+		{ label: i18n.t('status.commit_count'), value: data.status.commitCount.toLocaleString(i18n.lang) },
+		{ 
+			label: i18n.t('status.last_deployment'), 
+			value: formatDateTime(data.status.lastDeployment), 
+			rawValue: data.status.lastDeployment,
+			type: 'datetime'
+		},
 	]);
 </script>
 
@@ -42,10 +51,12 @@
 					<Table.Row>
 						<Table.Cell class="font-medium">{item.label}</Table.Cell>
 						<Table.Cell>
-							{#if item.isBadge}
+							{#if item.type === 'badge'}
 								<Badge variant={item.value === 'online' ? 'default' : 'destructive'}>
 									{item.displayValue}
 								</Badge>
+							{:else if item.type === 'datetime'}
+								<time datetime={item.rawValue} title={getFriendlyTime(new Date(item.rawValue))}>{item.value}</time>
 							{:else}
 								{item.value}
 							{/if}

@@ -2,18 +2,12 @@
 > website-next@0.0.1 dev
 > vite dev
 
-Port 5173 is in use, trying another one...
-
-  VITE v5.4.14  ready in 4408 ms
-
-  ➜  Local:   http://localhost:5174/
-  ➜  Network: use --host to expose
-8:36:35 PM [vite] .env changed, restarting server...
-8:36:36 PM [vite] server restarted.
-8:37:52 PM [vite] .env changed, restarting server...
-8:37:52 PM [vite] server restarted.
-8:56:52 PM [vite] .env changed, restarting server...
-8:56:53 PM [vite] server restarted.
-8:58:37 PM [vite] .env changed, restarting server...
 Forced re-optimization of dependencies
-8:58:37 PM [vite] server restarted.
+
+  VITE v5.4.14  ready in 1998 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+
+warn - The class `duration-[2000]` is ambiguous and matches multiple utilities.
+warn - If this is content and not a class, replace it with `duration-&lsqb;2000&rsqb;` to silence this warning.
