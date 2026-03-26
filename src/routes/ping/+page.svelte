@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX, NTFY_URL } from '$lib/config';
 	import Heading from '$lib/components/typography/Heading.svelte';
@@ -10,6 +11,11 @@
 
 	let message = $state('');
 	let loading = $state(false);
+	let textareaElement = $state<HTMLTextAreaElement>();
+
+	onMount(() => {
+		textareaElement?.focus();
+	});
 
 	async function sendMessage() {
 		if (!message.trim()) return;
@@ -58,10 +64,17 @@
 			>
 				<Textarea
 					bind:value={message}
+					bind:ref={textareaElement}
 					placeholder={i18n.t('ping.placeholder')}
 					rows={5}
 					required
 					disabled={loading}
+					onkeydown={(e) => {
+						if (e.key === 'Enter' && !e.shiftKey) {
+							e.preventDefault();
+							sendMessage();
+						}
+					}}
 				/>
 				<Button type="submit" disabled={loading || !message.trim()} class="w-full">
 					{#if loading}
