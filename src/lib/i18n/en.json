@@ -1,4 +1,13 @@
 {
+	"duration": {
+		"y": "y",
+		"mo": "mo",
+		"w": "w",
+		"d": "d",
+		"h": "h",
+		"m": "m",
+		"s": "s"
+	},
 	"common": {
 		"home": "Home",
 		"settings": "Settings",

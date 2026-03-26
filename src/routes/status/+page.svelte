@@ -9,10 +9,6 @@
 
 	let { data } = $props();
 
-	/**
-	 * Optimized status items that update automatically when the language changes.
-	 * Uses i18n.t for translating labels and badge values.
-	 */
 	const statusItems = $derived([
 		{
 			label: i18n.t('status.monthly_views'),
