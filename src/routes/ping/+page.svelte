@@ -11,11 +11,6 @@
 
 	let message = $state('');
 	let loading = $state(false);
-	let textareaElement = $state<HTMLTextAreaElement>();
-
-	onMount(() => {
-		textareaElement?.focus();
-	});
 
 	async function sendMessage() {
 		if (!message.trim()) return;
@@ -63,7 +58,7 @@
 			>
 				<Textarea
 					bind:value={message}
-					bind:ref={textareaElement}
+					autofocus
 					placeholder={i18n.t('ping.placeholder')}
 					rows={5}
 					required
