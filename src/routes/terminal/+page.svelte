@@ -18,7 +18,14 @@
 
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Terminal from '$lib/components/ui/terminal';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { debugLog } from '$lib/stores/app';
+
+	/**
+	 * Localization optimization: Move hardcoded terminal page strings to i18n service.
+	 * This makes the terminal accessible in both English and German.
+	 */
 	import { endpoints } from '../api/+page.svelte';
 	import pagesData from '../../data/pages.json?raw';
     type Page = {
@@ -28,8 +35,6 @@
 	};
 	const pages = JSON.parse(pagesData) as Page[];
 
-	const pageTitle = 'Terminal';
-	const pageDescription = 'A command line interface for the muenstererOS website.';
 	const lines = $state<Line[]>([]);
     let linesContainer = $state<HTMLDivElement | null>(null);
     let currentDirectory = $state<string>('~');
@@ -438,20 +443,20 @@
 </script>
 
 <svelte:head>
-	<title>{pageTitle}</title>
-	<meta name="description" content={pageDescription} />
+	<title>{i18n.t('terminal.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('terminal.description')} />
 </svelte:head>
 
 <div class="container">
-	<Heading>{pageTitle}</Heading>
+	<Heading>{i18n.t('terminal.title')}</Heading>
 	<Terminal.Root class="max-w-2xl" delay={100}>
 		{#if !isIntroComplete}
 			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
 				{#snippet loadingMessage()}
-					init muenstererOS
+					{i18n.t('terminal.loading')}
 				{/snippet}
 				{#snippet completeMessage()}
-					<span class="text-green-500"> ✔ CLI ready </span>
+					<span class="text-green-500"> ✔ {i18n.t('terminal.ready')} </span>
 				{/snippet}
 			</Terminal.Loading>
 		{:else}
@@ -469,7 +474,7 @@
 				{/each}
 			</div>
 			<Terminal.Input
-				placeholder="Type your command..."
+				placeholder={i18n.t('terminal.placeholder')}
 				prompt="muenstererOS %"
 				onsubmit={handleSubmit}
 				onkeydown={handleKeyDown}

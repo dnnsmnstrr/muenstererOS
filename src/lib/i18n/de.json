@@ -514,5 +514,12 @@
 			"link_text": "Mehr über Raycast erfahren",
 			"referral_note": "(Empfehlungslink)"
 		}
+	},
+	"terminal": {
+		"title": "Terminal",
+		"description": "Eine Kommandozeile für die muenstererOS Webseite.",
+		"placeholder": "Befehl eingeben...",
+		"loading": "muenstererOS initialisieren",
+		"ready": "CLI bereit"
 	}
 }

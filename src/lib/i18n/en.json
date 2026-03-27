@@ -514,5 +514,12 @@
 			"link_text": "Learn more about Raycast",
 			"referral_note": "(referral link)"
 		}
+	},
+	"terminal": {
+		"title": "Terminal",
+		"description": "A command line interface for the muenstererOS website.",
+		"placeholder": "Type your command...",
+		"loading": "init muenstererOS",
+		"ready": "CLI ready"
 	}
 }
