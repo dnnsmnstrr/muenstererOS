@@ -56,7 +56,8 @@
 		"en": "Englisch"
 	},
 	"error": {
-		"404": "Keine Seite verfügbar unter:"
+		"404": "Keine Seite verfügbar unter:",
+		"searching": "Suche nach Redirect"
 	},
 	"header": {
 		"pages": "Seiten",
@@ -175,7 +176,9 @@
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
 		"konami_success": "Achievement freigeschaltet: Konami Code",
-		"konami_description": "Glückwunsch, du bist ein Nerd!"
+		"konami_description": "Glückwunsch, du bist ein Nerd!",
+		"picked_color": "Farbe ausgewählt: {color}",
+		"copy_to_clipboard": "Klicken zum Kopieren"
 	},
 	"window": {
 		"close": "Fenster schließen",
@@ -325,7 +328,8 @@
 		"decrease_depth": "Tiefe verringern",
 		"increase_depth": "Tiefe erhöhen",
 		"zoom": "Zoom",
-		"graph_label": "Interaktive Grafik des Website-Netzwerks"
+		"graph_label": "Interaktive Grafik des Website-Netzwerks",
+		"loading": "Website-Netzwerk wird geladen..."
 	},
 	"about": {
 		"title": "Über diese Seite",

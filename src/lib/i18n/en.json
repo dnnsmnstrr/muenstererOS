@@ -56,7 +56,8 @@
 		"en": "English"
 	},
 	"error": {
-		"404": "No page or redirect found for:"
+		"404": "No page or redirect found for:",
+		"searching": "Searching for redirect"
 	},
 	"header": {
 		"pages": "Pages",
@@ -175,7 +176,9 @@
 		"switch_language": "Switch Language",
 		"language_switched": "Language switched",
 		"konami_success": "Achievement Unlocked: Konami Code",
-		"konami_description": "Congratulations, you're a nerd!"
+		"konami_description": "Congratulations, you're a nerd!",
+		"picked_color": "Picked color: {color}",
+		"copy_to_clipboard": "Click to copy to clipboard"
 	},
 	"window": {
 		"close": "Close window",
@@ -325,7 +328,8 @@
 		"decrease_depth": "Decrease depth",
 		"increase_depth": "Increase depth",
 		"zoom": "Zoom",
-		"graph_label": "Interactive site network graph"
+		"graph_label": "Interactive site network graph",
+		"loading": "Loading network graph..."
 	},
 	"about": {
 		"title": "About",
