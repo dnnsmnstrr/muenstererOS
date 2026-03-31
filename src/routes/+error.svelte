@@ -13,7 +13,7 @@
 	onMount(() => {
 		const query = $page.url.pathname.replace('/', '');
 		const foundRedirect = getRedirect(query, redirects, { log: debugLog });
-		const hasLoopedBack = window.location.search.includes('noRedirect')
+		const hasLoopedBack = window.location.search.includes('noRedirect');
 		if (foundRedirect && !foundRedirect.toString().includes('404') && !hasLoopedBack && browser) {
 			debugLog('redirecting to ' + foundRedirect);
 			const isExternal = typeof foundRedirect === 'string' && foundRedirect.startsWith('http');
@@ -25,11 +25,12 @@
 </script>
 
 {#if loading}
-	<Loader title="Searching for redirect" />
+	<Loader title={i18n.t('error.searching')} />
 {:else}
 	<h1>{$page.status}: {$page.error?.message}</h1>
 
 	<span>
-		{i18n.t('error.404')} {$page.url.pathname}
+		{i18n.t('error.404')}
+		{$page.url.pathname}
 	</span>
 {/if}
