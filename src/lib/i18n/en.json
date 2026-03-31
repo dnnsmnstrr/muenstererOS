@@ -201,7 +201,9 @@
 		"changes_one": "1 change",
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
-		"load": "Load"
+		"load": "Load",
+		"first_version": "First",
+		"latest_version": "Latest"
 	},
 	"status": {
 		"title": "System Status",
