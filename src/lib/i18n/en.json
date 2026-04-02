@@ -53,7 +53,10 @@
 		"enter_fullscreen": "Enter Full Screen",
 		"exit_fullscreen": "Exit Full Screen",
 		"de": "German",
-		"en": "English"
+		"en": "English",
+		"na": "N/A",
+		"yes": "Yes",
+		"no": "No"
 	},
 	"error": {
 		"404": "No page or redirect found for:",
@@ -525,5 +528,15 @@
 		"loading": "init muenstererOS",
 		"ready": "CLI ready",
 		"placeholder": "Type your command..."
+	},
+	"admin": {
+		"title": "Gist Admin",
+		"gist_info": "Gist Information",
+		"description": "Description",
+		"last_updated": "Last Updated",
+		"public": "Public",
+		"versions": "Versions",
+		"no_description": "No description",
+		"view_on_github": "View on GitHub"
 	}
 }

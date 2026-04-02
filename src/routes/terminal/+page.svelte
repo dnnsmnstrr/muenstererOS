@@ -115,7 +115,7 @@
             description: 'Show information about the terminal.',
             usage: 'about',
             callback: async ({ lines }) => {
-                lines.push({ value: 'This is a command line interface for the muenstererOS website.', type: 'output' });
+                lines.push({ value: i18n.t('terminal.description'), type: 'output' });
             }
         },
         {
@@ -257,7 +257,8 @@
             example: 'date',
             callback: async ({ lines }) => {
                 const now = new Date();
-                lines.push({ value: now.toLocaleString(), type: 'output' });
+                // Optimization: Use locale-aware formatting for date and time
+                lines.push({ value: now.toLocaleString(i18n.lang), type: 'output' });
             }
         },
         {
@@ -267,7 +268,8 @@
             example: 'time',
             callback: async ({ lines }) => {
                 const time = new Date();
-                lines.push({ value: time.toLocaleTimeString(), type: 'output' });
+                // Optimization: Use locale-aware formatting for date and time
+                lines.push({ value: time.toLocaleTimeString(i18n.lang), type: 'output' });
             }
         },
         {

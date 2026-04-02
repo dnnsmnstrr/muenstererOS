@@ -53,7 +53,10 @@
 		"enter_fullscreen": "Vollbild aktivieren",
 		"exit_fullscreen": "Vollbild beenden",
 		"de": "Deutsch",
-		"en": "Englisch"
+		"en": "Englisch",
+		"na": "n. v.",
+		"yes": "Ja",
+		"no": "Nein"
 	},
 	"error": {
 		"404": "Keine Seite verfügbar unter:",
@@ -525,5 +528,15 @@
 		"loading": "init muenstererOS",
 		"ready": "CLI bereit",
 		"placeholder": "Befehl eingeben..."
+	},
+	"admin": {
+		"title": "Gist Admin",
+		"gist_info": "Gist-Informationen",
+		"description": "Beschreibung",
+		"last_updated": "Zuletzt aktualisiert",
+		"public": "Öffentlich",
+		"versions": "Versionen",
+		"no_description": "Keine Beschreibung",
+		"view_on_github": "Auf GitHub ansehen"
 	}
 }

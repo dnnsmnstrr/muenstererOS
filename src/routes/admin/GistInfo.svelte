@@ -5,6 +5,7 @@
     import { ChevronDown } from 'lucide-svelte';
     import { Button } from '$lib/components/ui/button';
 	import type { GistData } from '$lib/utils/github-api';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 
     let {
@@ -24,7 +25,7 @@
                     variant="ghost"
                     class="w-full justify-between p-6 font-semibold hover:bg-transparent"
                 >
-                    Gist Information
+                    {i18n.t('admin.gist_info')}
                     <ChevronDown
                         class="h-4 w-4 transition-transform duration-200{isOpen ? ' rotate-180' : ''}"
                     />
@@ -36,23 +37,24 @@
             <CardContent>
                 <div class="grid grid-cols-1 gap-4 text-sm md:grid-cols-2 lg:grid-cols-4">
                     <div>
-                        <Label class="text-xs uppercase text-muted-foreground">Description</Label>
-                        <p>{gistInfo?.description ?? 'No description'}</p>
+                        <Label class="text-xs uppercase text-muted-foreground">{i18n.t('admin.description')}</Label>
+                        <p>{gistInfo?.description ?? i18n.t('admin.no_description')}</p>
                     </div>
 
                     <div>
-                        <Label class="text-xs uppercase text-muted-foreground">Last Updated</Label>
-                        <p>{lastUpdated ? lastUpdated.toLocaleString() : 'N/A'}</p>
+                        <Label class="text-xs uppercase text-muted-foreground">{i18n.t('admin.last_updated')}</Label>
+                        <!-- Optimization: Use locale-aware formatting for date and time -->
+                        <p>{lastUpdated ? lastUpdated.toLocaleString(i18n.lang) : i18n.t('common.na')}</p>
                     </div>
 
                     <div>
-                        <Label class="text-xs uppercase text-muted-foreground">Public</Label>
-                        <p>{gistInfo?.public ? 'Yes' : 'No'}</p>
+                        <Label class="text-xs uppercase text-muted-foreground">{i18n.t('admin.public')}</Label>
+                        <p>{gistInfo?.public ? i18n.t('common.yes') : i18n.t('common.no')}</p>
                     </div>
 
                     <div>
-                        <Label class="text-xs uppercase text-muted-foreground">Versions</Label>
-                        <p>{history?.length > 0 ? history.length : 'N/A'}</p>
+                        <Label class="text-xs uppercase text-muted-foreground">{i18n.t('admin.versions')}</Label>
+                        <p>{history?.length > 0 ? history.length : i18n.t('common.na')}</p>
                     </div>
                 </div>
 
@@ -63,7 +65,7 @@
                         class="text-sm text-blue-600 hover:underline"
                         rel="noopener noreferrer"
                     >
-                        View on GitHub ↗
+                        {i18n.t('admin.view_on_github')} ↗
                     </a>
                 </div>
             </CardContent>
