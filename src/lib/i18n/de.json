@@ -74,7 +74,8 @@
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"brand_kit": "Marken-Assets"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
@@ -402,7 +403,9 @@
 		"description": "meine Slash-Seiten",
 		"spin": "DREHEN",
 		"good_luck": "Viel Glück!",
-		"wheel_label": "Glücksrad"
+		"wheel_label": "Glücksrad",
+		"mute": "Haptik stummschalten",
+		"unmute": "Haptik einschalten"
 	},
 	"concerts": {
 		"title": "Konzerte & Festivals",
