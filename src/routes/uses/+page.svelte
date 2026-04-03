@@ -38,11 +38,6 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
-	/**
-	 * Localization optimization: Replace hardcoded UI strings with i18n.t() calls.
-	 * This makes the Uses page accessible in multiple languages (English and German).
-	 */
-
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
 	let selectedTag: string | null = $state(null);

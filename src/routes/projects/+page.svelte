@@ -4,11 +4,6 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { Heading } from '$lib/components/typography';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-
-	/**
-	 * Localization: Localize the "All Tags" string for consistency across all filterable pages.
-	 */
-
 	import { capitalize } from '$lib/utils/index';
 	import projects from '../../data/projects.json';
 
