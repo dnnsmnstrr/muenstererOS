@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Music, ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import { goto } from '$app/navigation';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import playlistData from '../../data/playlists.json';
@@ -38,16 +37,6 @@
 			const bSeason = seasonOrder[b.season || 'winter'];
 			return bSeason - aSeason;
 		})[0];
-
-	function handleClick(e: MouseEvent) {
-		e.stopPropagation();
-		goto('/playlists?current');
-	}
-
-	function toggleExpanded(e: MouseEvent) {
-		e.stopPropagation();
-		expanded = !expanded;
-	}
 </script>
 
 <div class={cn('relative flex items-center', side === 'right' ? 'flex-row-reverse' : '')}>
@@ -66,7 +55,6 @@
 							variant="outline"
 							size="icon"
 							class="group z-10 mx-4 h-10 w-10 rounded-full shadow-lg"
-							onclick={toggleExpanded}
 							aria-label={i18n.t('now_playing.hide')}
 						>
 							{#if side === 'right'}
@@ -88,7 +76,6 @@
 					'group cursor-pointer overflow-hidden transition-all hover:scale-105 hover:shadow-lg',
 					side === 'right' ? 'ml-4' : 'mr-4'
 				)}
-				onclick={handleClick}
 			>
 				<Card.Content class="h-40 w-40 p-0">
 					<div class="relative">
@@ -139,7 +126,6 @@
 							variant="outline"
 							size="icon"
 							class={cn('z-10 mx-4 h-10 w-10 rounded-full shadow-lg')}
-							onclick={toggleExpanded}
 							aria-label={i18n.t('now_playing.show')}
 						>
 							<Disc />

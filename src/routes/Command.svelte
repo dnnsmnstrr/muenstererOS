@@ -33,10 +33,12 @@
 		Search,
 		Github,
 		Link,
+		LayoutGrid,
 		RotateCcw,
 		Monitor,
 		Plus,
-		Globe
+		Globe,
+		Ticket
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -105,7 +107,8 @@
 
 	const gotoShortcuts: Record<string, string> = {
 		a: '/about',
-		e: '/experiment',
+		b: '/ping',
+		c: '/concerts',
 		i: '/legal', // impressum
 		l: '/legal',
 		p: '/projects',
@@ -299,7 +302,7 @@
 			appId: PUBLIC_ALGOLIA_APP_ID,
 			apiKey: PUBLIC_ALGOLIA_API_KEY,
 			indexName: 'dnnsmnstrr-gitlab',
-			placeholder: 'Search Zettelkasten',
+			placeholder: i18n.t('command.search_zettelkasten'),
 			insights: true,
 			navigator: {
 				// https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/keyboard-navigation/
@@ -438,13 +441,14 @@
 			},
 			{
 				name: i18n.t('command.switch_language'),
-				value: 'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
+				value:
+					'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
 				icon: Globe,
 				action: async () => {
 					const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
 					await i18n.setLanguage(newLanguage);
 					toast.success(i18n.t('command.language_switched'));
-					$isCommandActive = false;	
+					$isCommandActive = false;
 				}
 			},
 			{
@@ -521,9 +525,7 @@
 				{#if group === 'links'}
 					{#each Object.entries(links)
 						.filter(([name]) => !commands.some((c) => c.name.toLowerCase() === name.toLowerCase()))
-						.map(([name, href]) => enrichLink({ name, href })) 
-						as command
-					}
+						.map(([name, href]) => enrichLink({ name, href })) as command}
 						<Command.Item
 							onSelect={command.action}
 							value={command.value}
@@ -541,13 +543,13 @@
 				<button
 					use:eyeDropperAction={{
 						onDone: (color) => {
-							const message = 'Picked color: ' + color;
+							const message = i18n.t('command.picked_color', { color });
 							debugLog(message);
 							$primaryColor = hexToHsl(color);
 							toast.success(message, {
-								description: 'Click to copy to clipboard',
+								description: i18n.t('command.copy_to_clipboard'),
 								action: {
-									label: 'Copy',
+									label: i18n.t('common.copy'),
 									onClick: () => navigator.clipboard.writeText(color)
 								}
 							});
@@ -564,13 +566,13 @@
 				<button
 					use:eyeDropperAction={{
 						onDone: (color) => {
-							const message = 'Picked color: ' + color;
+							const message = i18n.t('command.picked_color', { color });
 							debugLog(message);
 							$backgroundColor = hexToHsl(color);
 							toast.success(message, {
-								description: 'Click to copy to clipboard',
+								description: i18n.t('command.copy_to_clipboard'),
 								action: {
-									label: 'Copy',
+									label: i18n.t('common.copy'),
 									onClick: () => navigator.clipboard.writeText(color)
 								}
 							});

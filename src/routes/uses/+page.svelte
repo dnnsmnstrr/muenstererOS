@@ -1,5 +1,5 @@
 <script module lang="ts">
-	const categories = ['hardware', 'software', 'development'] as const;
+	const categories = ['hardware', 'software', 'development', 'services'] as const;
 	export type UsesItem = {
 		name: string;
 		description?: string;
@@ -33,14 +33,9 @@
 	import uses from '../../data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
 	import * as Table from '$lib/components/ui/table';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-
-	/**
-	 * Localization optimization: Replace hardcoded UI strings with i18n.t() calls.
-	 * This makes the Uses page accessible in multiple languages (English and German).
-	 */
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
@@ -52,7 +47,15 @@
 	});
 
 	// Get unique tags from all items
-	let allTags = $derived([...new Set(uses.flatMap((item) => item.tags || []))].sort());
+	/**
+	 * Optimized tag sorting: Uses localeCompare with the active language (i18n.lang)
+	 * to ensure correct alphabetical order for both English and German users.
+	 */
+	let allTags = $derived(
+		[...new Set(uses.flatMap((item) => item.tags || []))].sort((a, b) =>
+			a.localeCompare(b, i18n.lang)
+		)
+	);
 	let filteredUses = $derived(
 		uses
 			.filter((item) => {
@@ -68,13 +71,15 @@
 
 				return matchesSearch && matchesCategory && matchesTags;
 			})
+			/**
+			 * Optimized sorting: Uses localeCompare with the active language (i18n.lang)
+			 * for more accurate internationalized string comparisons.
+			 */
 			.sort((a, b) => {
 				const { field, direction } = sortConfig;
-				const aValue = a[field].toLowerCase();
-				const bValue = b[field].toLowerCase();
-				if (aValue < bValue) return direction === 'asc' ? -1 : 1;
-				if (aValue > bValue) return direction === 'asc' ? 1 : -1;
-				return 0;
+				return direction === 'asc'
+					? a[field].localeCompare(b[field], i18n.lang)
+					: b[field].localeCompare(a[field], i18n.lang);
 			})
 	);
 	let filteredTags = $derived(
@@ -124,13 +129,12 @@
 	});
 
 	const triggerContent = $derived(
-		capitalize(
-			categories.find((category) => category === selectedCategory) ?? i18n.t('uses.all_categories')
-		)
+		selectedCategory ? i18n.t('uses.categories.' + selectedCategory) : i18n.t('uses.all_categories')
 	);
 </script>
 
 <svelte:head>
+	<title>{i18n.t('uses.title') + PAGE_TITLE_SUFFIX}</title>
 	<meta name="description" content={i18n.t('uses.description')} />
 </svelte:head>
 
@@ -177,7 +181,11 @@
 
 	<div class="mb-8 space-y-4">
 		<div class="flex flex-col items-center gap-4 sm:flex-row">
-			<Input placeholder={i18n.t('uses.search_placeholder')} type="search" bind:value={searchQuery} />
+			<Input
+				placeholder={i18n.t('uses.search_placeholder')}
+				type="search"
+				bind:value={searchQuery}
+			/>
 
 			<Select.Root type="single" bind:value={selectedCategory}>
 				<Select.Trigger class="min-w-40">
@@ -187,7 +195,7 @@
 					<Select.Group>
 						<Select.Item value="">{i18n.t('uses.all_categories')}</Select.Item>
 						{#each categories as category}
-							<Select.Item value={category}>{capitalize(category)}</Select.Item>
+							<Select.Item value={category}>{i18n.t('uses.categories.' + category)}</Select.Item>
 						{/each}
 					</Select.Group>
 				</Select.Content>
@@ -360,7 +368,7 @@
 								</p>
 							</Table.Cell>
 							<Table.Cell>
-								<Badge variant="outline">{capitalize(item.category)}</Badge>
+								<Badge variant="outline">{i18n.t('uses.categories.' + item.category)}</Badge>
 							</Table.Cell>
 							<Table.Cell>
 								<div class="flex flex-wrap gap-1">

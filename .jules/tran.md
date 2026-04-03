@@ -1,4 +1,3 @@
-
 # Tran's Journal - Localization Learnings
 
 ## 2026-02-14 - [Avoid polluting repository with environmental files and lockfiles]
@@ -42,3 +41,27 @@
 **Learning:** When localizing sentences that contain components (like `<Link>`), the established pattern in this repository is to split the sentence into prefix, link text, and suffix keys in the i18n files, then use them sequentially in the template.
 
 **Action:** Avoid complex template literals for localizing components; use multiple `i18n.t()` calls instead.
+
+## 2026-03-16 - [Localizing Pages with Complex SVG Elements]
+
+**Learning:** When localizing pages that feature complex SVG elements (like the Slashes wheel), accessibility labels like `aria-label` are as important as the visible text. Furthermore, it is critical to use the `PAGE_TITLE_SUFFIX` for localized page titles to maintain brand consistency.
+
+**Action:** Always check for `aria-label` in SVG or interactive elements when localizing a page. Use `PAGE_TITLE_SUFFIX` from `$lib/config` when setting localized titles in `<svelte:head>`.
+
+## 2026-03-19 - [Redirect Aliases and Shared Namespaces]
+
+**Learning:** When adding redirects, it's easy to create duplicate aliases (e.g., 'meta') that may conflict with existing names or other aliases, causing test failures. Additionally, using a central namespace for common route titles in the root layout simplifies site-wide localization but requires consistent key naming in `en.json` and `de.json`.
+
+**Action:** Before submitting, run `pnpm test` to catch duplicate redirect aliases. Use `$derived.by` in root layouts to reactive handle localized page titles across the entire application.
+
+## 2026-03-24 - [Namespace Consistency and Workflow Hygiene]
+
+**Learning:** When localizing a new page, it is critical to ensure that the keys used in the component match the namespace and keys defined in the translation files. Furthermore, automated tools like `pnpm install` can generate large files like `pnpm-lock.yaml` which should be explicitly excluded from localization PRs to maintain focus and follow the "small optimization" rule.
+
+**Action:** Double-check key mappings (e.g., `api.title` vs `common.api`) before submission. Always run `git status` and remove any unintended files (like lockfiles or temporary logs) before committing.
+
+## 2026-04-03 - [Reusing Existing Namespaces for Consistent Data Localization]
+
+**Learning:** When localizing components that display data categorized by pre-defined keys (like "Spring", "Summer"), reusing existing i18n namespaces (e.g., `playlists.seasons`) ensures that the terminology remains consistent across different parts of the application. This avoids "translation drift" where the same concept is translated differently in separate files.
+
+**Action:** Always search the `en.json` and `de.json` files for existing keys that match the data values before adding new ones. Use dynamic path construction with `i18n.t()` to localize these values reactively.

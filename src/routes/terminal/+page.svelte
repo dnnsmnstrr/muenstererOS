@@ -21,6 +21,10 @@
 	import { debugLog } from '$lib/stores/app';
 	import { endpoints } from '../api/+page.svelte';
 	import pagesData from '../../data/pages.json?raw';
+	// Localization: Import i18n service and PAGE_TITLE_SUFFIX for consistency
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+
     type Page = {
 		date: string;
 		title: string;
@@ -28,8 +32,6 @@
 	};
 	const pages = JSON.parse(pagesData) as Page[];
 
-	const pageTitle = 'Terminal';
-	const pageDescription = 'A command line interface for the muenstererOS website.';
 	const lines = $state<Line[]>([]);
     let linesContainer = $state<HTMLDivElement | null>(null);
     let currentDirectory = $state<string>('~');
@@ -438,20 +440,22 @@
 </script>
 
 <svelte:head>
-	<title>{pageTitle}</title>
-	<meta name="description" content={pageDescription} />
+	<!-- Localization: Use localized title and PAGE_TITLE_SUFFIX for document metadata -->
+	<title>{i18n.t('terminal.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('terminal.description')} />
 </svelte:head>
 
 <div class="container">
-	<Heading>{pageTitle}</Heading>
+	<!-- Localization: Use i18n.t for all user-facing strings to support multiple languages -->
+	<Heading>{i18n.t('terminal.title')}</Heading>
 	<Terminal.Root class="max-w-2xl" delay={100}>
 		{#if !isIntroComplete}
 			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
 				{#snippet loadingMessage()}
-					init muenstererOS
+					{i18n.t('terminal.loading')}
 				{/snippet}
 				{#snippet completeMessage()}
-					<span class="text-green-500"> ✔ CLI ready </span>
+					<span class="text-green-500"> ✔ {i18n.t('terminal.ready')} </span>
 				{/snippet}
 			</Terminal.Loading>
 		{:else}
@@ -469,7 +473,7 @@
 				{/each}
 			</div>
 			<Terminal.Input
-				placeholder="Type your command..."
+				placeholder={i18n.t('terminal.placeholder')}
 				prompt="muenstererOS %"
 				onsubmit={handleSubmit}
 				onkeydown={handleKeyDown}

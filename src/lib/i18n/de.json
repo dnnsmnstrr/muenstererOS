@@ -1,23 +1,39 @@
 {
+	"duration": {
+		"y": "J",
+		"mo": "M",
+		"w": "W",
+		"d": "T",
+		"h": "Std",
+		"m": "Min",
+		"s": "Sek"
+	},
 	"common": {
 		"home": "Startseite",
 		"settings": "Einstellungen",
 		"legal": "Impressum",
 		"admin": "Admin",
 		"about": "Über diese Webseite",
+		"buttons": "Buttons",
 		"projects": "Projekte",
 		"now": "Jetzt (Now Page)",
+		"where": "Standort",
 		"uses": "Uses (Tech Stack)",
 		"playlists": "Playlists",
 		"hotkeys": "Hotkeys",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
+		"concerts": "Konzerte",
 		"changelog": "Änderungsprotokoll",
 		"playlist": "Playlist",
 		"api": "API",
+		"ping": "Ping",
 		"contact": "Kontakt",
 		"status": "Status",
 		"sites": "Sites",
+		"sitemap": "Sitemap",
+		"experiment": "Experiment",
+		"slashes": "Slashes",
 		"quit": "Beenden",
 		"new_window": "Neues Fenster",
 		"close_window": "Fenster schließen",
@@ -40,7 +56,8 @@
 		"en": "Englisch"
 	},
 	"error": {
-		"404": "Keine Seite verfügbar unter:"
+		"404": "Keine Seite verfügbar unter:",
+		"searching": "Suche nach Redirect"
 	},
 	"header": {
 		"pages": "Seiten",
@@ -54,6 +71,7 @@
 		"battery": "Batterie",
 		"charging": "Lädt",
 		"discharging": "Entlädt",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
@@ -63,7 +81,18 @@
 		"rights_reserved": "Alle Rechte vorbehalten"
 	},
 	"profile": {
-		"find_out_more": "Mehr erfahren..."
+		"find_out_more": "Mehr erfahren...",
+		"descriptions": {
+			"occupation": "Softwareentwickler",
+			"builder": "Erbauer von Dingen",
+			"coder": "Programmierer von Apps",
+			"pizza": "Pizzaliebhaber",
+			"backer": "Unterstützer von Projekten",
+			"music": "Musikbegeisterter",
+			"movies": "Filmliebhaber",
+			"printer": "Drucker von Objekten",
+			"stargazer": "Sterngucker"
+		}
 	},
 	"settings": {
 		"title": "Einstellungen",
@@ -78,15 +107,34 @@
 		"dvd_bounce": "Bildschirmschoner",
 		"enable_dvd_bounce": "DVD Bounce",
 		"actions": "Aktionen",
-		"reset_desktop": "Desktop-Dateien zurücksetzen",
-		"reset_success": "Desktop-Dateien auf Standardpositionen zurückgesetzt",
+		"reset_desktop": "Desktop zurücksetzen",
+		"reset_success": "Desktop zurückgesetzt",
 		"language": "Sprache",
 		"english": "Englisch",
 		"german": "Deutsch",
 		"texture": "Hintergrundstruktur",
+		"texture_size": "Größe",
+		"texture_spacing": "Abstand",
 		"dots": "Punkte",
+		"offset-dots": "Versetzte Punkte",
 		"grid": "Gitter",
-		"diagonal": "Diagonal"
+		"diagonal": "Diagonal",
+		"wave": "Welle",
+		"none": "Keine",
+		"themes": {
+			"zinc": "Zink",
+			"slate": "Schiefer",
+			"stone": "Stein",
+			"gray": "Grau",
+			"neutral": "Neutral",
+			"red": "Rot",
+			"rose": "Rose",
+			"orange": "Orange",
+			"green": "Grün",
+			"blue": "Blau",
+			"yellow": "Gelb",
+			"violet": "Violett"
+		}
 	},
 	"command": {
 		"placeholder": "Befehl eingeben oder suchen...",
@@ -129,7 +177,9 @@
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
 		"konami_success": "Achievement freigeschaltet: Konami Code",
-		"konami_description": "Glückwunsch, du bist ein nerd!"
+		"konami_description": "Glückwunsch, du bist ein Nerd!",
+		"picked_color": "Farbe ausgewählt: {color}",
+		"copy_to_clipboard": "Klicken zum Kopieren"
 	},
 	"window": {
 		"close": "Fenster schließen",
@@ -161,9 +211,11 @@
 		"last_deployment": "Letztes Deployment",
 		"commit_count": "Commit-Anzahl",
 		"page_count": "Seitenanzahl",
+		"monthly_views": "Seitenaufrufe (letzter Monat)",
 		"cv_status": "CV-Status",
 		"online": "online",
-		"offline": "offline"
+		"offline": "offline",
+		"unknown": "unbekannt"
 	},
 	"now_playing": {
 		"title": "Aktuelle Wiedergabe",
@@ -186,12 +238,14 @@
 		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
 		"preview_title": "Playlist-Vorschau",
 		"alt_gif": "Playlist GIF",
-		"alt_cover": "Playlist Cover",
-		"spring": "Frühling",
-		"summer": "Sommer",
-		"autumn": "Herbst",
-		"winter": "Winter",
+		"alt_cover": "Playlist-Cover",
 		"all_years": "Alle Jahre",
+		"seasons": {
+			"spring": "Frühling",
+			"summer": "Sommer",
+			"autumn": "Herbst",
+			"winter": "Winter"
+		},
 		"stats": "Statistiken",
 		"artist_frequency": "Künstler-Frequenz",
 		"next": "Weiter",
@@ -233,7 +287,13 @@
 		"more_info_link": "Zettelkasten",
 		"inspired_by": "Inspiriert von",
 		"search_placeholder": "Suchen...",
-		"all_categories": "All Categories",
+		"all_categories": "Alle Kategorien",
+		"categories": {
+			"hardware": "Hardware",
+			"software": "Software",
+			"development": "Entwicklung",
+			"services": "Dienste"
+		},
 		"reset_filters": "Filter zurücksetzen",
 		"no_results": "Keine Ergebnisse gefunden.",
 		"results_found_one": "1 Ergebnis gefunden.",
@@ -269,7 +329,8 @@
 		"decrease_depth": "Tiefe verringern",
 		"increase_depth": "Tiefe erhöhen",
 		"zoom": "Zoom",
-		"graph_label": "Interaktive Grafik des Website-Netzwerks"
+		"graph_label": "Interaktive Grafik des Website-Netzwerks",
+		"loading": "Website-Netzwerk wird geladen..."
 	},
 	"about": {
 		"title": "Über diese Seite",
@@ -289,8 +350,196 @@
 		"h_ago": "vor {count}h",
 		"d_ago": "vor {count}d"
 	},
+	"buttons": {
+		"title": "Buttons",
+		"description": "Eine Sammlung von 88x31 Buttons.",
+		"all_categories": "Alle Kategorien",
+		"categories": {
+			"personal": "Persönlich",
+			"fun": "Spaß",
+			"political": "Politisch",
+			"other": "Andere"
+		},
+		"external_link_text": "Mehr auf eightyeightthirty.one entdecken"
+	},
 	"contact": {
 		"title": "Kontakt",
 		"description": "Du kannst mich unter"
+	},
+	"ping": {
+		"title": "Ping",
+		"description": "Sende eine Nachricht an mein Handy. (Kein Witz, das wird wirklich auf meinem Bildschirm aufploppen)",
+		"placeholder": "Deine Nachricht...",
+		"send": "Nachricht senden",
+		"sending": "Wird gesendet...",
+		"success": "Nachricht gesendet!",
+		"error": "Nachricht konnte nicht gesendet werden."
+	},
+	"api": {
+		"title": "API",
+		"description": "Entdecke die muenstererOS API-Endpunkte.",
+		"select_endpoint": "Wähle einen Endpunkt, um die Ausgabe zu testen:",
+		"query_parameters": "Abfrageparameter",
+		"clear_parameters": "Parameter löschen",
+		"call_endpoint": "Endpunkt aufrufen",
+		"loading": "Wird geladen...",
+		"error": "Fehler",
+		"response": "Antwort",
+		"json_viewer": "JSON-Viewer",
+		"schema": "Schema",
+		"search": "Suche",
+		"sortBy": "Sortieren nach",
+		"direction": "Richtung",
+		"page": "Seite",
+		"limit": "Limit",
+		"type": "Typ",
+		"ascending": "Aufsteigend",
+		"descending": "Absteigend",
+		"select": "Wählen",
+		"number": "Nummer"
+	},
+	"slashes": {
+		"title": "Slashes",
+		"description": "meine Slash-Seiten",
+		"spin": "DREHEN",
+		"good_luck": "Viel Glück!",
+		"wheel_label": "Glücksrad"
+	},
+	"concerts": {
+		"title": "Konzerte & Festivals",
+		"description": "Eine Sammlung von Live-Musik-Events, die ich besucht habe.",
+		"last_updated": "Zuletzt aktualisiert:",
+		"artist": "Künstler:in",
+		"venue": "Veranstaltungsort",
+		"location": "Ort",
+		"date": "Datum",
+		"type": "Typ",
+		"concert": "Konzert",
+		"concerts": "Konzerte",
+		"festival": "Festival",
+		"festivals": "Festivals",
+		"no_concerts": "Keine Konzerte gefunden.",
+		"view_on_musicbrainz": "Auf MusicBrainz ansehen",
+		"stats": "Statistiken",
+		"artist_frequency": "Künstler:innen-Frequenz",
+		"artist_frequency_description": "Das sind die Künstler:innen, die ich am häufigsten live gesehen habe.",
+		"artists_one": "1 Künstler:in",
+		"artists_many": "{count} Künstler:innen"
+	},
+	"where": {
+		"title": "Wo ich mich gerade befinde",
+		"description": "Mein aktueller Standort",
+		"roughly": "(ungefähr)"
+	},
+	"onboarding": {
+		"title": "Willkommen!",
+		"description": "Lass uns dein Erlebnis einrichten.",
+		"welcome": "Willkommen auf meiner Webseite! Dieses schnelle Setup hilft dir dabei, das Aussehen nach deinen Wünschen anzupassen.",
+		"step_welcome": "Willkommen",
+		"step_language": "Sprache",
+		"step_theme": "Design",
+		"step_texture": "Struktur",
+		"finish": "Setup abschließen",
+		"notification": "Willkommen! Möchtest du dein Erlebnis anpassen?",
+		"notification_link": "Onboarding starten"
+	},
+	"hotkeys": {
+		"title": "Hotkeys",
+		"meta_description": "Meine Raycast-Konfiguration und Tastenkombinationen",
+		"heading": "Hotkeys",
+		"try_raycast": "Raycast ausprobieren",
+		"referral_title": "Empfehlungslink zu Raycast",
+		"intro": {
+			"prefix": "Seit Raycast den ",
+			"middle": " eingeführt hat, bin ich ein großer Fan und intensiver Nutzer dieser zusätzlichen Produktivitätsebene geworden.",
+			"hyper_key": "Hyper Key",
+			"hyper_text": "Hyper",
+			"means_all": " bedeutet, dass alle Modifikatortasten (",
+			"triggered_simultaneously": ") gleichzeitig mit einer einzigen Taste ausgelöst werden, normalerweise ",
+			"caps_lock": "Feststelltaste (Caps Lock)",
+			"description": "Hier ist eine Übersicht der Hotkeys, die ich für meinen täglichen Workflow auf mehreren Geräten definiert habe und verwende."
+		},
+		"keyboard_help": "Bewege den Mauszeiger über die markierten Tasten, um deren Raycast-Shortcuts zu sehen (oder tippe eine Taste)",
+		"shortcuts_reference": "Shortcuts-Referenz",
+		"shortcuts_description": "Einige meiner Raycast-Shortcuts. (Fenstermanagement nutzt die Pfeiltasten)",
+		"extension": "Erweiterung",
+		"actions": {
+			"raycast_launcher": "Raycast Launcher",
+			"hyper_key": "Hyper Key",
+			"clipboard_manager": "Zwischenablage-Manager",
+			"snippets": "Textbausteine (Snippets)",
+			"bitwarden": "Bitwarden",
+			"downloads": "Downloads",
+			"editor": "Editor",
+			"finder": "Finder",
+			"google": "Google",
+			"notes": "Notizen",
+			"obsidian": "Obsidian",
+			"recognize_text": "Text erkennen",
+			"spotify": "Spotify",
+			"teams": "Teams",
+			"web": "Web-Browser",
+			"xcode": "Xcode",
+			"history": "Verlauf",
+			"mail": "Mail",
+			"screenshots": "Screenshots",
+			"terminal": "Terminal",
+			"menu_items": "Menüpunkte",
+			"ai_chat": "KI-Chat",
+			"switch_windows": "Fenster wechseln"
+		},
+		"descriptions": {
+			"spotlight": "Ich verwende Strg als Modifikator, um Spotlight ebenfalls verfügbar zu halten",
+			"capslock": "Die Feststelltaste wird selten benötigt, daher ist sie auf alle Modifikatortasten gleichzeitig umbelegt ({hyperKeys})",
+			"clipboard": "Zwischenablage-Manager öffnen",
+			"snippets": "Die Raycast Snippets-Ansicht öffnen",
+			"bitwarden": "Bitwarden öffnen (Schnellzugriff auf Passwörter)",
+			"downloads": "Downloads im Finder öffnen",
+			"editor": "Aktuelles IDE-Fenster anzeigen",
+			"finder": "Aktuelles Finder-Fenster öffnen",
+			"google": "Markierten Text mit Google suchen",
+			"notes": "Raycast-Notizen umschalten",
+			"obsidian": "Obsidian starten",
+			"recognize_text": "Text vom Bildschirm mit ScreenOCR erkennen",
+			"spotify": "Spotify-Player umschalten",
+			"teams": "Microsoft Teams öffnen",
+			"web": "Web-Browser öffnen",
+			"xcode": "Xcode öffnen",
+			"history": "Verlauf durchsuchen",
+			"mail": "Mail öffnen",
+			"screenshots": "Screenshots durchsuchen",
+			"terminal": "Terminal starten",
+			"menu_items": "Menüpunkte durchsuchen",
+			"ai_chat": "KI-Chat-Fenster umschalten",
+			"switch_windows": "Fenster im Raycast Window Switcher suchen"
+		},
+		"about": {
+			"title": "Über Raycast",
+			"description": "Raycast ist ein blitzschneller, vollständig erweiterbarer Launcher für Mac. Er ermöglicht es dir, Aufgaben zu erledigen, Berechnungen durchzuführen, häufig genutzte Links zu teilen und vieles mehr. Diese Seite zeigt meine persönliche Konfiguration und die Shortcuts, die ich täglich nutze, um meine Produktivität zu steigern.",
+			"link_text": "Mehr über Raycast erfahren",
+			"referral_note": "(Empfehlungslink)"
+		}
+	},
+	"terminal": {
+		"title": "Terminal",
+		"description": "Eine Kommandozeile für die muenstererOS Webseite.",
+		"loading": "init muenstererOS",
+		"ready": "CLI bereit",
+		"placeholder": "Befehl eingeben..."
+	},
+	"experiment": {
+		"title": "JavaScript-Spielplatz",
+		"description": "Ein Spielplatz für JavaScript-Code mit sofortiger Ausführung",
+		"snippets": "Snippets",
+		"editor": "Editor",
+		"output": "Ausgabe",
+		"reset": "Zurücksetzen",
+		"clear": "Leeren",
+		"console_output": "Konsolenausgabe",
+		"error": "Fehler",
+		"no_console_output": "Code erfolgreich ausgeführt (keine Konsolenausgabe)",
+		"execution_error": "Ausführungsfehler",
+		"placeholder_title": "Tippen Sie etwas ein, um die Live-Ausführung zu sehen",
+		"placeholder_subtitle": "Der Code wird automatisch während der Eingabe ausgeführt"
 	}
 }

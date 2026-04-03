@@ -9,63 +9,63 @@ import pages from '../../../data/pages.json';
 import uses from '../../../data/uses.json';
 
 const dataMap: Record<string, any> = {
-  playlists,
-  changes,
-  pages,
-  uses
+	playlists,
+	changes,
+	pages,
+	uses
 };
 const DEFAULT_LIMIT = 50;
 
 export async function GET({ params, url }) {
-  const { slug } = params;
-  
-  try {
-    const data = dataMap[slug];
+	const { slug } = params;
 
-    // Pagination parameters
-    const page = parseInt(url.searchParams.get('page') || '1', 10);
-    const limit = parseInt(url.searchParams.get('limit') || `${DEFAULT_LIMIT}`, 10);
+	try {
+		const data = dataMap[slug];
 
-    // Search parameter
-    const search = url.searchParams.get('search')?.toLowerCase();
+		// Pagination parameters
+		const page = parseInt(url.searchParams.get('page') || '1', 10);
+		const limit = parseInt(url.searchParams.get('limit') || `${DEFAULT_LIMIT}`, 10);
 
-    // Sorting parameters
-    const sortKey = url.searchParams.get('sortBy');
-    const sortDir = url.searchParams.get('direction')?.toLowerCase() === 'desc' ? 'desc' : 'asc';
+		// Search parameter
+		const search = url.searchParams.get('search')?.toLowerCase();
 
-    let filteredData = data;
+		// Sorting parameters
+		const sortKey = url.searchParams.get('sortBy');
+		const sortDir = url.searchParams.get('direction')?.toLowerCase() === 'desc' ? 'desc' : 'asc';
 
-    // Search filter
-    if (search && Array.isArray(filteredData)) {
-      filteredData = searchData(filteredData, search, ['title', 'description', 'year', 'date'])
-    }
-    // Sorting
-    if (sortKey && Array.isArray(filteredData)) {
-      // Only sort if the key exists on the first item (or fallback to string)
-      const key = sortKey as keyof DataItem;
-      if (filteredData.length > 0 && key in filteredData[0]) {
-        filteredData = sortData(filteredData, key, sortDir);
-      }
-    }
+		let filteredData = data;
 
-    if (!Array.isArray(filteredData)) {
-      // If the data is not an array, return as is (no pagination)
-      return json(filteredData);
-    }
+		// Search filter
+		if (search && Array.isArray(filteredData)) {
+			filteredData = searchData(filteredData, search, ['title', 'description', 'year', 'date']);
+		}
+		// Sorting
+		if (sortKey && Array.isArray(filteredData)) {
+			// Only sort if the key exists on the first item (or fallback to string)
+			const key = sortKey as keyof DataItem;
+			if (filteredData.length > 0 && key in filteredData[0]) {
+				filteredData = sortData(filteredData, key, sortDir);
+			}
+		}
 
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const paginated = filteredData.slice(start, end);
+		if (!Array.isArray(filteredData)) {
+			// If the data is not an array, return as is (no pagination)
+			return json(filteredData);
+		}
 
-    return json({
-      page,
-      limit,
-      dataType: slug,
-      total: filteredData.length,
-      totalPages: Math.ceil(filteredData.length / limit),
-      items: paginated
-    });
-  } catch (err: any) {
-    throw error(404, `Data file not found for slug: ${slug}, Error: ${err.message}`);
-  }
+		const start = (page - 1) * limit;
+		const end = start + limit;
+		const paginated = filteredData.slice(start, end);
+
+		return json({
+			page,
+			limit,
+			dataType: slug,
+			total: filteredData.length,
+			totalPages: Math.ceil(filteredData.length / limit),
+			items: paginated
+		});
+	} catch (err: any) {
+		throw error(404, `Data file not found for slug: ${slug}, Error: ${err.message}`);
+	}
 }

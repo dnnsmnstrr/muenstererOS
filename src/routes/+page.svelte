@@ -10,6 +10,8 @@
 	import { onMount, untrack } from 'svelte';
 	import { cn } from '$lib/utils';
 	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	let element: HTMLElement | null = $state(null);
 	let width = $state(0);
@@ -38,13 +40,13 @@
 		const dx = e.clientX - startX;
 		const dy = e.clientY - startY;
 
-		if (!hasDragged && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+		if (!hasDragged && (Math.abs(dx) > 10 || Math.abs(dy) > 10)) {
 			hasDragged = true;
 		}
 
 		if (hasDragged) {
 			// Update Y position with clamping
-			const minY = 80;
+			const minY = 160;
 			const maxY = height - 80;
 			nowPlayingY = Math.max(minY, Math.min(e.clientY, maxY));
 
@@ -62,20 +64,19 @@
 			(e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 			if (hasDragged) {
 				lastDragEndTime = Date.now();
-				// Save state when drag ends
 				nowPlayingStore.saveToStorage({
 					y: nowPlayingY,
 					side: nowPlayingSide,
 					expanded: nowPlayingExpanded
 				});
 			}
+			isDragging = false;
 		}
-		isDragging = false;
 	}
 
 	function handleClickCapture(e: MouseEvent) {
 		// Allow drag gesture to prevent expansion toggle
-		if (hasDragged || (Date.now() - lastDragEndTime < 100)) {
+		if (hasDragged || Date.now() - lastDragEndTime < 100) {
 			e.stopPropagation();
 			e.preventDefault();
 			if (e.type === 'click') {
@@ -87,14 +88,18 @@
 		// Check if click is outside of the expanded area
 		const clickX = e.clientX;
 		const toggleThreshold = 70;
-		const isNearActiveSide = 
+		const isNearActiveSide =
 			(nowPlayingSide === 'left' && clickX < toggleThreshold) ||
 			(nowPlayingSide === 'right' && clickX > window.innerWidth - toggleThreshold);
 
-		if (isNearActiveSide || !nowPlayingExpanded) {
+		if (isNearActiveSide) {
 			nowPlayingExpanded = !nowPlayingExpanded;
+			e.stopPropagation();
+			e.preventDefault();
 		} else {
 			goto('/playlists?current');
+			e.stopPropagation();
+			e.preventDefault();
 		}
 	}
 
@@ -113,7 +118,24 @@
 	onMount(() => {
 		initializeFiles();
 		nowPlayingStore.loadFromStorage();
-		
+
+		const onboardingComplete = localStorage.getItem('onboardingComplete');
+		if (!onboardingComplete) {
+			const duration = 10 * 1000; // 10 seconds
+			const timer = setTimeout(() => {
+				toast(i18n.t('onboarding.notification'), {
+					action: {
+						label: i18n.t('onboarding.notification_link'),
+						onClick: () => goto('/onboarding')
+					},
+					duration
+				});
+			}, duration);
+			return () => {
+				clearTimeout(timer);
+			};
+		}
+
 		// Subscribe to store changes to sync local state
 		const unsubscribe = nowPlayingStore.subscribe((state) => {
 			nowPlayingY = state.y;
@@ -150,10 +172,7 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		data-testid="now-playing-wrapper"
-		class={cn(
-			"fixed z-40 touch-none select-none",
-			isDragging ? "cursor-grabbing" : "cursor-grab"
-		)}
+		class={cn('fixed z-40 touch-none select-none', isDragging ? 'cursor-grabbing' : 'cursor-grab')}
 		style="top: {nowPlayingY}px; {nowPlayingSide}: 0; transform: translateY(-50%);"
 		onpointerdown={handlePointerDown}
 		onpointermove={handlePointerMove}

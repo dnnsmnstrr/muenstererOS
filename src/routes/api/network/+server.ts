@@ -15,8 +15,15 @@ interface Edge {
 	target: string;
 }
 
+interface CacheEntry {
+	links: string[];
+	timestamp: number;
+}
+
 const MAX_DEPTH = 3; // 3 levels deep as requested
-const MAX_NODES = 100; // Limit nodes to avoid timeouts
+const MAX_NODES = 50; // Limit nodes to avoid timeouts
+const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 hours
+const linkCache = new Map<string, CacheEntry>();
 
 const EXCLUDED_DOMAINS = [
 	'github.com',
@@ -56,7 +63,7 @@ const EXCLUDED_DOMAINS = [
 	'codepen.io',
 	'nextjs.org',
 	'blogroll.org',
-	'schema.org',
+	'schema.org'
 ];
 
 function isPersonal(url: string): boolean {
@@ -88,7 +95,7 @@ function isPersonal(url: string): boolean {
 		const urlObj = new URL(url);
 		const domain = urlObj.hostname;
 
-		if (EXCLUDED_DOMAINS.some(social => domain.endsWith(social))) {
+		if (EXCLUDED_DOMAINS.some((social) => domain.endsWith(social))) {
 			return false;
 		}
 
@@ -99,11 +106,17 @@ function isPersonal(url: string): boolean {
 }
 
 async function getLinks(url: string): Promise<string[]> {
+	const cached = linkCache.get(url);
+	if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+		return cached.links;
+	}
+
 	try {
 		const response = await fetch(url, {
 			headers: {
-				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-				'Accept': 'text/html'
+				'User-Agent':
+					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+				Accept: 'text/html'
 			},
 			signal: AbortSignal.timeout(5000)
 		});
@@ -126,7 +139,11 @@ async function getLinks(url: string): Promise<string[]> {
 
 				const path = linkUrl.pathname.toLowerCase();
 				const isRoot = path === '/' || path === '';
-				const isDirectory = path.includes('/sites') || path.includes('/people') || path.includes('/links') || path.includes('/blogroll');
+				const isDirectory =
+					path.includes('/sites') ||
+					path.includes('/people') ||
+					path.includes('/links') ||
+					path.includes('/blogroll');
 
 				// Follow if it's a directory we're interested in, OR if it's a root link to a different domain (likely a personal site)
 				if (isDirectory || (isRoot && getBaseDomain(foundUrl) !== getBaseDomain(url))) {
@@ -148,7 +165,11 @@ async function getLinks(url: string): Promise<string[]> {
 
 				const path = linkUrl.pathname.toLowerCase();
 				const isRoot = path === '/' || path === '';
-				const isDirectory = path.includes('/sites') || path.includes('/people') || path.includes('/links') || path.includes('/blogroll');
+				const isDirectory =
+					path.includes('/sites') ||
+					path.includes('/people') ||
+					path.includes('/links') ||
+					path.includes('/blogroll');
 
 				if (isDirectory || (isRoot && getBaseDomain(resolvedUrl) !== getBaseDomain(url))) {
 					links.add(resolvedUrl);
@@ -157,7 +178,9 @@ async function getLinks(url: string): Promise<string[]> {
 				// Invalid URL
 			}
 		}
-		return Array.from(links);
+		const result = Array.from(links);
+		linkCache.set(url, { links: result, timestamp: Date.now() });
+		return result;
 	} catch (e) {
 		console.error(`Failed to fetch links from ${url}:`, e);
 		return [];
@@ -165,33 +188,38 @@ async function getLinks(url: string): Promise<string[]> {
 }
 
 function getBaseDomain(url: string): string {
-    try {
-        const urlObj = new URL(url);
-        const parts = urlObj.hostname.split('.');
-        
-        // Handle specific second-level domains
-        if (parts.length >= 2) {
-            // Check for .co.uk and similar domains
-            const secondLevelDomains = ['co.uk', 'gov.uk', 'ac.uk', 'org.uk'];
-            const lastTwoParts = parts.slice(-2).join('.');
-            
-            // Determine if the last two parts or last three parts form a known second-level domain
-            if (secondLevelDomains.includes(lastTwoParts)) {
-                const base = parts.slice(-3).join('.');
-                return `${urlObj.protocol}//${base}/`;
-            } else {
-                const base = parts.slice(-2).join('.');
-                return `${urlObj.protocol}//${base}/`;
-            }
-        }
-        return urlObj.origin + '/';
-    } catch {
-        return url;
-    }
+	try {
+		const urlObj = new URL(url);
+		const parts = urlObj.hostname.split('.');
+
+		// Handle specific second-level domains
+		if (parts.length >= 2) {
+			// Check for .co.uk and similar domains
+			const secondLevelDomains = ['co.uk', 'gov.uk', 'ac.uk', 'org.uk'];
+			const lastTwoParts = parts.slice(-2).join('.');
+
+			// Determine if the last two parts or last three parts form a known second-level domain
+			if (secondLevelDomains.includes(lastTwoParts)) {
+				const base = parts.slice(-3).join('.');
+				return `${urlObj.protocol}//${base}/`;
+			} else {
+				const base = parts.slice(-2).join('.');
+				return `${urlObj.protocol}//${base}/`;
+			}
+		}
+		return urlObj.origin + '/';
+	} catch {
+		return url;
+	}
 }
 
+export async function GET({ url: requestUrl }) {
+	const depthParam = requestUrl.searchParams.get('depth');
+	const maxDepth = depthParam ? Math.min(Math.max(parseInt(depthParam, 10), 1), 10) : MAX_DEPTH;
 
-export async function GET() {
+	const limitParam = requestUrl.searchParams.get('limit');
+	const maxNodes = limitParam ? Math.min(Math.max(parseInt(limitParam, 10), 1), 500) : MAX_NODES * MAX_DEPTH;
+
 	const rootUrl = getBaseDomain(`https://${CURRENT_DOMAIN}/`);
 	const nodes: Node[] = [{ id: rootUrl, label: CURRENT_DOMAIN, depth: 0, type: 'root' }];
 	const edges: Edge[] = [];
@@ -220,11 +248,10 @@ export async function GET() {
 		}
 	}
 
-
 	let currentLevel = queue;
 	let currentDepth = 1;
 
-	while (currentLevel.length > 0 && currentDepth < MAX_DEPTH && nodes.length < MAX_NODES) {
+	while (currentLevel.length > 0 && currentDepth < maxDepth && nodes.length < maxNodes) {
 		const results = await Promise.all(
 			currentLevel.map(async ({ url, depth }) => {
 				const discoveredLinks = await getLinks(url);
@@ -237,12 +264,10 @@ export async function GET() {
 		for (const { url, depth, discoveredLinks } of results) {
 			// Limit links per page to avoid one seed exhausting the limit
 			// and shuffle them to ensure diversity
-			const shuffledLinks = discoveredLinks
-				.sort(() => Math.random() - 0.5)
-				.slice(0, 25);
+			const shuffledLinks = discoveredLinks.sort(() => Math.random() - 0.5).slice(0, 25);
 
 			for (const link of shuffledLinks) {
-				if (nodes.length >= MAX_NODES) break;
+				if (nodes.length >= maxNodes) break;
 
 				try {
 					const linkUrl = new URL(link);

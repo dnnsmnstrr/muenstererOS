@@ -5,7 +5,13 @@ import * as LucideIcons from 'lucide-svelte';
 
 export const defaultFiles = [
 	{ id: 'projects', name: 'Projects', href: '/projects', icon: LucideIcons.FolderOpen },
-	{ id: 'experiment', name: 'index.js', href: '/experiment', icon: LucideIcons.FileText, leftOffset: 3 },
+	{
+		id: 'experiment',
+		name: 'index.js',
+		href: '/experiment',
+		icon: LucideIcons.FileText,
+		leftOffset: 3
+	}
 ];
 
 // Icon registry for serialization
@@ -77,7 +83,11 @@ desktopFiles.subscribe((value) => {
 	}
 });
 
-export function initializeFiles(files: FileDefinition[] = defaultFiles, padding = 20, fileSize = 60) {
+export function initializeFiles(
+	files: FileDefinition[] = defaultFiles,
+	padding = 20,
+	fileSize = 60
+) {
 	if (!browser) return;
 
 	desktopFiles.update((existingFiles) => {
@@ -141,7 +151,7 @@ export function updateFilePosition(id: string, x: number, y: number) {
 
 export function renameFile(id: string, newName: string) {
 	if (!newName || !newName.trim()) return;
-	desktopFiles.update((files) => 
+	desktopFiles.update((files) =>
 		files.map((file) => (file.id === id ? { ...file, name: newName.trim() } : file))
 	);
 }
@@ -155,10 +165,11 @@ export function updateFileIcon(id: string, iconName: string) {
 }
 
 export function resetDesktopFiles() {
-  desktopFiles.set([]);
-  if (browser && window?.localStorage) {
-    delete window.localStorage.desktopFiles;
-  }
+	desktopFiles.set([]);
+	if (browser && window?.localStorage) {
+		delete window.localStorage.desktopFiles;
+		delete window.localStorage.onboardingComplete;
+	}
 	if (defaultFiles) {
 		// Reset to default files with new positions
 		initializeFiles(defaultFiles);

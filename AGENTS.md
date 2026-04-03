@@ -19,6 +19,7 @@ This file provides guidance to AI agents when working with code in this reposito
 This is a SvelteKit-based personal website called "muenstererOS" with a unique interactive desktop operating system like UI.
 
 ### Core Technologies
+
 - **SvelteKit 2** with Svelte 5 - Full-stack framework
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling with custom theming system
@@ -30,24 +31,28 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 ### Key Architecture Patterns
 
 #### Data Management
+
 - Svelte stores in `src/lib/stores/` for global state
 - Data files stored as JSON in `static/data/`
 - Generic API handler at `/api/[slug]` that serves any JSON file from `static/data/`
 - API utilities in `src/lib/utils/api.ts` for search, sort, and pagination
 
 #### UI System
+
 - Component library in `src/lib/components/ui/` following shadcn-ui patterns
 - Custom components in `src/lib/components/`
 - Theming system with CSS custom properties and multiple theme variants
 - Interactive cursor-following mask effect controlled by mouse movement on the homepage with predefined positioning for other pages
 
 #### Routing Structure
+
 - File-based routing with SvelteKit conventions
 - API routes in `src/routes/api/`
 - JSON data in `src/data/`
 - Dynamic pages use server-side data loading patterns
 
 ### Key Features
+
 - Desktop-like interface with draggable windows
 - Command palette (Cmd+K) for navigation
 - Dynamic theming system with color customization
@@ -56,6 +61,7 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 - Generic JSON API endpoints with search/sort/pagination
 
 ### Development Notes
+
 - Uses Svelte 5 syntax (runes: `$state`, `$derived`, `$props`, `$effect`)
 - TypeScript strict mode enabled
 - Prettier for code formatting
@@ -63,11 +69,13 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 - Environment variables: `PUBLIC_ALGOLIA_API_ID`, `PUBLIC_ALGOLIA_API_KEY`
 
 ### Content Management
+
 - Major changes and features tracked in `static/data/changes.json`
 - Run `npm run xml` after updating changes to regenerate RSS feed
 - Static assets in `static/images/`
 - Page content primarily in route components
 
 ### i18n
-- Translations for English and German 
+
+- Translations for English and German
 - Date and Number formatting based on locale

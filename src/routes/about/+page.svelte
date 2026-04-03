@@ -2,6 +2,7 @@
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import Link from '$lib/components/typography/Link.svelte';
 	import List from '$lib/components/typography/List.svelte';
+	import ButtonMarquee from '$lib/components/ButtonMarquee.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
@@ -9,7 +10,8 @@
 	import { Github } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { formatDate } from '$lib/utils/helper';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { formatDate, getFriendlyTime } from '$lib/utils/helper';
 
 	interface Status {
 		lastDeployment: string;
@@ -28,17 +30,7 @@
 		}
 	});
 
-	function getFriendlyTime(date: Date) {
-		const now = new Date();
-		const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-		if (diffInSeconds < 60) return i18n.t('about.just_now');
-		const diffInMinutes = Math.floor(diffInSeconds / 60);
-		if (diffInMinutes < 60) return i18n.t('about.m_ago', { count: diffInMinutes.toString() });
-		const diffInHours = Math.floor(diffInMinutes / 60);
-		if (diffInHours < 24) return i18n.t('about.h_ago', { count: diffInHours.toString() });
-		const diffInDays = Math.floor(diffInHours / 24);
-		return i18n.t('about.d_ago', { count: diffInDays.toString() });
-	}
+	
 
 	let lastDeploymentDate = $derived(status ? new Date(status.lastDeployment) : null);
 	let isRecent = $derived(
@@ -61,7 +53,7 @@
 </script>
 
 <svelte:head>
-	<title>{i18n.t('about.title')}</title>
+	<title>{i18n.t('about.title')}{PAGE_TITLE_SUFFIX}</title>
 	<meta name="description" content={i18n.t('about.title')} />
 </svelte:head>
 
@@ -110,20 +102,20 @@
 				</List>
 			</ScrollArea>
 		</Card.Content>
-		<Card.Footer class="justify-between text-xs text-muted-foreground">
-			<Button variant="link" href="/humans.txt" class="h-auto p-0">
-				<img src="/images/humanstxt.png" alt="" class="h-8" />
-			</Button>
+		<Card.Footer class="flex-col items-stretch gap-4 text-xs text-muted-foreground">
+			<ButtonMarquee />
 			{#if status}
-				<Link
-					href="/status"
-					class="flex flex-col items-end gap-1 font-normal text-muted-foreground decoration-muted-foreground/50 transition-colors hover:text-foreground"
-				>
-					<span title={titleTime}>
-						{i18n.t('about.last_deployment')}
-						{displayTime}
-					</span>
-				</Link>
+				<div class="flex justify-end">
+					<Link
+						href="/status"
+						class="flex flex-col items-end gap-1 font-normal text-muted-foreground decoration-muted-foreground/50 transition-colors hover:text-foreground"
+					>
+						<span title={titleTime}>
+							{i18n.t('about.last_deployment')}
+							{displayTime}
+						</span>
+					</Link>
+				</div>
 			{/if}
 		</Card.Footer>
 	</Card.Root>

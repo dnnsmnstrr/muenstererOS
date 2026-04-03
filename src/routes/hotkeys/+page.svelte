@@ -8,174 +8,182 @@
 	import { getRedirectByName } from '$lib/redirects';
 	import { Button } from '$lib/components/ui/button';
 	import { isCommandActive } from '$lib/stores/app';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+
 	const raycastUrl = getRedirectByName('raycast')?.url;
 
 	// Raycast shortcuts configuration
 	const hyperKeys = '⌘⌥⌃⇧';
-	const shortcuts: Shortcut[] = [
+
+	/**
+	 * Reactive shortcuts list that updates action labels and descriptions
+	 * when the active language changes.
+	 */
+	const shortcuts: Shortcut[] = $derived([
 		{
 			modifier: Modifier.Ctrl,
 			key: 'Space',
-			description: 'I use Ctrl as modifier to keep Spotlight available as well',
-			action: 'Raycast Launcher',
+			description: i18n.t('hotkeys.descriptions.spotlight'),
+			action: i18n.t('hotkeys.actions.raycast_launcher'),
 			icon: '🚀'
 		},
 		{
 			key: 'Caps',
-			description: `Capslock is rarely needed, so it is remapped to all modifier keys at once (${hyperKeys})`,
-			action: 'Hyper Key',
+			description: i18n.t('hotkeys.descriptions.capslock', { hyperKeys }),
+			action: i18n.t('hotkeys.actions.hyper_key'),
 			icon: Modifier.Hyper
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'c',
-			description: 'Open Clipboard Manager',
-			action: 'Clipboard Manager',
+			description: i18n.t('hotkeys.descriptions.clipboard'),
+			action: i18n.t('hotkeys.actions.clipboard_manager'),
 			icon: '📋'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'v',
-			description: 'Open the Raycast Snippets view',
-			action: 'Snippets',
+			description: i18n.t('hotkeys.descriptions.snippets'),
+			action: i18n.t('hotkeys.actions.snippets'),
 			icon: '📝'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'b',
-			description: 'Open Bitwarden (Quick Access to passwords)',
-			action: 'Bitwarden',
+			description: i18n.t('hotkeys.descriptions.bitwarden'),
+			action: i18n.t('hotkeys.actions.bitwarden'),
 			icon: '🔒'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'd',
-			description: 'Open Downloads in Finder',
-			action: 'Downloads',
+			description: i18n.t('hotkeys.descriptions.downloads'),
+			action: i18n.t('hotkeys.actions.downloads'),
 			icon: '📥'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'e',
-			description: 'Show current IDE window',
-			action: 'Editor',
+			description: i18n.t('hotkeys.descriptions.editor'),
+			action: i18n.t('hotkeys.actions.editor'),
 			icon: '⌨️'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'f',
-			description: 'Open current Finder window',
-			action: 'Finder',
+			description: i18n.t('hotkeys.descriptions.finder'),
+			action: i18n.t('hotkeys.actions.finder'),
 			icon: '📁'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'g',
-			description: 'Search selected text with Google',
-			action: 'Google',
+			description: i18n.t('hotkeys.descriptions.google'),
+			action: i18n.t('hotkeys.actions.google'),
 			icon: '👀'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'n',
-			description: 'Toggle Raycast Notes',
-			action: 'Notes',
+			description: i18n.t('hotkeys.descriptions.notes'),
+			action: i18n.t('hotkeys.actions.notes'),
 			icon: '🗒️'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'o',
-			description: 'Launch Obsidian',
-			action: 'Obsidian',
+			description: i18n.t('hotkeys.descriptions.obsidian'),
+			action: i18n.t('hotkeys.actions.obsidian'),
 			icon: '🪨'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'r',
-			description: 'Recognize text from screen with ScreenOCR',
-			action: 'Recognize Text',
+			description: i18n.t('hotkeys.descriptions.recognize_text'),
+			action: i18n.t('hotkeys.actions.recognize_text'),
 			icon: '👁️‍🗨️',
 			url: 'https://www.raycast.com/huzef44/screenocr'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 's',
-			description: 'Toggle Spotify player',
-			action: 'Spotify',
+			description: i18n.t('hotkeys.descriptions.spotify'),
+			action: i18n.t('hotkeys.actions.spotify'),
 			icon: '🎵'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 't',
-			description: 'Open Microsoft Teams',
-			action: 'Teams',
+			description: i18n.t('hotkeys.descriptions.teams'),
+			action: i18n.t('hotkeys.actions.teams'),
 			icon: '👥'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'w',
-			description: 'Open Web Browser',
-			action: 'Web',
+			description: i18n.t('hotkeys.descriptions.web'),
+			action: i18n.t('hotkeys.actions.web'),
 			icon: '🌐'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'x',
-			description: 'Open Xcode',
-			action: 'Xcode',
+			description: i18n.t('hotkeys.descriptions.xcode'),
+			action: i18n.t('hotkeys.actions.xcode'),
 			icon: '🔨'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: 'z',
-			description: 'Search history',
-			action: 'History',
+			description: i18n.t('hotkeys.descriptions.history'),
+			action: i18n.t('hotkeys.actions.history'),
 			icon: '⌛',
 			url: 'https://www.raycast.com/Keyruu/zen-browser'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: '2',
-			description: 'Open Mail',
-			action: 'Mail',
+			description: i18n.t('hotkeys.descriptions.mail'),
+			action: i18n.t('hotkeys.actions.mail'),
 			icon: '📧'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: '4',
-			description: 'Search screenshots',
-			action: 'Screenshots',
+			description: i18n.t('hotkeys.descriptions.screenshots'),
+			action: i18n.t('hotkeys.actions.screenshots'),
 			icon: '📷'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: '.',
-			description: 'Launch Terminal',
-			action: 'Terminal',
+			description: i18n.t('hotkeys.descriptions.terminal'),
+			action: i18n.t('hotkeys.actions.terminal'),
 			icon: '💻'
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: '/',
-			description: 'Search menu items',
-			action: 'Menu Items',
+			description: i18n.t('hotkeys.descriptions.menu_items'),
+			action: i18n.t('hotkeys.actions.menu_items'),
 			icon: '🔎',
 		},
 		{
 			modifier: Modifier.Hyper,
 			key: '`',
-			description: 'Toggle AI Chat window',
-			action: 'AI Chat',
+			description: i18n.t('hotkeys.descriptions.ai_chat'),
+			action: i18n.t('hotkeys.actions.ai_chat'),
 			icon: '💬',
 		},
 		{
 			modifier: Modifier.Alt,
 			key: 'Tab',
-			description: 'Search windows in the Raycast Window Switcher',
-			action: 'Switch Windows',
+			description: i18n.t('hotkeys.descriptions.switch_windows'),
+			action: i18n.t('hotkeys.actions.switch_windows'),
 			icon: '🪟',
 		},
-	];
+	]);
 
 
 	function clickKey(label: string) {
@@ -203,34 +211,39 @@
 </script>
 
 <svelte:head>
-	<meta name="description" content="My Raycast configuration and keyboard shortcuts" />
+	<title>{i18n.t('hotkeys.title')}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('hotkeys.meta_description')} />
 </svelte:head>
 
 <div class="container">
 	<div class="mb-6 flex items-center justify-between">
-		<Heading class="mb-0">Hotkeys</Heading>
+		<Heading class="mb-0">{i18n.t('hotkeys.heading')}</Heading>
 		<Button
 			variant="outline"
-			title="Referral link to Raycast"
+			title={i18n.t('hotkeys.referral_title')}
 			href={raycastUrl}
 			target="_blank"
 			rel="noopener noreferrer"
 			class="flex items-center gap-2 text-sm text-muted-foreground ring-1 ring-red-500/50 mt-1"
 		>
 			<img src={Raycast} alt="Raycast" class="h-4 w-4" />
-			<span>Try Raycast</span>
+			<span>{i18n.t('hotkeys.try_raycast')}</span>
 		</Button>
 	</div>
 
 	<div class="my-8">
 		<p class="text-card-foreground leading-loose">
-			Since Raycast introduced the <Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">Hyper Key</Link>, 
-			I've become a big fan and heavy user of this additional productivity layer. 
+			{i18n.t('hotkeys.intro.prefix')}
+			<Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">
+				{i18n.t('hotkeys.intro.hyper_key')}
+			</Link>
+			{i18n.t('hotkeys.intro.middle')}
 			<br>
-			Hyper <Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd> means all modifier keys (<Kbd class="font-bold">{hyperKeys}</Kbd>) are triggered simultaneously with a single key, usually <Kbd class="font-bold">Caps Lock</Kbd>.
+			{i18n.t('hotkeys.intro.hyper_text')} <Kbd class="text-xl pt-0">{Modifier.Hyper}</Kbd>
+			{i18n.t('hotkeys.intro.means_all')} <Kbd class="font-bold">{hyperKeys}</Kbd>
+			{i18n.t('hotkeys.intro.triggered_simultaneously')} <Kbd class="font-bold">{i18n.t('hotkeys.intro.caps_lock')}</Kbd>.
 			<br>
-			Here is an overview of the hotkeys I have defined and use across multiple devices for my daily workflow. 
-			
+			{i18n.t('hotkeys.intro.description')}
 		</p>
 	</div>
 
@@ -241,7 +254,7 @@
 				<VirtualKeyboard {shortcuts} />
 				<div class="mt-4 text-center">
 					<div class="text-sm text-muted-foreground">
-						Hover over highlighted keys to see their Raycast shortcuts (or try typing a key)
+						{i18n.t('hotkeys.keyboard_help')}
 					</div>
 				</div>
 			</Card.Content>
@@ -252,9 +265,9 @@
 			<Card.Header>
 				<Card.Title class="flex items-center gap-2">
 					<Command class="h-5 w-5" />
-					Shortcuts Reference
+					{i18n.t('hotkeys.shortcuts_reference')}
 				</Card.Title>
-				<Card.Description>Some of my Raycast shortcuts. (Window management uses the arrow keys)</Card.Description>
+				<Card.Description>{i18n.t('hotkeys.shortcuts_description')}</Card.Description>
 			</Card.Header>
 			<Card.Content>
 				<div class="space-y-3">
@@ -268,7 +281,7 @@
 										<div class="font-medium">{shortcut.action}
 											{#if shortcut.url}
 												<a href={shortcut.url} target="_blank" rel="noopener noreferrer" class="ml-1">
-													<Kbd class="text-xs">Extension</Kbd>
+													<Kbd class="text-xs">{i18n.t('hotkeys.extension')}</Kbd>
 												</a>
 											{/if}
 										</div>
@@ -295,14 +308,14 @@
 	</div>
 
 	<div class="my-8 rounded-lg border bg-muted/50 p-4">
-		<h3 class="mb-2 font-semibold">About Raycast</h3>
+		<h3 class="mb-2 font-semibold">{i18n.t('hotkeys.about.title')}</h3>
 		<p class="text-sm text-muted-foreground pb-4">
-			Raycast is a blazingly fast, totally extendable launcher for Mac. It lets you complete tasks,
-			calculate, share common links, and much more. This page showcases my personal configuration
-			and the shortcuts I use daily to boost productivity.
+			{i18n.t('hotkeys.about.description')}
 			<br><br>
-			<Link href={raycastUrl} target="_blank" rel="noopener noreferrer">Learn more about Raycast</Link> 
-			(referral link)
+			<Link href={raycastUrl} target="_blank" rel="noopener noreferrer">
+				{i18n.t('hotkeys.about.link_text')}
+			</Link>
+			{i18n.t('hotkeys.about.referral_note')}
 		</p>
 	</div>
 </div>

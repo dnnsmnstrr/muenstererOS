@@ -14,12 +14,17 @@
 		setSelectedPlaylistUri: (uri: string) => {};
 	}
 
-	let { playlist = $bindable(), compact = false, isHighlighted = false, setSelectedPlaylistUri }: Props = $props();
+	let {
+		playlist = $bindable(),
+		compact = false,
+		isHighlighted = false,
+		setSelectedPlaylistUri
+	}: Props = $props();
 </script>
 
 <Card.Root data-playlist-card class="group relative {isHighlighted ? 'ring-2 ring-primary' : ''}">
 	<a href={playlist.url || SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank" class="h-full">
-		<Card.Content class="pt-6 h-full">
+		<Card.Content class="h-full pt-6">
 			{#if !compact}
 				{#if playlist.gif}
 					<div class="relative">
@@ -60,7 +65,8 @@
 					</h2>
 					{#if playlist.season}
 						<p class="text-muted-foreground">
-							{i18n.t(`playlists.${playlist.season}`)} - {playlist.year || i18n.t('playlists.all_years')}
+							{i18n.t('playlists.seasons.' + playlist.season)} - {playlist.year ||
+								i18n.t('playlists.all_years')}
 						</p>
 					{/if}
 					{#if playlist.description}
@@ -72,11 +78,13 @@
 			</div>
 		</Card.Content>
 	</a>
-	<button
-		class="absolute right-2 top-2 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
-		class:opacity-0={!playlist.isHovered && window?.innerWidth < breakpoints.sm}
-		onclick={stopPropagation(preventDefault(() => setSelectedPlaylistUri(playlist.uri)))}
-	>
-		<Info class="h-4 w-4" />
-	</button>
+	{#if !!playlist.uri}
+		<button
+			class="absolute right-2 top-2 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
+			class:opacity-0={!playlist.isHovered && window?.innerWidth < breakpoints.sm}
+			onclick={stopPropagation(preventDefault(() => setSelectedPlaylistUri(playlist.uri)))}
+		>
+			<Info class="h-4 w-4" />
+		</button>
+	{/if}
 </Card.Root>

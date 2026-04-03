@@ -1,9 +1,12 @@
-import { disemvowel } from "./utils/helper";
+import { disemvowel } from './utils/helper';
 
 export const FIRST_NAME = 'Dennis';
 export const LAST_NAME = 'Muensterer';
 export const NOW_GIST_ID = 'f18bfa6e4f02dc480426d05cf7adff79';
 export const RESUME_GIST_ID = '548256752a08213eded1c5c90dbe7767';
+export const CONCERTS_GIST_ID = 'dfbfe91a2270618febfc7c58f10cff48';
+export const NTFY_TOPIC = 'muensterer_tech';
+export const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
 export const EMAIL_PROVIDER = 'gmail';
 export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
@@ -29,8 +32,8 @@ export const user = {
 	familyName: LAST_NAME,
 	username: USERNAME_SHORT,
 	birthDate: BIRTHDATE,
-	occupation: 'Software Developer',
-}
+	occupation: 'Software Developer'
+};
 
 export const links = {
 	yat: 'https://y.at/🤖💻📱⌚🎧',
@@ -59,8 +62,8 @@ export const links = {
 	applemusic: 'https://music.apple.com/profile/' + USERNAME_SHORT,
 	email: EMAIL,
 	mailto: 'mailto:' + EMAIL,
-    cv: "https://cv.muensterer.tech",
-	pages: `https://${USERNAME_SHORT}.github.io`,
+	cv: 'https://cv.muensterer.tech',
+	pages: `https://${USERNAME_SHORT}.github.io`
 } as const;
 
 export const gists = {
@@ -88,21 +91,14 @@ export const gists = {
 		id: '2fc6578c2a8d7375af8cfd1be3131711',
 		name: 'Songs',
 		filename: 'songs.json'
+	},
+	concerts: {
+		id: CONCERTS_GIST_ID,
+		name: 'Concerts',
+		filename: 'concerts.json'
 	}
 };
 
-export const descriptions = [
-    { name: '🤖💻📱⌚🎧', href: links.yat },
-	{ name: '💻 ' + user.occupation, href: links.cv },
-	{ name: '🤖 Builder of Things', href: links.makerer },
-	'📱 Coder of Apps',
-	'🍕 Pizza lover',
-    { name: '💚 Backer of Projects', href: links.kickstarter },
-    { name: '🎧 Music enthusiast', href: links.spotify},
-    { name: '📺 Watcher of Movies', href: links.imdb},
-    { name: '🧡 Printer of Objects', href: links.printables},
-    { name: '🌟 Stargazer', href: links.github + '?tab=stars'},
-];
 
 export const defaultColors = {
 	light: {
@@ -116,10 +112,48 @@ export const defaultColors = {
 };
 
 export const breakpoints = {
-    sm: 768,
-    md: 1024,
-    lg: 1280,
-    xl: 1920
-}
+	sm: 768,
+	md: 1024,
+	lg: 1280,
+	xl: 1920
+};
 
 export const INACTIVITY_TIMEOUT = 1 * 60 * 1000; // 1 minute in milliseconds
+
+export const backgroundTextures = [
+	{
+		name: 'dots',
+		value: 'dots',
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: radial-gradient(${color} ${size}px, transparent ${size}px); background-size: ${spacing}px ${spacing}px;`
+	},
+	{
+		name: 'offset-dots',
+		value: 'offset-dots',
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: radial-gradient(${color} ${size}px, transparent ${size}px), radial-gradient(${color} ${size}px, transparent ${size}px); background-size: ${spacing}px ${spacing}px; background-position: 0 0, ${spacing / 2}px ${spacing / 2}px;`
+	},
+	{
+		name: 'grid',
+		value: 'grid',
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: linear-gradient(to right, ${color} ${size}px, transparent ${size}px), linear-gradient(to bottom, ${color} ${size}px, transparent ${size}px); background-size: ${spacing}px ${spacing}px;`
+	},
+	{
+		name: 'diagonal',
+		value: 'diagonal',
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} ${size}px, transparent ${size}px, transparent ${spacing}px); background-size: auto;`
+	},
+	{
+		name: 'wave',
+		value: 'wave',
+		getStyle: (color: string, size: number = 1, spacing: number = 16) =>
+			`background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='10'%3E%3Cpath d='M0 5 Q 5 0 10 5 T 20 5' fill='none' stroke='${color.replace('#', '%23')}' stroke-width='${size}'/%3E%3C/svg%3E"); background-size: ${spacing}px ${spacing / 2}px;`
+	},
+	{
+		name: 'none',
+		value: 'none',
+		getStyle: () => ''
+	}
+];

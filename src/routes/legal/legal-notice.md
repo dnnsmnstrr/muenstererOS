@@ -1,20 +1,20 @@
 # Legal Notice / Impressum
 
-__Dennis Münsterer__, IT specialist for application development
+**Dennis Münsterer**, IT specialist for application development
 
 - E-Mail: `dennismuensterer@gmail.com`
 
-
 ## Data Protection Policy (GDPR)
-This website does not collect, store or process Personally Identifiable Information (PII).  
+
+This website does not collect, store or process Personally Identifiable Information (PII).
 
 No cookies are used for tracking, see [Usage Statistics](#Usage-Statistics) below for more information.
 
 ## Third Party Inclusion
+
 This website runs on [Vercel](https://vercel.com/). Their privacy policy can be found [here](https://vercel.com/legal/privacy-policy).
 
 Parts of the website and its code are hosted on [GitHub](https://www.github.com/) using [GitHub Pages](https://help.github.com/articles/what-is-github-pages/). The GitHub Privacy Statement can be found [here](https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement).
-
 
 ## Data Privacy
 
@@ -24,6 +24,6 @@ My personal website can be used without providing personal data. Insofar as pers
 
 This website uses [Counter.dev](https://counter.dev/) to track and analyze page views. The tool helps understand how visitors interact with our content, allowing us to improve user experience and optimize our services. Counter.dev collects information such as the number of views, page visits, and user engagement metrics without the use of cookies.
 
-For more information on how Counter.dev collects and processes data, please visit their [privacy policy](https://counter.dev/pages/privacy.html).  
+For more information on how Counter.dev collects and processes data, please visit their [privacy policy](https://counter.dev/pages/privacy.html).
 
 By using this website, you consent to the collection and processing of your data as described.

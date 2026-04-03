@@ -1,21 +1,37 @@
 {
+	"duration": {
+		"y": "y",
+		"mo": "mo",
+		"w": "w",
+		"d": "d",
+		"h": "h",
+		"m": "m",
+		"s": "s"
+	},
 	"common": {
 		"home": "Home",
 		"settings": "Settings",
 		"legal": "Legal Notice",
 		"admin": "Admin",
 		"about": "About",
+		"buttons": "Buttons",
 		"projects": "Projects",
 		"now": "Now",
+		"where": "Where",
 		"uses": "Uses",
 		"playlists": "Playlists",
 		"sites": "Sites",
+		"sitemap": "Sitemap",
+		"experiment": "Experiment",
+		"slashes": "Slashes",
 		"hotkeys": "Hotkeys",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
+		"concerts": "Concerts",
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
+		"ping": "Ping",
 		"contact": "Contact",
 		"status": "Status",
 		"quit": "Quit",
@@ -40,7 +56,8 @@
 		"en": "English"
 	},
 	"error": {
-		"404": "No page or redirect found for:"
+		"404": "No page or redirect found for:",
+		"searching": "Searching for redirect"
 	},
 	"header": {
 		"pages": "Pages",
@@ -54,6 +71,7 @@
 		"battery": "Battery",
 		"charging": "Charging",
 		"discharging": "Discharging",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Download Logo",
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
@@ -63,7 +81,18 @@
 		"rights_reserved": "All rights reserved"
 	},
 	"profile": {
-		"find_out_more": "Find out more..."
+		"find_out_more": "Find out more...",
+		"descriptions": {
+			"occupation": "Software Developer",
+			"builder": "Builder of Things",
+			"coder": "Coder of Apps",
+			"pizza": "Pizza lover",
+			"backer": "Backer of Projects",
+			"music": "Music enthusiast",
+			"movies": "Watcher of Movies",
+			"printer": "Printer of Objects",
+			"stargazer": "Stargazer"
+		}
 	},
 	"settings": {
 		"title": "Settings",
@@ -78,15 +107,34 @@
 		"dvd_bounce": "Screensaver",
 		"enable_dvd_bounce": "DVD Bounce",
 		"actions": "Actions",
-		"reset_desktop": "Reset Desktop Files",
+		"reset_desktop": "Reset Desktop",
 		"reset_success": "Desktop files reset to default positions",
 		"language": "Language",
 		"english": "English",
 		"german": "German",
 		"texture": "Background Texture",
+		"texture_size": "Texture Size",
+		"texture_spacing": "Texture Spacing",
 		"dots": "Dots",
+		"offset-dots": "Offset Dots",
 		"grid": "Grid",
-		"diagonal": "Diagonal"
+		"diagonal": "Diagonal",
+		"wave": "Wave",
+		"none": "None",
+		"themes": {
+			"zinc": "Zinc",
+			"slate": "Slate",
+			"stone": "Stone",
+			"gray": "Gray",
+			"neutral": "Neutral",
+			"red": "Red",
+			"rose": "Rose",
+			"orange": "Orange",
+			"green": "Green",
+			"blue": "Blue",
+			"yellow": "Yellow",
+			"violet": "Violet"
+		}
 	},
 	"command": {
 		"placeholder": "Type a command or search...",
@@ -129,7 +177,9 @@
 		"switch_language": "Switch Language",
 		"language_switched": "Language switched",
 		"konami_success": "Achievement Unlocked: Konami Code",
-		"konami_description": "Congratulations, you're a nerd!"
+		"konami_description": "Congratulations, you're a nerd!",
+		"picked_color": "Picked color: {color}",
+		"copy_to_clipboard": "Click to copy to clipboard"
 	},
 	"window": {
 		"close": "Close window",
@@ -153,19 +203,20 @@
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
 		"load": "Load"
-  },
-  "status": {
+	},
+	"status": {
 		"title": "System Status",
 		"metric": "Metric",
 		"value": "Value",
 		"last_deployment": "Last Deployment",
 		"commit_count": "Commit Count",
 		"page_count": "Page Count",
-		"cv_status": "CV Page Status",
+		"monthly_views": "View Count (last 30 days)",
+		"cv_status": "CV Page Availability",
 		"online": "online",
 		"offline": "offline",
 		"unknown": "unknown"
-  },
+	},
 	"now_playing": {
 		"title": "Now Playing",
 		"show": "Show Now Playing",
@@ -188,11 +239,13 @@
 		"preview_title": "Playlist Preview",
 		"alt_gif": "Playlist GIF",
 		"alt_cover": "Playlist cover",
-		"spring": "Spring",
-		"summer": "Summer",
-		"autumn": "Autumn",
-		"winter": "Winter",
 		"all_years": "All Years",
+		"seasons": {
+			"spring": "Spring",
+			"summer": "Summer",
+			"autumn": "Autumn",
+			"winter": "Winter"
+		},
 		"stats": "Stats",
 		"artist_frequency": "Artist Frequency",
 		"next": "Next",
@@ -235,6 +288,12 @@
 		"inspired_by": "Inspired by",
 		"search_placeholder": "Search...",
 		"all_categories": "All Categories",
+		"categories": {
+			"hardware": "Hardware",
+			"software": "Software",
+			"development": "Development",
+			"services": "Services"
+		},
 		"reset_filters": "Reset Filters",
 		"no_results": "No results found.",
 		"results_found_one": "1 result found.",
@@ -270,7 +329,8 @@
 		"decrease_depth": "Decrease depth",
 		"increase_depth": "Increase depth",
 		"zoom": "Zoom",
-		"graph_label": "Interactive site network graph"
+		"graph_label": "Interactive site network graph",
+		"loading": "Loading network graph..."
 	},
 	"about": {
 		"title": "About",
@@ -290,8 +350,196 @@
 		"h_ago": "{count}h ago",
 		"d_ago": "{count}d ago"
 	},
+	"buttons": {
+		"title": "Buttons",
+		"description": "A collection of 88x31 buttons.",
+		"all_categories": "All Categories",
+		"categories": {
+			"personal": "Personal",
+			"fun": "Fun",
+			"political": "Political",
+			"other": "Other"
+		},
+		"external_link_text": "Explore at eightyeightthirty.one"
+	},
 	"contact": {
 		"title": "Contact",
 		"description": "You can contact me at"
+	},
+	"ping": {
+		"title": "Ping",
+		"description": "Send a message to my phone. (No joke, this will actually pop up on my screen)",
+		"placeholder": "Your message...",
+		"send": "Send Message",
+		"sending": "Sending...",
+		"success": "Message sent!",
+		"error": "Failed to send message."
+	},
+	"api": {
+		"title": "API",
+		"description": "Explore the muenstererOS API endpoints.",
+		"select_endpoint": "Select endpoint to test the output:",
+		"query_parameters": "Query Parameters",
+		"clear_parameters": "Clear Parameters",
+		"call_endpoint": "Call Endpoint",
+		"loading": "Loading...",
+		"error": "Error",
+		"response": "Response",
+		"json_viewer": "JSON Viewer",
+		"schema": "Schema",
+		"search": "Search",
+		"sortBy": "Sort by",
+		"direction": "Direction",
+		"page": "Page",
+		"limit": "Limit",
+		"type": "Type",
+		"ascending": "Ascending",
+		"descending": "Descending",
+		"select": "select",
+		"number": "number"
+	},
+	"slashes": {
+		"title": "Slashes",
+		"description": "my slash pages",
+		"spin": "SPIN",
+		"good_luck": "Good Luck!",
+		"wheel_label": "Wheel of Fortune"
+	},
+	"concerts": {
+		"title": "Concerts & Festivals",
+		"description": "A collection of live music events I've attended.",
+		"last_updated": "Last updated:",
+		"artist": "Artist",
+		"venue": "Venue",
+		"location": "Location",
+		"date": "Date",
+		"type": "Type",
+		"concert": "Concert",
+		"concerts": "Concerts",
+		"festival": "Festival",
+		"festivals": "Festivals",
+		"no_concerts": "No concerts found.",
+		"view_on_musicbrainz": "View on MusicBrainz",
+		"stats": "Stats",
+		"artist_frequency": "Artist Frequency",
+		"artist_frequency_description": "These are the artists I've seen most often live.",
+		"artists_one": "1 artist",
+		"artists_many": "{count} artists"
+	},
+	"where": {
+		"title": "Where I am right now",
+		"description": "My current location",
+		"roughly": "(roughly)"
+	},
+	"onboarding": {
+		"title": "Welcome!",
+		"description": "Let's set up your experience.",
+		"welcome": "Welcome to my website! This quick setup will help you customize the look and feel to your liking.",
+		"step_welcome": "Welcome",
+		"step_language": "Language",
+		"step_theme": "Theme",
+		"step_texture": "Texture",
+		"finish": "Finish Setup",
+		"notification": "Welcome! Want to customize your experience?",
+		"notification_link": "Start Onboarding"
+	},
+	"hotkeys": {
+		"title": "Hotkeys",
+		"meta_description": "My Raycast configuration and keyboard shortcuts",
+		"heading": "Hotkeys",
+		"try_raycast": "Try Raycast",
+		"referral_title": "Referral link to Raycast",
+		"intro": {
+			"prefix": "Since Raycast introduced the ",
+			"middle": ", I've become a big fan and heavy user of this additional productivity layer.",
+			"hyper_key": "Hyper Key",
+			"hyper_text": "Hyper",
+			"means_all": " means all modifier keys (",
+			"triggered_simultaneously": ") are triggered simultaneously with a single key, usually ",
+			"caps_lock": "Caps Lock",
+			"description": "Here is an overview of the hotkeys I have defined and use across multiple devices for my daily workflow."
+		},
+		"keyboard_help": "Hover over highlighted keys to see their Raycast shortcuts (or try typing a key)",
+		"shortcuts_reference": "Shortcuts Reference",
+		"shortcuts_description": "Some of my Raycast shortcuts. (Window management uses the arrow keys)",
+		"extension": "Extension",
+		"actions": {
+			"raycast_launcher": "Raycast Launcher",
+			"hyper_key": "Hyper Key",
+			"clipboard_manager": "Clipboard Manager",
+			"snippets": "Snippets",
+			"bitwarden": "Bitwarden",
+			"downloads": "Downloads",
+			"editor": "Editor",
+			"finder": "Finder",
+			"google": "Google",
+			"notes": "Notes",
+			"obsidian": "Obsidian",
+			"recognize_text": "Recognize Text",
+			"spotify": "Spotify",
+			"teams": "Teams",
+			"web": "Web",
+			"xcode": "Xcode",
+			"history": "History",
+			"mail": "Mail",
+			"screenshots": "Screenshots",
+			"terminal": "Terminal",
+			"menu_items": "Menu Items",
+			"ai_chat": "AI Chat",
+			"switch_windows": "Switch Windows"
+		},
+		"descriptions": {
+			"spotlight": "I use Ctrl as modifier to keep Spotlight available as well",
+			"capslock": "Capslock is rarely needed, so it is remapped to all modifier keys at once ({hyperKeys})",
+			"clipboard": "Open Clipboard Manager",
+			"snippets": "Open the Raycast Snippets view",
+			"bitwarden": "Open Bitwarden (Quick Access to passwords)",
+			"downloads": "Open Downloads in Finder",
+			"editor": "Show current IDE window",
+			"finder": "Open current Finder window",
+			"google": "Search selected text with Google",
+			"notes": "Toggle Raycast Notes",
+			"obsidian": "Launch Obsidian",
+			"recognize_text": "Recognize text from screen with ScreenOCR",
+			"spotify": "Toggle Spotify player",
+			"teams": "Open Microsoft Teams",
+			"web": "Open Web Browser",
+			"xcode": "Open Xcode",
+			"history": "Search history",
+			"mail": "Open Mail",
+			"screenshots": "Search screenshots",
+			"terminal": "Launch Terminal",
+			"menu_items": "Search menu items",
+			"ai_chat": "Toggle AI Chat window",
+			"switch_windows": "Search windows in the Raycast Window Switcher"
+		},
+		"about": {
+			"title": "About Raycast",
+			"description": "Raycast is a blazingly fast, totally extendable launcher for Mac. It lets you complete tasks, calculate, share common links, and much more. This page showcases my personal configuration and the shortcuts I use daily to boost productivity.",
+			"link_text": "Learn more about Raycast",
+			"referral_note": "(referral link)"
+		}
+	},
+	"terminal": {
+		"title": "Terminal",
+		"description": "A command line interface for the muenstererOS website.",
+		"loading": "init muenstererOS",
+		"ready": "CLI ready",
+		"placeholder": "Type your command..."
+	},
+	"experiment": {
+		"title": "JavaScript Playground",
+		"description": "A playground for JavaScript code with instant execution",
+		"snippets": "Snippets",
+		"editor": "Editor",
+		"output": "Output",
+		"reset": "Reset",
+		"clear": "Clear",
+		"console_output": "Console Output",
+		"error": "Error",
+		"no_console_output": "Code executed successfully (no console output)",
+		"execution_error": "Execution error",
+		"placeholder_title": "Start typing to see live execution",
+		"placeholder_subtitle": "Code runs automatically as you type"
 	}
 }

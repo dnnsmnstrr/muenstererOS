@@ -6,7 +6,16 @@
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
 	import { page } from '$app/state';
-	import { theme, debug, debugLog, isCommandActive, resetColors, backgroundTexture } from '$lib/stores/app';
+	import {
+		theme,
+		debug,
+		debugLog,
+		isCommandActive,
+		resetColors,
+		backgroundTexture,
+		backgroundSize,
+		backgroundSpacing
+	} from '$lib/stores/app';
 	import { onMount } from 'svelte';
 	import { Spring, Tween } from 'svelte/motion';
 
@@ -14,11 +23,12 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard } from 'lucide-svelte';
+	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard, Ticket, IdCard, FerrisWheel, Network, Send } from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
 
 	interface Props {
@@ -158,18 +168,12 @@
 	});
 
 	let isLightMode = $derived($mode === 'light');
-	let isFullWidth = $derived(page.url.pathname === '/experiment');
+	let isFullWidth = $derived(page.url.pathname === '/experiment' || page.url.pathname === '/slashes');
 	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
-		switch ($backgroundTexture) {
-			case 'grid':
-				return `background-image: linear-gradient(to right, ${color} 1px, transparent 1px), linear-gradient(to bottom, ${color} 1px, transparent 1px); background-size: 16px 16px;`;
-			case 'diagonal':
-				return `background-image: repeating-linear-gradient(45deg, ${color} 0, ${color} 1px, transparent 1px, transparent 10px); background-size: auto;`;
-			case 'dots':
-			default:
-				return `background-image: radial-gradient(${color} 1px, transparent 1px); background-size: 16px 16px;`;
-		}
+		const texture =
+			backgroundTextures.find((t) => t.value === $backgroundTexture) || backgroundTextures[0];
+		return texture.getStyle(color, $backgroundSize, $backgroundSpacing);
 	});
 
 	const bookmarksRaw: BookmarkItem[] = [
@@ -179,11 +183,15 @@
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
 		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
-		{ name: 'Slashes', href: '/slashes', icon: Slash, hidden: true },
+		{ name: 'Slashes', href: '/slashes', icon: FerrisWheel, hidden: true },
 		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
     	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
     	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
     	{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
+		{ name: 'Buttons', href: '/buttons', icon: IdCard, hidden: true },
+		{ name: 'Concerts', href: '/concerts', icon: Ticket, hidden: true },
+		{ name: 'Sites', href: '/sites', icon: Network, hidden: true },
+		{ name: 'Ping', href: '/ping', icon: Send, hidden: true },
 	];
 	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
 		...b,
@@ -201,15 +209,24 @@
 		};
 	}));
 	const allPages = $derived([...bookmarks, ...otherBookmarks]);
+
+	/**
+	 * Optimized page title logic that updates automatically when the language changes.
+	 * It attempts to find a translation for the current route segment in the 'common' namespace.
+	 */
+	const pageTitle = $derived.by(() => {
+		if (page.url.pathname === '/') return i18n.t('common.home');
+		const segment = page.url.pathname.split('/')[1];
+		const translated = i18n.t(`common.${segment}`);
+		return translated !== `common.${segment}` ? translated : capitalize(segment);
+	});
 </script>
 
 <svelte:head>
 	<style>
 		@import '/themes.css';
 	</style>
-	{#if page.url.pathname !== '/legal'}
-		<title>{page.url.pathname === '/' ? i18n.t('common.home') : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
-	{/if}
+	<title>{pageTitle}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <ModeWatcher />

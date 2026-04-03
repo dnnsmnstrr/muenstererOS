@@ -53,7 +53,7 @@ export function searchData<T extends Record<string, any> = DataItem>(
 	const lowerQuery = String(query).toLowerCase();
 	const searchedItems = items.filter((item) =>
 		searchKeys.some((key) => {
-            if (!item[key]) return false
+			if (!item[key]) return false;
 			const value = item[key];
 			if (Array.isArray(value)) {
 				return (value as Array<string | number | boolean>).some((v: string | number | boolean) =>

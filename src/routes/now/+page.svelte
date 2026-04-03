@@ -12,7 +12,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
-	// 🌐 Localization: use i18n for text and helper for locale-aware date formatting
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { formatDate } from '$lib/utils/helper';
 
@@ -27,7 +26,7 @@
 	let playlistImage = $state<string | undefined>(undefined);
 
 	$effect(() => {
-		const nextPlaylist = playlists.find((p) => p.uri === nowData.playlist.uri);
+		const nextPlaylist = playlists.find((p) => p.url === nowData.playlist.url || p.uri === nowData.playlist.uri);
 		const nextImage =
 			nextPlaylist?.imageUrl ||
 			(nextPlaylist?.imageId ? `https://i.scdn.co/image/${nextPlaylist.imageId}` : undefined);
@@ -68,10 +67,9 @@
 			...gistData,
 			updatedAt: gistData.updatedAt || timestamp || new Date(apiData.updated_at).toISOString(),
 			versions: nowData.versions,
-			url: apiData.url
+			url: apiData?.url
 		};
-		currentPlaylist = playlists.find((p) => p.uri === gistData.playlisturi);
-		console.log(currentPlaylist);
+		currentPlaylist = playlists.find((p) => p.url === gistData.playlist?.url || p.uri === gistData.playlist?.uri);
 		showingVersion = true;
 		return gistData;
 	}
@@ -92,7 +90,7 @@
 		{i18n.t('now.title')}
 		<div class="flex items-center">
 			<Link
-				href={nowData.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
+				href={nowData?.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
 				class="block text-sm font-normal"
 			>
 				{#if showingVersion}
@@ -141,13 +139,14 @@
 			{#if nowData.playlist}
 				<div class="flex flex-col items-center space-y-2">
 					{#if playlistImage}
+						<!-- Localization: Use localized alt text for accessibility and consistency -->
 						<img
 							src={playlistImage}
-							alt="Playlist cover"
+							alt={i18n.t('playlists.alt_cover')}
 							class="aspect-square w-full rounded-md object-cover"
 						/>
 					{/if}
-					<Link href={`https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">
+					<Link href={nowData.playlist.url || `https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">
 						{nowData.playlist.name}
 					</Link>
 				</div>
@@ -174,7 +173,6 @@
 		</Card>
 	</div>
 
-	<!-- 🌐 Localization Optimization: Use localized labels and components for better accessibility and multi-language support -->
 	<div class="mt-4 flex items-center justify-center gap-2">
 		<Versions versions={nowData.versions} {versionPositions} {loadVersion} />
 		{#if showEditButton}

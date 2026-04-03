@@ -6,7 +6,9 @@
 		mode: z.string().default('system'),
 		language: z.string().default('en'),
 		dvdBounceEnabled: z.boolean().default(false),
-		backgroundTexture: z.string().default('dots')
+		backgroundTexture: z.string().default('dots'),
+		backgroundSize: z.number().default(1),
+		backgroundSpacing: z.number().default(16)
 	});
 	export type SettingsSchema = typeof settingsSchema;
 </script>
@@ -17,7 +19,16 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { mode, setMode, resetMode } from 'mode-watcher';
-	import { debug, dvdBounceEnabled, backgroundTexture, theme as themeStore } from '$lib/stores/app';
+	import {
+		debug,
+		dvdBounceEnabled,
+		backgroundTexture,
+		backgroundSize,
+		backgroundSpacing,
+		theme as themeStore,
+		DEFAULT_BACKGROUND_SIZE,
+		DEFAULT_BACKGROUND_SPACING
+	} from '$lib/stores/app';
 	import { Bug, Check } from 'lucide-svelte';
 	import { Separator } from '$lib/components/ui/separator';
 	import AnimatedToggle from '$lib/components/AnimatedToggle.svelte';
@@ -28,7 +39,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { INACTIVITY_TIMEOUT } from '$lib/config';
+	import { INACTIVITY_TIMEOUT, backgroundTextures } from '$lib/config';
+	import { Input } from '$lib/components/ui/input';
 
 	let { data }: { data?: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
 	const form = superForm(
@@ -37,7 +49,9 @@
 			mode: 'system',
 			language: i18n.lang,
 			dvdBounceEnabled: false,
-			backgroundTexture: get(backgroundTexture)
+			backgroundTexture: get(backgroundTexture),
+			backgroundSize: get(backgroundSize),
+			backgroundSpacing: get(backgroundSpacing)
 		},
 		{
 			validators: zodClient(settingsSchema)
@@ -117,22 +131,29 @@
 					<div class="flex flex-col space-y-2">
 						<h2>{i18n.t('settings.mode')}</h2>
 						<RadioGroup.Root
-							class="flex flex-col space-y-1"
+							class="md: flex flex-col gap-4 space-y-1 md:flex-row"
 							value={$mode}
 							onValueChange={handleModeChange}
 							{...props}
 						>
 							<div class="flex items-center space-x-3 space-y-0">
 								<RadioGroup.Item value="light" id="light" />
-								<Form.Label for="light" class="font-normal">{i18n.t('settings.light')}</Form.Label>
+								<Form.Label
+									for="light"
+									class="font-normal"
+									onclick={() => handleModeChange('light')}>{i18n.t('settings.light')}</Form.Label
+								>
 							</div>
 							<div class="flex items-center space-x-3 space-y-0">
 								<RadioGroup.Item value="dark" id="dark" />
-								<Form.Label for="dark" class="font-normal">{i18n.t('settings.dark')}</Form.Label>
+								<Form.Label for="dark" class="font-normal" onclick={() => handleModeChange('dark')}
+									>{i18n.t('settings.dark')}</Form.Label
+								>
 							</div>
 							<div class="flex items-center space-x-3 space-y-0">
 								<RadioGroup.Item value="" id="system" />
-								<Form.Label for="system" class="font-normal">{i18n.t('settings.system')}</Form.Label
+								<Form.Label for="system" class="font-normal" onclick={() => handleModeChange('')}
+									>{i18n.t('settings.system')}</Form.Label
 								>
 							</div>
 						</RadioGroup.Root>
@@ -166,27 +187,80 @@
 				</div>
 			</Form.Field>
 
-			<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
-				<Form.Control>
-					{#snippet children({ props })}
-						<div class="flex flex-col space-y-2">
-							<Form.Label>{i18n.t('settings.texture')}</Form.Label>
-							<Select.Root type="single" bind:value={$backgroundTexture} name={props.name}>
-								<Select.Trigger {...props} class="w-full">
-									{$backgroundTexture
-										? i18n.t(`settings.${$backgroundTexture}`)
-										: i18n.t('settings.texture')}
-								</Select.Trigger>
-								<Select.Content>
-									<Select.Item value="dots" label={i18n.t('settings.dots')} />
-									<Select.Item value="grid" label={i18n.t('settings.grid')} />
-									<Select.Item value="diagonal" label={i18n.t('settings.diagonal')} />
-								</Select.Content>
-							</Select.Root>
-						</div>
-					{/snippet}
-				</Form.Control>
-			</Form.Field>
+			<div class="flex flex-col space-y-2">
+				<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
+					<Form.Control>
+						{#snippet children({ props })}
+							<div class="flex flex-col space-y-2">
+								<Form.Label>{i18n.t('settings.texture')}</Form.Label>
+								<Select.Root
+									type="single"
+									bind:value={$backgroundTexture}
+									name={props.name}
+									onValueChange={() => {
+										$backgroundSize = DEFAULT_BACKGROUND_SIZE;
+										$backgroundSpacing = DEFAULT_BACKGROUND_SPACING;
+									}}
+								>
+									<Select.Trigger {...props} class="w-full">
+										{$backgroundTexture
+											? i18n.t(`settings.${$backgroundTexture}`)
+											: i18n.t('settings.texture')}
+									</Select.Trigger>
+									<Select.Content>
+										{#each backgroundTextures as texture}
+											<Select.Item
+												value={texture.value}
+												label={i18n.t(`settings.${texture.name}`)}
+											/>
+										{/each}
+									</Select.Content>
+								</Select.Root>
+							</div>
+						{/snippet}
+					</Form.Control>
+				</Form.Field>
+
+				{#if $backgroundTexture !== 'none'}
+					<div class="flex gap-4">
+						<Form.Field {form} name="backgroundSize" class="flex flex-col justify-between gap-2">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{i18n.t('settings.texture_size')}</Form.Label>
+									<Input
+										type="number"
+										class="w-20"
+										bind:value={$backgroundSize}
+										{...props}
+										min="0.5"
+										max="24"
+										step="0.5"
+									/>
+								{/snippet}
+							</Form.Control>
+						</Form.Field>
+						<Form.Field {form} name="backgroundSpacing" class="flex flex-col justify-between gap-2">
+							<Form.Control>
+								{#snippet children({ props })}
+									<Form.Label>{i18n.t('settings.texture_spacing')}</Form.Label>
+									<div class="flex items-center gap-2">
+										<Input
+											type="range"
+											bind:value={$backgroundSpacing}
+											{...props}
+											min="4"
+											max="64"
+											step="1"
+											class="h-10"
+										/>
+										<span class="w-8 text-right text-sm">{$backgroundSpacing}</span>
+									</div>
+								{/snippet}
+							</Form.Control>
+						</Form.Field>
+					</div>
+				{/if}
+			</div>
 		</div>
 
 		<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
@@ -209,7 +283,7 @@
 							<Check class="h-4 w-4 text-white" />
 						{/if}
 					</span>
-					{theme.label}
+					{i18n.t(`settings.themes.${theme.name}`)}
 				</Button>
 			{/each}
 		</div>

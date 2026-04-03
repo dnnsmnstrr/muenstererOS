@@ -3,7 +3,6 @@ import { debugLog } from '$lib/stores/app';
 
 export const isBrowser = typeof document !== 'undefined';
 
-
 export function updateMetaThemeColor(color: string = '#000000') {
 	if (!browser || !document) return;
 	let metaThemeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
@@ -13,7 +12,9 @@ export function updateMetaThemeColor(color: string = '#000000') {
 		document.head.appendChild(metaThemeColor);
 	}
 	metaThemeColor.setAttribute('content', color);
-	let appleStatusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]') as HTMLMetaElement;
+	let appleStatusBar = document.querySelector(
+		'meta[name="apple-mobile-web-app-status-bar-style"]'
+	) as HTMLMetaElement;
 	if (!appleStatusBar) {
 		appleStatusBar = document.createElement('meta');
 		appleStatusBar.name = 'apple-mobile-web-app-status-bar-style';

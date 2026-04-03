@@ -9,19 +9,15 @@ export async function GET({ url }) {
 	let filtered = redirects;
 
 	if (search) {
-		filtered = searchData(redirects, search, ['name', 'description', 'aliases', 'url'])
+		filtered = searchData(redirects, search, ['name', 'description', 'aliases', 'url']);
 	}
 
-    if (type) {
-        filtered = filtered.filter((redirect) => {
-            if (type === 'internal' && 
-                (!redirect.url || !redirect.url.startsWith('http')
-            )) return true;
-            if (type === 'external' && 
-                (redirect.url?.startsWith('http')
-            )) return true;
-            return false;
-        });
-    }
+	if (type) {
+		filtered = filtered.filter((redirect) => {
+			if (type === 'internal' && (!redirect.url || !redirect.url.startsWith('http'))) return true;
+			if (type === 'external' && redirect.url?.startsWith('http')) return true;
+			return false;
+		});
+	}
 	return json(filtered);
 }
