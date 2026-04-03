@@ -533,19 +533,26 @@
 		"ready": "CLI bereit",
 		"placeholder": "Befehl eingeben..."
 	},
-	"experiment": {
-		"title": "JavaScript-Spielplatz",
-		"description": "Ein Spielplatz für JavaScript-Code mit sofortiger Ausführung",
-		"snippets": "Snippets",
-		"editor": "Editor",
-		"output": "Ausgabe",
-		"reset": "Zurücksetzen",
-		"clear": "Leeren",
-		"console_output": "Konsolenausgabe",
-		"error": "Fehler",
-		"no_console_output": "Code erfolgreich ausgeführt (keine Konsolenausgabe)",
-		"execution_error": "Ausführungsfehler",
-		"placeholder_title": "Tippen Sie etwas ein, um die Live-Ausführung zu sehen",
-		"placeholder_subtitle": "Der Code wird automatisch während der Eingabe ausgeführt"
+	"desktop": {
+		"open": "Öffnen",
+		"open_new_tab": "In neuem Tab öffnen",
+		"rename": "Umbenennen",
+		"rename_prompt": "Neuen Namen eingeben:",
+		"change_icon": "Icon ändern",
+		"delete": "Löschen",
+		"icons": {
+			"folder": "Ordner",
+			"file": "Datei",
+			"text": "Text",
+			"image": "Bild",
+			"music": "Musik",
+			"code": "Code",
+			"terminal": "Terminal",
+			"settings": "Einstellungen"
+		}
+	},
+	"playground": {
+		"counter_decrease": "Zähler um eins verringern",
+		"counter_increase": "Zähler um eins erhöhen"
 	}
 }

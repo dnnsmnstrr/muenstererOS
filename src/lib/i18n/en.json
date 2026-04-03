@@ -533,19 +533,26 @@
 		"ready": "CLI ready",
 		"placeholder": "Type your command..."
 	},
-	"experiment": {
-		"title": "JavaScript Playground",
-		"description": "A playground for JavaScript code with instant execution",
-		"snippets": "Snippets",
-		"editor": "Editor",
-		"output": "Output",
-		"reset": "Reset",
-		"clear": "Clear",
-		"console_output": "Console Output",
-		"error": "Error",
-		"no_console_output": "Code executed successfully (no console output)",
-		"execution_error": "Execution error",
-		"placeholder_title": "Start typing to see live execution",
-		"placeholder_subtitle": "Code runs automatically as you type"
+	"desktop": {
+		"open": "Open",
+		"open_new_tab": "Open in New Tab",
+		"rename": "Rename",
+		"rename_prompt": "Enter new name:",
+		"change_icon": "Change Icon",
+		"delete": "Delete",
+		"icons": {
+			"folder": "Folder",
+			"file": "File",
+			"text": "Text",
+			"image": "Image",
+			"music": "Music",
+			"code": "Code",
+			"terminal": "Terminal",
+			"settings": "Settings"
+		}
+	},
+	"playground": {
+		"counter_decrease": "Decrease the counter by one",
+		"counter_increase": "Increase the counter by one"
 	}
 }
