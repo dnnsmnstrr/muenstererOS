@@ -17,7 +17,6 @@
 		"buttons": "Buttons",
 		"projects": "Projekte",
 		"now": "Jetzt (Now Page)",
-		"home": "Startseite",
 		"where": "Standort",
 		"uses": "Uses (Tech Stack)",
 		"playlists": "Playlists",
@@ -28,6 +27,7 @@
 		"changelog": "Änderungsprotokoll",
 		"playlist": "Playlist",
 		"api": "API",
+		"ping": "Ping",
 		"contact": "Kontakt",
 		"status": "Status",
 		"sites": "Sites",
@@ -53,12 +53,17 @@
 		"enter_fullscreen": "Vollbild aktivieren",
 		"exit_fullscreen": "Vollbild beenden",
 		"de": "Deutsch",
-		"en": "Englisch"
+		"en": "Englisch",
+		"na": "n. v.",
+		"yes": "Ja",
+		"no": "Nein"
 	},
 	"error": {
-		"404": "Keine Seite verfügbar unter:"
+		"404": "Keine Seite verfügbar unter:",
+		"searching": "Suche nach Redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Seiten",
 		"social": "Social Media",
 		"command_palette": "Befehlspalette",
@@ -70,10 +75,12 @@
 		"battery": "Batterie",
 		"charging": "Lädt",
 		"discharging": "Entlädt",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"brand_kit": "Marken-Assets"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
@@ -175,7 +182,9 @@
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
 		"konami_success": "Achievement freigeschaltet: Konami Code",
-		"konami_description": "Glückwunsch, du bist ein Nerd!"
+		"konami_description": "Glückwunsch, du bist ein Nerd!",
+		"picked_color": "Farbe ausgewählt: {color}",
+		"copy_to_clipboard": "Klicken zum Kopieren"
 	},
 	"window": {
 		"close": "Fenster schließen",
@@ -198,7 +207,9 @@
 		"changes_one": "1 Änderung",
 		"changes_many": "{count} Änderungen",
 		"version_marker": "Version vom {date}",
-		"load": "Laden"
+		"load": "Laden",
+		"first_version": "Erste",
+		"latest_version": "Neueste"
 	},
 	"status": {
 		"title": "Systemstatus",
@@ -207,6 +218,7 @@
 		"last_deployment": "Letztes Deployment",
 		"commit_count": "Commit-Anzahl",
 		"page_count": "Seitenanzahl",
+		"monthly_views": "Seitenaufrufe (letzter Monat)",
 		"cv_status": "CV-Status",
 		"online": "online",
 		"offline": "offline",
@@ -324,7 +336,8 @@
 		"decrease_depth": "Tiefe verringern",
 		"increase_depth": "Tiefe erhöhen",
 		"zoom": "Zoom",
-		"graph_label": "Interaktive Grafik des Website-Netzwerks"
+		"graph_label": "Interaktive Grafik des Website-Netzwerks",
+		"loading": "Website-Netzwerk wird geladen..."
 	},
 	"about": {
 		"title": "Über diese Seite",
@@ -360,6 +373,15 @@
 		"title": "Kontakt",
 		"description": "Du kannst mich unter"
 	},
+	"ping": {
+		"title": "Ping",
+		"description": "Sende eine Nachricht an mein Handy. (Kein Witz, das wird wirklich auf meinem Bildschirm aufploppen)",
+		"placeholder": "Deine Nachricht...",
+		"send": "Nachricht senden",
+		"sending": "Wird gesendet...",
+		"success": "Nachricht gesendet!",
+		"error": "Nachricht konnte nicht gesendet werden."
+	},
 	"api": {
 		"title": "API",
 		"description": "Entdecke die muenstererOS API-Endpunkte.",
@@ -388,7 +410,9 @@
 		"description": "meine Slash-Seiten",
 		"spin": "DREHEN",
 		"good_luck": "Viel Glück!",
-		"wheel_label": "Glücksrad"
+		"wheel_label": "Glücksrad",
+		"mute": "Haptik stummschalten",
+		"unmute": "Haptik einschalten"
 	},
 	"concerts": {
 		"title": "Konzerte & Festivals",
@@ -504,5 +528,44 @@
 			"link_text": "Mehr über Raycast erfahren",
 			"referral_note": "(Empfehlungslink)"
 		}
+	},
+	"terminal": {
+		"title": "Terminal",
+		"description": "Eine Kommandozeile für die muenstererOS Webseite.",
+		"loading": "init muenstererOS",
+		"ready": "CLI bereit",
+		"placeholder": "Befehl eingeben..."
+	},
+	"admin": {
+		"title": "Gist Admin",
+		"gist_info": "Gist-Informationen",
+		"description": "Beschreibung",
+		"last_updated": "Zuletzt aktualisiert",
+		"public": "Öffentlich",
+		"versions": "Versionen",
+		"no_description": "Keine Beschreibung",
+		"view_on_github": "Auf GitHub ansehen"
+  },
+	"desktop": {
+		"open": "Öffnen",
+		"open_new_tab": "In neuem Tab öffnen",
+		"rename": "Umbenennen",
+		"rename_prompt": "Neuen Namen eingeben:",
+		"change_icon": "Icon ändern",
+		"delete": "Löschen",
+		"icons": {
+			"folder": "Ordner",
+			"file": "Datei",
+			"text": "Text",
+			"image": "Bild",
+			"music": "Musik",
+			"code": "Code",
+			"terminal": "Terminal",
+			"settings": "Einstellungen"
+		}
+	},
+	"playground": {
+		"counter_decrease": "Zähler um eins verringern",
+		"counter_increase": "Zähler um eins erhöhen"
 	}
 }

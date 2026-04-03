@@ -31,6 +31,7 @@
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
+		"ping": "Ping",
 		"contact": "Contact",
 		"status": "Status",
 		"quit": "Quit",
@@ -52,12 +53,17 @@
 		"enter_fullscreen": "Enter Full Screen",
 		"exit_fullscreen": "Exit Full Screen",
 		"de": "German",
-		"en": "English"
+		"en": "English",
+		"na": "N/A",
+		"yes": "Yes",
+		"no": "No"
 	},
 	"error": {
-		"404": "No page or redirect found for:"
+		"404": "No page or redirect found for:",
+		"searching": "Searching for redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Pages",
 		"social": "Social",
 		"command_palette": "Command Palette",
@@ -69,10 +75,12 @@
 		"battery": "Battery",
 		"charging": "Charging",
 		"discharging": "Discharging",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Download Logo",
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
-		"copy_logo_url": "Copy image URL"
+		"copy_logo_url": "Copy image URL",
+		"brand_kit": "Brand Kit"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"
@@ -174,7 +182,9 @@
 		"switch_language": "Switch Language",
 		"language_switched": "Language switched",
 		"konami_success": "Achievement Unlocked: Konami Code",
-		"konami_description": "Congratulations, you're a nerd!"
+		"konami_description": "Congratulations, you're a nerd!",
+		"picked_color": "Picked color: {color}",
+		"copy_to_clipboard": "Click to copy to clipboard"
 	},
 	"window": {
 		"close": "Close window",
@@ -197,7 +207,9 @@
 		"changes_one": "1 change",
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
-		"load": "Load"
+		"load": "Load",
+		"first_version": "First",
+		"latest_version": "Latest"
 	},
 	"status": {
 		"title": "System Status",
@@ -206,7 +218,8 @@
 		"last_deployment": "Last Deployment",
 		"commit_count": "Commit Count",
 		"page_count": "Page Count",
-		"cv_status": "CV Page Status",
+		"monthly_views": "View Count (last 30 days)",
+		"cv_status": "CV Page Availability",
 		"online": "online",
 		"offline": "offline",
 		"unknown": "unknown"
@@ -323,7 +336,8 @@
 		"decrease_depth": "Decrease depth",
 		"increase_depth": "Increase depth",
 		"zoom": "Zoom",
-		"graph_label": "Interactive site network graph"
+		"graph_label": "Interactive site network graph",
+		"loading": "Loading network graph..."
 	},
 	"about": {
 		"title": "About",
@@ -359,6 +373,15 @@
 		"title": "Contact",
 		"description": "You can contact me at"
 	},
+	"ping": {
+		"title": "Ping",
+		"description": "Send a message to my phone. (No joke, this will actually pop up on my screen)",
+		"placeholder": "Your message...",
+		"send": "Send Message",
+		"sending": "Sending...",
+		"success": "Message sent!",
+		"error": "Failed to send message."
+	},
 	"api": {
 		"title": "API",
 		"description": "Explore the muenstererOS API endpoints.",
@@ -387,7 +410,9 @@
 		"description": "my slash pages",
 		"spin": "SPIN",
 		"good_luck": "Good Luck!",
-		"wheel_label": "Wheel of Fortune"
+		"wheel_label": "Wheel of Fortune",
+		"mute": "Mute haptics",
+		"unmute": "Unmute haptics"
 	},
 	"concerts": {
 		"title": "Concerts & Festivals",
@@ -503,5 +528,44 @@
 			"link_text": "Learn more about Raycast",
 			"referral_note": "(referral link)"
 		}
+	},
+	"terminal": {
+		"title": "Terminal",
+		"description": "A command line interface for the muenstererOS website.",
+		"loading": "init muenstererOS",
+		"ready": "CLI ready",
+		"placeholder": "Type your command..."
+	},
+	"admin": {
+		"title": "Gist Admin",
+		"gist_info": "Gist Information",
+		"description": "Description",
+		"last_updated": "Last Updated",
+		"public": "Public",
+		"versions": "Versions",
+		"no_description": "No description",
+		"view_on_github": "View on GitHub"
+  },
+	"desktop": {
+		"open": "Open",
+		"open_new_tab": "Open in New Tab",
+		"rename": "Rename",
+		"rename_prompt": "Enter new name:",
+		"change_icon": "Change Icon",
+		"delete": "Delete",
+		"icons": {
+			"folder": "Folder",
+			"file": "File",
+			"text": "Text",
+			"image": "Image",
+			"music": "Music",
+			"code": "Code",
+			"terminal": "Terminal",
+			"settings": "Settings"
+		}
+	},
+	"playground": {
+		"counter_decrease": "Decrease the counter by one",
+		"counter_increase": "Increase the counter by one"
 	}
 }

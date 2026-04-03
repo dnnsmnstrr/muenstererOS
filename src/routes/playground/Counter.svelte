@@ -7,6 +7,9 @@
 		count?: number;
 	}
 
+	/* Localization: Import i18n service for accessible aria-labels */
+	import { i18n } from '$lib/i18n/i18n.svelte';
+
 	let { count = $bindable(0) }: Props = $props();
 
 	const displayed_count = spring();
@@ -22,7 +25,8 @@
 </script>
 
 <div class="counter">
-	<button onclick={() => (count -= 1)} aria-label="Decrease the counter by one">
+	<!-- Localization: Use i18n for accessible aria-labels on counter buttons -->
+	<button onclick={() => (count -= 1)} aria-label={i18n.t('playground.counter_decrease')}>
 		<svg aria-hidden="true" viewBox="0 0 1 1">
 			<path d="M0,0.5 L1,0.5" />
 		</svg>
@@ -35,7 +39,7 @@
 		</div>
 	</div>
 
-	<button onclick={() => (count += 1)} aria-label="Increase the counter by one">
+	<button onclick={() => (count += 1)} aria-label={i18n.t('playground.counter_increase')}>
 		<svg aria-hidden="true" viewBox="0 0 1 1">
 			<path d="M0,0.5 L1,0.5 M0.5,0 L0.5,1" />
 		</svg>

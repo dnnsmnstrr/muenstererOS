@@ -11,7 +11,7 @@
 	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
-	import { formatDate } from '$lib/utils/helper';
+	import { formatDate, getFriendlyTime } from '$lib/utils/helper';
 
 	interface Status {
 		lastDeployment: string;
@@ -30,17 +30,7 @@
 		}
 	});
 
-	function getFriendlyTime(date: Date) {
-		const now = new Date();
-		const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-		if (diffInSeconds < 60) return i18n.t('about.just_now');
-		const diffInMinutes = Math.floor(diffInSeconds / 60);
-		if (diffInMinutes < 60) return i18n.t('about.m_ago', { count: diffInMinutes.toString() });
-		const diffInHours = Math.floor(diffInMinutes / 60);
-		if (diffInHours < 24) return i18n.t('about.h_ago', { count: diffInHours.toString() });
-		const diffInDays = Math.floor(diffInHours / 24);
-		return i18n.t('about.d_ago', { count: diffInDays.toString() });
-	}
+	
 
 	let lastDeploymentDate = $derived(status ? new Date(status.lastDeployment) : null);
 	let isRecent = $derived(

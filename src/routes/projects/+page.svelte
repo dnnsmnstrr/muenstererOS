@@ -1,9 +1,10 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-  import * as Select from '$lib/components/ui/select';
+	import * as Select from '$lib/components/ui/select';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Heading } from '$lib/components/typography';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/index';
 	import projects from '../../data/projects.json';
 
@@ -19,7 +20,13 @@
 	};
 
 	let selectedTag = $state('');
-	const allTags = $derived([...new Set(projects.flatMap((p) => p.tags))].sort());
+	/**
+	 * Optimized tag sorting: Uses localeCompare with the active language (i18n.lang)
+	 * to ensure correct alphabetical order for both English and German users.
+	 */
+	const allTags = $derived(
+		[...new Set(projects.flatMap((p) => p.tags))].sort((a, b) => a.localeCompare(b, i18n.lang))
+	);
 	const filteredProjects = $derived(
 		selectedTag === '' ? projects : projects.filter((p) => p.tags.includes(selectedTag))
 	);
@@ -30,6 +37,7 @@
 </script>
 
 <svelte:head>
+	<title>{i18n.t('projects.title')}{PAGE_TITLE_SUFFIX}</title>
 	<meta name="description" content={i18n.t('projects.description')} />
 </svelte:head>
 

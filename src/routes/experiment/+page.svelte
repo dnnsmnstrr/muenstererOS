@@ -6,6 +6,8 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { ChevronDown, RotateCw } from 'lucide-svelte';
 	import snippets from './snippets.json';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	const defaultCode = `// Welcome to the Real-Time JavaScript Editor!
 // Code executes automatically as you type
@@ -100,9 +102,9 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 				// Restore original console.log
 				console.log = originalConsoleLog;
 
-				executionResult = logs.join('\n') || 'Code executed successfully (no console output)';
+				executionResult = logs.join('\n') || i18n.t('experiment.no_console_output');
 			} catch (error) {
-				executionError = error instanceof Error ? error.message : 'Execution error';
+				executionError = error instanceof Error ? error.message : i18n.t('experiment.execution_error');
 				executionResult = '';
 			}
 		}, DEBOUNCE_TIME);
@@ -127,12 +129,12 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 	}
 
 	onMount(executeCode);
-	const title = 'JavaScript Playground';
+	const title = $derived(i18n.t('experiment.title'));
 </script>
 
 <svelte:head>
-	<title>{title} | muenstererOS</title>
-	<meta name="description" content="A playground for JavaScript code with instant execution" />
+	<title>{title}{PAGE_TITLE_SUFFIX}</title>
+	<meta name="description" content={i18n.t('experiment.description')} />
 </svelte:head>
 
 <!-- Full-screen split-pane layout -->
@@ -151,12 +153,12 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					<Button variant="outline" size="sm" class="gap-2">
-						🎨 Snippets
+						🎨 {i18n.t('experiment.snippets')}
 						<ChevronDown class="h-4 w-4" />
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content class="w-80">
-					<DropdownMenu.Label>Snippets</DropdownMenu.Label>
+					<DropdownMenu.Label>{i18n.t('experiment.snippets')}</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 					{#each snippets as snippet}
 						<DropdownMenu.Item onclick={() => loadSnippet(snippet)} class="cursor-pointer">
@@ -174,14 +176,14 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 	<Tabs.Root bind:value={activeTab} class="flex flex-1 flex-col overflow-hidden">
 		<div class="flex items-center justify-between border-b bg-muted/20 pr-4 py-2 md:hidden">
 			<Tabs.List class="mx-4 grid w-[calc(100%-2rem)] grid-cols-2">
-				<Tabs.Trigger value="editor">Editor</Tabs.Trigger>
-				<Tabs.Trigger value="output">Output</Tabs.Trigger>
+					<Tabs.Trigger value="editor">{i18n.t('experiment.editor')}</Tabs.Trigger>
+					<Tabs.Trigger value="output">{i18n.t('experiment.output')}</Tabs.Trigger>
 			</Tabs.List>
 			<Button
 				onclick={activeTab === 'editor' ? resetCode : clearOutput}
 				variant="secondary"
 			>
-				{activeTab === 'editor' ? 'Reset' : 'Clear'}
+					{activeTab === 'editor' ? i18n.t('experiment.reset') : i18n.t('experiment.clear')}
 			 </Button>
 		</div>
 
@@ -194,12 +196,12 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 					: 'hidden md:flex'} w-full flex-1 flex-col border-r md:w-auto"
 			>
 				<div class="hidden items-center justify-between border-b bg-muted/20 px-4 py-2 md:flex">
-					<h2 class="text-sm font-medium">Editor</h2>
+						<h2 class="text-sm font-medium">{i18n.t('experiment.editor')}</h2>
 					<button
 						onclick={resetCode}
 						class="rounded-md bg-muted px-3 py-1 text-sm transition-colors hover:bg-muted/80"
 					>
-						Reset
+							{i18n.t('experiment.reset')}
 					</button>
 				</div>
 				<div class="relative flex-1 pt-2 md:pt-0">
@@ -219,13 +221,13 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 					: 'hidden md:flex'} md:flex-2 flex-1 flex-col lg:flex-1"
 			>
 				<div class="hidden items-center justify-between border-b bg-muted/20 px-4 md:flex">
-					<h2 class="text-sm font-medium">Output</h2>
+						<h2 class="text-sm font-medium">{i18n.t('experiment.output')}</h2>
 					<div class="flex items-center gap-2">
 						<button
 							onclick={clearOutput}
 							class="rounded-md bg-muted px-3 py-1 text-sm transition-colors hover:bg-muted/80"
 						>
-							Clear
+								{i18n.t('experiment.clear')}
 						</button>
 						<Button variant="ghost" size="icon" onclick={executeCode}>
 							<RotateCw class="h-4 w-4" />
@@ -236,7 +238,7 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 					{#if executionError}
 						<div class="mb-4 rounded-md border border-destructive/20 bg-destructive/10 p-3">
 							<div class="mb-2 flex items-center gap-2">
-								<span class="font-semibold text-destructive">Error</span>
+									<span class="font-semibold text-destructive">{i18n.t('experiment.error')}</span>
 							</div>
 							<pre
 								class="whitespace-pre-wrap font-mono text-sm text-destructive">{executionError}</pre>
@@ -246,7 +248,7 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 					{#if executionResult}
 						<div class="mb-4">
 							<div class="mb-2 flex items-center gap-2">
-								<span class="text-sm font-semibold text-muted-foreground">Console Output</span>
+									<span class="text-sm font-semibold text-muted-foreground">{i18n.t('experiment.console_output')}</span>
 							</div>
 							<pre
 								class="whitespace-pre-wrap rounded-md border bg-background p-3 font-mono text-sm">{executionResult}</pre>
@@ -259,8 +261,8 @@ output.innerHTML = '<h2>Hello HTML!</h2>';
 					{#if !executionResult && !executionError}
 						<div class="flex h-full items-center justify-center text-center">
 							<div class="text-muted-foreground">
-								<p class="mb-2">Start typing to see live execution</p>
-								<p class="text-sm">Code runs automatically as you type</p>
+									<p class="mb-2">{i18n.t('experiment.placeholder_title')}</p>
+									<p class="text-sm">{i18n.t('experiment.placeholder_subtitle')}</p>
 							</div>
 						</div>
 					{/if}

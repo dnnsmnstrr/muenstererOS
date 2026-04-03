@@ -67,7 +67,7 @@
 			...gistData,
 			updatedAt: gistData.updatedAt || timestamp || new Date(apiData.updated_at).toISOString(),
 			versions: nowData.versions,
-			url: apiData.url
+			url: apiData?.url
 		};
 		currentPlaylist = playlists.find((p) => p.url === gistData.playlist?.url || p.uri === gistData.playlist?.uri);
 		showingVersion = true;
@@ -90,7 +90,7 @@
 		{i18n.t('now.title')}
 		<div class="flex items-center">
 			<Link
-				href={nowData.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
+				href={nowData?.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
 				class="block text-sm font-normal"
 			>
 				{#if showingVersion}

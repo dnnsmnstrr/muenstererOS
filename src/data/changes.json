@@ -1,5 +1,11 @@
 [
 	{
+		"date": "2025-03-20",
+		"title": "Ping",
+		"description": "Added a ping page to send messages to my phone with ntfy.",
+		"path": "/ping"
+	},
+	{
 		"date": "2025-03-10",
 		"title": "Concerts",
 		"description": "Added a page to list all the concerts and festivals I've been to.",

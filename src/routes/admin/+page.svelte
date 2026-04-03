@@ -12,6 +12,8 @@
 	import GistSelection from './GistSelection.svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	// State management
 	let githubToken = $state('');
@@ -281,12 +283,12 @@
 </script>
 
 <svelte:head>
-	<title>muenstererOS - Admin</title>
+	<title>{i18n.t('common.admin')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
-		<Heading class="mb-0">Gist Admin</Heading>
+		<Heading class="mb-0">{i18n.t('admin.title')}</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
 

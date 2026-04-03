@@ -81,6 +81,18 @@ export function formatDuration(milliseconds: number): string {
 	return duration.trim();
 }
 
+export function getFriendlyTime(date: Date) {
+	const now = new Date();
+	const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+	if (diffInSeconds < 60) return i18n.t('about.just_now');
+	const diffInMinutes = Math.floor(diffInSeconds / 60);
+	if (diffInMinutes < 60) return i18n.t('about.m_ago', { count: diffInMinutes.toString() });
+	const diffInHours = Math.floor(diffInMinutes / 60);
+	if (diffInHours < 24) return i18n.t('about.h_ago', { count: diffInHours.toString() });
+	const diffInDays = Math.floor(diffInHours / 24);
+	return i18n.t('about.d_ago', { count: diffInDays.toString() });
+}
+
 // color
 export function hexToHsl(hex: string): string {
 	// Remove the hash character, if present

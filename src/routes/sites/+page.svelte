@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Heading from '$lib/components/typography/Heading.svelte';
-	import { Loader2, Minus, Plus, Minimize, ZoomIn, ZoomOut, Expand, Focus } from 'lucide-svelte';
+	import { Minus, Plus, Minimize, ZoomIn, ZoomOut, Expand, Focus } from 'lucide-svelte';
+	import Loader from '$lib/components/Loader.svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
@@ -290,7 +291,10 @@
 				variant="ghost"
 				size="icon"
 				class="h-8 w-8"
-			onclick={() => { displayDepth = Math.min(MAX_DEPTH, displayDepth + 1); fetchData(); }}
+				onclick={() => {
+					displayDepth = Math.min(MAX_DEPTH, displayDepth + 1);
+					fetchData();
+				}}
 				disabled={displayDepth >= MAX_DEPTH}
 				aria-label={i18n.t('sites.increase_depth')}
 			>
@@ -352,7 +356,9 @@
 			size="icon"
 			class="{isFullscreen ? 'inline-flex' : 'hidden md:inline-flex'} h-10 w-10"
 			onclick={toggleContainerFullscreen}
-			aria-label={isFullscreen ? i18n.t('common.exit_fullscreen') : i18n.t('common.enter_fullscreen')}
+			aria-label={isFullscreen
+				? i18n.t('common.exit_fullscreen')
+				: i18n.t('common.enter_fullscreen')}
 		>
 			{#if isFullscreen}
 				<Minimize class="h-4 w-4" />
@@ -364,7 +370,7 @@
 {/snippet}
 
 <div class="flex h-full flex-col p-4 md:p-8">
-	<div class="mb-6 flex flex-col justify-between gap-4 lg:flex-row md:items-end">
+	<div class="mb-6 flex flex-col justify-between gap-4 md:items-end lg:flex-row">
 		<div>
 			<Heading>{i18n.t('common.sites')}</Heading>
 			<p class="text-muted-foreground lg:max-w-[500px]">
@@ -379,7 +385,9 @@
 
 	<div
 		bind:this={container}
-		class="relative flex-1 overflow-hidden rounded-xl border bg-card/50 backdrop-blur-sm {isFullscreen ? 'fixed inset-0 z-50 rounded-none bg-background' : ''}"
+		class="relative flex-1 overflow-hidden rounded-xl border bg-card/50 backdrop-blur-sm {isFullscreen
+			? 'fixed inset-0 z-50 rounded-none bg-background'
+			: ''}"
 		role="application"
 		aria-label={i18n.t('sites.graph_label')}
 		onpointerdown={handlePointerDown}
@@ -410,11 +418,13 @@
 
 		{#if loading}
 			<div class="flex h-full items-center justify-center">
-				<Loader2 class="h-8 w-8 animate-spin text-primary" />
+				<Loader title={i18n.t('sites.loading')} />
 			</div>
 		{:else}
 			<svg {width} {height} class="h-full w-full">
-				<g style="transform: translate({offsetX}px, {offsetY}px) scale({scale}); transform-origin: 0 0;">
+				<g
+					style="transform: translate({offsetX}px, {offsetY}px) scale({scale}); transform-origin: 0 0;"
+				>
 					<g>
 						{#each filteredEdges as edge}
 							<line
