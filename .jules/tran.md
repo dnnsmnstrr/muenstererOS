@@ -59,3 +59,9 @@
 **Learning:** When localizing a new page, it is critical to ensure that the keys used in the component match the namespace and keys defined in the translation files. Furthermore, automated tools like `pnpm install` can generate large files like `pnpm-lock.yaml` which should be explicitly excluded from localization PRs to maintain focus and follow the "small optimization" rule.
 
 **Action:** Double-check key mappings (e.g., `api.title` vs `common.api`) before submission. Always run `git status` and remove any unintended files (like lockfiles or temporary logs) before committing.
+
+## 2026-04-03 - [Reusing Existing Namespaces for Consistent Data Localization]
+
+**Learning:** When localizing components that display data categorized by pre-defined keys (like "Spring", "Summer"), reusing existing i18n namespaces (e.g., `playlists.seasons`) ensures that the terminology remains consistent across different parts of the application. This avoids "translation drift" where the same concept is translated differently in separate files.
+
+**Action:** Always search the `en.json` and `de.json` files for existing keys that match the data values before adding new ones. Use dynamic path construction with `i18n.t()` to localize these values reactively.
