@@ -129,7 +129,7 @@
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
 		"konami_success": "Achievement freigeschaltet: Konami Code",
-		"konami_description": "Glückwunsch, du bist ein Nerd!"
+		"konami_description": "Glückwunsch, du bist ein nerd!"
 	},
 	"window": {
 		"close": "Fenster schließen",
@@ -186,6 +186,12 @@
 		"top_artists_description": "Das waren meine meistgehörten Künstler auf Spotify über die Jahre",
 		"preview_title": "Playlist-Vorschau",
 		"alt_gif": "Playlist GIF",
+		"alt_cover": "Playlist Cover",
+		"spring": "Frühling",
+		"summer": "Sommer",
+		"autumn": "Herbst",
+		"winter": "Winter",
+		"all_years": "Alle Jahre",
 		"stats": "Statistiken",
 		"artist_frequency": "Künstler-Frequenz",
 		"next": "Weiter",
@@ -227,7 +233,7 @@
 		"more_info_link": "Zettelkasten",
 		"inspired_by": "Inspiriert von",
 		"search_placeholder": "Suchen...",
-		"all_categories": "Alle Kategorien",
+		"all_categories": "All Categories",
 		"reset_filters": "Filter zurücksetzen",
 		"no_results": "Keine Ergebnisse gefunden.",
 		"results_found_one": "1 Ergebnis gefunden.",

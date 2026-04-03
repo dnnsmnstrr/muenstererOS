@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { i18n } from './../../lib/i18n/i18n.svelte.ts';
+	import { i18n } from '$lib/i18n/i18n.svelte';
   import { MdSvelte } from '@jazzymcjazz/mdsvelte';
   import legalText from "./impressum.md?raw";
   import legalTextEN from "./legal-notice.md?raw";
 	import { renderers } from "$lib/components/typography";
 	import type { TypographyContext } from '$lib/components/typography';
   import * as Card from "$lib/components/ui/card";
+	import { WEBSITE_NAME } from '$lib/config';
 	import { setContext } from 'svelte';
 	import { page } from '$app/stores';
 	import { waitForElementToDisplay } from '$lib/utils/browser';
@@ -26,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>Legal Notice</title>
+	<title>{i18n.t('common.legal')} | {WEBSITE_NAME}</title>
 </svelte:head>
 
 <div class="container overflow-y-scroll p-4 card">

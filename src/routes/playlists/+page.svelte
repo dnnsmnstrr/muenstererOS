@@ -264,12 +264,13 @@
 			{/if}
 			<div class="grid grid-cols-4 gap-6">
 				{#each aggregatedPlaylists as seasonPlaylist}
-					<Card.Root title={seasonPlaylist.title}>
+					{@const title = i18n.t(`playlists.${seasonPlaylist.title.toLowerCase().replace(' ', '_')}`) !== `playlists.${seasonPlaylist.title.toLowerCase().replace(' ', '_')}` ? i18n.t(`playlists.${seasonPlaylist.title.toLowerCase().replace(' ', '_')}`) : seasonPlaylist.title}
+					<Card.Root {title}>
 						<a href={SPOTIFY_PLAYLIST_LINK + seasonPlaylist.uri} target="_blank">
 							<Card.Content class="flex items-center justify-center gap-4 p-4">
 								{seasonPlaylist.emoji}
 								<h2 class="hidden py-2 text-xl font-semibold md:block">
-									{seasonPlaylist.title}
+									{title}
 								</h2>
 							</Card.Content>
 						</a>

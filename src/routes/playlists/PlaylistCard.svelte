@@ -3,9 +3,9 @@
 
 	import * as Card from '$lib/components/ui/card';
 	import { breakpoints } from '$lib/config';
-	import { capitalize } from '$lib/utils/index';
 	import { Info } from 'lucide-svelte';
 	import { SPOTIFY_PLAYLIST_LINK, type PlaylistItem } from './+page.svelte';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface Props {
 		playlist: PlaylistItem;
@@ -25,7 +25,7 @@
 					<div class="relative">
 						<img
 							src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
-							alt="Playlist cover"
+							alt={i18n.t('playlists.alt_cover')}
 							class="aspect-square w-full rounded object-cover pb-2 transition-opacity duration-300"
 							class:opacity-0={playlist.isHovered}
 						/>
@@ -33,7 +33,7 @@
 							src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 							data-gif-src={playlist.gif}
 							data-gif-lazy
-							alt="Playlist GIF"
+							alt={i18n.t('playlists.alt_gif')}
 							class="absolute inset-0 aspect-square w-full rounded object-cover pb-2 transition-opacity duration-300"
 							class:opacity-0={!playlist.isHovered}
 							onmouseenter={() =>
@@ -45,7 +45,7 @@
 				{:else}
 					<img
 						src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
-						alt="No GIF available"
+						alt={i18n.t('playlists.alt_cover')}
 						class="aspect-square w-full object-cover pb-2"
 					/>
 				{/if}
@@ -60,7 +60,7 @@
 					</h2>
 					{#if playlist.season}
 						<p class="text-muted-foreground">
-							{capitalize(playlist.season)} - {playlist.year || 'All Years'}
+							{i18n.t(`playlists.${playlist.season}`)} - {playlist.year || i18n.t('playlists.all_years')}
 						</p>
 					{/if}
 					{#if playlist.description}

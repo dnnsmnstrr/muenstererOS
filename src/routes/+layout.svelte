@@ -207,7 +207,9 @@
 	<style>
 		@import '/themes.css';
 	</style>
-	<title>{page.url.pathname === '/' ? i18n.t('common.home') : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
+	{#if page.url.pathname !== '/legal'}
+		<title>{page.url.pathname === '/' ? i18n.t('common.home') : capitalize(page.url.pathname.replace('/',''))}{PAGE_TITLE_SUFFIX}</title>
+	{/if}
 </svelte:head>
 
 <ModeWatcher />
