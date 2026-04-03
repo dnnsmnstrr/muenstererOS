@@ -60,6 +60,7 @@
 		"searching": "Searching for redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Pages",
 		"social": "Social",
 		"command_palette": "Command Palette",
@@ -71,6 +72,7 @@
 		"battery": "Battery",
 		"charging": "Charging",
 		"discharging": "Discharging",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Download Logo",
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
@@ -202,7 +204,9 @@
 		"changes_one": "1 change",
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
-		"load": "Load"
+		"load": "Load",
+		"first_version": "First",
+		"latest_version": "Latest"
 	},
 	"status": {
 		"title": "System Status",
@@ -528,5 +532,20 @@
 		"loading": "init muenstererOS",
 		"ready": "CLI ready",
 		"placeholder": "Type your command..."
+	},
+	"experiment": {
+		"title": "JavaScript Playground",
+		"description": "A playground for JavaScript code with instant execution",
+		"snippets": "Snippets",
+		"editor": "Editor",
+		"output": "Output",
+		"reset": "Reset",
+		"clear": "Clear",
+		"console_output": "Console Output",
+		"error": "Error",
+		"no_console_output": "Code executed successfully (no console output)",
+		"execution_error": "Execution error",
+		"placeholder_title": "Start typing to see live execution",
+		"placeholder_subtitle": "Code runs automatically as you type"
 	}
 }

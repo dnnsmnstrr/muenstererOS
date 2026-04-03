@@ -60,6 +60,7 @@
 		"searching": "Suche nach Redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Seiten",
 		"social": "Social Media",
 		"command_palette": "Befehlspalette",
@@ -71,6 +72,7 @@
 		"battery": "Batterie",
 		"charging": "Lädt",
 		"discharging": "Entlädt",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
@@ -202,7 +204,9 @@
 		"changes_one": "1 Änderung",
 		"changes_many": "{count} Änderungen",
 		"version_marker": "Version vom {date}",
-		"load": "Laden"
+		"load": "Laden",
+		"first_version": "Erste",
+		"latest_version": "Neueste"
 	},
 	"status": {
 		"title": "Systemstatus",
@@ -528,5 +532,20 @@
 		"loading": "init muenstererOS",
 		"ready": "CLI bereit",
 		"placeholder": "Befehl eingeben..."
+	},
+	"experiment": {
+		"title": "JavaScript-Spielplatz",
+		"description": "Ein Spielplatz für JavaScript-Code mit sofortiger Ausführung",
+		"snippets": "Snippets",
+		"editor": "Editor",
+		"output": "Ausgabe",
+		"reset": "Zurücksetzen",
+		"clear": "Leeren",
+		"console_output": "Konsolenausgabe",
+		"error": "Fehler",
+		"no_console_output": "Code erfolgreich ausgeführt (keine Konsolenausgabe)",
+		"execution_error": "Ausführungsfehler",
+		"placeholder_title": "Tippen Sie etwas ein, um die Live-Ausführung zu sehen",
+		"placeholder_subtitle": "Der Code wird automatisch während der Eingabe ausgeführt"
 	}
 }

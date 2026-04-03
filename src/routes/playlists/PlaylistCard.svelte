@@ -64,7 +64,6 @@
 						{playlist.title}
 					</h2>
 					{#if playlist.season}
-						<!-- Localization: Use localized season and year fallback -->
 						<p class="text-muted-foreground">
 							{i18n.t('playlists.seasons.' + playlist.season)} - {playlist.year ||
 								i18n.t('playlists.all_years')}
