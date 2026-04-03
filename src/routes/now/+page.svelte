@@ -68,7 +68,7 @@
 			...gistData,
 			updatedAt: gistData.updatedAt || timestamp || new Date(apiData.updated_at).toISOString(),
 			versions: nowData.versions,
-			url: apiData.url
+			url: apiData?.url
 		};
 		currentPlaylist = playlists.find((p) => p.uri === gistData.playlisturi);
 		console.log(currentPlaylist);
@@ -92,7 +92,7 @@
 		{i18n.t('now.title')}
 		<div class="flex items-center">
 			<Link
-				href={nowData.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
+				href={nowData?.url || `https://gist.github.com/${USERNAME_SHORT}/${NOW_GIST_ID}`}
 				class="block text-sm font-normal"
 			>
 				{#if showingVersion}
@@ -174,7 +174,6 @@
 		</Card>
 	</div>
 
-	<!-- 🌐 Localization Optimization: Use localized labels and components for better accessibility and multi-language support -->
 	<div class="mt-4 flex items-center justify-center gap-2">
 		<Versions versions={nowData.versions} {versionPositions} {loadVersion} />
 		{#if showEditButton}
