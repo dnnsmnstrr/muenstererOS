@@ -91,7 +91,6 @@
 	</ContextMenu.Trigger>
 	<ContextMenu.Content>
         <ContextMenu.Group>
-			<!-- Localized Brand Kit heading for the logo context menu -->
             <ContextMenu.GroupHeading inset>{i18n.t('header.brand_kit')}</ContextMenu.GroupHeading>
             <ContextMenu.Item onclick={downloadLogo()}>
                 <Download class="mr-2 h-4 w-4" />
