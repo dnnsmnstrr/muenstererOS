@@ -76,7 +76,8 @@
 		"download_logo": "Download Logo",
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
-		"copy_logo_url": "Copy image URL"
+		"copy_logo_url": "Copy image URL",
+		"brand_kit": "Brand Kit"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"
@@ -406,7 +407,9 @@
 		"description": "my slash pages",
 		"spin": "SPIN",
 		"good_luck": "Good Luck!",
-		"wheel_label": "Wheel of Fortune"
+		"wheel_label": "Wheel of Fortune",
+		"mute": "Mute haptics",
+		"unmute": "Unmute haptics"
 	},
 	"concerts": {
 		"title": "Concerts & Festivals",
