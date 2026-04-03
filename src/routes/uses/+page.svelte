@@ -33,15 +33,9 @@
 	import uses from '../../data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
 	import * as Table from '$lib/components/ui/table';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
-
-	/**
-	 * Localization optimization: Replace hardcoded UI strings with i18n.t() calls.
-	 * This makes the Uses page accessible in multiple languages (English and German).
-	 */
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
