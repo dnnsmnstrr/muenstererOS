@@ -91,7 +91,7 @@
 	</ContextMenu.Trigger>
 	<ContextMenu.Content>
         <ContextMenu.Group>
-            <ContextMenu.GroupHeading inset>Brand Kit</ContextMenu.GroupHeading>
+            <ContextMenu.GroupHeading inset>{i18n.t('header.brand_kit')}</ContextMenu.GroupHeading>
             <ContextMenu.Item onclick={downloadLogo()}>
                 <Download class="mr-2 h-4 w-4" />
                 {i18n.t('header.download_logo_png')}

@@ -13,6 +13,7 @@
 	import { Volume2, VolumeX } from 'lucide-svelte';
 
 	let isMuted = $state(window.localStorage.getItem('slashes_muted') === 'true');
+	// Localization: Initialize haptics service for the Slashes wheel
 	const { trigger, destroy, setDebug, isSupported } = createWebHaptics({
 		debug: true,
 		showSwitch: false
@@ -180,6 +181,7 @@
 
 		<div class="flex items-center gap-2">
 			{#if !isSupported}
+				<!-- Localization: Use localized aria-label for accessibility -->
 				<Button
 					onclick={() => {
 						setDebug(!isMuted);
@@ -187,9 +189,7 @@
 						window.localStorage.setItem('slashes_muted', isMuted.toString());
 					}}
 					variant="secondary"
-					aria-label={isMuted
-						? i18n.t('slashes.unmute')
-						: i18n.t('slashes.mute')}
+					aria-label={isMuted ? i18n.t('slashes.unmute') : i18n.t('slashes.mute')}
 				>
 					{#if isMuted}
 						<Volume2 class="h-4 w-4" />

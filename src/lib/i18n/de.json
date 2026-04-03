@@ -60,6 +60,7 @@
 		"searching": "Suche nach Redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Seiten",
 		"social": "Social Media",
 		"command_palette": "Befehlspalette",
@@ -71,10 +72,12 @@
 		"battery": "Batterie",
 		"charging": "Lädt",
 		"discharging": "Entlädt",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"brand_kit": "Marken-Assets"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
@@ -201,7 +204,9 @@
 		"changes_one": "1 Änderung",
 		"changes_many": "{count} Änderungen",
 		"version_marker": "Version vom {date}",
-		"load": "Laden"
+		"load": "Laden",
+		"first_version": "Erste",
+		"latest_version": "Neueste"
 	},
 	"status": {
 		"title": "Systemstatus",
@@ -402,7 +407,9 @@
 		"description": "meine Slash-Seiten",
 		"spin": "DREHEN",
 		"good_luck": "Viel Glück!",
-		"wheel_label": "Glücksrad"
+		"wheel_label": "Glücksrad",
+		"mute": "Haptik stummschalten",
+		"unmute": "Haptik einschalten"
 	},
 	"concerts": {
 		"title": "Konzerte & Festivals",

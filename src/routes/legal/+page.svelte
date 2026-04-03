@@ -7,6 +7,7 @@
 	import { renderers } from "$lib/components/typography";
 	import type { TypographyContext } from '$lib/components/typography';
   import * as Card from "$lib/components/ui/card";
+	import { WEBSITE_NAME } from '$lib/config';
 	import { setContext } from 'svelte';
 	import { page } from '$app/stores';
 	import { waitForElementToDisplay } from '$lib/utils/browser';
@@ -28,7 +29,6 @@
 
 <svelte:head>
 	<title>{i18n.t('common.legal')}{PAGE_TITLE_SUFFIX}</title>
-	<meta name="description" content={i18n.t('common.legal')} />
 </svelte:head>
 
 <div class="container overflow-y-scroll p-4 card">
