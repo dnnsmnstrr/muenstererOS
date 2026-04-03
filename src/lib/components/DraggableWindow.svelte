@@ -31,6 +31,8 @@
 	import File from './File.svelte';
 	import { debugLog, dvdBounceEnabled } from '$lib/stores/app';
 	import { INACTIVITY_TIMEOUT } from '$lib/config';
+	/* Localization: Import i18n service to support multi-language desktop context menu */
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
 
 	const minHeight = 300;
@@ -503,6 +505,7 @@
 					</div>
 				</ContextMenu.Trigger>
 				<ContextMenu.Content>
+					<!-- Localization: Use i18n for context menu actions and labels -->
 					<ContextMenu.Item
 						onclick={() => {
 							if (fileItem.href) {
@@ -511,7 +514,7 @@
 						}}
 					>
 						<FolderOpen class="mr-2 h-4 w-4" />
-						Open
+						{i18n.t('desktop.open')}
 					</ContextMenu.Item>
 					<ContextMenu.Item
 						onclick={() => {
@@ -521,63 +524,63 @@
 						}}
 					>
 						<ExternalLink class="mr-2 h-4 w-4" />
-						Open in New Tab
+						{i18n.t('desktop.open_new_tab')}
 					</ContextMenu.Item>
 					<ContextMenu.Item
 						onclick={() => {
-							const newName = prompt('Enter new name:', fileItem.name || fileItem.id);
+							const newName = prompt(i18n.t('desktop.rename_prompt'), fileItem.name || fileItem.id);
 							if (newName !== null) {
 								renameFile(fileItem.id, newName);
 							}
 						}}
 					>
 						<Pencil class="mr-2 h-4 w-4" />
-						Rename
+						{i18n.t('desktop.rename')}
 					</ContextMenu.Item>
 					<ContextMenu.Sub>
 						<ContextMenu.SubTrigger>
 							<Palette class="mr-2 h-4 w-4" />
-							Change Icon
+							{i18n.t('desktop.change_icon')}
 						</ContextMenu.SubTrigger>
 						<ContextMenu.SubContent>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'FolderOpen')}>
 								<FolderOpen class="mr-2 h-4 w-4" />
-								Folder
+								{i18n.t('desktop.icons.folder')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'File')}>
 								<FileIcon class="mr-2 h-4 w-4" />
-								File
+								{i18n.t('desktop.icons.file')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'FileText')}>
 								<FileText class="mr-2 h-4 w-4" />
-								Text
+								{i18n.t('desktop.icons.text')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Image')}>
 								<ImageIcon class="mr-2 h-4 w-4" />
-								Image
+								{i18n.t('desktop.icons.image')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Music')}>
 								<Music class="mr-2 h-4 w-4" />
-								Music
+								{i18n.t('desktop.icons.music')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Code')}>
 								<Code class="mr-2 h-4 w-4" />
-								Code
+								{i18n.t('desktop.icons.code')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Terminal')}>
 								<Terminal class="mr-2 h-4 w-4" />
-								Terminal
+								{i18n.t('desktop.icons.terminal')}
 							</ContextMenu.Item>
 							<ContextMenu.Item onclick={() => updateFileIcon(fileItem.id, 'Settings')}>
 								<Settings class="mr-2 h-4 w-4" />
-								Settings
+								{i18n.t('desktop.icons.settings')}
 							</ContextMenu.Item>
 						</ContextMenu.SubContent>
 					</ContextMenu.Sub>
 					<ContextMenu.Separator />
 					<ContextMenu.Item onclick={() => hideFile(fileItem.id)}>
 						<Trash2 class="mr-2 h-4 w-4" />
-						Delete
+						{i18n.t('desktop.delete')}
 					</ContextMenu.Item>
 				</ContextMenu.Content>
 			</ContextMenu.Root>

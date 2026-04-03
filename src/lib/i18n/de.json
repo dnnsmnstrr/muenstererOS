@@ -63,6 +63,7 @@
 		"searching": "Suche nach Redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Seiten",
 		"social": "Social Media",
 		"command_palette": "Befehlspalette",
@@ -74,10 +75,12 @@
 		"battery": "Batterie",
 		"charging": "Lädt",
 		"discharging": "Entlädt",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"brand_kit": "Marken-Assets"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
@@ -204,7 +207,9 @@
 		"changes_one": "1 Änderung",
 		"changes_many": "{count} Änderungen",
 		"version_marker": "Version vom {date}",
-		"load": "Laden"
+		"load": "Laden",
+		"first_version": "Erste",
+		"latest_version": "Neueste"
 	},
 	"status": {
 		"title": "Systemstatus",
@@ -405,7 +410,9 @@
 		"description": "meine Slash-Seiten",
 		"spin": "DREHEN",
 		"good_luck": "Viel Glück!",
-		"wheel_label": "Glücksrad"
+		"wheel_label": "Glücksrad",
+		"mute": "Haptik stummschalten",
+		"unmute": "Haptik einschalten"
 	},
 	"concerts": {
 		"title": "Konzerte & Festivals",
@@ -538,5 +545,27 @@
 		"versions": "Versionen",
 		"no_description": "Keine Beschreibung",
 		"view_on_github": "Auf GitHub ansehen"
+  },
+	"desktop": {
+		"open": "Öffnen",
+		"open_new_tab": "In neuem Tab öffnen",
+		"rename": "Umbenennen",
+		"rename_prompt": "Neuen Namen eingeben:",
+		"change_icon": "Icon ändern",
+		"delete": "Löschen",
+		"icons": {
+			"folder": "Ordner",
+			"file": "Datei",
+			"text": "Text",
+			"image": "Bild",
+			"music": "Musik",
+			"code": "Code",
+			"terminal": "Terminal",
+			"settings": "Einstellungen"
+		}
+	},
+	"playground": {
+		"counter_decrease": "Zähler um eins verringern",
+		"counter_increase": "Zähler um eins erhöhen"
 	}
 }

@@ -19,12 +19,10 @@
 </script>
 
 <svelte:head>
-	<!-- Use localized title for the page -->
 	<title>{i18n.t('common.changelog')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
 <div class="container mx-auto p-4">
-	<!-- Use localized heading -->
 	<Heading>{i18n.t('common.changelog')}</Heading>
 	<ul class="relative border-l border-foreground mt-8 ml-2">
 		{#each changelog as entry, i}

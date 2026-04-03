@@ -63,6 +63,7 @@
 		"searching": "Searching for redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Pages",
 		"social": "Social",
 		"command_palette": "Command Palette",
@@ -74,10 +75,12 @@
 		"battery": "Battery",
 		"charging": "Charging",
 		"discharging": "Discharging",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Download Logo",
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
-		"copy_logo_url": "Copy image URL"
+		"copy_logo_url": "Copy image URL",
+		"brand_kit": "Brand Kit"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"
@@ -204,7 +207,9 @@
 		"changes_one": "1 change",
 		"changes_many": "{count} changes",
 		"version_marker": "Version from {date}",
-		"load": "Load"
+		"load": "Load",
+		"first_version": "First",
+		"latest_version": "Latest"
 	},
 	"status": {
 		"title": "System Status",
@@ -405,7 +410,9 @@
 		"description": "my slash pages",
 		"spin": "SPIN",
 		"good_luck": "Good Luck!",
-		"wheel_label": "Wheel of Fortune"
+		"wheel_label": "Wheel of Fortune",
+		"mute": "Mute haptics",
+		"unmute": "Unmute haptics"
 	},
 	"concerts": {
 		"title": "Concerts & Festivals",
@@ -538,5 +545,27 @@
 		"versions": "Versions",
 		"no_description": "No description",
 		"view_on_github": "View on GitHub"
+  },
+	"desktop": {
+		"open": "Open",
+		"open_new_tab": "Open in New Tab",
+		"rename": "Rename",
+		"rename_prompt": "Enter new name:",
+		"change_icon": "Change Icon",
+		"delete": "Delete",
+		"icons": {
+			"folder": "Folder",
+			"file": "File",
+			"text": "Text",
+			"image": "Image",
+			"music": "Music",
+			"code": "Code",
+			"terminal": "Terminal",
+			"settings": "Settings"
+		}
+	},
+	"playground": {
+		"counter_decrease": "Decrease the counter by one",
+		"counter_increase": "Increase the counter by one"
 	}
 }
