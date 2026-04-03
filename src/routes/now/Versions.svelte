@@ -28,52 +28,39 @@
 		<div class="mb-4 flex items-center">
 			<h2 class="text-2xl font-bold">{i18n.t('now.version_history')}</h2>
 		</div>
-		<div class="block sm:hidden max-h-80 overflow-y-auto">
-			<ul class="space-y-2">
-				{#each versions as version}
-					<li class="flex items-center justify-between rounded bg-gray-100 dark:bg-gray-800 px-3 py-2">
-						<span>
-							{formatDate(version.timestamp)}
-                            {#if version.change_status?.total > 0}
-                                <span class="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                                    ({version.change_status.total === 1
-										? i18n.t('now.changes_one')
-										: i18n.t('now.changes_many', { count: version.change_status.total.toString() })})
-                                </span>
-                            {/if}
-						</span>
-						<Button
-							variant="outline"
-							size="sm"
-							onclick={() => {
-								loadVersion(version.url, version.timestamp);
-								showModal = false;
-							}}
-						>
-							{i18n.t('now.load')}
-						</Button>
-					</li>
-				{/each}
-			</ul>
-		</div>
-		<div class="relative h-4 w-full rounded bg-gray-200 dark:bg-gray-700 hidden sm:block">
+		<div class="relative mt-8 h-4 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+			<div class="absolute -top-6 left-0 text-xs text-muted-foreground">
+				{i18n.t('now.first_version')}
+			</div>
+			<div class="absolute -top-6 right-0 text-xs text-muted-foreground">
+				{i18n.t('now.latest_version')}
+			</div>
 			{#each versions as version, index}
 				<Tooltip.Root>
 					<Tooltip.Trigger
-						class="absolute h-full w-1 rounded bg-accent"
-						style="left: {versionPositions[index]}%"
+						class="absolute top-1/2 -translate-y-1/2 rounded-full bg-primary opacity-80 mix-blend-multiply transition-all hover:scale-125 hover:opacity-100 dark:mix-blend-screen"
+						style="left: {versionPositions[index]}%; width: 1.25rem; height: 1.25rem; transform: translate(-50%, -50%);"
 					>
 						<button
 							aria-label={i18n.t('now.version_marker', { date: formatDate(version.timestamp) })}
-							class="absolute left-1/2 h-4 w-1"
+							class="h-full w-full rounded-full"
 							onclick={() => {
-								loadVersion(version.url);
+								loadVersion(version.url, version.timestamp);
 								showModal = false;
 							}}
 						></button>
 					</Tooltip.Trigger>
 					<Tooltip.Content side="bottom">
-						{formatDate(version.timestamp)}
+						<div class="flex flex-col items-center">
+							<span>{formatDate(version.timestamp)}</span>
+							{#if version.change_status?.total > 0}
+								<span class="text-xs text-muted-foreground">
+									({version.change_status.total === 1
+										? i18n.t('now.changes_one')
+										: i18n.t('now.changes_many', { count: version.change_status.total.toString() })})
+								</span>
+							{/if}
+						</div>
 					</Tooltip.Content>
 				</Tooltip.Root>
 			{/each}
