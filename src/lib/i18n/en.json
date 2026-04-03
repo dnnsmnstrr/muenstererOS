@@ -526,5 +526,20 @@
 		"loading": "init muenstererOS",
 		"ready": "CLI ready",
 		"placeholder": "Type your command..."
+	},
+	"experiment": {
+		"title": "JavaScript Playground",
+		"description": "A playground for JavaScript code with instant execution",
+		"snippets": "Snippets",
+		"editor": "Editor",
+		"output": "Output",
+		"reset": "Reset",
+		"clear": "Clear",
+		"console_output": "Console Output",
+		"error": "Error",
+		"no_console_output": "Code executed successfully (no console output)",
+		"execution_error": "Execution error",
+		"placeholder_title": "Start typing to see live execution",
+		"placeholder_subtitle": "Code runs automatically as you type"
 	}
 }

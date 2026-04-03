@@ -526,5 +526,20 @@
 		"loading": "init muenstererOS",
 		"ready": "CLI bereit",
 		"placeholder": "Befehl eingeben..."
+	},
+	"experiment": {
+		"title": "JavaScript-Spielplatz",
+		"description": "Ein Spielplatz für JavaScript-Code mit sofortiger Ausführung",
+		"snippets": "Snippets",
+		"editor": "Editor",
+		"output": "Ausgabe",
+		"reset": "Zurücksetzen",
+		"clear": "Leeren",
+		"console_output": "Konsolenausgabe",
+		"error": "Fehler",
+		"no_console_output": "Code erfolgreich ausgeführt (keine Konsolenausgabe)",
+		"execution_error": "Ausführungsfehler",
+		"placeholder_title": "Tippen Sie etwas ein, um die Live-Ausführung zu sehen",
+		"placeholder_subtitle": "Der Code wird automatisch während der Eingabe ausgeführt"
 	}
 }
