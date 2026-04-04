@@ -553,6 +553,8 @@
 		"rename_prompt": "Neuen Namen eingeben:",
 		"change_icon": "Icon ändern",
 		"delete": "Löschen",
+		"resize_window": "Fenstergröße ändern",
+		"drag_file": "{name} ziehen",
 		"icons": {
 			"folder": "Ordner",
 			"file": "Datei",
