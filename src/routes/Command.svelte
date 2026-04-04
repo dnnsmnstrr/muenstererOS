@@ -276,13 +276,13 @@
 			$showHelp = false;
 		}
 
-		const pagesWithSearchField = ['/redirects', '/uses', '/playlists', '/terminal']; // immediately search on these pages
+		const pagesWithSearchField = ['/redirects', '/uses', '/playlists', '/terminal', '/ping']; // immediately search on these pages
 		if (
 			pagesWithSearchField.includes(page.url.pathname) &&
 			!isOverlayVisible &&
 			!['Enter', 'Tab', 'Escape'].includes(e.key)
 		) {
-			const input = document.querySelector('input');
+			const input = document.querySelector('input') || document.querySelector('textarea');
 			if (input && input.focus) {
 				input.focus();
 			}

@@ -5,7 +5,13 @@
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle
+	} from '$lib/components/ui/card';
 	import { toast } from 'svelte-sonner';
 	import { Send } from 'lucide-svelte';
 
@@ -64,7 +70,7 @@
 					required
 					disabled={loading}
 					onkeydown={(e) => {
-						if (e.key === 'Enter' && !e.shiftKey) {
+						if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !e.shiftKey) {
 							e.preventDefault();
 							sendMessage();
 						}
