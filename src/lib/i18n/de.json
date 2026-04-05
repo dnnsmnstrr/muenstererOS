@@ -28,8 +28,10 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"ping": "Ping",
+		"pap": "PAP",
 		"contact": "Kontakt",
 		"status": "Status",
+		"quit": "Beenden",
 		"sites": "Sites",
 		"sitemap": "Sitemap",
 		"experiment": "Experiment",
@@ -568,5 +570,15 @@
 	"playground": {
 		"counter_decrease": "Zähler um eins verringern",
 		"counter_increase": "Zähler um eins erhöhen"
+	},
+	"pap": {
+		"title": "Paula Amusement Page",
+		"password_prompt": "Passwort eingeben, um auf die Amusement Page zuzugreifen",
+		"password_placeholder": "Passwort...",
+		"unlock": "Freischalten",
+		"invalid_password": "Falsches Passwort. Bitte erneut versuchen.",
+		"stickers_label": "Sticker",
+		"clear_canvas": "Leinwand leeren",
+		"peel_hint": "Klicke auf einen Sticker, um ihn abzuziehen!"
 	}
 }
