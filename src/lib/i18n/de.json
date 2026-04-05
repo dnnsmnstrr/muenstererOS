@@ -371,7 +371,8 @@
 	},
 	"contact": {
 		"title": "Kontakt",
-		"description": "Du kannst mich unter"
+		"description": "Du kannst mich unter",
+		"meta_description": "Kontaktinformationen und Möglichkeiten, mich zu erreichen."
 	},
 	"ping": {
 		"title": "Ping",
