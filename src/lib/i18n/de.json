@@ -545,8 +545,49 @@
 		"public": "Öffentlich",
 		"versions": "Versionen",
 		"no_description": "Keine Beschreibung",
-		"view_on_github": "Auf GitHub ansehen"
-  },
+		"view_on_github": "Auf GitHub ansehen",
+		"status": {
+			"validating": "Wird validiert...",
+			"valid": "Gültiger Token",
+			"invalid": "Ungültiger Token",
+			"set": "Token gesetzt",
+			"none": "Kein Token"
+		},
+		"settings": {
+			"title": "GitHub Access Token",
+			"label": "Persönlicher Access Token",
+			"placeholder": "ghp_xxxxxxxxxxxxxxxxxxxx",
+			"description": "Token benötigt 'gist' Scope.",
+			"create_link": "Hier einen erstellen",
+			"validation_success": "Token ist gültig und hat die erforderlichen Berechtigungen",
+			"scopes": "Scopes",
+			"save_success": "Token lokal gespeichert",
+			"validation_failed": "Token-Validierung fehlgeschlagen",
+			"fetch_failed": "Validierung fehlgeschlagen",
+			"cleared": "Token gelöscht",
+			"save": "Speichern",
+			"validate": "Validieren",
+			"clear": "Löschen"
+		},
+		"gist_selection": {
+			"title": "Gist auswählen",
+			"gist_label": "Gist",
+			"custom_id": "Benutzerdefinierte Gist ID",
+			"filename": "Dateiname",
+			"id_label": "Gist ID",
+			"load": "Gist laden",
+			"loading": "Wird geladen..."
+		},
+		"editor": {
+			"editor_tab": "Editor",
+			"form_tab": "Formular",
+			"select_theme": "Theme auswählen",
+			"format": "Formatieren",
+			"reset": "Zurücksetzen",
+			"save": "Gist speichern",
+			"saving": "Wird gespeichert..."
+		}
+	},
 	"desktop": {
 		"open": "Öffnen",
 		"open_new_tab": "In neuem Tab öffnen",
