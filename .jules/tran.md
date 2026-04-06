@@ -60,6 +60,18 @@
 
 **Action:** Double-check key mappings (e.g., `api.title` vs `common.api`) before submission. Always run `git status` and remove any unintended files (like lockfiles or temporary logs) before committing.
 
+## 2026-04-04 - Localizing Interactive Desktop Elements
+
+**Learning:** Accessibility labels for interactive elements (like resize handles and draggable icons) are often overlooked but crucial for a fully localized desktop experience. Using interpolation (e.g., `{name}`) allows for natural phrasing in different languages (e.g., "Drag {name}" vs "{name} ziehen").
+
+**Action:** Always check for `aria-label` in interactive components and use interpolation for dynamic labels to ensure correct word order across locales.
+
+## 2026-04-04 - No Comments Inside Svelte Template Tags
+
+**Learning:** Adding comments (e.g., `/* ... */` or `<!-- ... -->`) inside Svelte template element attributes or between props can break the Svelte compiler and cause build failures like "Expected token >".
+
+**Action:** Place explanatory comments for i18n optimizations inside `<script>` blocks or as standard HTML comments OUTSIDE of element tags, never within the opening tag of a component or element.
+
 ## 2026-04-03 - [Reusing Existing Namespaces for Consistent Data Localization]
 
 **Learning:** When localizing components that display data categorized by pre-defined keys (like "Spring", "Summer"), reusing existing i18n namespaces (e.g., `playlists.seasons`) ensures that the terminology remains consistent across different parts of the application. This avoids "translation drift" where the same concept is translated differently in separate files.
