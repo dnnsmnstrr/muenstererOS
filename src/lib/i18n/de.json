@@ -409,6 +409,18 @@
 	"slashes": {
 		"title": "Slashes",
 		"description": "meine Slash-Seiten",
+		"items": {
+			"about": "",
+			"contact": "wie man mich erreicht",
+			"defaults": "meine Haupt-Apps auf iOS und macOS (mehr unter defaults.rknight.me)",
+			"interests": "woran ich interessiert bin",
+			"log": "ein Änderungsprotokoll für diese Webseite",
+			"now": "was ich gerade mache",
+			"slashes": "diese Seite",
+			"uses": "Dinge, die ich benutze",
+			"where": "wo ich die meiste Zeit verbringe",
+			"playlists": "meine Lieblingslieder"
+		},
 		"spin": "DREHEN",
 		"good_luck": "Viel Glück!",
 		"wheel_label": "Glücksrad",

@@ -19,22 +19,30 @@
 		showSwitch: false
 	});
 
-	const slashes = [
-		{ label: '/about', href: '/about', description: '' },
-		{ label: '/contact', href: '/contact', description: 'how to reach me' },
+	/**
+	 * Reactive slashes array that localizes descriptions
+	 * when the active language changes.
+	 */
+	const slashes = $derived([
+		{ label: '/about', href: '/about', description: i18n.t('slashes.items.about') },
+		{ label: '/contact', href: '/contact', description: i18n.t('slashes.items.contact') },
 		{
 			label: '/defaults',
 			href: '/defaults',
-			description: 'my main apps on iOS and macOS (more at defaults.rknight.me)'
+			description: i18n.t('slashes.items.defaults')
 		},
-		{ label: '/interests', href: '/zettelkasten/interests', description: "what I'm interested in" },
-		{ label: '/log', href: '/log', description: 'a changelog for this website' },
-		{ label: '/now', href: '/now', description: "what i'm doing right now" },
-		{ label: '/slashes', href: '/slashes', description: 'this page' },
-		{ label: '/uses', href: '/uses', description: 'things I use' },
-		{ label: '/where', href: '/where', description: 'where I spend most of my time' },
-		{ label: '/playlists', href: '/playlists', description: 'my favorite songs' }
-	];
+		{
+			label: '/interests',
+			href: '/zettelkasten/interests',
+			description: i18n.t('slashes.items.interests')
+		},
+		{ label: '/log', href: '/log', description: i18n.t('slashes.items.log') },
+		{ label: '/now', href: '/now', description: i18n.t('slashes.items.now') },
+		{ label: '/slashes', href: '/slashes', description: i18n.t('slashes.items.slashes') },
+		{ label: '/uses', href: '/uses', description: i18n.t('slashes.items.uses') },
+		{ label: '/where', href: '/where', description: i18n.t('slashes.items.where') },
+		{ label: '/playlists', href: '/playlists', description: i18n.t('slashes.items.playlists') }
+	]);
 
 	let rotation = $state(0);
 	let isSpinning = $state(false);
@@ -48,7 +56,10 @@
 
 	let displayRotation = $derived(isSpinning ? spinTween.current : rotation);
 
-	const segmentAngle = 360 / slashes.length;
+	/**
+	 * Derived segment angle based on the current number of slashes.
+	 */
+	const segmentAngle = $derived(360 / slashes.length);
 
 	let lastAngle = 0;
 	let lastTime = 0;

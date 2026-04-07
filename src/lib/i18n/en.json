@@ -409,6 +409,18 @@
 	"slashes": {
 		"title": "Slashes",
 		"description": "my slash pages",
+		"items": {
+			"about": "",
+			"contact": "how to reach me",
+			"defaults": "my main apps on iOS and macOS (more at defaults.rknight.me)",
+			"interests": "what I'm interested in",
+			"log": "a changelog for this website",
+			"now": "what i'm doing right now",
+			"slashes": "this page",
+			"uses": "things I use",
+			"where": "where I spend most of my time",
+			"playlists": "my favorite songs"
+		},
 		"spin": "SPIN",
 		"good_luck": "Good Luck!",
 		"wheel_label": "Wheel of Fortune",
