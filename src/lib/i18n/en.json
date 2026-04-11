@@ -565,6 +565,28 @@
 			"settings": "Settings"
 		}
 	},
+	"lobster": {
+		"title": "Lobster",
+		"description": "Patty's observations",
+		"reading": "Reading: {name}",
+		"observed_from": "observed from the Zettelkasten 🍀",
+		"observations": {
+			"builds": "builds instead of buys",
+			"systems": "systems thinker",
+			"modular": "modular everything",
+			"plays_by_ear": "plays by ear",
+			"indoor": "indoor creature",
+			"shares": "shares freely",
+			"backup": "backup evangelist"
+		},
+		"artifacts": {
+			"piano_note": "chords > sheet music",
+			"theremidi_note": "self-built"
+		},
+		"quote": "Kein Backup, kein Mitleid.",
+		"source": "source: {count} notes",
+		"calibration": "calibration: zettelkasten-derived"
+	},
 	"playground": {
 		"counter_decrease": "Decrease the counter by one",
 		"counter_increase": "Increase the counter by one"

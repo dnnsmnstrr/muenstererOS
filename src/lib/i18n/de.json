@@ -565,6 +565,28 @@
 			"settings": "Einstellungen"
 		}
 	},
+	"lobster": {
+		"title": "Lobster",
+		"description": "Pattys Beobachtungen",
+		"reading": "Lesung: {name}",
+		"observed_from": "beobachtet aus dem Zettelkasten 🍀",
+		"observations": {
+			"builds": "baut lieber als zu kaufen",
+			"systems": "Systemdenker",
+			"modular": "alles modular",
+			"plays_by_ear": "spielt nach Gehör",
+			"indoor": "Drinnen-Kreatur",
+			"shares": "teilt freigiebig",
+			"backup": "Backup-Evangelist"
+		},
+		"artifacts": {
+			"piano_note": "Akkorde > Notenblatt",
+			"theremidi_note": "selbstgebaut"
+		},
+		"quote": "Kein Backup, kein Mitleid.",
+		"source": "Quelle: {count} Notizen",
+		"calibration": "Kalibrierung: Zettelkasten-basiert"
+	},
 	"playground": {
 		"counter_decrease": "Zähler um eins verringern",
 		"counter_increase": "Zähler um eins erhöhen"

@@ -1,43 +1,50 @@
 <script lang="ts">
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import { Card } from '$lib/components/ui/card';
-	import { FIRST_NAME } from '$lib/config';
+	import { FIRST_NAME, PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { i18n } from '$lib/i18n/i18n.svelte';
 
-	const observations = [
-		{ label: 'builds instead of buys', confidence: 97 },
-		{ label: 'systems thinker', confidence: 94 },
-		{ label: 'modular everything', confidence: 92 },
-		{ label: 'plays by ear', confidence: 88 },
-		{ label: 'indoor creature', confidence: 95 },
-		{ label: 'shares freely', confidence: 89 },
-		{ label: 'backup evangelist', confidence: 99 },
-	];
+	// Observations data with localized labels
+	const observations = $derived([
+		{ label: i18n.t('lobster.observations.builds'), confidence: 97 },
+		{ label: i18n.t('lobster.observations.systems'), confidence: 94 },
+		{ label: i18n.t('lobster.observations.modular'), confidence: 92 },
+		{ label: i18n.t('lobster.observations.plays_by_ear'), confidence: 88 },
+		{ label: i18n.t('lobster.observations.indoor'), confidence: 95 },
+		{ label: i18n.t('lobster.observations.shares'), confidence: 89 },
+		{ label: i18n.t('lobster.observations.backup'), confidence: 99 }
+	]);
 
-	const artifacts = [
+	// Artifacts data with localized notes
+	const artifacts = $derived([
 		{ icon: '🖨️', name: '2× CR6-SE', note: 'Klipper + Octoprint' },
-		{ icon: '🎹', name: 'Piano', note: 'chords > sheet music' },
-		{ icon: '👻', name: 'ThereMIDI', note: 'self-built' },
-		{ icon: '🎮', name: 'Steam Deck', note: 'Portal, KSP, Astroneer' },
-	];
+		{ icon: '🎹', name: 'Piano', note: i18n.t('lobster.artifacts.piano_note') },
+		{ icon: '👻', name: 'ThereMIDI', note: i18n.t('lobster.artifacts.theremidi_note') },
+		{ icon: '🎮', name: 'Steam Deck', note: 'Portal, KSP, Astroneer' }
+	]);
 
-	const quote = 'Kein Backup, kein Mitleid.';
+	// Localized quote and page metadata
+	const quote = $derived(i18n.t('lobster.quote'));
+	const pageTitle = $derived(i18n.t('lobster.title') + PAGE_TITLE_SUFFIX);
+	const pageDescription = $derived(i18n.t('lobster.description'));
 
 	let hoveredIndex = $state<number | null>(null);
 </script>
 
 <svelte:head>
-	<title>Lobster | muenstererOS</title>
-	<meta name="description" content="Patty's observations" />
+	<title>{pageTitle}</title>
+	<meta name="description" content={pageDescription} />
 </svelte:head>
 
 <div class="container mx-auto flex min-h-[70vh] flex-col items-center justify-center p-8">
 	<Card class="max-w-md p-8">
-		<Heading class="mb-2 text-2xl">Reading: {FIRST_NAME}</Heading>
-		<p class="text-muted-foreground mb-6 text-sm">observed from the Zettelkasten 🍀</p>
+		<Heading class="mb-2 text-2xl">{i18n.t('lobster.reading', { name: FIRST_NAME })}</Heading>
+		<p class="text-muted-foreground mb-6 text-sm">{i18n.t('lobster.observed_from')}</p>
 
 		<div class="space-y-3">
 			{#each observations as obs, i}
 				<div
+					role="listitem"
 					class="group flex items-center gap-3"
 					onmouseenter={() => (hoveredIndex = i)}
 					onmouseleave={() => (hoveredIndex = null)}
@@ -77,7 +84,7 @@
 		</blockquote>
 
 		<p class="text-muted-foreground mt-6 text-center text-xs">
-			source: 111 notes · calibration: zettelkasten-derived
+			{i18n.t('lobster.source', { count: '111' })} · {i18n.t('lobster.calibration')}
 		</p>
 	</Card>
 </div>
