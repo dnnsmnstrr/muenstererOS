@@ -48,7 +48,8 @@
 
 		return Object.entries(counts)
 			.map(([name, count]) => ({ name, count }))
-			.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+			/* Optimized artist sorting: Uses localeCompare with the active language (i18n.lang) */
+			.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, i18n.lang));
 	});
 
 	let maxSeen = $derived(Math.max(...artistStats.map((s) => s.count), 1));
