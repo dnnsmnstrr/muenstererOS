@@ -365,6 +365,8 @@
 			"personal": "Personal",
 			"fun": "Fun",
 			"political": "Political",
+			"gaming": "Gaming",
+			"tech": "Tech",
 			"other": "Other"
 		},
 		"external_link_text": "Explore at eightyeightthirty.one"
