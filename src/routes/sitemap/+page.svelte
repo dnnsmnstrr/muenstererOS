@@ -7,6 +7,13 @@
 	import { formatDate } from '$lib/utils/helper';
 
 	let { data }: PageProps = $props();
+
+	/*
+	 * The common namespace in i18n files is used to dynamically translate
+	 * page slugs in the sitemap. If a slug (e.g., 'timeline', 'log') is
+	 * missing from the common namespace, it falls back to a formatted version
+	 * of the technical slug.
+	 */
 </script>
 
 <svelte:head>
