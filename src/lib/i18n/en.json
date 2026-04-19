@@ -413,7 +413,19 @@
 		"good_luck": "Good Luck!",
 		"wheel_label": "Wheel of Fortune",
 		"mute": "Mute haptics",
-		"unmute": "Unmute haptics"
+		"unmute": "Unmute haptics",
+		"items": {
+			"about": "more about me",
+			"contact": "how to reach me",
+			"defaults": "my main apps on iOS and macOS (more at defaults.rknight.me)",
+			"interests": "what I'm interested in",
+			"log": "a changelog for this website",
+			"now": "what i'm doing right now",
+			"slashes": "this page",
+			"uses": "things I use",
+			"where": "where I spend most of my time",
+			"playlists": "my favorite songs"
+		}
 	},
 	"concerts": {
 		"title": "Concerts & Festivals",
@@ -546,7 +558,7 @@
 		"versions": "Versions",
 		"no_description": "No description",
 		"view_on_github": "View on GitHub"
-  },
+	},
 	"desktop": {
 		"open": "Open",
 		"open_new_tab": "Open in New Tab",
