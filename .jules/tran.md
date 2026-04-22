@@ -65,3 +65,9 @@
 **Learning:** When localizing components that display data categorized by pre-defined keys (like "Spring", "Summer"), reusing existing i18n namespaces (e.g., `playlists.seasons`) ensures that the terminology remains consistent across different parts of the application. This avoids "translation drift" where the same concept is translated differently in separate files.
 
 **Action:** Always search the `en.json` and `de.json` files for existing keys that match the data values before adding new ones. Use dynamic path construction with `i18n.t()` to localize these values reactively.
+
+## 2026-04-03 - [Localizing Accessibility Labels in Interactive Components]
+
+**Learning:** Interactive components like Draggable Windows often contain accessibility labels (aria-label) that remain hardcoded in English, even when the rest of the UI is localized. These labels are crucial for screen reader users and should always be internationalized using the same `i18n.t()` pattern as visible text.
+
+**Action:** Scan for hardcoded `aria-label` attributes in interactive elements (resizers, draggers, buttons) and replace them with localized keys. Use interpolation for dynamic labels (e.g., `desktop.drag_file` with `{name}`).

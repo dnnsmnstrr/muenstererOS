@@ -190,7 +190,8 @@
 		"close": "Close window",
 		"minimize": "Minimize window",
 		"maximize": "Maximize window",
-		"restore": "Restore window"
+		"restore": "Restore window",
+		"resize": "Resize window"
 	},
 	"now": {
 		"title": "What I'm doing Now",
@@ -554,6 +555,7 @@
 		"rename_prompt": "Enter new name:",
 		"change_icon": "Change Icon",
 		"delete": "Delete",
+		"drag_file": "Drag {name}",
 		"icons": {
 			"folder": "Folder",
 			"file": "File",

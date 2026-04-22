@@ -190,7 +190,8 @@
 		"close": "Fenster schließen",
 		"minimize": "Fenster minimieren",
 		"maximize": "Fenster maximieren",
-		"restore": "Fenster wiederherstellen"
+		"restore": "Fenster wiederherstellen",
+		"resize": "Fenstergröße ändern"
 	},
 	"now": {
 		"title": "Now - Was ich gerade mache",
@@ -554,6 +555,7 @@
 		"rename_prompt": "Neuen Namen eingeben:",
 		"change_icon": "Icon ändern",
 		"delete": "Löschen",
+		"drag_file": "{name} ziehen",
 		"icons": {
 			"folder": "Ordner",
 			"file": "Datei",
