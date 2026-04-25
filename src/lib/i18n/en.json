@@ -554,6 +554,8 @@
 		"rename_prompt": "Enter new name:",
 		"change_icon": "Change Icon",
 		"delete": "Delete",
+		"resize_window": "Resize window",
+		"drag_file": "Drag {name}",
 		"icons": {
 			"folder": "Folder",
 			"file": "File",

@@ -472,7 +472,8 @@
 					onpointercancel={handleResizePointerUp}
 					role="button"
 					tabindex="-1"
-					aria-label="Resize window"
+					/* Localization optimization: Use localized aria-label for window resize handle */
+					aria-label={i18n.t('desktop.resize_window')}
 				></div>
 			</Card.Root>
 		</div>
@@ -494,7 +495,8 @@
 						ondragstart={(e) => e.preventDefault()}
 						role="button"
 						tabindex="-1"
-						aria-label="Drag {fileItem.name || fileItem.id}"
+						/* Localization optimization: Use localized aria-label for desktop file drag handle */
+						aria-label={i18n.t('desktop.drag_file', { name: fileItem.name || fileItem.id })}
 					>
 						<File
 							name={fileItem.name || fileItem.id}
