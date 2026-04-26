@@ -1,7 +1,7 @@
 import { CONCERTS_GIST_ID } from '$lib/config.js';
 
 export async function load({ fetch }) {
-	const response = await fetch('/api/concerts');
+	const response = await fetch('/api/gists/concerts');
 	if (!response.ok) {
 		return {
 			concerts: [],

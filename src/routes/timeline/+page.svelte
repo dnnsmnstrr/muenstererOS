@@ -66,6 +66,7 @@
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/events');
+			console.log(response)
 			if (!response.ok) {
 				throw new Error('Failed to fetch events');
 			}
