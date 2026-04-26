@@ -31,7 +31,6 @@
 	import File from './File.svelte';
 	import { debugLog, dvdBounceEnabled } from '$lib/stores/app';
 	import { INACTIVITY_TIMEOUT } from '$lib/config';
-	/* Localization: Import i18n service to support multi-language desktop context menu */
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
 
@@ -464,7 +463,6 @@
 				<div class={cn('flex h-full items-center justify-center', className)}>
 					<slot />
 				</div>
-				<!-- Localization: Use i18n for accessibility labels to support multi-language window resizing -->
 				<div
 					class="absolute bottom-0 right-0 hidden h-8 w-8 cursor-nwse-resize select-none md:block"
 					onpointerdown={handleResizePointerDown}
@@ -495,7 +493,6 @@
 						ondragstart={(e) => e.preventDefault()}
 						role="button"
 						tabindex="-1"
-						/* Localization: Localize aria-label for desktop file interaction */
 						aria-label={i18n.t('desktop.drag_file', { name: fileItem.name || fileItem.id })}
 					>
 						<File
@@ -507,7 +504,6 @@
 					</div>
 				</ContextMenu.Trigger>
 				<ContextMenu.Content>
-					<!-- Localization: Use i18n for context menu actions and labels -->
 					<ContextMenu.Item
 						onclick={() => {
 							if (fileItem.href) {

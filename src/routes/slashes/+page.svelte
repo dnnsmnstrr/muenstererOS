@@ -13,13 +13,11 @@
 	import { Volume2, VolumeX } from 'lucide-svelte';
 
 	let isMuted = $state(window.localStorage.getItem('slashes_muted') === 'true');
-	// Localization: Initialize haptics service for the Slashes wheel
 	const { trigger, destroy, setDebug, isSupported } = createWebHaptics({
 		debug: true,
 		showSwitch: false
 	});
 
-	// Localization: Define slash pages reactively to support language switching
 	const slashes = $derived([
 		{ label: '/about', href: '/about', description: i18n.t('slashes.items.about') },
 		{ label: '/contact', href: '/contact', description: i18n.t('slashes.items.contact') },
@@ -53,7 +51,6 @@
 
 	let displayRotation = $derived(isSpinning ? spinTween.current : rotation);
 
-	// Localization: Ensure the segment angle is recalculated reactively
 	const segmentAngle = $derived(360 / slashes.length);
 
 	let lastAngle = 0;
@@ -187,7 +184,6 @@
 
 		<div class="flex items-center gap-2">
 			{#if !isSupported}
-				<!-- Localization: Use localized aria-label for accessibility -->
 				<Button
 					onclick={() => {
 						setDebug(!isMuted);

@@ -21,7 +21,6 @@
 	import { debugLog } from '$lib/stores/app';
 	import { endpoints } from '../api/+page.svelte';
 	import pagesData from '../../data/pages.json?raw';
-	// Localization: Import i18n service and PAGE_TITLE_SUFFIX for consistency
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 
@@ -442,13 +441,11 @@
 </script>
 
 <svelte:head>
-	<!-- Localization: Use localized title and PAGE_TITLE_SUFFIX for document metadata -->
 	<title>{i18n.t('terminal.title')}{PAGE_TITLE_SUFFIX}</title>
 	<meta name="description" content={i18n.t('terminal.description')} />
 </svelte:head>
 
 <div class="container">
-	<!-- Localization: Use i18n.t for all user-facing strings to support multiple languages -->
 	<Heading>{i18n.t('terminal.title')}</Heading>
 	<Terminal.Root class="max-w-2xl" delay={100}>
 		{#if !isIntroComplete}
