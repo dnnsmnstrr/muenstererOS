@@ -267,6 +267,8 @@
 		"resolution": "Resolution",
 		"week": "Week",
 		"month": "Month",
+		"year": "Year",
+		"day": "Day",
 		"zoom": "Zoom",
 		"until": "until",
 		"until_now": "until now",

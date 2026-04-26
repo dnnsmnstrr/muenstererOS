@@ -14,7 +14,7 @@
 	let error = $state<string | null>(null);
 
 	let viewMode = $state<'timeline' | 'grid'>('timeline');
-	let resolution = $state<'week' | 'month'>('week');
+	let resolution = $state<'day' | 'week' | 'month' | 'year'>('week');
 	let zoom = $state(12);
 	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
 	let selectedUnit = $state<(typeof gridUnits)[0] | null>(null);
@@ -27,14 +27,25 @@
 
 	const gridUnits = $derived.by(() => {
 		const units = [];
-		const totalUnits = resolution === 'week' ? targetAge * 52 : targetAge * 12;
+		const totalUnits =
+			resolution === 'week'
+				? targetAge * 52
+				: resolution === 'month'
+					? targetAge * 12
+					: resolution === 'year'
+						? targetAge
+						: targetAge * 365;
 
 		for (let i = 0; i < totalUnits; i++) {
 			const unitDate = new Date(birthDate);
 			if (resolution === 'week') {
 				unitDate.setDate(birthDate.getDate() + i * 7);
-			} else {
+			} else if (resolution === 'month') {
 				unitDate.setMonth(birthDate.getMonth() + i);
+			} else if (resolution === 'year') {
+				unitDate.setFullYear(birthDate.getFullYear() + i);
+			} else {
+				unitDate.setDate(birthDate.getDate() + i);
 			}
 
 			const isPast = unitDate < now;
@@ -44,20 +55,49 @@
 			const nextUnitDate = new Date(unitDate);
 			if (resolution === 'week') {
 				nextUnitDate.setDate(unitDate.getDate() + 7);
-			} else {
+			} else if (resolution === 'month') {
 				nextUnitDate.setMonth(unitDate.getMonth() + 1);
+			} else if (resolution === 'year') {
+				nextUnitDate.setFullYear(unitDate.getFullYear() + 1);
+			} else {
+				nextUnitDate.setDate(unitDate.getDate() + 1);
 			}
 
 			const activeEvents = parsedEvents.filter((event) => {
 				return event.start < nextUnitDate && event.end >= unitDate;
 			});
 
+			if (showFuture && i >= totalUnits - 1) {
+				activeEvents.push({
+					start: unitDate,
+					end: unitDate,
+					startDate: unitDate.toDateString(),
+					endDate: unitDate.toDateString(),
+					location: '',
+					name: 'Death?',
+					color: '#000'
+				});
+			}
 			units.push({
 				date: unitDate,
 				isPast,
 				events: activeEvents,
-				isBirthday: resolution === 'week' ? i % 52 === 0 : i % 12 === 0,
-				age: resolution === 'week' ? Math.floor(i / 52) : Math.floor(i / 12)
+				isBirthday:
+					resolution === 'week'
+						? i % 52 === 0
+						: resolution === 'month'
+							? i % 12 === 0
+							: resolution === 'year'
+								? i % 1 === 0
+								: i % 365 === 0,
+				age:
+					resolution === 'week'
+						? Math.floor(i / 52)
+						: resolution === 'month'
+							? Math.floor(i / 12)
+							: resolution === 'year'
+								? i
+								: Math.floor(i / 365)
 			});
 		}
 		return units;
@@ -66,6 +106,7 @@
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/events');
+			console.log(response);
 			if (!response.ok) {
 				throw new Error('Failed to fetch events');
 			}
@@ -124,10 +165,12 @@
 					<CustomSelect
 						name="resolution"
 						value={resolution}
-						onValueChange={(v) => (resolution = v as 'week' | 'month')}
+						onValueChange={(v) => (resolution = v as 'week' | 'month' | 'year' | 'day')}
 						options={[
+							{ value: 'day', label: i18n.t('timeline.day') },
 							{ value: 'week', label: i18n.t('timeline.week') },
-							{ value: 'month', label: i18n.t('timeline.month') }
+							{ value: 'month', label: i18n.t('timeline.month') },
+							{ value: 'year', label: i18n.t('timeline.year') },
 						]}
 						class="w-32"
 					/>
@@ -140,6 +183,11 @@
 						min="4"
 						max="32"
 						bind:value={zoom}
+						onwheel={(e) => {
+							e.preventDefault();
+							const delta = Math.sign(e.deltaY) * -1;
+							zoom = Math.min(32, Math.max(4, zoom + delta));
+						}}
 						class="h-1.5 w-32 cursor-pointer appearance-none rounded-lg bg-secondary accent-primary"
 					/>
 				</div>
@@ -191,14 +239,14 @@
 	<div class="">
 		<!-- Timeline line -->
 		<div
-			class="absolute left-0 right-0 top-1/2 mt-24 z-0 h-0.5 -translate-y-1/2 transform bg-border"
+			class="absolute left-0 right-0 top-1/2 z-0 mt-24 h-0.5 -translate-y-1/2 transform bg-border"
 		></div>
 
 		<!-- Timeline container -->
 		<div
-			class="absolute inset-0 top-48 overflow-x-auto flex items-center scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800"
+			class="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 absolute inset-0 top-48 flex items-center overflow-x-auto"
 		>
-			<div class="flex min-w-max space-x-8 px-4 h-4/6 sm:max-h-80 sm:px-20">
+			<div class="flex h-4/6 min-w-max space-x-8 px-4 sm:max-h-80 sm:px-20">
 				{#each parsedEvents as event, index}
 					{@const duration = Math.round(event.end.getTime() - event.start.getTime())}
 					<div class="relative flex min-w-64 flex-col">
@@ -262,9 +310,11 @@
 	<div class="container mx-auto overflow-x-hidden px-4 pb-20">
 		<div
 			class="grid"
-			style="grid-template-columns: repeat(auto-fill, {zoom}px); gap: {zoom > 8 ? 2 : 1}px; width: 100%;"
+			style="grid-template-columns: repeat(auto-fill, {zoom}px); gap: {zoom > 8
+				? 2
+				: 1}px; width: 100%;"
 		>
-			{#each gridUnits as unit}
+			{#each gridUnits as unit, index}
 				{@const primaryEvent = unit.events[0]}
 				{@const isSelected = selectedUnit === unit}
 				<!-- svelte-ignore a11y_mouse_events_have_key_events -->
@@ -282,16 +332,20 @@
                         height: {zoom}px;
                         background-color: {primaryEvent?.color || 'transparent'};
                         opacity: {unit.isPast ? 1 : 0.2};
-                        border-color: {isSelected ? 'var(--primary)' : primaryEvent ? 'rgba(0,0,0,0.2)' : 'var(--border)'};
-                        box-shadow: {isSelected ? '0 0 0 2px var(--background), 0 0 0 4px var(--primary)' : 'none'};
+                        border-color: {isSelected
+						? 'var(--primary)'
+						: primaryEvent
+							? 'rgba(0,0,0,0.2)'
+							: 'var(--border)'};
+                        box-shadow: {isSelected
+						? '0 0 0 2px var(--background), 0 0 0 4px var(--primary)'
+						: 'none'};
                         z-index: {isSelected ? 10 : 1};
                         {zoom < 6 ? 'border-width: 0;' : ''}
                     "
 				>
-					{#if showBirthdays && unit.isBirthday}
-						<div
-							class="absolute inset-0 flex items-center justify-center pointer-events-none"
-						>
+					{#if (showBirthdays && unit.isBirthday) || (showFuture && index >= gridUnits.length - 1)}
+						<div class="pointer-events-none absolute inset-0 flex items-center justify-center">
 							<div
 								class="rounded-full bg-black shadow-sm dark:bg-white"
 								style="width: {Math.max(3, zoom / 3)}px; height: {Math.max(3, zoom / 3)}px;"
@@ -306,7 +360,7 @@
 	{#if hoveredUnit || selectedUnit}
 		{@const displayUnit = hoveredUnit || selectedUnit}
 		<div
-			class="pointer-events-none fixed bottom-8 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
+			class="pointer-events-none fixed bottom-16 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
 		>
 			<div class="font-bold">{formatDate(displayUnit!.date.toISOString())}</div>
 			{#if displayUnit!.isBirthday}

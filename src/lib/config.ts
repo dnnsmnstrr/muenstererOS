@@ -87,6 +87,11 @@ export const gists = {
 		name: 'Playlists',
 		filename: 'playlists.json'
 	},
+	projects: {
+		id: 'dbffdd660d34e056c6d3cf8378c1371a',
+		name: 'Projects',
+		filename: 'projects.json'
+	},
 	songs: {
 		id: '2fc6578c2a8d7375af8cfd1be3131711',
 		name: 'Songs',

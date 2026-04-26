@@ -1,12 +1,11 @@
 import { json, error } from '@sveltejs/kit';
 import { searchData, sortData } from '$lib/utils/api';
 import type { DataItem } from '$lib/utils/api';
-import fs from 'fs/promises';
-import path from 'path';
 import playlists from '../../../data/playlists.json';
 import changes from '../../../data/changes.json';
 import pages from '../../../data/pages.json';
 import uses from '../../../data/uses.json';
+import { gists } from '$lib/config';
 
 const dataMap: Record<string, any> = {
 	playlists,
@@ -18,6 +17,23 @@ const DEFAULT_LIMIT = 50;
 
 export async function GET({ params, url }) {
 	const { slug } = params;
+
+	if (!dataMap[slug] && (!gists || !gists[slug as keyof typeof gists])) {
+		throw error(404, `No data found for ${slug}`);
+	}
+
+	if (!dataMap[slug]) {
+		// fall back to gists
+		const gistUrl = new URL(`/api/gists/${slug}${url.search}`, url.origin);
+		const gistResponse = await fetch(gistUrl);
+
+		if (!gistResponse.ok) {
+			throw error(gistResponse.status, `No static data or gist found for slug: ${slug}`);
+		}
+
+		return gistResponse;
+	}
+
 
 	try {
 		const data = dataMap[slug];

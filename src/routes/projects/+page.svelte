@@ -6,8 +6,11 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/index';
-	import projects from '../../data/projects.json';
 
+	let { data }: PageProps = $props();
+
+	let projects = $state(data.projects);
+	
 	type Project = {
 		title: string;
 		description: string;
