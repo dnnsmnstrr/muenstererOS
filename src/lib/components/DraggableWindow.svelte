@@ -464,6 +464,7 @@
 				<div class={cn('flex h-full items-center justify-center', className)}>
 					<slot />
 				</div>
+				<!-- Localization: Use i18n for accessibility labels to support multi-language window resizing -->
 				<div
 					class="absolute bottom-0 right-0 hidden h-8 w-8 cursor-nwse-resize select-none md:block"
 					onpointerdown={handleResizePointerDown}
@@ -472,7 +473,7 @@
 					onpointercancel={handleResizePointerUp}
 					role="button"
 					tabindex="-1"
-					aria-label="Resize window"
+					aria-label={i18n.t('window.resize')}
 				></div>
 			</Card.Root>
 		</div>
@@ -494,7 +495,8 @@
 						ondragstart={(e) => e.preventDefault()}
 						role="button"
 						tabindex="-1"
-						aria-label="Drag {fileItem.name || fileItem.id}"
+						/* Localization: Localize aria-label for desktop file interaction */
+						aria-label={i18n.t('desktop.drag_file', { name: fileItem.name || fileItem.id })}
 					>
 						<File
 							name={fileItem.name || fileItem.id}
