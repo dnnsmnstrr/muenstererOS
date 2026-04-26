@@ -267,6 +267,7 @@
 		"resolution": "Resolution",
 		"week": "Week",
 		"month": "Month",
+		"year": "Year",
 		"zoom": "Zoom",
 		"until": "until",
 		"until_now": "until now",
@@ -546,7 +547,7 @@
 		"versions": "Versions",
 		"no_description": "No description",
 		"view_on_github": "View on GitHub"
-  },
+	},
 	"desktop": {
 		"open": "Open",
 		"open_new_tab": "Open in New Tab",
