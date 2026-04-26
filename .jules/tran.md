@@ -60,6 +60,12 @@
 
 **Action:** Double-check key mappings (e.g., `api.title` vs `common.api`) before submission. Always run `git status` and remove any unintended files (like lockfiles or temporary logs) before committing.
 
+## 2026-04-03 - [Handling External API Tooling Localization]
+
+**Learning:** When localizing specialized routes like an Admin page that interacts with external APIs (like GitHub Gists), it is essential to move all user-facing strings—including status badges, token validation messages, and loading states—to i18n files. However, it's also critical to ensure that technical terms and placeholders are appropriately translated for context (e.g., "Gist" might remain "Gist" in German, but "Save" should become "Speichern").
+
+**Action:** Thoroughly audit specialized routes for hardcoded strings and placeholders. Always add explanatory comments to localized components as required by project guidelines.
+
 ## 2026-04-03 - [Reusing Existing Namespaces for Consistent Data Localization]
 
 **Learning:** When localizing components that display data categorized by pre-defined keys (like "Spring", "Summer"), reusing existing i18n namespaces (e.g., `playlists.seasons`) ensures that the terminology remains consistent across different parts of the application. This avoids "translation drift" where the same concept is translated differently in separate files.
