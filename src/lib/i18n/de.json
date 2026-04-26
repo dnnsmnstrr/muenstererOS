@@ -413,7 +413,19 @@
 		"good_luck": "Viel Glück!",
 		"wheel_label": "Glücksrad",
 		"mute": "Haptik stummschalten",
-		"unmute": "Haptik einschalten"
+		"unmute": "Haptik einschalten",
+		"items": {
+			"about": "",
+			"contact": "wie man mich erreicht",
+			"defaults": "meine Standard-Apps auf iOS und macOS (mehr auf defaults.rknight.me)",
+			"interests": "was mich interessiert",
+			"log": "ein Änderungsprotokoll für diese Webseite",
+			"now": "was ich gerade so mache",
+			"slashes": "diese Seite",
+			"uses": "Dinge, die ich benutze",
+			"where": "wo ich die meiste Zeit verbringe",
+			"playlists": "meine Lieblingslieder"
+		}
 	},
 	"concerts": {
 		"title": "Konzerte & Festivals",
