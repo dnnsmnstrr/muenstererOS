@@ -32,24 +32,14 @@ Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unt
 
 ## Datenschutz
 
-Die Nutzung meiner Webseite ist ohne Angabe personenbezogener Daten möglich. Soweit auf meinen Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.
+Die Nutzung meiner Webseite ist ohne Angabe personenbezogener Daten möglich. Soweit auf meinen Seiten personenbezogene Daten (beispielsweise Name oder E-Mail-Adresse) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.
 Ich weise darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
 Der Nutzung von im Rahmen der Impressumspflicht veröffentlichten Kontaktdaten durch Dritte zur Übersendung von nicht ausdrücklich angeforderter Werbung und Informationsmaterialien wird hiermit ausdrücklich widersprochen. Der Betreiber der Seiten behält sich ausdrücklich rechtliche Schritte im Falle der unverlangten Zusendung von Werbeinformationen, etwa durch Spam-Mails, vor.
 
 ### Nutzungsstatistik
 
-Diese Webseite verwendet [Counter.dev](https://counter.dev/), um Seitenaufrufe zu verfolgen und zu analysieren. Dieses Tool hilft uns, zu verstehen, wie Besucher mit unseren Inhalten interagieren, was es uns ermöglicht, die Benutzererfahrung zu verbessern und unsere Dienstleistungen zu optimieren. Counter.dev sammelt Informationen wie die Anzahl der Aufrufe, Seitenbesuche und Nutzerengagement-Metriken anonymisiert und ohne die Verwendung von Cookies.
-Für weitere Informationen darüber, wie Counter.dev Daten erhebt und verarbeitet, besuchen Sie bitte deren [Datenschutzerklärung](https://counter.dev/pages/privacy.html).
+Diese Webseite verwendet [Goatcounter](https://www.goatcounter.com/), um Seitenaufrufe zu verfolgen und zu analysieren. Dieses Tool hilft uns zu verstehen, wie Besucher mit unseren Inhalten interagieren, was es uns ermöglicht, die Benutzererfahrung zu verbessern. Goatcounter sammelt Informationen wie die Anzahl der Aufrufe, Seitenbesuche und Nutzerengagement-Metriken anonymisiert und ohne die Verwendung von Cookies.
+
+Für weitere Informationen darüber, wie Goatcounter Daten erhebt und verarbeitet, besuchen Sie bitte deren [Datenschutzerklärung](https://www.goatcounter.com/help/privacy).
 
 Durch die Nutzung dieser Website stimmen Sie der Erhebung und Verarbeitung Ihrer Daten gemäß dieser Beschreibung zu.
-
-## Social Media
-
-Dieses Impressum gilt auch für die Inhalte folgender Social-Media-Präsenzen und Onlineprofile:
-
-- Facebook ([dennismuensterer](https://facebook.com/dennismuensterer))
-- LinkedIn ([dennismuensterer](https://www.linkedin.com/in/dennismuensterer))
-- Twitter ([dnnsmnstrr](https://twitter.com/dnnsmnstrr))
-- Instagram ([dnnsmnstrr](https://www.instagram.com/dnnsmnstrr))
-- TikTok ([dnnsmnstrr](https://www.tiktok.com/@dnnsmnstrr) & [dennis.makererer](https://www.tiktok.com/@dennis.makerer))
-- [Universe](https://dnnsmnstrr.onuniverse.com/)
