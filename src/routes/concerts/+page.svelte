@@ -60,7 +60,9 @@
 	);
 
 	let festivals = $derived(
-		(data.festivals as Festival[]).sort((a, b) => b.year - a.year || a.name.localeCompare(b.name))
+		(data.festivals as Festival[]).sort(
+			(a, b) => b.year - a.year || a.name.localeCompare(b.name, i18n.lang)
+		)
 	);
 
 	function getMusicBrainzUrl(mbid: string) {

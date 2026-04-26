@@ -48,7 +48,7 @@
         });
         return Object.entries(counts)
             .map(([name, count]) => ({ name, count }))
-            .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+            .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, i18n.lang));
     });
 
     let maxAppearances = $derived(Math.max(...artistStats.map(s => s.count), 1));
