@@ -14,7 +14,7 @@
 	let error = $state<string | null>(null);
 
 	let viewMode = $state<'timeline' | 'grid'>('timeline');
-	let resolution = $state<'week' | 'month' | 'year'>('week');
+	let resolution = $state<'day' | 'week' | 'month' | 'year'>('week');
 	let zoom = $state(12);
 	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
 	let selectedUnit = $state<(typeof gridUnits)[0] | null>(null);
@@ -28,7 +28,13 @@
 	const gridUnits = $derived.by(() => {
 		const units = [];
 		const totalUnits =
-			resolution === 'week' ? targetAge * 52 : resolution === 'month' ? targetAge * 12 : targetAge;
+			resolution === 'week'
+				? targetAge * 52
+				: resolution === 'month'
+					? targetAge * 12
+					: resolution === 'year'
+						? targetAge
+						: targetAge * 365;
 
 		for (let i = 0; i < totalUnits; i++) {
 			const unitDate = new Date(birthDate);
@@ -36,8 +42,10 @@
 				unitDate.setDate(birthDate.getDate() + i * 7);
 			} else if (resolution === 'month') {
 				unitDate.setMonth(birthDate.getMonth() + i);
-			} else {
+			} else if (resolution === 'year') {
 				unitDate.setFullYear(birthDate.getFullYear() + i);
+			} else {
+				unitDate.setDate(birthDate.getDate() + i);
 			}
 
 			const isPast = unitDate < now;
@@ -49,8 +57,10 @@
 				nextUnitDate.setDate(unitDate.getDate() + 7);
 			} else if (resolution === 'month') {
 				nextUnitDate.setMonth(unitDate.getMonth() + 1);
-			} else {
+			} else if (resolution === 'year') {
 				nextUnitDate.setFullYear(unitDate.getFullYear() + 1);
+			} else {
+				nextUnitDate.setDate(unitDate.getDate() + 1);
 			}
 
 			const activeEvents = parsedEvents.filter((event) => {
@@ -77,13 +87,17 @@
 						? i % 52 === 0
 						: resolution === 'month'
 							? i % 12 === 0
-							: i % 1 === 0,
+							: resolution === 'year'
+								? i % 1 === 0
+								: i % 365 === 0,
 				age:
 					resolution === 'week'
 						? Math.floor(i / 52)
 						: resolution === 'month'
 							? Math.floor(i / 12)
-							: i
+							: resolution === 'year'
+								? i
+								: Math.floor(i / 365)
 			});
 		}
 		return units;
@@ -151,11 +165,12 @@
 					<CustomSelect
 						name="resolution"
 						value={resolution}
-						onValueChange={(v) => (resolution = v as 'week' | 'month' | 'year')}
+						onValueChange={(v) => (resolution = v as 'week' | 'month' | 'year' | 'day')}
 						options={[
+							{ value: 'day', label: i18n.t('timeline.day') },
 							{ value: 'week', label: i18n.t('timeline.week') },
 							{ value: 'month', label: i18n.t('timeline.month') },
-							{ value: 'year', label: i18n.t('timeline.year') }
+							{ value: 'year', label: i18n.t('timeline.year') },
 						]}
 						class="w-32"
 					/>
