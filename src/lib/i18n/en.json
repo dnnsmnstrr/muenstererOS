@@ -35,6 +35,7 @@
 		"ping": "Ping",
 		"contact": "Contact",
 		"status": "Status",
+		"export": "Export",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -170,6 +171,7 @@
 		"confetti": "Confetti",
 		"enable_dvd_bounce": "Enable DVD Bounce",
 		"disable_dvd_bounce": "Disable DVD Bounce",
+		"export_data": "Export Data",
 		"shortcuts_title": "Keyboard Shortcuts",
 		"shortcuts_description": "There are many different shortcuts and features to explore on this page. Here is a selection of the most obvious ones:",
 		"shortcuts": {
@@ -628,5 +630,22 @@
 	"playground": {
 		"counter_decrease": "Decrease the counter by one",
 		"counter_increase": "Increase the counter by one"
+	},
+	"export": {
+		"title": "Data Export",
+		"description": "Backup your website data into a single JSON file.",
+		"options": "Export Options",
+		"static_data": "Static Data",
+		"static_data_description": "Data from local JSON files (projects, uses, etc.)",
+		"gists": "GitHub Gists",
+		"gists_description": "Current content and metadata from your configured gists",
+		"local_storage": "Local Storage",
+		"local_storage_description": "Your design preferences and desktop positions",
+		"github_token": "GitHub Token",
+		"github_token_description": "Optional: Use for accessing private gists",
+		"generate": "Generate Export",
+		"downloading": "Preparing download...",
+		"success": "Export ready!",
+		"error": "Error during export: {error}"
 	}
 }

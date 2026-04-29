@@ -14,6 +14,7 @@
 	import { goto } from '$app/navigation';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { Download } from 'lucide-svelte';
 
 	// State management
 	let githubToken = $state('');
@@ -289,7 +290,13 @@
 <div class="container mx-auto max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
 		<Heading class="mb-0">{i18n.t('admin.title')}</Heading>
-		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
+		<div class="flex items-center gap-2">
+			<Button variant="outline" size="sm" href="/export">
+				<Download class="mr-2 h-4 w-4" />
+				{i18n.t('common.export')}
+			</Button>
+			<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
+		</div>
 	</div>
 
 	<!-- Gist Selection Section -->
