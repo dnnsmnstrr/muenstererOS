@@ -7,6 +7,7 @@
 	import { gists } from '$lib/config';
 	import { GitHubGistAPI, type GistData } from '$lib/utils/github-api';
 	import { Heading } from '$lib/components/typography';
+	import { Button } from '$lib/components/ui/button';
 	import GistEditor from './GistEditor.svelte';
 	import GistInfo from './GistInfo.svelte';
 	import GistSelection from './GistSelection.svelte';
