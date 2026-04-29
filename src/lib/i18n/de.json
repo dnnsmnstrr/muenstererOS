@@ -31,6 +31,7 @@
 		"ping": "Ping",
 		"contact": "Kontakt",
 		"status": "Status",
+		"export": "Export",
 		"sites": "Sites",
 		"sitemap": "Sitemap",
 		"experiment": "Experiment",
@@ -170,6 +171,7 @@
 		"confetti": "Konfetti",
 		"enable_dvd_bounce": "DVD Bounce aktivieren",
 		"disable_dvd_bounce": "DVD Bounce deaktivieren",
+		"export_data": "Daten exportieren",
 		"shortcuts_title": "Tastenkombinationen",
 		"shortcuts_description": "Es gibt viele verschiedene Abkürzungen und Funktionen auf dieser Seite zu entdecken. Hier ist eine Auswahl der offensichtlichsten:",
 		"shortcuts": {
@@ -628,5 +630,22 @@
 	"playground": {
 		"counter_decrease": "Zähler um eins verringern",
 		"counter_increase": "Zähler um eins erhöhen"
+	},
+	"export": {
+		"title": "Datenexport",
+		"description": "Sichere deine Websitedaten in einer einzigen JSON-Datei.",
+		"options": "Export-Optionen",
+		"static_data": "Statische Daten",
+		"static_data_description": "Daten aus lokalen JSON-Dateien (Projekte, Uses, etc.)",
+		"gists": "GitHub Gists",
+		"gists_description": "Aktueller Inhalt und Metadaten deiner konfigurierten Gists",
+		"local_storage": "Lokaler Speicher",
+		"local_storage_description": "Deine Design-Einstellungen und Desktop-Positionen",
+		"github_token": "GitHub Token",
+		"github_token_description": "Optional: Für den Zugriff auf private Gists verwenden",
+		"generate": "Export generieren",
+		"downloading": "Download wird vorbereitet...",
+		"success": "Export bereit!",
+		"error": "Fehler beim Export: {error}"
 	}
 }
