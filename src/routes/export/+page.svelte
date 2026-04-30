@@ -115,7 +115,21 @@
 		</Card.Header>
 		<Card.Content class="space-y-6">
 			<div class="space-y-4">
-				<Heading depth={4}>{i18n.t('export.options')}</Heading>
+				<div class="flex items-center justify-between">
+					<Heading depth={4} class="mb-0">{i18n.t('export.options')}</Heading>
+					<Button
+						variant="ghost"
+						size="sm"
+						onclick={() => {
+							includeStatic = true;
+							includeGists = true;
+							includeLocalStorage = true;
+						}}
+						class="h-8 px-2 text-xs text-muted-foreground"
+					>
+						{i18n.t('common.select_all')}
+					</Button>
+				</div>
 
 				<div class="flex items-start space-x-3 space-y-0">
 					<Checkbox id="static" bind:checked={includeStatic} />
