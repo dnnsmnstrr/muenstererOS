@@ -6,7 +6,6 @@ import llms from '$lib/../data/llms.json';
 import network_seeds from '$lib/../data/network_seeds.json';
 import pages from '$lib/../data/pages.json';
 import playlists from '$lib/../data/playlists.json';
-import projects from '$lib/../data/projects.json';
 import uses from '$lib/../data/uses.json';
 
 const staticData = {
@@ -16,7 +15,6 @@ const staticData = {
 	network_seeds,
 	pages,
 	playlists,
-	projects,
 	uses
 };
 
