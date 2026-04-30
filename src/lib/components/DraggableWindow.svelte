@@ -102,6 +102,14 @@
 		}
 	}
 
+	function recenter() {
+		DraggableWidth = defaultWidth;
+		DraggableHeight = minHeight;
+		DraggableX = width / 2 - DraggableWidth / 2;
+		DraggableY = height / 3 - DraggableHeight / 2;
+		isMaximized = false;
+	}
+
 	// DVD Bounce animation
 	let bounceAnimationId: number | null = null;
 	let velocityX = 2;
@@ -263,6 +271,18 @@
 				cancelAnimationFrame(bounceAnimationId);
 				bounceAnimationId = null;
 			}
+		};
+	});
+
+	$effect(() => {
+		const handleFullscreenChange = () => {
+			// Wait for the viewport dimensions to update
+			setTimeout(recenter, 100);
+		};
+
+		document.addEventListener('fullscreenchange', handleFullscreenChange);
+		return () => {
+			document.removeEventListener('fullscreenchange', handleFullscreenChange);
 		};
 	});
 
@@ -451,12 +471,7 @@
 					onpointermove={handleWindowPointerMove}
 					onpointerup={handleWindowPointerUp}
 					onpointercancel={handleWindowPointerUp}
-					ondblclick={() => {
-						DraggableWidth = defaultWidth;
-						DraggableHeight = minHeight;
-						DraggableX = width / 2 - DraggableWidth / 2;
-						DraggableY = height / 3 - DraggableHeight / 2;
-					}}
+					ondblclick={recenter}
 				>
 					<WindowButtons {isMaximized} onMaximize={toggleMaximize} />
 				</div>
