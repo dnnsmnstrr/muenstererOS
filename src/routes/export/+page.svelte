@@ -120,6 +120,7 @@
 					<Button
 						variant="ghost"
 						size="sm"
+						disabled={includeStatic && includeGists && includeLocalStorage}
 						onclick={() => {
 							includeStatic = true;
 							includeGists = true;
