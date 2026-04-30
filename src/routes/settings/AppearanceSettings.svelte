@@ -39,145 +39,71 @@
 </script>
 
 <div class="flex flex-col space-y-6">
-	<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2">
-		<Form.Control>
-			{#snippet children({ props })}
-				<div class="flex flex-col space-y-2">
-					<h2>{i18n.t('settings.mode')}</h2>
-					<RadioGroup.Root
-						class="flex flex-col gap-4 space-y-1 md:flex-row"
-						value={$mode}
-						onValueChange={handleModeChange}
-						{...props}
-					>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="light" id="light" />
-							<Form.Label
-								for="light"
-								class="font-normal"
-								onclick={() => handleModeChange('light')}>{i18n.t('settings.light')}</Form.Label
-							>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="dark" id="dark" />
-							<Form.Label for="dark" class="font-normal" onclick={() => handleModeChange('dark')}
-								>{i18n.t('settings.dark')}</Form.Label
-							>
-						</div>
-						<div class="flex items-center space-x-3 space-y-0">
-							<RadioGroup.Item value="" id="system" />
-							<Form.Label for="system" class="font-normal" onclick={() => handleModeChange('')}
-								>{i18n.t('settings.system')}</Form.Label
-							>
-						</div>
-					</RadioGroup.Root>
-				</div>
-			{/snippet}
-		</Form.Control>
-	</Form.Field>
-
-	<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between gap-2">
-		<div class="flex flex-col space-y-2">
-			<h2>{i18n.t('settings.dvd_bounce')}</h2>
-			<div class="flex items-center space-x-3 space-y-0">
-				<Form.Control>
-					{#snippet children({ props })}
-						<Checkbox
-							{...props}
-							checked={$dvdBounceEnabled}
-							onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
-							id="dvd-bounce-checkbox"
-						/>
-						<Form.Label
-							for="dvd-bounce-checkbox"
-							class="font-normal"
-							title={formatDuration(INACTIVITY_TIMEOUT)}
-							onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
-						>
-							{i18n.t('settings.enable_dvd_bounce')}
-						</Form.Label>
-					{/snippet}
-				</Form.Control>
-			</div>
-		</div>
-	</Form.Field>
-
-	<div class="flex flex-col space-y-2">
-		<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
+	<div class="flex flex-col md:flex-row gap-4 md:gap-10 ">
+		<Form.Field {form} name="mode" class="flex flex-col justify-between gap-2">
 			<Form.Control>
 				{#snippet children({ props })}
 					<div class="flex flex-col space-y-2">
-						<Form.Label>{i18n.t('settings.texture')}</Form.Label>
-						<Select.Root
-							type="single"
-							bind:value={$backgroundTexture}
-							name={props.name}
-							onValueChange={() => {
-								$backgroundSize = DEFAULT_BACKGROUND_SIZE;
-								$backgroundSpacing = DEFAULT_BACKGROUND_SPACING;
-							}}
+						<h2>{i18n.t('settings.mode')}</h2>
+	
+						<RadioGroup.Root
+							class="flex flex-row gap-4 space-y-1"
+							value={$mode}
+							onValueChange={handleModeChange}
+							{...props}
 						>
-							<Select.Trigger {...props} class="w-full">
-								{$backgroundTexture
-									? i18n.t(`settings.${$backgroundTexture}`)
-									: i18n.t('settings.texture')}
-							</Select.Trigger>
-							<Select.Content>
-								{#each backgroundTextures as texture}
-									<Select.Item
-										value={texture.value}
-										label={i18n.t(`settings.${texture.name}`)}
-									/>
-								{/each}
-							</Select.Content>
-						</Select.Root>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="light" id="light" />
+								<Form.Label for="light" class="font-normal" onclick={() => handleModeChange('light')}
+									>{i18n.t('settings.light')}</Form.Label
+								>
+							</div>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="dark" id="dark" />
+								<Form.Label for="dark" class="font-normal" onclick={() => handleModeChange('dark')}
+									>{i18n.t('settings.dark')}</Form.Label
+								>
+							</div>
+							<div class="flex items-center space-x-3 space-y-0">
+								<RadioGroup.Item value="" id="system" />
+								<Form.Label for="system" class="font-normal" onclick={() => handleModeChange('')}
+									>{i18n.t('settings.system')}</Form.Label
+								>
+							</div>
+						</RadioGroup.Root>
 					</div>
 				{/snippet}
 			</Form.Control>
 		</Form.Field>
-
-		{#if $backgroundTexture !== 'none'}
-			<div class="flex flex-wrap gap-4">
-				<Form.Field {form} name="backgroundSize" class="flex flex-col justify-between gap-2">
+	
+		<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between gap-2">
+			<div class="flex flex-col space-y-2">
+				<h2>{i18n.t('settings.dvd_bounce')}</h2>
+				<div class="flex items-center space-x-3 space-y-0">
 					<Form.Control>
 						{#snippet children({ props })}
-							<Form.Label>{i18n.t('settings.texture_size')}</Form.Label>
-							<Input
-								type="number"
-								class="w-20"
-								bind:value={$backgroundSize}
+							<Checkbox
 								{...props}
-								min="0.5"
-								max="24"
-								step="0.5"
+								checked={$dvdBounceEnabled}
+								onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
+								id="dvd-bounce-checkbox"
 							/>
+							<Form.Label
+								for="dvd-bounce-checkbox"
+								class="font-normal"
+								title={formatDuration(INACTIVITY_TIMEOUT)}
+								onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
+							>
+								{i18n.t('settings.enable_dvd_bounce')}
+							</Form.Label>
 						{/snippet}
 					</Form.Control>
-				</Form.Field>
-				<Form.Field {form} name="backgroundSpacing" class="flex flex-col justify-between gap-2">
-					<Form.Control>
-						{#snippet children({ props })}
-							<Form.Label>{i18n.t('settings.texture_spacing')}</Form.Label>
-							<div class="flex items-center gap-2">
-								<Input
-									type="range"
-									bind:value={$backgroundSpacing}
-									{...props}
-									min="4"
-									max="64"
-									step="1"
-									class="h-10"
-								/>
-								<span class="w-8 text-right text-sm">{$backgroundSpacing}</span>
-							</div>
-						{/snippet}
-					</Form.Control>
-				</Form.Field>
+				</div>
 			</div>
-		{/if}
+		</Form.Field>
 	</div>
 
-	<div class="grid grid-cols-2 gap-2 md:grid-cols-3">
+	<div class="grid grid-cols-2 gap-2 md:grid-cols-3 pt-4">
 		<h2 class="col-span-2 mt-0 sm:-mt-2 md:col-span-3">{i18n.t('settings.theme')}</h2>
 		{#each themes as theme (theme.name)}
 			{@const isActive = $themeStore === theme.name}
@@ -200,5 +126,77 @@
 				{i18n.t(`settings.themes.${theme.name}`)}
 			</Button>
 		{/each}
+	</div>
+	
+	<div class="flex flex-col md:flex-row gap-8">
+		<Form.Field {form} name="backgroundTexture" class="flex flex-col justify-between gap-2">
+			<Form.Control>
+				{#snippet children({ props })}
+					<div class="flex flex-col space-y-4">
+						<Form.Label class="text-base">{i18n.t('settings.texture')}</Form.Label>
+						<Select.Root
+							type="single"
+							bind:value={$backgroundTexture}
+							name={props.name}
+							onValueChange={() => {
+								$backgroundSize = DEFAULT_BACKGROUND_SIZE;
+								$backgroundSpacing = DEFAULT_BACKGROUND_SPACING;
+							}}
+						>
+							<Select.Trigger {...props} class="w-full min-w-56">
+								{$backgroundTexture
+									? i18n.t(`settings.${$backgroundTexture}`)
+									: i18n.t('settings.texture')}
+							</Select.Trigger>
+							<Select.Content>
+								{#each backgroundTextures as texture}
+									<Select.Item value={texture.value} label={i18n.t(`settings.${texture.name}`)} />
+								{/each}
+							</Select.Content>
+						</Select.Root>
+					</div>
+				{/snippet}
+			</Form.Control>
+		</Form.Field>
+
+		{#if $backgroundTexture !== 'none'}
+			<div class="flex gap-4">
+				<Form.Field {form} name="backgroundSize" class="flex flex-col justify-between min-w-24">
+					<Form.Control>
+						{#snippet children({ props })}
+							<Form.Label class="pt-2">{i18n.t('settings.texture_size')}</Form.Label>
+							<Input
+								type="number"
+								class="w-20"
+								bind:value={$backgroundSize}
+								{...props}
+								min="0.5"
+								max="24"
+								step="0.5"
+							/>
+						{/snippet}
+					</Form.Control>
+				</Form.Field>
+				<Form.Field {form} name="backgroundSpacing" class="flex flex-col justify-between">
+					<Form.Control>
+						{#snippet children({ props })}
+							<Form.Label class="pt-2">{i18n.t('settings.texture_spacing')}</Form.Label>
+							<div class="flex items-center gap-2">
+								<Input
+									type="range"
+									bind:value={$backgroundSpacing}
+									{...props}
+									min="4"
+									max="64"
+									step="1"
+									class="h-10"
+								/>
+								<span class="w-8 text-right text-sm">{$backgroundSpacing}</span>
+							</div>
+						{/snippet}
+					</Form.Control>
+				</Form.Field>
+			</div>
+		{/if}
 	</div>
 </div>

@@ -80,6 +80,7 @@
 	let timeout: number | undefined = undefined;
 	function handleMouseMove(event?: MouseEvent & { timeout?: number; duration?: number }) {
 		clearTimeout(timeout);
+		const largestEdge = Math.max(innerWidth, innerHeight);
 		switch (page.url.pathname) {
 			case '/':
 				if (event) {
@@ -104,21 +105,20 @@
 				break;
 			case '/settings':
 				// focus on top area
-				cursor.set({ x: innerWidth / 2.7, y: innerHeight / 4 });
-				setMaskSize(300, 600, 800);
-				changeRadius(200, 600);
+				cursor.set({ x: innerWidth / 1.8, y: innerHeight / 2.25 });
+				setMaskSize(200, 100);
+				changeRadius(750, 1000);
 				break;
 			case '/about':
 				// focus on the top left area
 				cursor.set({ x: innerWidth / 3, y: innerHeight / 2.5 });
-				setMaskSize(300, 200);
-				changeRadius(500, 900);
+				setMaskSize(200, 400);
+				changeRadius(250, 550);
 				break;
 			default:
 				// full page content, no masking
 				cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
 				setMaskSize(300, 200);
-				const largestEdge = Math.max(innerWidth, innerHeight);
 				changeRadius(largestEdge, largestEdge + 200);
 				break;
 		}
