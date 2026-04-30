@@ -189,8 +189,8 @@
 			{/if}
 		</Card.Content>
 		<Card.Footer class="flex flex-col gap-4 border-t pt-6 sm:flex-row sm:justify-between">
-			<Link href="/admin" class="text-sm text-muted-foreground no-underline hover:underline">
-				&larr; {i18n.t('common.admin')}
+			<Link href="/settings" class="text-sm text-muted-foreground no-underline hover:underline">
+				&larr; {i18n.t('common.settings')}
 			</Link>
 			<Button onclick={handleExport} disabled={isExporting} class="w-full sm:w-auto">
 				{#if isExporting}

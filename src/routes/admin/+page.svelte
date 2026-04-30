@@ -51,7 +51,7 @@
 			}
 
 			initializeFromUrl();
-			
+
 			if (savedToken) {
 				githubToken = savedToken;
 				validateToken(); // Validate the loaded token
@@ -288,16 +288,10 @@
 	<title>{i18n.t('common.admin')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
-<div class="container mx-auto max-w-6xl space-y-6">
+<div class="container mx-auto max-w-6xl space-y-6 mb-8">
 	<div class="flex items-center justify-between">
 		<Heading class="mb-0">{i18n.t('admin.title')}</Heading>
-		<div class="flex items-center gap-2">
-			<Button variant="outline" size="sm" href="/export">
-				<Download class="mr-2 h-4 w-4" />
-				{i18n.t('common.export')}
-			</Button>
-			<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
-		</div>
+		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
 	</div>
 
 	<!-- Gist Selection Section -->
@@ -330,4 +324,12 @@
 			{isSaving}
 		/>
 	{/if}
+
+	<div class="flex justify-center">
+		<Button variant="outline" size="sm" href="/export">
+			<Download class="mr-2 h-4 w-4" />
+			{i18n.t('common.export')}
+		</Button>
+	</div>
 </div>
+
