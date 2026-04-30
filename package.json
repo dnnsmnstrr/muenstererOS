@@ -10,6 +10,7 @@
 		"start": "vite dev",
 		"test": "vitest",
 		"xml": "node scripts/xml.js",
+		"backup": "node scripts/backup-data.js",
 		"lint": "prettier --check .",
 		"format": "prettier --write ."
 	},

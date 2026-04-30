@@ -38,7 +38,8 @@
 		Monitor,
 		Plus,
 		Globe,
-		Ticket
+		Ticket,
+		Download
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -417,6 +418,12 @@
 					$showHelp = true;
 					$isCommandActive = false;
 				}
+			},
+			{
+				name: i18n.t('command.export_data'),
+				value: 'export data, backup, download data',
+				icon: Download,
+				href: '/export'
 			},
 			{
 				name: i18n.t('command.go_forward'),
