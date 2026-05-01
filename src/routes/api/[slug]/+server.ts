@@ -1,17 +1,13 @@
 import { json, error } from '@sveltejs/kit';
 import { searchData, sortData } from '$lib/utils/api';
 import type { DataItem } from '$lib/utils/api';
-import playlists from '../../../data/playlists.json';
 import changes from '../../../data/changes.json';
 import pages from '../../../data/pages.json';
-import uses from '../../../data/uses.json';
 import { gists } from '$lib/config';
 
 const dataMap: Record<string, any> = {
-	playlists,
 	changes,
-	pages,
-	uses
+	pages
 };
 const DEFAULT_LIMIT = 50;
 

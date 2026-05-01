@@ -27,17 +27,17 @@
 	import { breakpoints, links } from '$lib/config';
 	import PlaylistCard from './PlaylistCard.svelte';
 	import TopArtists from './TopArtists.svelte';
-	import playlistData from '../../data/playlists.json';
 	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
+	let { data }: PageProps = $props();
 
 	let showGifs = $state(false);
 	let showCurrentHighlight = $state(false);
 
-	const allPlaylists = playlistData as PlaylistItem[];
+	const allPlaylists = data.playlists as PlaylistItem[];
 	const latestPlaylistUri = allPlaylists[0]?.uri;
 
 	let seasonPlaylists = $state(allPlaylists.filter((playlist) => playlist.type === 'season'));
