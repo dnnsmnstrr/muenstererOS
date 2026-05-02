@@ -113,12 +113,12 @@
 										class="w-20"
 										bind:value={$inactivityTimeout}
 										{...props}
-										min="1"
+										min="30"
 										max="3600"
-										step="1"
+										step="30"
 									/>
 									<span class="text-sm text-muted-foreground"
-										>{i18n.t('duration.s')}</span
+										>{$inactivityTimeout >= 60 ? formatDuration($inactivityTimeout * 1000) : i18n.t('duration.s')}</span
 									>
 								</div>
 							{/snippet}
