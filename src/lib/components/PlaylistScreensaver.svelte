@@ -14,7 +14,9 @@
 		try {
 			const response = await fetch('/api/playlists');
 			if (response.ok) {
-				playlists = await response.json();
+				const data = await response.json();
+				// Only use playlists that have an image
+				playlists = data.filter((p: PlaylistItem) => p.imageUrl || p.imageId);
 				updateGrid();
 			}
 		} catch (error) {
@@ -49,16 +51,18 @@
 		visibleGrid = newGrid;
 	}
 
+	function flipCover(index: number) {
+		if (playlists.length === 0) return;
+		const newPlaylist = playlists[Math.floor(Math.random() * playlists.length)];
+		const updatedGrid = [...visibleGrid];
+		updatedGrid[index] = newPlaylist;
+		visibleGrid = updatedGrid;
+	}
+
 	function flipRandomCover() {
 		if (playlists.length === 0 || visibleGrid.length === 0) return;
-
 		const randomIndex = Math.floor(Math.random() * visibleGrid.length);
-		const newPlaylist = playlists[Math.floor(Math.random() * playlists.length)];
-
-		// Create a copy and update
-		const updatedGrid = [...visibleGrid];
-		updatedGrid[randomIndex] = newPlaylist;
-		visibleGrid = updatedGrid;
+		flipCover(randomIndex);
 	}
 
 	onMount(() => {
@@ -104,6 +108,7 @@
 						alt=""
 						class="w-full h-full object-cover"
 						transition:fade={{ duration: 500 }}
+						onerror={() => flipCover(i)}
 					/>
 				{/key}
 			</div>
