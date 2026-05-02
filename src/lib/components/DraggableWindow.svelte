@@ -32,7 +32,6 @@
 	import { debugLog, screensaver, inactivityTimeout } from '$lib/stores/app';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
-
 	const minHeight = 300;
 	const minWidth = 200;
 	const breakpoint = 640;
@@ -116,7 +115,6 @@
 
 	// Inactivity timer for auto-starting DVD bounce
 	let inactivityTimer: number | null = null;
-	let isManualBounce = $state(false); // Track if bounce was manually activated
 
 	let lastWidth = $state(0);
 	let lastHeight = $state(0);
@@ -316,6 +314,8 @@
 		window.addEventListener('click', handleActivity);
 		window.addEventListener('scroll', handleActivity);
 		window.addEventListener('touchstart', handleActivity);
+		// Use document + capture to catch keydown events before stopImmediatePropagation in Command.svelte
+		document.addEventListener('keydown', handleActivity, true);
 
 		return () => {
 			if (inactivityTimer) {
@@ -326,6 +326,7 @@
 			window.removeEventListener('click', handleActivity);
 			window.removeEventListener('scroll', handleActivity);
 			window.removeEventListener('touchstart', handleActivity);
+			document.removeEventListener('keydown', handleActivity, true);
 		};
 	});
 

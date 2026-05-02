@@ -3,6 +3,7 @@
 		name: string;
 		keywords?: string[];
 		value?: string;
+		group?: string;
 		icon?: ConstructorOfATypedSvelteComponent;
 		href?: string;
 		action?: () => void;
@@ -68,7 +69,6 @@
 		scrollToTop,
 		toggleFullscreen
 	} from '$lib/utils/index';
-	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';
@@ -523,11 +523,17 @@
 				action: () => {
 					confetti();
 				}
-			},
+			}
+		],
+		settings: [
 			{
 				name: i18n.t('settings.screensaver'),
 				icon: Monitor,
-				action: () => (currentGroup = 'screensaver')
+				group: 'screensaver',
+				action: () => {
+					currentGroup = 'screensaver';
+					query = '';
+				}
 			}
 		],
 		screensaver: [
@@ -562,6 +568,18 @@
 			}
 		].map(enrichLink)
 	} as Record<string, CommandData[]>);
+
+	// Collect all sub-group names referenced by command items (e.g. 'screensaver')
+	const subGroups = $derived(
+		Object.values(commandConfig).reduce((acc, commands) => {
+			for (const cmd of commands) {
+				if (cmd.group && !acc.includes(cmd.group)) {
+					acc.push(cmd.group);
+				}
+			}
+			return acc;
+		}, [] as string[])
+	);
 </script>
 
 <Command.Dialog
@@ -573,7 +591,7 @@
 	<Command.Input bind:value={query} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
-		{#each Object.entries(commandConfig).filter(([group]) => !currentGroup || group === currentGroup) as [group, commands]}
+		{#each Object.entries(commandConfig).filter(([group]) => (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
 			<Command.Group
 				heading={i18n.t(`command.${group}`) !== `command.${group}`
 					? i18n.t(`command.${group}`)
@@ -603,64 +621,6 @@
 				{/if}
 			</Command.Group>
 		{/each}
-		{#if !currentGroup}
-			<Command.Group heading={i18n.t('common.settings')}>
-			{#if !isMobile.any()}
-				<button
-					use:eyeDropperAction={{
-						onDone: (color) => {
-							const message = i18n.t('command.picked_color', { color });
-							debugLog(message);
-							$primaryColor = hexToHsl(color);
-							toast.success(message, {
-								description: i18n.t('command.copy_to_clipboard'),
-								action: {
-									label: i18n.t('common.copy'),
-									onClick: () => navigator.clipboard.writeText(color)
-								}
-							});
-						},
-						onError: console.error
-					}}
-					class="w-full"
-				>
-					<Command.Item keywords={['theme']}>
-						<Pipette class="mr-2" />
-						{i18n.t('command.pick_primary_color')}
-					</Command.Item>
-				</button>
-				<button
-					use:eyeDropperAction={{
-						onDone: (color) => {
-							const message = i18n.t('command.picked_color', { color });
-							debugLog(message);
-							$backgroundColor = hexToHsl(color);
-							toast.success(message, {
-								description: i18n.t('command.copy_to_clipboard'),
-								action: {
-									label: i18n.t('common.copy'),
-									onClick: () => navigator.clipboard.writeText(color)
-								}
-							});
-						},
-						onError: console.error
-					}}
-					class="w-full"
-				>
-					<Command.Item keywords={['theme']}>
-						<Pipette class="mr-2" />
-						{i18n.t('command.pick_background_color')}
-					</Command.Item>
-				</button>
-			{/if}
-			{#if $modifiedColors}
-				<Command.Item onSelect={resetColors} keywords={['theme']}>
-					<Palette class="mr-2" />
-					{i18n.t('command.reset_theme_colors')}
-				</Command.Item>
-			{/if}
-		</Command.Group>
-		{/if}
 	</Command.List>
 </Command.Dialog>
 
