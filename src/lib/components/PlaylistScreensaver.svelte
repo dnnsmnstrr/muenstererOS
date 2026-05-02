@@ -126,7 +126,7 @@
 		const flipInterval = setInterval(flipRandomCover, FLIP_INTERVAL);
 		const multiFlipInterval = setInterval(() => {
 			if (Math.random() > 0.5) flipRandomCover();
-		}, FLIP_INTERVAL * 1.5);
+		}, FLIP_INTERVAL * 1.4);
 
 		return () => {
 			window.removeEventListener('resize', updateGridDimensions);
