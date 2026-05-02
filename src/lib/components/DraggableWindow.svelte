@@ -29,8 +29,7 @@
 		Image as ImageIcon
 	} from 'lucide-svelte';
 	import File from './File.svelte';
-	import { debugLog, dvdBounceEnabled } from '$lib/stores/app';
-	import { INACTIVITY_TIMEOUT } from '$lib/config';
+	import { debugLog, dvdBounceEnabled, inactivityTimeout } from '$lib/stores/app';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
 
@@ -298,7 +297,7 @@
 			if (!$dvdBounceActive) {
 				dvdBounceActive.set(true);
 			}
-		}, INACTIVITY_TIMEOUT);
+		}, $inactivityTimeout * 1000);
 	}
 
 	// Initialize inactivity timer on mount and add global event listeners

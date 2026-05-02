@@ -13,7 +13,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { settingsSchema } from './schema';
 	import { get } from 'svelte/store';
-	import { backgroundTexture, backgroundSize, backgroundSpacing } from '$lib/stores/app';
+	import { backgroundTexture, backgroundSize, backgroundSpacing, inactivityTimeout } from '$lib/stores/app';
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import type { SettingsSchema } from './schema';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -28,6 +28,7 @@
 			mode: 'system',
 			language: i18n.lang,
 			dvdBounceEnabled: false,
+			inactivityTimeout: get(inactivityTimeout),
 			backgroundTexture: get(backgroundTexture),
 			backgroundSize: get(backgroundSize),
 			backgroundSpacing: get(backgroundSpacing)

@@ -5,6 +5,7 @@
 	import { mode, setMode, resetMode } from 'mode-watcher';
 	import {
 		dvdBounceEnabled,
+		inactivityTimeout,
 		backgroundTexture,
 		backgroundSize,
 		backgroundSpacing,
@@ -19,7 +20,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { INACTIVITY_TIMEOUT, backgroundTextures } from '$lib/config';
+	import { backgroundTextures } from '$lib/config';
 	import { Input } from '$lib/components/ui/input';
 	import { formatDuration } from '$lib/utils/helper';
 	import type { SettingsSchema } from './schema';
@@ -76,31 +77,56 @@
 			</Form.Control>
 		</Form.Field>
 	
-		<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between gap-2">
-			<div class="flex flex-col space-y-2">
-				<h2>{i18n.t('settings.dvd_bounce')}</h2>
-				<div class="flex items-center space-x-3 space-y-0">
-					<Form.Control>
-						{#snippet children({ props })}
-							<Checkbox
-								{...props}
-								checked={$dvdBounceEnabled}
-								onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
-								id="dvd-bounce-checkbox"
-							/>
-							<Form.Label
-								for="dvd-bounce-checkbox"
-								class="font-normal"
-								title={formatDuration(INACTIVITY_TIMEOUT)}
-								onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
-							>
-								{i18n.t('settings.enable_dvd_bounce')}
-							</Form.Label>
-						{/snippet}
-					</Form.Control>
-				</div>
+		<div class="flex flex-col gap-2">
+			<h2>{i18n.t('settings.dvd_bounce')}</h2>
+			<div class="flex flex-row items-end gap-4">
+				<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between">
+					<div class="flex items-center space-x-3 space-y-0 h-10">
+						<Form.Control>
+							{#snippet children({ props })}
+								<Checkbox
+									{...props}
+									checked={$dvdBounceEnabled}
+									onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
+									id="dvd-bounce-checkbox"
+								/>
+								<Form.Label
+									for="dvd-bounce-checkbox"
+									class="font-normal"
+									title={formatDuration($inactivityTimeout * 1000)}
+									onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
+								>
+									{i18n.t('settings.enable_dvd_bounce')}
+								</Form.Label>
+							{/snippet}
+						</Form.Control>
+					</div>
+				</Form.Field>
+
+				{#if $dvdBounceEnabled}
+					<Form.Field {form} name="inactivityTimeout" class="flex flex-col justify-between">
+						<Form.Control>
+							{#snippet children({ props })}
+								<div class="flex items-center gap-2">
+									<Input
+										type="number"
+										class="w-20"
+										bind:value={$inactivityTimeout}
+										{...props}
+										min="30"
+										max="3600"
+										step="30"
+									/>
+									<span class="text-sm text-muted-foreground"
+										>{$inactivityTimeout >= 60 ? formatDuration($inactivityTimeout * 1000) : i18n.t('duration.s')}</span
+									>
+								</div>
+							{/snippet}
+						</Form.Control>
+					</Form.Field>
+				{/if}
 			</div>
-		</Form.Field>
+		</div>
 	</div>
 
 	<div class="grid grid-cols-2 gap-2 md:grid-cols-3 pt-4">
