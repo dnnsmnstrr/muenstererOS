@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade, crossfade } from 'svelte/transition';
-	import { cubicInOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 	import { screensaverActive } from '$lib/stores/desktop';
 	import type { PlaylistItem } from '../../routes/playlists/+page.svelte';
 
@@ -10,6 +9,8 @@
 	let columns = $state(2);
 	let rows = $state(1);
 	let totalItems = $derived(columns * rows);
+
+	const FLIP_INTERVAL = 3000;
 
 	function rotateIn(node: HTMLElement, { duration = 700 }) {
 		return {
@@ -122,10 +123,10 @@
 
 		window.addEventListener('resize', updateGridDimensions);
 
-		const flipInterval = setInterval(flipRandomCover, 3000);
+		const flipInterval = setInterval(flipRandomCover, FLIP_INTERVAL);
 		const multiFlipInterval = setInterval(() => {
 			if (Math.random() > 0.5) flipRandomCover();
-		}, 1000);
+		}, FLIP_INTERVAL * 1.5);
 
 		return () => {
 			window.removeEventListener('resize', updateGridDimensions);
