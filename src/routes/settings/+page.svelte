@@ -17,6 +17,8 @@
 	import type { SuperValidated, Infer } from 'sveltekit-superforms';
 	import type { SettingsSchema } from './schema';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 
 	let { data }: { data: { form?: SuperValidated<Infer<SettingsSchema>> } } = $props();
 
@@ -34,6 +36,17 @@
 			validators: zodClient(settingsSchema)
 		}
 	);
+
+	let showAdminButton = $state(false);
+	onMount(() => {
+		// Load saved token and last gist selection from localStorage
+		if (browser) {
+			const savedToken = localStorage.getItem('github_admin_token');
+			if (savedToken) {
+				showAdminButton = true;
+			}
+		}
+	});
 </script>
 
 <div class="container mb-40">
@@ -43,20 +56,20 @@
 				<Card.Header>
 					<Card.Title class="flex w-full items-center justify-between">
 						<Heading class="mb-0">{i18n.t('settings.title')}</Heading>
-						<Link
-							href="/admin"
-							class="text-base text-muted-foreground no-underline lg:hidden"
-							showIcon>{i18n.t('common.admin')}</Link
-						>
+						{#if showAdminButton}
+							<Link
+								href="/admin"
+								class="text-base text-muted-foreground no-underline lg:hidden"
+								showIcon>{i18n.t('common.admin')}</Link
+							>
+						{/if}
 					</Card.Title>
 				</Card.Header>
 				<Card.Content>
 					<GeneralSettings {form} />
 					<Separator class="mt-6" />
 				</Card.Content>
-				<Card.Footer
-					class="flex flex-col items-start justify-end gap-4"
-				>
+				<Card.Footer class="flex flex-col items-start justify-end gap-4">
 					<Button
 						variant="outline"
 						size="sm"
@@ -81,11 +94,13 @@
 			<Card.Header class="">
 				<Card.Title class="flex w-full items-center justify-between">
 					<Heading class="border-none" depth={3}>{i18n.t('settings.look_and_feel')}</Heading>
-					<Link
-						href="/admin"
-						class="hidden text-base text-muted-foreground no-underline lg:flex"
-						showIcon>{i18n.t('common.admin')}</Link
-					>
+					{#if showAdminButton}
+						<Link
+							href="/admin"
+							class="hidden text-base text-muted-foreground no-underline lg:flex"
+							showIcon>{i18n.t('common.admin')}</Link
+						>
+					{/if}
 				</Card.Title>
 			</Card.Header>
 			<Card.Content>
