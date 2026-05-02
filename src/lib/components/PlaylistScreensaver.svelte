@@ -11,14 +11,27 @@
 	let rows = $state(1);
 	let totalItems = $derived(columns * rows);
 
-	function rotateFlip(node: HTMLElement, { duration = 700 }) {
+	function rotateIn(node: HTMLElement, { duration = 700 }) {
 		return {
 			duration,
 			css: (t: number) => {
 				const rotate = (1 - t) * 180;
 				return `
 					transform: rotateY(${rotate}deg);
-					opacity: ${t > 0.5 ? 1 : 0};
+					backface-visibility: hidden;
+				`;
+			}
+		};
+	}
+
+	function rotateOut(node: HTMLElement, { duration = 700 }) {
+		return {
+			duration,
+			css: (t: number) => {
+				const rotate = -((1 - t) * 180);
+				return `
+					transform: rotateY(${rotate}deg);
+					backface-visibility: hidden;
 				`;
 			}
 		};
@@ -142,13 +155,14 @@
 			<div class="aspect-square w-full border border-black/10 [perspective:1000px]">
 				{#key playlist.imageId || playlist.imageUrl}
 					<div
-						class="relative h-full w-full"
-						in:rotateFlip={{ duration: 700 }}
+						class="absolute h-full w-full [transform-style:preserve-3d]"
+						in:rotateIn={{ duration: 700 }}
+						out:rotateOut={{ duration: 700 }}
 					>
 						<img
 							src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
 							alt=""
-							class="absolute h-full w-full object-cover"
+							class="h-full w-full object-cover [backface-visibility:hidden]"
 							onerror={() => flipCover(i)}
 						/>
 					</div>
