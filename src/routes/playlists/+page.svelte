@@ -30,7 +30,6 @@
 	import TopArtists from './TopArtists.svelte';
 	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	let { data }: PageProps = $props();
@@ -39,7 +38,7 @@
 	let showCurrentHighlight = $state(false);
 
 	const allPlaylists = data.playlists as PlaylistItem[];
-	const latestPlaylistUri = allPlaylists[0]?.uri;
+	const latestPlaylist = allPlaylists[0];
 
 	let seasonPlaylists = $state(allPlaylists.filter((playlist) => playlist.type === 'season'));
 	const aggregatedPlaylists = allPlaylists.filter((playlist) => playlist.type === 'aggregated');
@@ -195,7 +194,9 @@
 			{#if selectedPlaylistUri}
 				<iframe
 					title={i18n.t('playlists.preview_title')}
-					src={selectedPlaylistUri.startsWith('http') ? selectedPlaylistUri.replace('music.apple.com', 'embed.music.apple.com') : `https://open.spotify.com/embed/playlist/${selectedPlaylistUri}`}
+					src={selectedPlaylistUri.startsWith('http')
+						? selectedPlaylistUri.replace('music.apple.com', 'embed.music.apple.com')
+						: `https://open.spotify.com/embed/playlist/${selectedPlaylistUri}`}
 					width="100%"
 					height="450"
 					frameBorder="0"
@@ -263,7 +264,10 @@
 					{playlist}
 					setSelectedPlaylistUri={() => (selectedPlaylistUri = playlist.url || playlist.uri)}
 					compact={!!filterQuery}
-					isHighlighted={showCurrentHighlight && playlist.uri === latestPlaylistUri}
+					isHighlighted={showCurrentHighlight &&
+						(playlist.url
+							? playlist.url === latestPlaylist.url
+							: playlist.uri === latestPlaylist?.uri)}
 				/>
 			{/each}
 		</div>

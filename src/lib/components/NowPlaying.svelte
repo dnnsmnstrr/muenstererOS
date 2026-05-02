@@ -2,7 +2,6 @@
 	import { Music, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import playlistData from '../../data/playlists.json';
 	import { fly, fade } from 'svelte/transition';
 	import Disc from './icons/disc.svelte';
 	import { cn } from '$lib/utils';
@@ -24,19 +23,18 @@
 		expanded?: boolean;
 	}>();
 
-	const playlists = playlistData as PlaylistItem[];
+	let currentPlaylist = $state<PlaylistItem | null>(null);
 
-	// Get the most recent season playlist
-	const currentPlaylist = playlists
-		.filter((p) => p.type === 'season')
-		.sort((a, b) => {
-			// Sort by year, then by season order
-			const seasonOrder = { winter: 0, spring: 1, summer: 2, autumn: 3 };
-			if (a.year !== b.year) return (b.year || 0) - (a.year || 0);
-			const aSeason = seasonOrder[a.season || 'winter'];
-			const bSeason = seasonOrder[b.season || 'winter'];
-			return bSeason - aSeason;
-		})[0];
+	$effect(() => {
+		fetch('/api/playlists?current=true')
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				currentPlaylist = data ?? null;
+			})
+			.catch(() => {
+				currentPlaylist = null;
+			});
+	});
 </script>
 
 <div class={cn('relative flex items-center', side === 'right' ? 'flex-row-reverse' : '')}>

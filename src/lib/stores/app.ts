@@ -56,12 +56,12 @@ export function debugLog(...args: any[]) {
 	}
 }
 
-// dvd bounce
-const storedDvdBounceSetting = browser ? window?.localStorage?.dvdBounceEnabled === 'true' : false;
-export const dvdBounceEnabled = writable<boolean>(storedDvdBounceSetting);
-dvdBounceEnabled.subscribe((value) => {
+// screensaver
+const storedScreensaverSetting = browser ? window?.localStorage?.screensaver : 'dvd';
+export const screensaver = writable<string>(storedScreensaverSetting || 'dvd');
+screensaver.subscribe((value) => {
 	if (browser && window?.localStorage) {
-		window.localStorage.dvdBounceEnabled = String(value);
+		window.localStorage.screensaver = String(value);
 	}
 });
 

@@ -4,7 +4,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { mode, setMode, resetMode } from 'mode-watcher';
 	import {
-		dvdBounceEnabled,
+		screensaver as screensaverStore,
 		inactivityTimeout,
 		backgroundTexture,
 		backgroundSize,
@@ -78,32 +78,32 @@
 		</Form.Field>
 	
 		<div class="flex flex-col gap-2">
-			<h2>{i18n.t('settings.dvd_bounce')}</h2>
+			<h2>{i18n.t('settings.screensaver')}</h2>
 			<div class="flex flex-row items-end gap-4">
-				<Form.Field {form} name="dvdBounceEnabled" class="flex flex-col justify-between">
+				<Form.Field {form} name="screensaver" class="flex flex-col justify-between">
 					<div class="flex items-center space-x-3 space-y-0 h-10">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Checkbox
-									{...props}
-									checked={$dvdBounceEnabled}
-									onCheckedChange={(value) => ($dvdBounceEnabled = !!value)}
-									id="dvd-bounce-checkbox"
-								/>
-								<Form.Label
-									for="dvd-bounce-checkbox"
-									class="font-normal"
-									title={formatDuration($inactivityTimeout * 1000)}
-									onclick={() => ($dvdBounceEnabled = !$dvdBounceEnabled)}
+								<Select.Root
+									type="single"
+									bind:value={$screensaverStore}
+									name={props.name}
 								>
-									{i18n.t('settings.enable_dvd_bounce')}
-								</Form.Label>
+									<Select.Trigger {...props} class="w-full min-w-40">
+										{i18n.t(`settings.screensaver_${$screensaverStore}`)}
+									</Select.Trigger>
+									<Select.Content>
+										<Select.Item value="none" label={i18n.t('settings.screensaver_none')} />
+										<Select.Item value="dvd" label={i18n.t('settings.screensaver_dvd')} />
+										<Select.Item value="playlists" label={i18n.t('settings.screensaver_playlists')} />
+									</Select.Content>
+								</Select.Root>
 							{/snippet}
 						</Form.Control>
 					</div>
 				</Form.Field>
 
-				{#if $dvdBounceEnabled}
+				{#if $screensaverStore !== 'none'}
 					<Form.Field {form} name="inactivityTimeout" class="flex flex-col justify-between">
 						<Form.Control>
 							{#snippet children({ props })}

@@ -60,8 +60,8 @@ export interface FileDefinition {
 	leftOffset?: number;
 }
 
-// DVD Bounce
-export const dvdBounceActive = writable(false);
+// Screensaver
+export const screensaverActive = writable(false);
 
 const storedFiles =
 	browser && window?.localStorage?.desktopFiles

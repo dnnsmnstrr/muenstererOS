@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { WEBSITE_NAME } from '$lib/config';
 	import DraggableWindow from '$lib/components/DraggableWindow.svelte';
+	import PlaylistScreensaver from '$lib/components/PlaylistScreensaver.svelte';
+	import { screensaverActive } from '$lib/stores/desktop';
+	import { screensaver } from '$lib/stores/app';
 	import { elementBoundingStore } from '@sveltelegos-blue/svelte-legos';
 	import Profile from '$lib/components/Profile.svelte';
 	import NowPlaying from '$lib/components/NowPlaying.svelte';
@@ -164,6 +167,10 @@
 </svelte:head>
 
 <section class="h-full w-full" bind:this={element}>
+	{#if $screensaverActive && $screensaver === 'playlists'}
+		<PlaylistScreensaver />
+	{/if}
+
 	<DraggableWindow {width} {height} class="flex flex-col items-center justify-center gap-4 p-4">
 		<Profile />
 	</DraggableWindow>

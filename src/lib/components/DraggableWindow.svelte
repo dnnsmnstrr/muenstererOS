@@ -8,7 +8,7 @@
 	import {
 		desktopFiles,
 		updateFilePosition,
-		dvdBounceActive,
+		screensaverActive,
 		hideFile,
 		renameFile,
 		updateFileIcon
@@ -29,9 +29,8 @@
 		Image as ImageIcon
 	} from 'lucide-svelte';
 	import File from './File.svelte';
-	import { debugLog, dvdBounceEnabled, inactivityTimeout } from '$lib/stores/app';
+	import { debugLog, screensaver, inactivityTimeout } from '$lib/stores/app';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-
 
 	const minHeight = 300;
 	const minWidth = 200;
@@ -116,7 +115,6 @@
 
 	// Inactivity timer for auto-starting DVD bounce
 	let inactivityTimer: number | null = null;
-	let isManualBounce = $state(false); // Track if bounce was manually activated
 
 	let lastWidth = $state(0);
 	let lastHeight = $state(0);
@@ -187,8 +185,8 @@
 		e.preventDefault();
 
 		// Disable bounce animation when user interacts with window
-		if ($dvdBounceActive) {
-			dvdBounceActive.set(false);
+		if ($screensaverActive) {
+			screensaverActive.set(false);
 		}
 
 		isDraggingWindow = true;
@@ -223,10 +221,10 @@
 
 	// DVD Bounce animation
 	function startDvdBounce() {
-		if (bounceAnimationId || !$dvdBounceEnabled) return; // Already running
+		if (bounceAnimationId || $screensaver !== 'dvd') return; // Already running or not selected
 
 		const animate = () => {
-			if (!$dvdBounceActive) {
+			if (!$screensaverActive || $screensaver !== 'dvd') {
 				bounceAnimationId = null;
 				return;
 			}
@@ -261,7 +259,7 @@
 	}
 
 	$effect(() => {
-		if ($dvdBounceActive) {
+		if ($screensaverActive && $screensaver === 'dvd') {
 			startDvdBounce();
 		}
 
@@ -294,8 +292,8 @@
 
 		// Set new timer to start bounce after inactivity
 		inactivityTimer = setTimeout(() => {
-			if (!$dvdBounceActive) {
-				dvdBounceActive.set(true);
+			if (!$screensaverActive && $screensaver !== 'none') {
+				screensaverActive.set(true);
 			}
 		}, $inactivityTimeout * 1000);
 	}
@@ -307,9 +305,8 @@
 		const handleActivity = () => {
 			resetInactivityTimer();
 			// Stop bounce animation on any activity
-			if ($dvdBounceActive) {
-				console.log('stopping bouncex');
-				dvdBounceActive.set(false);
+			if ($screensaverActive) {
+				screensaverActive.set(false);
 			}
 		};
 
@@ -317,6 +314,8 @@
 		window.addEventListener('click', handleActivity);
 		window.addEventListener('scroll', handleActivity);
 		window.addEventListener('touchstart', handleActivity);
+		// Use document + capture to catch keydown events before stopImmediatePropagation in Command.svelte
+		document.addEventListener('keydown', handleActivity, true);
 
 		return () => {
 			if (inactivityTimer) {
@@ -327,6 +326,7 @@
 			window.removeEventListener('click', handleActivity);
 			window.removeEventListener('scroll', handleActivity);
 			window.removeEventListener('touchstart', handleActivity);
+			document.removeEventListener('keydown', handleActivity, true);
 		};
 	});
 
