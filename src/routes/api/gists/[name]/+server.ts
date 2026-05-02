@@ -1,12 +1,25 @@
 import { gists } from '$lib/config';
+import { gistCache } from '$lib/server/cache';
 import { json } from '@sveltejs/kit';
+
+const CACHE_TTL = 15 * 60; // 15 minutes in seconds
 
 export async function GET({ params, url }) {
 	const { name } = params;
-	const gist = gists[name];
+	const refresh = url.searchParams.get('refresh') === 'true';
+
+	const gist = gists[name as keyof typeof gists];
 	if (!gist) {
 		return json({ error: 'Gist not found for name: ' + name }, { status: 404 });
 	}
+
+	if (!refresh) {
+		const cachedData = gistCache.get(name);
+		if (cachedData) {
+			return json(cachedData);
+		}
+	}
+
 	const gistApiUrl = `https://api.github.com/gists/${gist.id}`;
 
 	try {
@@ -25,7 +38,12 @@ export async function GET({ params, url }) {
 			changes: item.change_status?.total
 		}));
 
-		return json({ ...gistData, updatedAt, gistUrl: apiData.html_url, versions });
+		const responseData = { ...gistData, updatedAt, gistUrl: apiData.html_url, versions };
+
+		// Update cache
+		gistCache.set(name, responseData, CACHE_TTL);
+
+		return json(responseData);
 	} catch (error) {
 		return json({ error }, { status: 500 });
 	}
