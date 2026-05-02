@@ -41,19 +41,43 @@
 		updateGrid();
 	}
 
+	function getNonConflictingPlaylist(index: number, currentGrid: PlaylistItem[]) {
+		if (playlists.length <= 4) return playlists[Math.floor(Math.random() * playlists.length)];
+
+		let attempts = 0;
+		while (attempts < 10) {
+			const candidate = playlists[Math.floor(Math.random() * playlists.length)];
+			const candidateId = candidate.imageId || candidate.imageUrl;
+
+			// Check neighbors (left, right, top, bottom)
+			const neighbors = [];
+			if (index % columns > 0) neighbors.push(currentGrid[index - 1]); // Left
+			if (index % columns < columns - 1) neighbors.push(currentGrid[index + 1]); // Right
+			if (index >= columns) neighbors.push(currentGrid[index - columns]); // Top
+			if (index < totalItems - columns) neighbors.push(currentGrid[index + columns]); // Bottom
+
+			const hasConflict = neighbors.some((n) => n && (n.imageId || n.imageUrl) === candidateId);
+
+			if (!hasConflict) return candidate;
+			attempts++;
+		}
+
+		return playlists[Math.floor(Math.random() * playlists.length)];
+	}
+
 	function updateGrid() {
 		if (playlists.length === 0) return;
 
-		const newGrid = [];
+		const newGrid: PlaylistItem[] = [];
 		for (let i = 0; i < totalItems; i++) {
-			newGrid.push(playlists[Math.floor(Math.random() * playlists.length)]);
+			newGrid.push(getNonConflictingPlaylist(i, newGrid));
 		}
 		visibleGrid = newGrid;
 	}
 
 	function flipCover(index: number) {
 		if (playlists.length === 0) return;
-		const newPlaylist = playlists[Math.floor(Math.random() * playlists.length)];
+		const newPlaylist = getNonConflictingPlaylist(index, visibleGrid);
 		const updatedGrid = [...visibleGrid];
 		updatedGrid[index] = newPlaylist;
 		visibleGrid = updatedGrid;
