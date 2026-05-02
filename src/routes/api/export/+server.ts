@@ -5,23 +5,20 @@ import changes from '$lib/../data/changes.json';
 import llms from '$lib/../data/llms.json';
 import network_seeds from '$lib/../data/network_seeds.json';
 import pages from '$lib/../data/pages.json';
-import playlists from '$lib/../data/playlists.json';
-import uses from '$lib/../data/uses.json';
 
 const staticData = {
 	buttons,
 	changes,
 	llms,
 	network_seeds,
-	pages,
-	playlists,
-	uses
+	pages
 };
 
 export async function GET({ url, request }) {
 	const includeStatic = url.searchParams.get('static') !== 'false';
 	const includeGists = url.searchParams.get('gists') !== 'false';
-	const token = request.headers.get('Authorization')?.replace('Bearer ', '') || url.searchParams.get('token');
+	const token =
+		request.headers.get('Authorization')?.replace('Bearer ', '') || url.searchParams.get('token');
 
 	const exportData: any = {
 		metadata: {
