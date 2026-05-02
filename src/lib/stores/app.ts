@@ -65,6 +65,15 @@ dvdBounceEnabled.subscribe((value) => {
 	}
 });
 
+export const DEFAULT_INACTIVITY_TIMEOUT = 30;
+const storedInactivityTimeout = browser ? window?.localStorage?.inactivityTimeout : String(DEFAULT_INACTIVITY_TIMEOUT);
+export const inactivityTimeout = writable<number>(Number(storedInactivityTimeout) || DEFAULT_INACTIVITY_TIMEOUT);
+inactivityTimeout.subscribe((value) => {
+	if (browser && window?.localStorage) {
+		window.localStorage.inactivityTimeout = String(value);
+	}
+});
+
 // background texture
 const storedBackgroundTexture = browser ? window?.localStorage?.backgroundTexture : 'dots';
 export const backgroundTexture = writable<string>(storedBackgroundTexture || 'dots');

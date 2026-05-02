@@ -113,6 +113,7 @@
 		"debug_description": "This will cause more verbose logging in the console.",
 		"dvd_bounce": "Screensaver",
 		"enable_dvd_bounce": "DVD Bounce",
+		"inactivity_timeout": "Inactivity Timeout",
 		"actions": "Actions",
 		"reset_desktop": "Reset Desktop",
 		"reset_success": "Desktop files reset to default positions",

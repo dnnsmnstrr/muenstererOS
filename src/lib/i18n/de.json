@@ -113,6 +113,7 @@
 		"debug_description": "Führt zu detaillierterem Output in der Konsole.",
 		"dvd_bounce": "Bildschirmschoner",
 		"enable_dvd_bounce": "DVD Bounce",
+		"inactivity_timeout": "Inaktivitäts-Timeout",
 		"actions": "Aktionen",
 		"reset_desktop": "Desktop zurücksetzen",
 		"reset_success": "Desktop zurückgesetzt",

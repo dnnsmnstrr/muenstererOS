@@ -123,7 +123,6 @@ export const breakpoints = {
 	xl: 1920
 };
 
-export const INACTIVITY_TIMEOUT = 1 * 30 * 1000; // 1 minute in milliseconds
 
 export const backgroundTextures = [
 	{
