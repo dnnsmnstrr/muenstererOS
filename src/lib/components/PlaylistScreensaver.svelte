@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import { fade, crossfade } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
 	import { screensaverActive } from '$lib/stores/desktop';
 	import type { PlaylistItem } from '../../routes/playlists/+page.svelte';
 
@@ -9,6 +10,19 @@
 	let columns = $state(2);
 	let rows = $state(1);
 	let totalItems = $derived(columns * rows);
+
+	function rotateFlip(node: HTMLElement, { duration = 700 }) {
+		return {
+			duration,
+			css: (t: number) => {
+				const rotate = (1 - t) * 180;
+				return `
+					transform: rotateY(${rotate}deg);
+					opacity: ${t > 0.5 ? 1 : 0};
+				`;
+			}
+		};
+	}
 
 	async function fetchPlaylists() {
 		try {
@@ -125,15 +139,19 @@
 		style="grid-template-columns: repeat({columns}, 1fr);"
 	>
 		{#each visibleGrid as playlist, i (i)}
-			<div class="aspect-square w-full overflow-hidden border border-black/10">
+			<div class="aspect-square w-full border border-black/10 [perspective:1000px]">
 				{#key playlist.imageId || playlist.imageUrl}
-					<img
-						src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
-						alt=""
-						class="w-full h-full object-cover"
-						transition:fade={{ duration: 500 }}
-						onerror={() => flipCover(i)}
-					/>
+					<div
+						class="relative h-full w-full"
+						in:rotateFlip={{ duration: 700 }}
+					>
+						<img
+							src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
+							alt=""
+							class="absolute h-full w-full object-cover"
+							onerror={() => flipCover(i)}
+						/>
+					</div>
 				{/key}
 			</div>
 		{/each}
