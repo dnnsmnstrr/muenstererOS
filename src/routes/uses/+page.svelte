@@ -30,12 +30,14 @@
 		ArrowDown
 	} from 'lucide-svelte';
 	import SvgIcons from '$lib/components/icons';
-	import uses from '../../data/uses.json';
 	import Link from '$lib/components/typography/Link.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+
+	let { data }: PageProps = $props();
+	const uses = data.uses;
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');

@@ -97,6 +97,11 @@ export const gists = {
 		name: 'Songs',
 		filename: 'songs.json'
 	},
+	uses: {
+		id: 'f04d648e19c29b075dcedf89845abd67',
+		name: 'Uses Data',
+		filename: 'uses.json'
+	},
 	concerts: {
 		id: CONCERTS_GIST_ID,
 		name: 'Concerts',
