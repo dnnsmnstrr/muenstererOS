@@ -54,7 +54,7 @@
 		resetColors,
 		showHelp,
 		modifiedColors,
-		dvdBounceEnabled
+		screensaver
 	} from '$lib/stores/app';
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
@@ -82,7 +82,7 @@
 	import type { BookmarkItem } from './Menu.svelte';
 	import {
 		resetDesktopFiles,
-		dvdBounceActive,
+		screensaverActive,
 		desktopFiles,
 		addFileToDesktop
 	} from '$lib/stores/desktop';
@@ -393,6 +393,9 @@
 			console.log('error', error);
 		}
 	}
+
+	let currentGroup = $state<string | null>(null);
+
 	let commandConfig = $derived({
 		navigation: [
 			{ name: i18n.t('common.home'), icon: Home, href: '/' },
@@ -511,16 +514,71 @@
 					}
 				];
 			})()
-		]
+		],
+		fun: [
+			{
+				name: i18n.t('command.confetti'),
+				keywords: ['party', 'celebrate'],
+				icon: PartyPopper,
+				action: () => {
+					confetti();
+				}
+			},
+			{
+				name: i18n.t('settings.screensaver'),
+				icon: Monitor,
+				action: () => (currentGroup = 'screensaver')
+			}
+		],
+		screensaver: [
+			{
+				name: i18n.t('settings.screensaver_none'),
+				action: () => {
+					$screensaver = 'none';
+					$isCommandActive = false;
+					currentGroup = null;
+				}
+			},
+			{
+				name: i18n.t('settings.screensaver_dvd'),
+				action: () => {
+					$screensaver = 'dvd';
+					$isCommandActive = false;
+					currentGroup = null;
+				}
+			},
+			{
+				name: i18n.t('settings.screensaver_playlists'),
+				action: () => {
+					$screensaver = 'playlists';
+					$isCommandActive = false;
+					currentGroup = null;
+				}
+			},
+			{
+				name: i18n.t('command.go_back'),
+				icon: ArrowLeft,
+				action: () => (currentGroup = null)
+			}
+		].map(enrichLink)
 	} as Record<string, CommandData[]>);
 </script>
 
-<Command.Dialog bind:open={$isCommandActive}>
+<Command.Dialog
+	bind:open={$isCommandActive}
+	onOpenChange={(open) => {
+		if (!open) currentGroup = null;
+	}}
+>
 	<Command.Input bind:value={query} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
-		{#each Object.entries(commandConfig) as [group, commands]}
-			<Command.Group heading={i18n.t(`command.${group}`)}>
+		{#each Object.entries(commandConfig).filter(([group]) => !currentGroup || group === currentGroup) as [group, commands]}
+			<Command.Group
+				heading={i18n.t(`command.${group}`) !== `command.${group}`
+					? i18n.t(`command.${group}`)
+					: capitalize(group)}
+			>
 				{#each commands as command}
 					<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
 						{#if command.icon}
@@ -529,7 +587,7 @@
 						{command.name}
 					</Command.Item>
 				{/each}
-				{#if group === 'links'}
+				{#if group === 'links' && !currentGroup}
 					{#each Object.entries(links)
 						.filter(([name]) => !commands.some((c) => c.name.toLowerCase() === name.toLowerCase()))
 						.map(([name, href]) => enrichLink({ name, href })) as command}
@@ -545,7 +603,8 @@
 				{/if}
 			</Command.Group>
 		{/each}
-		<Command.Group heading={i18n.t('common.settings')}>
+		{#if !currentGroup}
+			<Command.Group heading={i18n.t('common.settings')}>
 			{#if !isMobile.any()}
 				<button
 					use:eyeDropperAction={{
@@ -601,29 +660,7 @@
 				</Command.Item>
 			{/if}
 		</Command.Group>
-		<Command.Group heading={i18n.t('command.fun')}>
-			<button use:confettiAction class="w-full">
-				<Command.Item value="confetti" keywords={['party', 'celebrate']}>
-					<PartyPopper class="mr-2" />
-					{i18n.t('command.confetti')}
-				</Command.Item>
-			</button>
-			{#if !$dvdBounceActive}
-				<Command.Item
-					onSelect={() => {
-						$dvdBounceEnabled = !$dvdBounceEnabled;
-						$isCommandActive = false;
-					}}
-					value="dvd bounce"
-					keywords={['easter egg', 'screen saver']}
-				>
-					<Monitor class="mr-2" />
-					{$dvdBounceEnabled
-						? i18n.t('command.disable_dvd_bounce')
-						: i18n.t('command.enable_dvd_bounce')}
-				</Command.Item>
-			{/if}
-		</Command.Group>
+		{/if}
 	</Command.List>
 </Command.Dialog>
 
