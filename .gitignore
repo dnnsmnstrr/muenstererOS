@@ -13,3 +13,4 @@ test-results
 .output
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+pnpm-lock.yaml
