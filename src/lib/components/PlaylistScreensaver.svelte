@@ -140,18 +140,21 @@
 	}
 </script>
 
-<svelte:window onkeydown={handleActivity} onmousedown={handleActivity} ontouchstart={handleActivity} onmousemove={handleActivity} />
+<svelte:window
+	onkeydown={handleActivity}
+	onmousedown={handleActivity}
+	ontouchstart={handleActivity}
+	onmousemove={handleActivity}
+/>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class="fixed inset-0 z-[100] bg-black overflow-hidden"
+	class="fixed inset-0 z-[100] overflow-hidden bg-black"
 	transition:fade={{ duration: 1000 }}
 	onclick={handleActivity}
+	onkeydown={handleActivity}
 >
-	<div
-		class="grid w-full h-full"
-		style="grid-template-columns: repeat({columns}, 1fr);"
-	>
+	<div class="grid h-full w-full" style="grid-template-columns: repeat({columns}, 1fr);">
 		{#each visibleGrid as playlist, i (i)}
 			<div class="aspect-square w-full border border-black/10 [perspective:1000px]">
 				{#key playlist.imageId || playlist.imageUrl}

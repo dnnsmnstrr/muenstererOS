@@ -4,8 +4,8 @@
 	import { mode } from 'mode-watcher';
 	import type * as Monaco from 'monaco-editor';
 	import { get } from 'svelte/store';
-	
-	let { 
+
+	let {
 		value = $bindable('{}'),
 		language = 'json',
 		theme = get(mode) === 'dark' ? 'vs-dark' : 'vs',
@@ -62,13 +62,18 @@
 				getWorker: function (workerId: string, label: string) {
 					// Use a more compatible worker setup for Vite
 					const createWorker = (workerPath: string) => {
-						const blob = new Blob([`
+						const blob = new Blob(
+							[
+								`
 							self.MonacoEnvironment = {
 								baseUrl: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/'
 							};
 							importScripts('https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/base/worker/workerMain.js');
-						`], { type: 'application/javascript' });
-						
+						`
+							],
+							{ type: 'application/javascript' }
+						);
+
 						return new Worker(URL.createObjectURL(blob));
 					};
 
@@ -94,7 +99,7 @@
 
 			// Dynamically import Monaco to avoid SSR issues
 			monaco = await import('monaco-editor');
-			
+
 			// Configure JSON validation and formatting with enhanced options
 			monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
 				validate: true,
@@ -129,9 +134,9 @@
 						endLineNumber: position.lineNumber,
 						endColumn: wordInfo.endColumn
 					};
-					
+
 					if (!monaco) return { suggestions: [] };
-					
+
 					const suggestions = [
 						{
 							label: 'true',
@@ -160,22 +165,25 @@
 							range
 						}
 					];
-					
+
 					// Add common schema URL suggestions when typing $schema value
 					const lineContent = model.getLineContent(position.lineNumber);
 					const beforeCursor = lineContent.substring(0, position.column - 1);
 					if (beforeCursor.includes('"$schema"') && beforeCursor.includes(':')) {
 						const commonSchemas = getCommonSchemaUrls();
-						const schemaSuggestions = commonSchemas.map(schema => ({
-							label: schema.name,
-							kind: monaco.languages.CompletionItemKind.Value,
-							insertText: `"${schema.url}"`,
-							documentation: schema.description,
-							range
-						}));
+						const schemaSuggestions = monaco
+							? commonSchemas.map((schema) => ({
+									label: schema.name,
+									kind: monaco!.languages.CompletionItemKind.Value,
+									insertText: `"${schema.url}"`,
+									insertTextRules: monaco!.languages.CompletionItemInsertTextRule.None,
+									documentation: schema.description,
+									range
+								}))
+							: [];
 						suggestions.push(...schemaSuggestions);
 					}
-					
+
 					return { suggestions };
 				}
 			});
@@ -296,17 +304,17 @@
 			});
 
 			// Listen for value changes and auto-validate
-			let validationTimeout: number;
-			let schemaTimeout: number;
+			let validationTimeout: ReturnType<typeof setTimeout>;
+			let schemaTimeout: ReturnType<typeof setTimeout>;
 			editor.onDidChangeModelContent(() => {
 				value = editor?.getValue() || '';
-				
+
 				// Debounced validation to avoid excessive validation calls
 				clearTimeout(validationTimeout);
 				validationTimeout = setTimeout(() => {
 					validateJson();
 				}, 500);
-				
+
 				// Auto-detect schema after content changes (less frequent)
 				clearTimeout(schemaTimeout);
 				schemaTimeout = setTimeout(() => {
@@ -324,7 +332,6 @@
 			}
 
 			isEditorReady = true;
-
 		} catch (error) {
 			console.error('Failed to load Monaco Editor:', error);
 		}
@@ -339,12 +346,12 @@
 
 	export function formatJson() {
 		if (!editor || !monaco) return false;
-		
+
 		try {
 			const currentValue = editor.getValue();
 			const parsed = JSON.parse(currentValue);
 			const formatted = JSON.stringify(parsed, null, 2);
-			
+
 			editor.setValue(formatted);
 			value = formatted; // Update the bound value
 			return true;
@@ -354,31 +361,36 @@
 		}
 	}
 
-	export function validateJson(): { valid: boolean; error?: string; line?: number; column?: number } {
+	export function validateJson(): {
+		valid: boolean;
+		error?: string;
+		line?: number;
+		column?: number;
+	} {
 		if (!editor || !monaco) return { valid: false, error: 'Editor not initialized' };
-		
+
 		try {
 			const value = editor.getValue();
 			JSON.parse(value);
-			
+
 			// Clear any existing error markers
 			const model = editor.getModel();
 			if (model) {
 				monaco.editor.setModelMarkers(model, 'json-validation', []);
 			}
-			
+
 			return { valid: true };
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : 'Invalid JSON';
-			
+
 			// Try to extract line and column information from error message
 			const lineMatch = errorMessage.match(/line (\d+)/);
 			const columnMatch = errorMessage.match(/column (\d+)/);
 			const positionMatch = errorMessage.match(/position (\d+)/);
-			
+
 			let line = lineMatch ? parseInt(lineMatch[1]) : undefined;
 			let column = columnMatch ? parseInt(columnMatch[1]) : undefined;
-			
+
 			// If we have position but not line/column, calculate them
 			if (positionMatch && !line && !column) {
 				const position = parseInt(positionMatch[1]);
@@ -387,23 +399,25 @@
 				line = lines.length;
 				column = lines[lines.length - 1].length + 1;
 			}
-			
+
 			// Add error marker to the editor
 			const model = editor.getModel();
 			if (model && line && column) {
-				const markers = [{
-					severity: monaco.MarkerSeverity.Error,
-					startLineNumber: line,
-					startColumn: column,
-					endLineNumber: line,
-					endColumn: column + 1,
-					message: errorMessage
-				}];
+				const markers = [
+					{
+						severity: monaco.MarkerSeverity.Error,
+						startLineNumber: line,
+						startColumn: column,
+						endLineNumber: line,
+						endColumn: column + 1,
+						message: errorMessage
+					}
+				];
 				monaco.editor.setModelMarkers(model, 'json-validation', markers);
 			}
-			
-			return { 
-				valid: false, 
+
+			return {
+				valid: false,
 				error: errorMessage,
 				line,
 				column
@@ -419,7 +433,7 @@
 		if (editor) {
 			editor.setValue(newValue);
 			value = newValue; // Update the bound value
-			
+
 			// Auto-detect schema for the new content
 			setTimeout(() => {
 				autoDetectSchema();
@@ -436,30 +450,31 @@
 	export function focus() {
 		editor?.focus();
 	}
-	
+
 	export function getTokensInfo() {
 		if (!editor || !monaco) return null;
-		
+
 		const model = editor.getModel();
 		if (!model) return null;
-		
+
 		const lineCount = model.getLineCount();
 		const tokens = [];
-		
+
 		for (let line = 1; line <= lineCount; line++) {
 			const lineTokens = monaco.editor.tokenize(model.getLineContent(line), 'json');
 			tokens.push({
 				line,
-				tokens: lineTokens[0]?.map(token => ({
-					type: token.type,
-					offset: token.offset
-				})) || []
+				tokens:
+					lineTokens[0]?.map((token) => ({
+						type: token.type,
+						offset: token.offset
+					})) || []
 			});
 		}
-		
+
 		return tokens;
 	}
-	
+
 	export function highlightErrors() {
 		const validation = validateJson();
 		return validation;
@@ -472,23 +487,20 @@
 	}
 
 	export function getAvailableThemes() {
-		return [
-			'json-dark',
-			'json-light', 
-			'vs-dark',
-			'vs',
-		];
+		return ['json-dark', 'json-light', 'vs-dark', 'vs'];
 	}
 
 	export function enableJsonSchema(schema: any, uri?: string) {
 		if (!monaco) return;
-		
+
 		const schemaUri = uri || `http://json-schema.org/draft-07/schema#${Date.now()}`;
-		const jsonSchemas = [{
-			uri: schemaUri,
-			fileMatch: ['*'],
-			schema
-		}];
+		const jsonSchemas = [
+			{
+				uri: schemaUri,
+				fileMatch: ['*'],
+				schema
+			}
+		];
 
 		monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
 			validate: true,
@@ -498,7 +510,7 @@
 			schemaValidation: 'error',
 			schemaRequest: 'warning'
 		});
-		
+
 		// Force re-validation after schema change
 		setTimeout(() => {
 			validateJson();
@@ -506,7 +518,10 @@
 	}
 
 	// Add common JSON schemas for different data types
-	export function setCommonSchema(schemaType: 'gist' | 'config' | 'package' | 'tsconfig' | 'custom', customSchema?: any) {
+	export function setCommonSchema(
+		schemaType: 'gist' | 'config' | 'package' | 'tsconfig' | 'custom',
+		customSchema?: any
+	) {
 		const schemas = {
 			gist: {
 				type: 'object',
@@ -590,8 +605,24 @@
 					compilerOptions: {
 						type: 'object',
 						properties: {
-							target: { type: 'string', enum: ['es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'es2020', 'esnext'] },
-							module: { type: 'string', enum: ['commonjs', 'amd', 'umd', 'system', 'es6', 'es2015', 'esnext'] },
+							target: {
+								type: 'string',
+								enum: [
+									'es5',
+									'es6',
+									'es2015',
+									'es2016',
+									'es2017',
+									'es2018',
+									'es2019',
+									'es2020',
+									'esnext'
+								]
+							},
+							module: {
+								type: 'string',
+								enum: ['commonjs', 'amd', 'umd', 'system', 'es6', 'es2015', 'esnext']
+							},
 							lib: { type: 'array', items: { type: 'string' } },
 							outDir: { type: 'string' },
 							rootDir: { type: 'string' },
@@ -618,44 +649,48 @@
 	// Auto-detect schema based on JSON content
 	export function autoDetectSchema() {
 		if (!editor) return;
-		
+
 		try {
 			const content = editor.getValue();
 			const parsed = JSON.parse(content);
-			
+
 			// First check for explicit $schema property
 			if (parsed.$schema && typeof parsed.$schema === 'string') {
 				const schemaUrl = parsed.$schema;
-				
+
 				// Try to fetch and apply the schema from the URL
 				fetchSchemaFromUrl(schemaUrl);
 				return 'schema-url';
 			}
-			
+
 			// Check for package.json
-			if (parsed.name && parsed.version && (parsed.dependencies || parsed.devDependencies || parsed.scripts)) {
+			if (
+				parsed.name &&
+				parsed.version &&
+				(parsed.dependencies || parsed.devDependencies || parsed.scripts)
+			) {
 				setCommonSchema('package');
 				return 'package';
 			}
-			
+
 			// Check for tsconfig.json
 			if (parsed.compilerOptions) {
 				setCommonSchema('tsconfig');
 				return 'tsconfig';
 			}
-			
+
 			// Check for GitHub gist structure
 			if (parsed.id && parsed.files && typeof parsed.files === 'object') {
 				setCommonSchema('gist');
 				return 'gist';
 			}
-			
+
 			// Check for config-like structure
 			if (parsed.name && parsed.version && parsed.settings) {
 				setCommonSchema('config');
 				return 'config';
 			}
-			
+
 			// Default to custom schema
 			setCommonSchema('custom');
 			return 'custom';
@@ -670,9 +705,11 @@
 		try {
 			// Handle common schema URLs
 			const knownSchemas = getKnownSchemaUrls();
-			
+
 			// Check if it's a known schema URL
-			const knownSchema = knownSchemas.find(s => s.url === schemaUrl || s.aliases?.includes(schemaUrl));
+			const knownSchema = knownSchemas.find(
+				(s) => s.url === schemaUrl || s.aliases?.includes(schemaUrl)
+			);
 			if (knownSchema) {
 				if (knownSchema.type === 'common') {
 					setCommonSchema(knownSchema.schema as any);
@@ -681,7 +718,7 @@
 				}
 				return;
 			}
-			
+
 			// Try to fetch the schema from the URL
 			const response = await fetch(schemaUrl);
 			if (response.ok) {
@@ -704,13 +741,19 @@
 		return [
 			{
 				url: 'https://json.schemastore.org/package.json',
-				aliases: ['http://json.schemastore.org/package.json', 'https://json.schemastore.org/package'],
+				aliases: [
+					'http://json.schemastore.org/package.json',
+					'https://json.schemastore.org/package'
+				],
 				type: 'common',
 				schema: 'package'
 			},
 			{
 				url: 'https://json.schemastore.org/tsconfig.json',
-				aliases: ['http://json.schemastore.org/tsconfig.json', 'https://json.schemastore.org/tsconfig'],
+				aliases: [
+					'http://json.schemastore.org/tsconfig.json',
+					'https://json.schemastore.org/tsconfig'
+				],
 				type: 'common',
 				schema: 'tsconfig'
 			},
@@ -731,10 +774,7 @@
 							}
 						},
 						extends: {
-							oneOf: [
-								{ type: 'string' },
-								{ type: 'array', items: { type: 'string' } }
-							]
+							oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }]
 						},
 						rules: {
 							type: 'object',
@@ -790,10 +830,7 @@
 						title: { type: 'string' },
 						description: { type: 'string' },
 						type: {
-							oneOf: [
-								{ type: 'string' },
-								{ type: 'array', items: { type: 'string' } }
-							]
+							oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }]
 						},
 						properties: { type: 'object' },
 						required: { type: 'array', items: { type: 'string' } },
@@ -807,26 +844,26 @@
 	// Add $schema property to JSON
 	export function addSchemaProperty(schemaUrl: string) {
 		if (!editor) return false;
-		
+
 		try {
 			const content = editor.getValue();
 			const parsed = JSON.parse(content);
-			
+
 			// Add $schema property at the beginning
 			const newObj = {
 				$schema: schemaUrl,
 				...parsed
 			};
-			
+
 			const formatted = JSON.stringify(newObj, null, 2);
 			editor.setValue(formatted);
 			value = formatted;
-			
+
 			// Auto-detect schema after adding the property
 			setTimeout(() => {
 				autoDetectSchema();
 			}, 100);
-			
+
 			return true;
 		} catch (error) {
 			console.warn('Failed to add $schema property:', error);
@@ -893,9 +930,9 @@
 	});
 </script>
 
-<div 
-	bind:this={container} 
-	class="border border-border rounded-md overflow-hidden bg-background"
+<div
+	bind:this={container}
+	class="overflow-hidden rounded-md border border-border bg-background"
 	style="height: {height}; width: 100%;"
 ></div>
 
@@ -903,30 +940,36 @@
 	/* Ensure Monaco Editor styles are properly scoped */
 	:global(.monaco-editor) {
 		font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'SF Mono', monospace !important;
-		font-feature-settings: 'liga' 1, 'calt' 1;
+		font-feature-settings:
+			'liga' 1,
+			'calt' 1;
 	}
-	
+
 	:global(.monaco-editor .margin) {
 		background: transparent !important;
 	}
-	
+
 	/* Enhanced JSON syntax highlighting support */
-	:global(.monaco-editor .mtk1) { /* Default text */
+	:global(.monaco-editor .mtk1) {
+		/* Default text */
 		color: inherit;
 	}
-	
-	:global(.monaco-editor .mtk9) { /* JSON numbers */
+
+	:global(.monaco-editor .mtk9) {
+		/* JSON numbers */
 		font-weight: 600;
 	}
-	
-	:global(.monaco-editor .mtk22) { /* JSON strings */
+
+	:global(.monaco-editor .mtk22) {
+		/* JSON strings */
 		font-style: normal;
 	}
-	
-	:global(.monaco-editor .mtk5) { /* JSON keys */
+
+	:global(.monaco-editor .mtk5) {
+		/* JSON keys */
 		font-weight: 600;
 	}
-	
+
 	/* Bracket pair colorization */
 	:global(.monaco-editor .bracket-highlighting-0),
 	:global(.monaco-editor .bracket-highlighting-1),
@@ -936,67 +979,67 @@
 	:global(.monaco-editor .bracket-highlighting-5) {
 		font-weight: bold;
 	}
-	
+
 	/* Error and warning decorations */
 	:global(.monaco-editor .squiggly-error) {
 		border-bottom: 2px dotted #ff5555;
 		background: rgba(255, 85, 85, 0.1);
 	}
-	
+
 	:global(.monaco-editor .squiggly-warning) {
 		border-bottom: 2px dotted #ffaa00;
 		background: rgba(255, 170, 0, 0.1);
 	}
-	
+
 	/* Improved bracket matching */
 	:global(.monaco-editor .bracket-match) {
 		background: rgba(255, 215, 0, 0.3) !important;
 		border: 1px solid rgba(255, 215, 0, 0.8);
 		border-radius: 2px;
 	}
-	
+
 	/* Selection highlighting */
 	:global(.monaco-editor .selectionHighlight) {
 		background: rgba(173, 214, 255, 0.3);
 		border-radius: 2px;
 	}
-	
+
 	/* Word highlighting */
 	:global(.monaco-editor .wordHighlight) {
 		background: rgba(87, 156, 214, 0.25);
 		border-radius: 2px;
 	}
-	
+
 	:global(.monaco-editor .wordHighlightStrong) {
 		background: rgba(87, 156, 214, 0.4);
 		border-radius: 2px;
 	}
-	
+
 	/* Folding ranges */
 	:global(.monaco-editor .folded-background) {
 		background: rgba(255, 255, 255, 0.05);
 	}
-	
+
 	/* Indentation guides */
 	:global(.monaco-editor .guides-widget) {
 		opacity: 0.6;
 	}
-	
+
 	/* JSON-specific token colors */
 	:global(.monaco-editor .token.string.value) {
 		color: #ce9178;
 	}
-	
+
 	:global(.monaco-editor .token.string.key) {
 		color: #9cdcfe;
 		font-weight: 600;
 	}
-	
+
 	:global(.monaco-editor .token.number) {
 		color: #b5cea8;
 		font-weight: 600;
 	}
-	
+
 	:global(.monaco-editor .token.keyword) {
 		color: #569cd6;
 		font-weight: 600;

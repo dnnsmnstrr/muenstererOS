@@ -116,7 +116,7 @@
 	let velocityY = 2;
 
 	// Inactivity timer for auto-starting DVD bounce
-	let inactivityTimer: number | null = null;
+	let inactivityTimer: ReturnType<typeof setTimeout> | null = null;
 
 	let lastWidth = $state(0);
 	let lastHeight = $state(0);

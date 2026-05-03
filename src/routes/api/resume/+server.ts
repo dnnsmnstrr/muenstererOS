@@ -18,11 +18,13 @@ export async function GET({ url }) {
 		let result = { ...gistData, updatedAt, gistUrl: apiData.html_url };
 
 		if (includeVersions) {
-			const versions = apiData.history.map((item) => ({
-				version: item.version,
-				url: item.url,
-				timestamp: item.committed_at
-			}));
+			const versions = apiData.history.map(
+				(item: { version: string; url: string; committed_at: string }) => ({
+					version: item.version,
+					url: item.url,
+					timestamp: item.committed_at
+				})
+			);
 			result = { ...result, versions };
 		}
 
@@ -35,7 +37,8 @@ export async function GET({ url }) {
 			}
 		});
 	} catch (error) {
-		return new Response(JSON.stringify({ error: error.message }), {
+		const message = error instanceof Error ? error.message : String(error);
+		return new Response(JSON.stringify({ error: message }), {
 			status: 500,
 			headers: {
 				'Content-Type': 'application/json',

@@ -6,11 +6,10 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/index';
+	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
-	let projects = $state(data.projects);
-	
 	type Project = {
 		title: string;
 		description: string;
@@ -22,13 +21,17 @@
 		image: string;
 	};
 
+	let projects = $state(data.projects as Project[]);
+
 	let selectedTag = $state('');
 	/**
 	 * Optimized tag sorting: Uses localeCompare with the active language (i18n.lang)
 	 * to ensure correct alphabetical order for both English and German users.
 	 */
 	const allTags = $derived(
-		[...new Set(projects.flatMap((p) => p.tags))].sort((a, b) => a.localeCompare(b, i18n.lang))
+		([...new Set(projects.flatMap((p: Project) => p.tags))] as string[]).sort((a, b) =>
+			a.localeCompare(b, i18n.lang)
+		)
 	);
 	const filteredProjects = $derived(
 		selectedTag === '' ? projects : projects.filter((p) => p.tags.includes(selectedTag))

@@ -2,6 +2,7 @@
 	const categories = ['hardware', 'software', 'development', 'services'] as const;
 	export type UsesItem = {
 		name: string;
+		title: string;
 		description?: string;
 		url?: string;
 		category: (typeof categories)[number];
@@ -35,9 +36,10 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
-	const uses = data.uses;
+	const uses = data.uses as UsesItem[];
 
 	let searchQuery = $state('');
 	let selectedCategory: string = $state('');
@@ -54,7 +56,7 @@
 	 * to ensure correct alphabetical order for both English and German users.
 	 */
 	let allTags = $derived(
-		[...new Set(uses.flatMap((item) => item.tags || []))].sort((a, b) =>
+		([...new Set(uses.flatMap((item) => item.tags || []))] as string[]).sort((a, b) =>
 			a.localeCompare(b, i18n.lang)
 		)
 	);
@@ -77,11 +79,13 @@
 			 * Optimized sorting: Uses localeCompare with the active language (i18n.lang)
 			 * for more accurate internationalized string comparisons.
 			 */
-			.sort((a, b) => {
+			.sort((a: UsesItem, b: UsesItem) => {
 				const { field, direction } = sortConfig;
+				const aVal = a[field] ?? '';
+				const bVal = b[field] ?? '';
 				return direction === 'asc'
-					? a[field].localeCompare(b[field], i18n.lang)
-					: b[field].localeCompare(a[field], i18n.lang);
+					? aVal.localeCompare(bVal, i18n.lang)
+					: bVal.localeCompare(aVal, i18n.lang);
 			})
 	);
 	let filteredTags = $derived(

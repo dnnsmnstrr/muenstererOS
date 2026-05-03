@@ -138,7 +138,7 @@
 				declare var setInterval: (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number;
 				declare var clearTimeout: (id?: number) => void;
 				declare var clearInterval: (id?: number) => void;
-				
+
 				// Console methods
 				interface Console {
 					log(...data: any[]): void;
@@ -147,28 +147,28 @@
 					info(...data: any[]): void;
 					debug(...data: any[]): void;
 				}
-				
+
 				// Document methods for the playground
 				interface Document {
 					getElementById(elementId: string): HTMLElement | null;
 					querySelector(selectors: string): Element | null;
 					querySelectorAll(selectors: string): NodeListOf<Element>;
 				}
-				
+
 				// Common JavaScript utilities
 				declare function alert(message?: any): void;
 				declare function confirm(message?: string): boolean;
 				declare function prompt(message?: string, defaultText?: string): string | null;
-				
+
 				// Math object
 				declare var Math: Math;
-				
+
 				// Date constructor
 				declare var Date: DateConstructor;
-				
+
 				// JSON object
 				declare var JSON: JSON;
-				
+
 				// Array and Object constructors
 				declare var Array: ArrayConstructor;
 				declare var Object: ObjectConstructor;
@@ -452,7 +452,7 @@
 			});
 
 			// Listen for value changes
-			let validationTimeout: number;
+			let validationTimeout: ReturnType<typeof setTimeout>;
 			editor.onDidChangeModelContent(() => {
 				value = editor?.getValue() || '';
 

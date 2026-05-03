@@ -64,8 +64,9 @@
 	function initializeFromUrl() {
 		if (!browser) return;
 		const fileParam = page.url.searchParams.get('file');
-		if (fileParam && gists[fileParam]) {
-			selectedGist = gists[fileParam].id;
+		const gistsMap = gists as Record<string, { id: string; name: string; filename: string }>;
+		if (fileParam && gistsMap[fileParam]) {
+			selectedGist = gistsMap[fileParam].id;
 		}
 		return false; // No URL parameter found
 	}
@@ -299,7 +300,7 @@
 	<title>{i18n.t('common.admin')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
-<div class="container mx-auto max-w-6xl space-y-6 mb-8">
+<div class="container mx-auto mb-8 max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
 		<Heading class="mb-0">{i18n.t('admin.title')}</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
@@ -343,4 +344,3 @@
 		</Button>
 	</div>
 </div>
-

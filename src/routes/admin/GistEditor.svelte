@@ -24,19 +24,19 @@
 		gistData = $bindable('{}'),
 		gistInfo = $bindable<GistData>(),
 		schema = null,
-        isSaving = false,
-        onFormatJson,
-        onResetEditor,
-        onSaveGist,
+		isSaving = false,
+		onFormatJson,
+		onResetEditor,
+		onSaveGist
 	} = $props();
-    
+
 	let jsonEditorRef = $state<JsonEditor | null>(null);
 	let viewMode = $derived(
 		(page.url.searchParams.get('mode') as 'editor' | 'form') || (schema ? 'form' : 'editor')
 	);
 	let formData = $state<any>(null);
 	let lastSyncedGistData = $state('');
-	let lastViewMode = $state(viewMode);
+	let lastViewMode = $state<'editor' | 'form'>('editor');
 
 	$effect(() => {
 		if (lastViewMode === 'form' && viewMode === 'editor') {
@@ -93,7 +93,7 @@
 			}
 		}
 	}
-	
+
 	// Re-export methods from JsonEditor
 	export function setValue(value: string) {
 		if (viewMode === 'form') {
@@ -108,14 +108,14 @@
 			jsonEditorRef?.setValue(value);
 		}
 	}
-	
+
 	export function getValue() {
 		if (viewMode === 'form') {
 			return JSON.stringify(formData, null, 2);
 		}
 		return jsonEditorRef?.getValue() || gistData;
 	}
-	
+
 	export function validateJson() {
 		if (viewMode === 'form') {
 			// Form data is inherently valid JSON when stringified
@@ -123,7 +123,7 @@
 		}
 		return jsonEditorRef?.validateJson() || { valid: true };
 	}
-	
+
 	export function formatJson() {
 		if (viewMode === 'form') {
 			// Already "formatted" by stringify in getValue
@@ -131,7 +131,7 @@
 		}
 		return jsonEditorRef?.formatJson();
 	}
-	
+
 	export function setTheme(themeName: string) {
 		jsonEditorRef?.setTheme(themeName);
 	}
@@ -170,7 +170,7 @@
 				{/if}
 				{#if viewMode === 'editor'}
 					<CustomSelect
-						class="w-[130px] hidden lg:flex"
+						class="hidden w-[130px] lg:flex"
 						value={selectedTheme}
 						name="theme"
 						placeholder={i18n.t('admin.editor.select_theme')}
@@ -182,7 +182,8 @@
 			<div class="flex w-full justify-between gap-2 sm:w-auto">
 				<div class="flex items-center gap-2">
 					{#if viewMode === 'editor'}
-						<Button onclick={onFormatJson} variant="outline">{i18n.t('admin.editor.format')}</Button>
+						<Button onclick={onFormatJson} variant="outline">{i18n.t('admin.editor.format')}</Button
+						>
 					{/if}
 					<Button onclick={handleReset} variant="outline">{i18n.t('admin.editor.reset')}</Button>
 				</div>

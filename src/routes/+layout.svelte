@@ -23,7 +23,23 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard, Ticket, IdCard, FerrisWheel, Network, Send } from 'lucide-svelte';
+	import {
+		Info,
+		LayoutGrid,
+		List,
+		ListMusic,
+		Signpost,
+		Slash,
+		TabletSmartphone,
+		Terminal,
+		Webhook,
+		Keyboard,
+		Ticket,
+		IdCard,
+		FerrisWheel,
+		Network,
+		Send
+	} from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
@@ -77,7 +93,7 @@
 		maskHeight.set(y || x, { duration });
 	}
 
-	let timeout: number | undefined = undefined;
+	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 	function handleMouseMove(event?: MouseEvent & { timeout?: number; duration?: number }) {
 		clearTimeout(timeout);
 		const largestEdge = Math.max(innerWidth, innerHeight);
@@ -168,7 +184,9 @@
 	});
 
 	let isLightMode = $derived($mode === 'light');
-	let isFullWidth = $derived(page.url.pathname === '/experiment' || page.url.pathname === '/slashes');
+	let isFullWidth = $derived(
+		page.url.pathname === '/experiment' || page.url.pathname === '/slashes'
+	);
 	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
 		const texture =
@@ -185,29 +203,36 @@
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
 		{ name: 'Slashes', href: '/slashes', icon: FerrisWheel, hidden: true },
 		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
-    	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
-    	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
-    	{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
+		{ name: 'Changelog', href: '/log', icon: List, hidden: true },
+		{ name: 'API', href: '/api', icon: Webhook, hidden: true },
+		{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
 		{ name: 'Buttons', href: '/buttons', icon: IdCard, hidden: true },
 		{ name: 'Concerts', href: '/concerts', icon: Ticket, hidden: true },
 		{ name: 'Sites', href: '/sites', icon: Network, hidden: true },
-		{ name: 'Ping', href: '/ping', icon: Send, hidden: true },
+		{ name: 'Ping', href: '/ping', icon: Send, hidden: true }
 	];
-	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
-		...b,
-		name: i18n.t(`common.${b.name.toLowerCase()}`) !== `common.${b.name.toLowerCase()}`
-			? i18n.t(`common.${b.name.toLowerCase()}`)
-			: b.name
-	})));
-	const otherPages = pages.filter(page => !bookmarksRaw.some(bookmark => bookmark.name === page.title));
-	const otherBookmarks = $derived(otherPages.map(page => {
-		const translatedName = i18n.t(`common.${page.title.toLowerCase()}`);
-		return {
-			name: translatedName !== `common.${page.title.toLowerCase()}` ? translatedName : page.title,
-			href: page.path,
-			icon: Info,
-		};
-	}));
+	const bookmarks: BookmarkItem[] = $derived(
+		bookmarksRaw.map((b) => ({
+			...b,
+			name:
+				i18n.t(`common.${b.name.toLowerCase()}`) !== `common.${b.name.toLowerCase()}`
+					? i18n.t(`common.${b.name.toLowerCase()}`)
+					: b.name
+		}))
+	);
+	const otherPages = pages.filter(
+		(page) => !bookmarksRaw.some((bookmark) => bookmark.name === page.title)
+	);
+	const otherBookmarks = $derived(
+		otherPages.map((page) => {
+			const translatedName = i18n.t(`common.${page.title.toLowerCase()}`);
+			return {
+				name: translatedName !== `common.${page.title.toLowerCase()}` ? translatedName : page.title,
+				href: page.path,
+				icon: Info
+			};
+		})
+	);
 	const allPages = $derived([...bookmarks, ...otherBookmarks]);
 
 	/**
