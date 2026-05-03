@@ -2,7 +2,10 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { screensaverActive } from '$lib/stores/desktop';
-	import type { PlaylistItem } from '../../routes/playlists/+page.svelte';
+	import type { PlaylistItem } from '$lib/types';
+	import { SPOTIFY_PLAYLIST_LINK } from '$lib/config';
+
+	let { standalone = false } = $props<{ standalone?: boolean }>();
 
 	let playlists = $state<PlaylistItem[]>([]);
 	let visibleGrid = $state<PlaylistItem[]>([]);
@@ -136,6 +139,7 @@
 	});
 
 	function handleActivity() {
+		if (standalone) return;
 		$screensaverActive = false;
 	}
 </script>
@@ -149,7 +153,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class="fixed inset-0 z-[100] overflow-hidden bg-black"
+	class={standalone ? 'h-full w-full overflow-hidden bg-black' : 'fixed inset-0 z-[100] overflow-hidden bg-black'}
 	transition:fade={{ duration: 1000 }}
 	onclick={handleActivity}
 	onkeydown={handleActivity}
@@ -163,12 +167,28 @@
 						in:rotateIn={{ duration: 700 }}
 						out:rotateOut={{ duration: 700 }}
 					>
-						<img
-							src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
-							alt=""
-							class="h-full w-full object-cover [backface-visibility:hidden]"
-							onerror={() => flipCover(i)}
-						/>
+						{#if standalone}
+							<a
+								href={playlist.url || SPOTIFY_PLAYLIST_LINK + playlist.uri}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="block h-full w-full"
+							>
+								<img
+									src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
+									alt={playlist.title}
+									class="h-full w-full object-cover [backface-visibility:hidden]"
+									onerror={() => flipCover(i)}
+								/>
+							</a>
+						{:else}
+							<img
+								src={playlist.imageUrl || `https://i.scdn.co/image/${playlist.imageId}`}
+								alt=""
+								class="h-full w-full object-cover [backface-visibility:hidden]"
+								onerror={() => flipCover(i)}
+							/>
+						{/if}
 					</div>
 				{/key}
 			</div>
