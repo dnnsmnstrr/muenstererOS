@@ -46,17 +46,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { mode, toggleMode } from 'mode-watcher';
 	import { onMount } from 'svelte';
-	import {
-		isCommandActive,
-		debug,
-		debugLog,
-		primaryColor,
-		backgroundColor,
-		resetColors,
-		showHelp,
-		modifiedColors,
-		screensaver
-	} from '$lib/stores/app';
+	import { isCommandActive, debug, debugLog, showHelp, screensaver } from '$lib/stores/app';
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';

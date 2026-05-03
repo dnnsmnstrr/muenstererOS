@@ -66,7 +66,7 @@
 	"dependencies": {
 		"@jazzymcjazz/mdsvelte": "^0.3.3",
 		"@lucide/lab": "^0.1.2",
-		"@sveltelegos-blue/svelte-legos": "^0.2.0",
+		"@sveltelegos-blue/svelte-legos": "^0.5.1",
 		"leaflet": "^1.9.4",
 		"monaco-editor": "^0.52.2",
 		"monaco-editor-auto-typings": "^0.4.6",

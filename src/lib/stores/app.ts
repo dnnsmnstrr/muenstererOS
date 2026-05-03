@@ -1,9 +1,14 @@
 import { browser } from '$app/environment';
 import { get, writable } from 'svelte/store';
-import { cssVarStore } from '@sveltelegos-blue/svelte-legos';
 import { defaultColors } from '$lib/config';
 import { mode } from 'mode-watcher';
 import { updateMetaThemeColor } from '$lib/utils/browser';
+
+function setCssVar(name: string, value: string) {
+	if (browser && typeof document !== 'undefined') {
+		document.documentElement.style.setProperty(name, value);
+	}
+}
 
 let currentMode = get(mode);
 const DEFAULT_THEME = 'zinc';
@@ -19,21 +24,21 @@ mode.subscribe((value) => {
 	updateMetaThemeColor(value === 'dark' ? '#000000' : '#ffffff');
 });
 
-export const primaryColor = cssVarStore('--primary', {
-	initialValue: defaultColors[currentMode || 'dark'].primary
+const initialMode = currentMode || 'dark';
+export const primaryColor = writable(defaultColors[initialMode].primary);
+export const backgroundColor = writable(defaultColors[initialMode].background);
+
+primaryColor.subscribe((color) => {
+	setCssVar('--primary', color);
 });
-export const backgroundColor = cssVarStore('--background', {
-	initialValue: defaultColors[currentMode || 'dark'].background
+backgroundColor.subscribe((color) => {
+	setCssVar('--background', color);
 });
-export const modifiedColors = writable(false);
-primaryColor.subscribe((color) => modifiedColors.set(true));
-backgroundColor.subscribe((color) => modifiedColors.set(true));
 export function resetColors() {
 	debugLog('Resetting colors...');
 	currentMode = get(mode);
 	primaryColor.set(defaultColors[currentMode || 'dark'].primary);
 	backgroundColor.set(defaultColors[currentMode || 'dark'].background);
-	modifiedColors.set(false);
 }
 // command
 export const isCommandActive = writable(false);
@@ -66,8 +71,12 @@ screensaver.subscribe((value) => {
 });
 
 export const DEFAULT_INACTIVITY_TIMEOUT = 30;
-const storedInactivityTimeout = browser ? window?.localStorage?.inactivityTimeout : String(DEFAULT_INACTIVITY_TIMEOUT);
-export const inactivityTimeout = writable<number>(Number(storedInactivityTimeout) || DEFAULT_INACTIVITY_TIMEOUT);
+const storedInactivityTimeout = browser
+	? window?.localStorage?.inactivityTimeout
+	: String(DEFAULT_INACTIVITY_TIMEOUT);
+export const inactivityTimeout = writable<number>(
+	Number(storedInactivityTimeout) || DEFAULT_INACTIVITY_TIMEOUT
+);
 inactivityTimeout.subscribe((value) => {
 	if (browser && window?.localStorage) {
 		window.localStorage.inactivityTimeout = String(value);
@@ -84,8 +93,12 @@ backgroundTexture.subscribe((value) => {
 });
 
 export const DEFAULT_BACKGROUND_SIZE = 1;
-const storedBackgroundSize = browser ? window?.localStorage?.backgroundSize : String(DEFAULT_BACKGROUND_SIZE);
-export const backgroundSize = writable<number>(Number(storedBackgroundSize) || DEFAULT_BACKGROUND_SIZE);
+const storedBackgroundSize = browser
+	? window?.localStorage?.backgroundSize
+	: String(DEFAULT_BACKGROUND_SIZE);
+export const backgroundSize = writable<number>(
+	Number(storedBackgroundSize) || DEFAULT_BACKGROUND_SIZE
+);
 backgroundSize.subscribe((value) => {
 	if (browser && window?.localStorage) {
 		window.localStorage.backgroundSize = String(value);
@@ -93,8 +106,12 @@ backgroundSize.subscribe((value) => {
 });
 
 export const DEFAULT_BACKGROUND_SPACING = 16;
-const storedBackgroundSpacing = browser ? window?.localStorage?.backgroundSpacing : String(DEFAULT_BACKGROUND_SPACING);
-export const backgroundSpacing = writable<number>(Number(storedBackgroundSpacing) || DEFAULT_BACKGROUND_SPACING);
+const storedBackgroundSpacing = browser
+	? window?.localStorage?.backgroundSpacing
+	: String(DEFAULT_BACKGROUND_SPACING);
+export const backgroundSpacing = writable<number>(
+	Number(storedBackgroundSpacing) || DEFAULT_BACKGROUND_SPACING
+);
 backgroundSpacing.subscribe((value) => {
 	if (browser && window?.localStorage) {
 		window.localStorage.backgroundSpacing = String(value);
