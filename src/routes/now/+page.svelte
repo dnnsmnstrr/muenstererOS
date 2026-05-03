@@ -74,9 +74,6 @@
 			versions: nowData.versions,
 			url: apiData?.url
 		};
-		currentPlaylist = playlists.find(
-			(p) => p.url === gistData.playlist?.url || p.uri === gistData.playlist?.uri
-		);
 		showingVersion = true;
 		return gistData;
 	}

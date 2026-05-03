@@ -39,11 +39,13 @@
 	let {
 		width = 0,
 		height = 0,
-		class: className
+		class: className,
+		children
 	}: {
 		width?: number;
 		height?: number;
 		class?: string;
+		children?: import('svelte').Snippet;
 	} = $props();
 
 	let fileSize = $derived(width < breakpoint ? 50 : 60);
@@ -64,8 +66,8 @@
 	let previousY = -1;
 
 	// Drag state
-	let isDraggingWindow = false;
-	let draggingFileId: string | null = null;
+	let isDraggingWindow = $state(false);
+	let draggingFileId = $state<string | null>(null);
 	let dragStartX = 0;
 	let dragStartY = 0;
 	let initialX = 0;
@@ -475,7 +477,7 @@
 					<WindowButtons {isMaximized} onMaximize={toggleMaximize} />
 				</div>
 				<div class={cn('flex h-full items-center justify-center', className)}>
-					<slot />
+					{@render children?.()}
 				</div>
 				<div
 					class="absolute bottom-0 right-0 hidden h-8 w-8 cursor-nwse-resize select-none md:block"
