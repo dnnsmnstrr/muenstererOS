@@ -174,6 +174,12 @@
 	});
 
 	$effect(() => {
+		if (i18n.lang) {
+			document.documentElement.lang = i18n.lang;
+		}
+	});
+
+	$effect(() => {
 		if ($mode) {
 			document.documentElement.setAttribute('data-theme', $mode);
 			debugLog('Theme was set to ' + $mode);

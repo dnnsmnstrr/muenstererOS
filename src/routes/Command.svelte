@@ -163,7 +163,7 @@
 		}
 
 		if (document.querySelector('.DocSearch-Modal')) {
-			console.log('DocSearch-Modal is open, ignoring keydown event');
+			debugLog('DocSearch-Modal is open, ignoring keydown event');
 			return;
 		}
 
@@ -390,7 +390,7 @@
 			}
 			$isCommandActive = false;
 		} catch (error) {
-			console.log('error', error);
+			debugLog('DocSearch error', error);
 		}
 	}
 
@@ -497,7 +497,6 @@
 								currentPage.href?.replace(/\//g, '') ||
 								'page';
 							const existingFile = $desktopFiles.find((f) => f.id === fileId);
-							console.log(currentPage);
 							if (existingFile && !existingFile.hidden) {
 								toast.info(i18n.t('command.shortcut_exists'));
 							} else {

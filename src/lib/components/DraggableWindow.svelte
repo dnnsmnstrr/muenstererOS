@@ -79,7 +79,6 @@
 
 	// Maximize/restore function
 	function toggleMaximize() {
-		console.log('maximize toggle');
 		if (isMaximized) {
 			// Restore previous size and position
 			DraggableWidth = previousWidth;

@@ -116,7 +116,6 @@
 							placeholder={i18n.t('admin.settings.placeholder')}
 							bind:value={githubToken}
 							onkeypress={(e) => {
-								console.log(e);
 								if (e.key === 'Enter') {
 									e.preventDefault();
 									saveTokenToStorage();
@@ -126,7 +125,8 @@
 						/>
 					</div>
 					<p class="text-xs text-muted-foreground">
-						{i18n.t('admin.settings.description')} <a
+						{i18n.t('admin.settings.description')}
+						<a
 							href="https://github.com/settings/tokens/new?scopes=gist"
 							target="_blank"
 							class="underline hover:text-foreground"

@@ -106,7 +106,6 @@
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/events');
-			console.log(response);
 			if (!response.ok) {
 				throw new Error('Failed to fetch events');
 			}
@@ -170,7 +169,7 @@
 							{ value: 'day', label: i18n.t('timeline.day') },
 							{ value: 'week', label: i18n.t('timeline.week') },
 							{ value: 'month', label: i18n.t('timeline.month') },
-							{ value: 'year', label: i18n.t('timeline.year') },
+							{ value: 'year', label: i18n.t('timeline.year') }
 						]}
 						class="w-32"
 					/>
