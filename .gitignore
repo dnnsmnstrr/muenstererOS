@@ -4,6 +4,8 @@ node_modules
 /.svelte-kit
 /package
 /export
+playwright-report
+test-results
 .env
 .env.*
 !.env.example
