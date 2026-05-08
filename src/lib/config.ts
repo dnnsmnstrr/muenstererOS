@@ -10,6 +10,7 @@ export const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
 export const EMAIL_PROVIDER = 'gmail';
 export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
+export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
 
 // Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);

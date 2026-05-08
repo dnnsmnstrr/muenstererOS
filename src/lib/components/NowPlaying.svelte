@@ -7,16 +7,7 @@
 	import { cn } from '$lib/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-
-	interface PlaylistItem {
-		title: string;
-		type: 'season' | 'aggregated' | 'theme' | 'hidden';
-		season?: 'winter' | 'spring' | 'summer' | 'autumn';
-		year?: number;
-		uri: string;
-		emoji?: string;
-		imageUrl?: string;
-	}
+	import type { PlaylistItem } from '$lib/types';
 
 	let { side = 'right', expanded = $bindable(false) } = $props<{
 		side?: 'left' | 'right';

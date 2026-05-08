@@ -1,23 +1,10 @@
 <script module lang="ts">
-	export interface PlaylistItem {
-		title: string;
-		type: 'season' | 'aggregated' | 'theme';
-		season?: 'winter' | 'spring' | 'summer' | 'autumn';
-		year?: number;
-		uri: string;
-		url?: string;
-		emoji?: string;
-		description?: string;
-		tags?: string[];
-		gif?: string;
-		imageId?: string;
-		imageUrl?: string;
-		isHovered?: boolean;
-	}
-	export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
+	import type { PlaylistItem } from '$lib/types';
+	export { type PlaylistItem };
 </script>
 
 <script lang="ts">
+	import { SPOTIFY_PLAYLIST_LINK } from '$lib/config';
 	import { Heading } from '$lib/components/typography';
 	import Link from '$lib/components/typography/Link.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';

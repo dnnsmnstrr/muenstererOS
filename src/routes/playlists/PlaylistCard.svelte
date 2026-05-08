@@ -4,7 +4,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { breakpoints } from '$lib/config';
 	import { Info } from 'lucide-svelte';
-	import { SPOTIFY_PLAYLIST_LINK, type PlaylistItem } from './+page.svelte';
+	import { SPOTIFY_PLAYLIST_LINK } from '$lib/config';
+	import type { PlaylistItem } from '$lib/types';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface Props {

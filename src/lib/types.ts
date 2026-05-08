@@ -20,3 +20,19 @@ export type Event = {
 	/** A URL for more information about the event, must use HTTPS. */
 	url?: string; // Optional, as it's not in the required properties
 };
+
+export interface PlaylistItem {
+	title: string;
+	type: 'season' | 'aggregated' | 'theme' | 'hidden';
+	season?: 'winter' | 'spring' | 'summer' | 'autumn';
+	year?: number;
+	uri: string;
+	url?: string;
+	emoji?: string;
+	description?: string;
+	tags?: string[];
+	gif?: string;
+	imageId?: string;
+	imageUrl?: string;
+	isHovered?: boolean;
+}
