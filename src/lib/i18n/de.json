@@ -416,7 +416,9 @@
 		"ascending": "Aufsteigend",
 		"descending": "Absteigend",
 		"select": "Wählen",
-		"number": "Nummer"
+		"number": "Nummer",
+		"response_time": "Antwortzeit",
+		"response_size": "Antwortgröße"
 	},
 	"slashes": {
 		"title": "Slashes",
