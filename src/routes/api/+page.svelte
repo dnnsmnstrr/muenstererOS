@@ -50,7 +50,7 @@
 		},
 		{
 			name: 'Events',
-			url: '/api/events',
+			url: '/api/events'
 		},
 		{
 			name: 'Concerts',
@@ -131,7 +131,10 @@
 
 			if (response?.$schema && typeof response.$schema === 'string') {
 				try {
-					let schemaUrl = new URL(response.$schema, new URL(url, window.location.origin)).toString();
+					let schemaUrl = new URL(
+						response.$schema,
+						new URL(url, window.location.origin)
+					).toString();
 					// Transform gist.github.com raw URLs to gist.githubusercontent.com to avoid CORS issues
 					if (schemaUrl.includes('gist.github.com') && schemaUrl.includes('/raw/')) {
 						schemaUrl = schemaUrl.replace('gist.github.com', 'gist.githubusercontent.com');
@@ -214,11 +217,7 @@
 		<label for="endpoint-select" class="mb-2 block font-semibold">
 			{i18n.t('api.select_endpoint')}
 		</label>
-		<select 
-			id="endpoint-select" 
-			bind:value={selected} 
-			class="h-9 w-full rounded border px-2 py-1"
-		>
+		<select id="endpoint-select" bind:value={selected} class="h-9 w-full rounded border px-2 py-1">
 			{#each endpoints as ep, i}
 				<option value={i}>{ep?.method || 'GET'} {ep.url}</option>
 			{/each}
@@ -294,7 +293,9 @@
 							{/each}
 						</div>
 						<div class="mt-4 flex gap-2">
-							<Button onclick={clearParams} variant="outline" size="sm">{i18n.t('api.clear_parameters')}</Button>
+							<Button onclick={clearParams} variant="outline" size="sm"
+								>{i18n.t('api.clear_parameters')}</Button
+							>
 						</div>
 					</Card.Content>
 				</Collapsible.Content>
@@ -310,23 +311,6 @@
 
 	{#if error}
 		<div class="mt-4 text-red-600">{i18n.t('api.error')}: {error}</div>
-	{/if}
-
-	{#if responseTime !== null || responseSize !== null}
-		<div class="mt-4 flex gap-4 text-sm text-muted-foreground">
-			{#if responseTime !== null}
-				<div>
-					<span class="font-semibold">{i18n.t('api.response_time')}:</span>
-					{responseTime}ms
-				</div>
-			{/if}
-			{#if responseSize !== null}
-				<div>
-					<span class="font-semibold">{i18n.t('api.response_size')}:</span>
-					{formatBytes(responseSize)}
-				</div>
-			{/if}
-		</div>
 	{/if}
 
 	{#if response}
@@ -360,5 +344,22 @@
 				{/if}
 			</Tabs.Root>
 		</Card.Root>
+	{/if}
+
+	{#if responseTime !== null || responseSize !== null}
+		<div class="mt-4 flex gap-4 text-sm text-muted-foreground">
+			{#if responseTime !== null}
+				<div>
+					<span class="font-semibold">{i18n.t('api.response_time')}:</span>
+					{responseTime}ms
+				</div>
+			{/if}
+			{#if responseSize !== null}
+				<div>
+					<span class="font-semibold">{i18n.t('api.response_size')}:</span>
+					{formatBytes(responseSize)}
+				</div>
+			{/if}
+		</div>
 	{/if}
 </div>
