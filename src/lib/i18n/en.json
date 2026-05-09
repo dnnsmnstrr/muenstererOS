@@ -414,7 +414,9 @@
 		"ascending": "Ascending",
 		"descending": "Descending",
 		"select": "select",
-		"number": "number"
+		"number": "number",
+		"response_time": "Response Time",
+		"response_size": "Response Size"
 	},
 	"slashes": {
 		"title": "Slashes",
