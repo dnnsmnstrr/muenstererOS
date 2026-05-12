@@ -457,8 +457,10 @@
 		"no_concerts": "Keine Konzerte gefunden.",
 		"view_on_musicbrainz": "Auf MusicBrainz ansehen",
 		"stats": "Statistiken",
+		"stats_description": "Statistiken über die Musik-Events, die ich besucht habe.",
 		"artist_frequency": "Künstler:innen-Frequenz",
 		"artist_frequency_description": "Das sind die Künstler:innen, die ich am häufigsten live gesehen habe.",
+		"yearly_frequency": "Jährliche Frequenz",
 		"artists_one": "1 Künstler:in",
 		"artists_many": "{count} Künstler:innen"
 	},
