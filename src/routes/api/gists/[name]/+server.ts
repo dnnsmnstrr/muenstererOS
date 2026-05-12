@@ -44,7 +44,7 @@ export async function GET({ params, url }) {
 		gistCache.set(name, responseData, CACHE_TTL);
 
 		return json(responseData);
-	} catch (error) {
-		return json({ error }, { status: 500 });
+	} catch (err: any) {
+		return json({ error: err.message || err }, { status: 500 });
 	}
 }

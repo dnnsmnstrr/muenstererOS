@@ -11,7 +11,7 @@ const dataMap: Record<string, any> = {
 };
 const DEFAULT_LIMIT = 50;
 
-export async function GET({ params, url }) {
+export async function GET({ params, url, fetch }) {
 	const { slug } = params;
 
 	if (!dataMap[slug] && (!gists || !gists[slug as keyof typeof gists])) {
@@ -20,8 +20,7 @@ export async function GET({ params, url }) {
 
 	if (!dataMap[slug]) {
 		// fall back to gists
-		const gistUrl = new URL(`/api/gists/${slug}${url.search}`, url.origin);
-		const gistResponse = await fetch(gistUrl);
+		const gistResponse = await fetch(`/api/gists/${slug}${url.search}`);
 
 		if (!gistResponse.ok) {
 			throw error(gistResponse.status, `No static data or gist found for slug: ${slug}`);
