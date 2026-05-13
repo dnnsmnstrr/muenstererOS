@@ -79,7 +79,55 @@
 </script>
 
 <div in:fade={{ duration: 300 }} class="space-y-6">
-	<Accordion.Root type="single" value="artist-frequency">
+	<Accordion.Root type="single" value="yearly-distribution">
+		<Accordion.Item value="yearly-distribution">
+			<Accordion.Trigger>{i18n.t('concerts.yearly_distribution')}</Accordion.Trigger>
+			<Accordion.Content>
+				<div class="flex h-64 items-end justify-between gap-2 border-b px-2 pt-12">
+					{#each [...yearStats].reverse() as { year, concerts, festivals, total }}
+						<div class="group relative flex h-full flex-1 flex-col items-center justify-end">
+							<!-- Tooltip -->
+							<div
+								class="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 scale-0 rounded bg-popover px-2 py-1 text-[10px] text-popover-foreground shadow-md transition-all group-hover:scale-100"
+								style="bottom: calc({Math.max((total / maxYearCount) * 100, 2)}% - 1rem)"
+							>
+								<p class="font-bold">{year}</p>
+								<p>{concerts} C / {festivals} F</p>
+							</div>
+
+							<div
+								class="flex w-full flex-col-reverse items-center justify-start overflow-hidden rounded-t-sm bg-secondary/30 transition-colors group-hover:bg-secondary/50"
+								style="height: {Math.max((total / maxYearCount) * 100, 2)}%"
+							>
+								<div
+									class="w-full bg-primary transition-all duration-500 hover:bg-primary/80"
+									style="height: {(concerts / total) * 100}%"
+									title="{year}: {concerts} {i18n.t('concerts.concerts')}"
+								></div>
+								<div
+									class="w-full bg-primary/30 transition-all duration-500 hover:bg-primary/50"
+									style="height: {(festivals / total) * 100}%"
+									title="{year}: {festivals} {i18n.t('concerts.festivals')}"
+								></div>
+							</div>
+							<span class="mt-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
+								{year.toString().slice(-2)}
+							</span>
+						</div>
+					{/each}
+				</div>
+				<div class="mt-4 flex justify-center gap-4 text-xs text-muted-foreground">
+					<div class="flex items-center gap-1">
+						<div class="h-2 w-2 bg-primary"></div>
+						<span>{i18n.t('concerts.concerts')}</span>
+					</div>
+					<div class="flex items-center gap-1">
+						<div class="h-2 w-2 bg-primary/30"></div>
+						<span>{i18n.t('concerts.festivals')}</span>
+					</div>
+				</div>
+			</Accordion.Content>
+		</Accordion.Item>
 		<Accordion.Item value="artist-frequency">
 			<Accordion.Trigger>{i18n.t('concerts.artist_frequency')}</Accordion.Trigger>
 			<Accordion.Content>
@@ -120,55 +168,6 @@
 							</div>
 						</div>
 					{/each}
-				</div>
-			</Accordion.Content>
-		</Accordion.Item>
-
-		<Accordion.Item value="yearly-distribution">
-			<Accordion.Trigger>{i18n.t('concerts.yearly_distribution')}</Accordion.Trigger>
-			<Accordion.Content>
-				<div class="flex h-64 items-end justify-between gap-2 border-b px-2 pt-12">
-					{#each [...yearStats].reverse() as { year, concerts, festivals, total }}
-						<div class="group relative flex h-full flex-1 flex-col items-center justify-end">
-							<!-- Tooltip -->
-							<div
-								class="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 scale-0 rounded bg-popover px-2 py-1 text-[10px] text-popover-foreground shadow-md transition-all group-hover:scale-100"
-								style="bottom: calc({Math.max((total / maxYearCount) * 100, 2)}% + 1.75rem)"
-							>
-								<p class="font-bold">{year}</p>
-								<p>{concerts} C / {festivals} F</p>
-							</div>
-
-							<div
-								class="flex w-full flex-col-reverse items-center justify-start overflow-hidden rounded-t-sm bg-secondary/30 transition-colors group-hover:bg-secondary/50"
-								style="height: {Math.max((total / maxYearCount) * 100, 2)}%"
-							>
-								<div
-									class="w-full bg-primary transition-all duration-500 hover:bg-primary/80"
-									style="height: {(concerts / total) * 100}%"
-									title="{year}: {concerts} {i18n.t('concerts.concerts')}"
-								></div>
-								<div
-									class="w-full bg-primary/30 transition-all duration-500 hover:bg-primary/50"
-									style="height: {(festivals / total) * 100}%"
-									title="{year}: {festivals} {i18n.t('concerts.festivals')}"
-								></div>
-							</div>
-							<span class="mt-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
-								{year.toString().slice(-2)}
-							</span>
-						</div>
-					{/each}
-				</div>
-				<div class="mt-4 flex justify-center gap-4 text-xs text-muted-foreground">
-					<div class="flex items-center gap-1">
-						<div class="h-2 w-2 bg-primary"></div>
-						<span>{i18n.t('concerts.concerts')}</span>
-					</div>
-					<div class="flex items-center gap-1">
-						<div class="h-2 w-2 bg-primary/30"></div>
-						<span>{i18n.t('concerts.festivals')}</span>
-					</div>
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>
