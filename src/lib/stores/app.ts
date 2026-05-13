@@ -117,3 +117,45 @@ backgroundSpacing.subscribe((value) => {
 		window.localStorage.backgroundSpacing = String(value);
 	}
 });
+
+// command suggestions
+export interface CommandStat {
+	count: number;
+	lastUsed: number;
+}
+
+const storedCommandStats = browser ? window?.localStorage?.commandStats : '{}';
+export const commandStats = writable<Record<string, CommandStat>>(
+	JSON.parse(storedCommandStats || '{}')
+);
+commandStats.subscribe((value) => {
+	if (browser && window?.localStorage) {
+		window.localStorage.commandStats = JSON.stringify(value);
+	}
+});
+
+export function trackCommand(id: string) {
+	commandStats.update((stats) => {
+		const stat = stats[id] || { count: 0, lastUsed: 0 };
+		return {
+			...stats,
+			[id]: {
+				count: stat.count + 1,
+				lastUsed: Date.now()
+			}
+		};
+	});
+}
+
+export const DEFAULT_SUGGESTIONS_LIMIT = 5;
+const storedSuggestionsLimit = browser
+	? window?.localStorage?.suggestionsLimit
+	: String(DEFAULT_SUGGESTIONS_LIMIT);
+export const suggestionsLimit = writable<number>(
+	Number(storedSuggestionsLimit) || DEFAULT_SUGGESTIONS_LIMIT
+);
+suggestionsLimit.subscribe((value) => {
+	if (browser && window?.localStorage) {
+		window.localStorage.suggestionsLimit = String(value);
+	}
+});

@@ -116,6 +116,7 @@
 		"screensaver_dvd": "DVD Bounce",
 		"screensaver_playlists": "Playlist Cover",
 		"inactivity_timeout": "Inaktivitäts-Timeout",
+		"suggestions_limit": "Limit für Befehlsvorschläge",
 		"actions": "Aktionen",
 		"reset_desktop": "Desktop zurücksetzen",
 		"reset_success": "Desktop zurückgesetzt",
@@ -125,6 +126,7 @@
 		"texture": "Hintergrundstruktur",
 		"texture_size": "Größe",
 		"texture_spacing": "Abstand",
+		"none": "Keine",
 		"dots": "Punkte",
 		"offset-dots": "Versetzte Punkte",
 		"grid": "Gitter",
@@ -149,6 +151,7 @@
 	"command": {
 		"placeholder": "Befehl eingeben oder suchen...",
 		"no_results": "Keine Ergebnisse gefunden.",
+		"suggestions": "Vorschläge",
 		"navigation": "Navigation",
 		"links": "Links",
 		"system": "System",

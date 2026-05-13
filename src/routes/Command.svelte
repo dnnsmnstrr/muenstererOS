@@ -1,5 +1,6 @@
 <script module lang="ts">
 	type CommandData = {
+		id?: string;
 		name: string;
 		keywords?: string[];
 		value?: string;
@@ -46,7 +47,16 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { mode, toggleMode } from 'mode-watcher';
 	import { onMount } from 'svelte';
-	import { isCommandActive, debug, debugLog, showHelp, screensaver } from '$lib/stores/app';
+	import {
+		isCommandActive,
+		debug,
+		debugLog,
+		showHelp,
+		screensaver,
+		trackCommand,
+		commandStats,
+		suggestionsLimit
+	} from '$lib/stores/app';
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
@@ -326,11 +336,14 @@
 		loadingProgress.set(loading ? 100 : 0);
 	});
 
-	const enrichLink = (link: CommandData): CommandData => {
+	const enrichLink = (link: CommandData, translationKey?: string): CommandData => {
 		let href = link.href || '';
 		if (!link.href && !link.action) {
 			href = '/' + link.name.toLowerCase();
 		}
+
+		const id = link.id || href || translationKey || link.name;
+
 		const action =
 			link.action ||
 			function () {
@@ -344,12 +357,19 @@
 					window.open(href);
 				}
 			};
+
+		const wrappedAction = () => {
+			trackCommand(id);
+			action();
+		};
+
 		let value = link.value || link.name;
 		return {
 			...link,
+			id,
 			keywords: link.keywords || link.name.toLowerCase().split(' '),
 			href,
-			action,
+			action: wrappedAction,
 			value
 		};
 	};
@@ -362,7 +382,7 @@
 		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, href: links.linkedin },
 		{ name: 'Twitter / 𝕏', keywords: ['X'], icon: Twitter, href: links.x },
 		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, href: links.cv }
-	].map(enrichLink);
+	].map((link) => enrichLink(link));
 
 	function toggleDebug() {
 		$debug = !$debug;
@@ -386,177 +406,262 @@
 
 	let currentGroup = $state<string | null>(null);
 
-	let commandConfig = $derived({
-		navigation: [
-			{ name: i18n.t('common.home'), icon: Home, href: '/' },
-			{ name: i18n.t('common.about'), icon: User, href: '/about' },
-			...pages.filter((page) => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
-			{
-				name: i18n.t('command.search_zettelkasten'),
-				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
-				icon: Search,
-				action: handleDocsearch
-			},
-			{
-				name: i18n.t('common.settings'),
-				keywords: ['preferences'],
-				icon: Settings,
-				href: '/settings'
-			},
-			{
-				name: i18n.t('command.keyboard_shortcuts'),
-				keywords: ['help', 'hotkeys'],
-				icon: Keyboard,
-				action: () => {
-					$showHelp = true;
-					$isCommandActive = false;
-				}
-			},
-			{
-				name: i18n.t('command.export_data'),
-				value: 'export data, backup, download data',
-				icon: Download,
-				href: '/export'
-			},
-			{
-				name: i18n.t('command.go_forward'),
-				icon: ArrowRight,
-				action: () => window.history.forward()
-			},
-			{ name: i18n.t('command.go_back'), icon: ArrowLeft, action: () => window.history.back() },
-			{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage }
-		]
-			.map(enrichLink)
-			.filter((link) => {
+	let commandConfig = $derived.by(() => {
+		const config: Record<string, CommandData[]> = {
+			navigation: [
+				enrichLink({ name: i18n.t('common.home'), icon: Home, href: '/' }),
+				enrichLink({ name: i18n.t('common.about'), icon: User, href: '/about' }),
+				...pages
+					.filter((page) => !['/', '/about', '/settings'].includes(page.href || ''))
+					.map((p) => enrichLink(p)),
+				enrichLink(
+					{
+						name: i18n.t('command.search_zettelkasten'),
+						keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
+						icon: Search,
+						action: handleDocsearch
+					},
+					'command.search_zettelkasten'
+				),
+				enrichLink(
+					{
+						name: i18n.t('common.settings'),
+						keywords: ['preferences'],
+						icon: Settings,
+						href: '/settings'
+					},
+					'common.settings'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.keyboard_shortcuts'),
+						keywords: ['help', 'hotkeys'],
+						icon: Keyboard,
+						action: () => {
+							$showHelp = true;
+							$isCommandActive = false;
+						}
+					},
+					'command.keyboard_shortcuts'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.export_data'),
+						value: 'export data, backup, download data',
+						icon: Download,
+						href: '/export'
+					},
+					'command.export_data'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.go_forward'),
+						icon: ArrowRight,
+						action: () => window.history.forward()
+					},
+					'command.go_forward'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.go_back'),
+						icon: ArrowLeft,
+						action: () => window.history.back()
+					},
+					'command.go_back'
+				),
+				enrichLink(
+					{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage },
+					'command.reload'
+				)
+			].filter((link) => {
 				// remove current page from navigation
 				return page.url.pathname !== link.href;
 			}),
-		links: externalLinks,
-		system: [
-			{
-				name: i18n.t('command.toggle_dark_mode'),
-				value: 'toggle dark mode, theme, light',
-				icon: $mode === 'light' ? Sun : Moon,
-				action: toggleMode
-			},
-			{
-				name: i18n.t('command.switch_language'),
-				value:
-					'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
-				icon: Globe,
-				action: async () => {
-					const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
-					await i18n.setLanguage(newLanguage);
-					toast.success(i18n.t('command.language_switched'));
-					$isCommandActive = false;
-				}
-			},
-			{
-				name: $debug ? i18n.t('command.disable_debug_mode') : i18n.t('command.enable_debug_mode'),
-				icon: $debug ? BugOff : Bug,
-				action: toggleDebug
-			},
-			{
-				name: i18n.t('command.reset_desktop_files'),
-				value: 'reset desktop files, restore file positions, clear desktop',
-				icon: RotateCcw,
-				action: () => {
-					resetDesktopFiles();
-					toast.success(i18n.t('command.reset_desktop_success'));
-					$isCommandActive = false;
-				}
-			},
-			...(() => {
-				// Only show "Create Desktop Shortcut" if current page has a bookmark entry
-				const currentPage = pages.find(
-					(p) =>
-						p.href === page.url.pathname ||
-						p.name.toLowerCase() === page.url.pathname.replace(/^\//, '')
-				);
-				if (!currentPage || page.url.pathname === '/') return [];
-
-				return [
+			links: externalLinks,
+			system: [
+				enrichLink(
 					{
-						name: i18n.t('command.create_desktop_shortcut'),
-						value: 'create desktop shortcut, add to desktop, pin to desktop',
-						keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
-						icon: Plus,
-						action: () => {
-							const fileId =
-								currentPage.name.toLocaleLowerCase() ||
-								currentPage.href?.replace(/\//g, '') ||
-								'page';
-							const existingFile = $desktopFiles.find((f) => f.id === fileId);
-							if (existingFile && !existingFile.hidden) {
-								toast.info(i18n.t('command.shortcut_exists'));
-							} else {
-								addFileToDesktop({
-									id: fileId,
-									name: currentPage.name,
-									href: currentPage.href || '/' + currentPage.name.toLowerCase(),
-									icon: currentPage.icon
-								});
-								toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
-							}
+						name: i18n.t('command.toggle_dark_mode'),
+						value: 'toggle dark mode, theme, light',
+						icon: $mode === 'light' ? Sun : Moon,
+						action: toggleMode
+					},
+					'command.toggle_dark_mode'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.switch_language'),
+						value:
+							'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
+						icon: Globe,
+						action: async () => {
+							const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
+							await i18n.setLanguage(newLanguage);
+							toast.success(i18n.t('command.language_switched'));
 							$isCommandActive = false;
 						}
-					}
-				];
-			})()
-		],
-		fun: [
-			{
-				name: i18n.t('command.confetti'),
-				keywords: ['party', 'celebrate'],
-				icon: PartyPopper,
-				action: () => {
-					confetti();
-				}
-			}
-		],
-		settings: [
-			{
-				name: i18n.t('settings.screensaver'),
-				icon: Monitor,
-				group: 'screensaver',
-				action: () => {
-					currentGroup = 'screensaver';
-					query = '';
-				}
-			}
-		],
-		screensaver: [
-			{
-				name: i18n.t('settings.screensaver_none'),
-				action: () => {
-					$screensaver = 'none';
-					$isCommandActive = false;
-					currentGroup = null;
-				}
-			},
-			{
-				name: i18n.t('settings.screensaver_dvd'),
-				action: () => {
-					$screensaver = 'dvd';
-					$isCommandActive = false;
-					currentGroup = null;
-				}
-			},
-			{
-				name: i18n.t('settings.screensaver_playlists'),
-				action: () => {
-					$screensaver = 'playlists';
-					$isCommandActive = false;
-					currentGroup = null;
-				}
-			},
-			{
-				name: i18n.t('command.go_back'),
-				icon: ArrowLeft,
-				action: () => (currentGroup = null)
-			}
-		].map(enrichLink)
-	} as Record<string, CommandData[]>);
+					},
+					'command.switch_language'
+				),
+				enrichLink(
+					{
+						name: $debug
+							? i18n.t('command.disable_debug_mode')
+							: i18n.t('command.enable_debug_mode'),
+						icon: $debug ? BugOff : Bug,
+						action: toggleDebug
+					},
+					'command.toggle_debug_mode'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.reset_desktop_files'),
+						value: 'reset desktop files, restore file positions, clear desktop',
+						icon: RotateCcw,
+						action: () => {
+							resetDesktopFiles();
+							toast.success(i18n.t('command.reset_desktop_success'));
+							$isCommandActive = false;
+						}
+					},
+					'command.reset_desktop_files'
+				),
+				...(() => {
+					// Only show "Create Desktop Shortcut" if current page has a bookmark entry
+					const currentPage = pages.find(
+						(p) =>
+							p.href === page.url.pathname ||
+							p.name.toLowerCase() === page.url.pathname.replace(/^\//, '')
+					);
+					if (!currentPage || page.url.pathname === '/') return [];
+
+					return [
+						enrichLink(
+							{
+								name: i18n.t('command.create_desktop_shortcut'),
+								value: 'create desktop shortcut, add to desktop, pin to desktop',
+								keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
+								icon: Plus,
+								action: () => {
+									const fileId =
+										currentPage.name.toLocaleLowerCase() ||
+										currentPage.href?.replace(/\//g, '') ||
+										'page';
+									const existingFile = $desktopFiles.find((f) => f.id === fileId);
+									if (existingFile && !existingFile.hidden) {
+										toast.info(i18n.t('command.shortcut_exists'));
+									} else {
+										addFileToDesktop({
+											id: fileId,
+											name: currentPage.name,
+											href: currentPage.href || '/' + currentPage.name.toLowerCase(),
+											icon: currentPage.icon
+										});
+										toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
+									}
+									$isCommandActive = false;
+								}
+							},
+							'command.create_desktop_shortcut'
+						)
+					];
+				})()
+			],
+			fun: [
+				enrichLink(
+					{
+						name: i18n.t('command.confetti'),
+						keywords: ['party', 'celebrate'],
+						icon: PartyPopper,
+						action: () => {
+							confetti();
+						}
+					},
+					'command.confetti'
+				)
+			],
+			settings: [
+				enrichLink(
+					{
+						name: i18n.t('settings.screensaver'),
+						icon: Monitor,
+						group: 'screensaver',
+						action: () => {
+							currentGroup = 'screensaver';
+							query = '';
+						}
+					},
+					'settings.screensaver'
+				)
+			],
+			screensaver: [
+				enrichLink(
+					{
+						name: i18n.t('settings.screensaver_none'),
+						action: () => {
+							$screensaver = 'none';
+							$isCommandActive = false;
+							currentGroup = null;
+						}
+					},
+					'settings.screensaver_none'
+				),
+				enrichLink(
+					{
+						name: i18n.t('settings.screensaver_dvd'),
+						action: () => {
+							$screensaver = 'dvd';
+							$isCommandActive = false;
+							currentGroup = null;
+						}
+					},
+					'settings.screensaver_dvd'
+				),
+				enrichLink(
+					{
+						name: i18n.t('settings.screensaver_playlists'),
+						action: () => {
+							$screensaver = 'playlists';
+							$isCommandActive = false;
+							currentGroup = null;
+						}
+					},
+					'settings.screensaver_playlists'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.go_back'),
+						icon: ArrowLeft,
+						action: () => (currentGroup = null)
+					},
+					'command.go_back_screensaver'
+				)
+			]
+		};
+
+		// Add Suggestions group if we have any tracked commands
+		const allCommands = Object.values(config).flat();
+		const suggestions = Object.entries($commandStats)
+			.map(([id, stat]) => {
+				const command = allCommands.find((c) => c.id === id);
+				if (!command) return null;
+				// Scoring: count + recency bonus (linear decay over 7 days)
+				const sevenDays = 7 * 24 * 60 * 60 * 1000;
+				const recencyBonus = Math.max(0, 1 - (Date.now() - stat.lastUsed) / sevenDays) * 10;
+				const score = stat.count + recencyBonus;
+				return { command, score };
+			})
+			.filter((s): s is { command: CommandData; score: number } => s !== null)
+			.sort((a, b) => b.score - a.score)
+			.slice(0, $suggestionsLimit)
+			.map((s) => s.command);
+
+		if (suggestions.length > 0) {
+			return { suggestions, ...config };
+		}
+
+		return config;
+	});
 
 	// Collect all sub-group names referenced by command items (e.g. 'screensaver')
 	const subGroups = $derived(

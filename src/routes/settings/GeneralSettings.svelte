@@ -8,8 +8,17 @@
 	import { type SuperForm, type Infer } from 'sveltekit-superforms';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import type { SettingsSchema } from './schema';
+	import { suggestionsLimit } from '$lib/stores/app';
+	import * as Select from '$lib/components/ui/select';
 
 	let { form }: { form: SuperForm<Infer<SettingsSchema>> } = $props();
+
+	const suggestionsLimitOptions = $derived(
+		[0, 3, 5, 10, 15, 20].map((v) => ({
+			value: v,
+			label: v === 0 ? i18n.t('settings.none') : v.toString()
+		}))
+	);
 </script>
 
 <div class="grid gap-6">
@@ -34,6 +43,32 @@
 						</div>
 					</RadioGroup.Root>
 				</div>
+			{/snippet}
+		</Form.Control>
+	</Form.Field>
+
+	<Form.Field {form} name="suggestionsLimit" class="flex flex-col justify-between gap-2">
+		<Form.Control>
+			{#snippet children({ props })}
+				<Form.Label>{i18n.t('settings.suggestions_limit')}</Form.Label>
+				<Select.Root
+					type="single"
+					value={$suggestionsLimit.toString()}
+					onValueChange={(v) => {
+						if (v) $suggestionsLimit = parseInt(v);
+					}}
+				>
+					<Select.Trigger {...props}>
+						{$suggestionsLimit === 0
+							? i18n.t('settings.none')
+							: $suggestionsLimit.toString()}
+					</Select.Trigger>
+					<Select.Content>
+						{#each suggestionsLimitOptions as option}
+							<Select.Item value={option.value.toString()} label={option.label} />
+						{/each}
+					</Select.Content>
+				</Select.Root>
 			{/snippet}
 		</Form.Control>
 	</Form.Field>
