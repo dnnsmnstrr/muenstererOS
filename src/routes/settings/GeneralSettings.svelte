@@ -14,7 +14,7 @@
 	let { form }: { form: SuperForm<Infer<SettingsSchema>> } = $props();
 
 	const suggestionsLimitOptions = $derived(
-		[0, 3, 5, 10, 15, 20].map((v) => ({
+		[0, 3, 5, 10, 15].map((v) => ({
 			value: v,
 			label: v === 0 ? i18n.t('settings.none') : v.toString()
 		}))
@@ -47,6 +47,31 @@
 		</Form.Control>
 	</Form.Field>
 
+	<Form.Field {form} name="debug">
+		<Form.Control>
+			<div class="flex flex-row items-start space-x-3 space-y-0 pt-3">
+				<Checkbox
+					checked={$debug}
+					onCheckedChange={(value) => ($debug = !!value)}
+					id="debug-checkbox"
+				/>
+				<div class="space-y-1 leading-none">
+					<Form.Label
+						class="-mt-0.5 flex items-center gap-2"
+						for="debug-checkbox"
+						onclick={() => ($debug = !$debug)}
+					>
+						<span class="pb-1.5">{i18n.t('settings.debug_mode')}</span>
+						<AnimatedToggle visible={$debug}>
+							<Bug class="w-4" />
+						</AnimatedToggle>
+					</Form.Label>
+				</div>
+			</div>
+			<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
+		</Form.Control>
+	</Form.Field>
+
 	<Form.Field {form} name="suggestionsLimit" class="flex flex-col justify-between gap-2">
 		<Form.Control>
 			{#snippet children({ props })}
@@ -70,31 +95,6 @@
 					</Select.Content>
 				</Select.Root>
 			{/snippet}
-		</Form.Control>
-	</Form.Field>
-
-	<Form.Field {form} name="debug">
-		<Form.Control>
-			<div class="flex flex-row items-start space-x-3 space-y-0 pt-3">
-				<Checkbox
-					checked={$debug}
-					onCheckedChange={(value) => ($debug = !!value)}
-					id="debug-checkbox"
-				/>
-				<div class="space-y-1 leading-none">
-					<Form.Label
-						class="-mt-0.5 flex items-center gap-2"
-						for="debug-checkbox"
-						onclick={() => ($debug = !$debug)}
-					>
-						<span class="pb-1.5">{i18n.t('settings.debug_mode')}</span>
-						<AnimatedToggle visible={$debug}>
-							<Bug class="w-4" />
-						</AnimatedToggle>
-					</Form.Label>
-				</div>
-			</div>
-			<Form.Description>{i18n.t('settings.debug_description')}</Form.Description>
 		</Form.Control>
 	</Form.Field>
 </div>
