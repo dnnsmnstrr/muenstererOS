@@ -461,6 +461,7 @@
 		"artist_frequency": "Künstler:innen-Frequenz",
 		"artist_frequency_description": "Das sind die Künstler:innen, die ich am häufigsten live gesehen habe.",
 		"yearly_frequency": "Jährliche Frequenz",
+		"yearly_distribution": "Jährliche Verteilung",
 		"artists_one": "1 Künstler:in",
 		"artists_many": "{count} Künstler:innen"
 	},

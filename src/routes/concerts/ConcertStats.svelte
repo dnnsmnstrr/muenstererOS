@@ -53,25 +53,33 @@
 	});
 
 	let yearStats = $derived.by(() => {
-		const counts: Record<number, number> = {};
+		const counts: Record<number, { concerts: number; festivals: number; total: number }> = {};
 
 		concerts.forEach((c: Concert) => {
 			const year = new Date(c.date).getFullYear();
-			counts[year] = (counts[year] || 0) + 1;
+			if (!counts[year]) counts[year] = { concerts: 0, festivals: 0, total: 0 };
+			if (c.type === 'festival') {
+				counts[year].festivals++;
+			} else {
+				counts[year].concerts++;
+			}
+			counts[year].total++;
 		});
 
 		festivals.forEach((f: Festival) => {
 			const year = f.year;
-			counts[year] = (counts[year] || 0) + 1;
+			if (!counts[year]) counts[year] = { concerts: 0, festivals: 0, total: 0 };
+			counts[year].festivals++;
+			counts[year].total++;
 		});
 
 		return Object.entries(counts)
-			.map(([year, count]) => ({ year: parseInt(year), count }))
+			.map(([year, stat]) => ({ year: parseInt(year), ...stat }))
 			.sort((a, b) => b.year - a.year);
 	});
 
 	let maxSeen = $derived(Math.max(...artistStats.map((s) => s.count), 1));
-	let maxYearCount = $derived(Math.max(...yearStats.map((s) => s.count), 1));
+	let maxYearCount = $derived(Math.max(...yearStats.map((s) => s.total), 1));
 </script>
 
 <div in:fade={{ duration: 300 }} class="space-y-6">
@@ -102,20 +110,65 @@
 			<Accordion.Trigger>{i18n.t('concerts.yearly_frequency')}</Accordion.Trigger>
 			<Accordion.Content>
 				<div class="max-h-[400px] space-y-4 overflow-y-auto pr-2">
-					{#each yearStats as { year, count }}
+					{#each yearStats as { year, total }}
 						<div class="space-y-1">
 							<div class="flex justify-between text-sm">
 								<span>{year}</span>
-								<span class="font-mono text-muted-foreground">{count}</span>
+								<span class="font-mono text-muted-foreground">{total}</span>
 							</div>
 							<div class="h-4 w-full overflow-hidden rounded-full bg-secondary">
 								<div
 									class="h-full bg-primary transition-all duration-500 ease-out"
-									style="width: {(count / maxYearCount) * 100}%"
+									style="width: {(total / maxYearCount) * 100}%"
 								></div>
 							</div>
 						</div>
 					{/each}
+				</div>
+			</Accordion.Content>
+		</Accordion.Item>
+
+		<Accordion.Item value="yearly-distribution">
+			<Accordion.Trigger>{i18n.t('concerts.yearly_distribution')}</Accordion.Trigger>
+			<Accordion.Content>
+				<div class="flex h-64 items-end justify-between gap-2 border-b pt-4">
+					{#each [...yearStats].reverse() as { year, concerts, festivals, total }}
+						<div class="group relative flex flex-1 flex-col items-center">
+							<div class="flex w-full flex-col-reverse items-center justify-start gap-px">
+								<div
+									class="w-full bg-primary/60 transition-all duration-500 hover:bg-primary"
+									style="height: {(concerts / maxYearCount) * 100}%"
+									title="{year}: {concerts} {i18n.t('concerts.concerts')}"
+								></div>
+								<div
+									class="w-full bg-primary transition-all duration-500 hover:bg-primary/80"
+									style="height: {(festivals / maxYearCount) * 100}%"
+									title="{year}: {festivals} {i18n.t('concerts.festivals')}"
+								></div>
+							</div>
+							<span class="mt-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
+								{year.toString().slice(-2)}
+							</span>
+
+							<!-- Tooltip -->
+							<div
+								class="pointer-events-none absolute -top-12 left-1/2 z-10 -translate-x-1/2 scale-0 rounded bg-popover px-2 py-1 text-[10px] text-popover-foreground shadow-md transition-all group-hover:scale-100"
+							>
+								<p class="font-bold">{year}</p>
+								<p>{concerts} C / {festivals} F</p>
+							</div>
+						</div>
+					{/each}
+				</div>
+				<div class="mt-4 flex justify-center gap-4 text-xs text-muted-foreground">
+					<div class="flex items-center gap-1">
+						<div class="h-2 w-2 bg-primary/60"></div>
+						<span>{i18n.t('concerts.concerts')}</span>
+					</div>
+					<div class="flex items-center gap-1">
+						<div class="h-2 w-2 bg-primary"></div>
+						<span>{i18n.t('concerts.festivals')}</span>
+					</div>
 				</div>
 			</Accordion.Content>
 		</Accordion.Item>

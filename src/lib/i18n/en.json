@@ -459,6 +459,7 @@
 		"artist_frequency": "Artist Frequency",
 		"artist_frequency_description": "These are the artists I've seen most often live.",
 		"yearly_frequency": "Yearly Frequency",
+		"yearly_distribution": "Yearly Distribution",
 		"artists_one": "1 artist",
 		"artists_many": "{count} artists"
 	},
