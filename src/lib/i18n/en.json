@@ -455,8 +455,11 @@
 		"no_concerts": "No concerts found.",
 		"view_on_musicbrainz": "View on MusicBrainz",
 		"stats": "Stats",
+		"stats_description": "Statistics about the music events I've attended.",
 		"artist_frequency": "Artist Frequency",
 		"artist_frequency_description": "These are the artists I've seen most often live.",
+		"yearly_frequency": "Yearly Frequency",
+		"yearly_distribution": "Yearly Distribution",
 		"artists_one": "1 artist",
 		"artists_many": "{count} artists"
 	},
