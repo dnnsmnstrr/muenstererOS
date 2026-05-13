@@ -7,6 +7,7 @@ export const settingsSchema = z.object({
     inactivityTimeout: z.number().default(30),
     backgroundTexture: z.string().default('dots'),
     backgroundSize: z.number().default(1),
-    backgroundSpacing: z.number().default(16)
+    backgroundSpacing: z.number().default(16),
+    suggestionsLimit: z.number().default(5)
 });
 export type SettingsSchema = typeof settingsSchema;

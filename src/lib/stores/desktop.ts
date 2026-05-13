@@ -169,6 +169,8 @@ export function resetDesktopFiles() {
 	if (browser && window?.localStorage) {
 		delete window.localStorage.desktopFiles;
 		delete window.localStorage.onboardingComplete;
+		delete window.localStorage.screensaver;
+		delete window.localStorage.commandStats;
 	}
 	if (defaultFiles) {
 		// Reset to default files with new positions
