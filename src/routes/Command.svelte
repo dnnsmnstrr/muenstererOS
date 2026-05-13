@@ -62,8 +62,6 @@
 	import { goto } from '$app/navigation';
 	import {
 		capitalize,
-		hexToHsl,
-		isMobile,
 		reloadPage,
 		scrollToBottom,
 		scrollToTop,
@@ -336,7 +334,7 @@
 		loadingProgress.set(loading ? 100 : 0);
 	});
 
-	const enrichLink = (link: CommandData, translationKey?: string): CommandData => {
+	const enrichLink = (link: CommandData, translationKey?: string, isGroup?: boolean): CommandData => {
 		let href = link.href || '';
 		if (!link.href && !link.action) {
 			href = '/' + link.name.toLowerCase();
@@ -363,13 +361,12 @@
 
 			if (!isInternalNavigation) {
 				$isCommandActive = false;
+				query = '';
 			}
 
 			action();
 
-			setTimeout(() => {
-				trackCommand(id);
-			}, 0);
+			if (!isGroup) trackCommand(id);
 		};
 
 		let value = link.value || link.name;
@@ -603,33 +600,36 @@
 			screensaver: [
 				enrichLink(
 					{
-						name: i18n.t('settings.screensaver_none'),
+						name: i18n.t('settings.screensaver_none') + ($screensaver === 'none' ? ` ✓` : ''),
 						action: () => {
 							$screensaver = 'none';
 							currentGroup = null;
 						}
 					},
-					'settings.screensaver_none'
+					'settings.screensaver_none',
+					true
 				),
 				enrichLink(
 					{
-						name: i18n.t('settings.screensaver_dvd'),
+						name: i18n.t('settings.screensaver_dvd') + ($screensaver === 'dvd' ? ` ✓` : ''),
 						action: () => {
 							$screensaver = 'dvd';
 							currentGroup = null;
 						}
 					},
-					'settings.screensaver_dvd'
+					'settings.screensaver_dvd',
+					true
 				),
 				enrichLink(
 					{
-						name: i18n.t('settings.screensaver_playlists'),
+						name: i18n.t('settings.screensaver_playlists') + ($screensaver === 'playlists' ? ` ✓` : ''),
 						action: () => {
 							$screensaver = 'playlists';
 							currentGroup = null;
 						}
 					},
-					'settings.screensaver_playlists'
+					'settings.screensaver_playlists',
+					true
 				),
 				enrichLink(
 					{
@@ -637,7 +637,8 @@
 						icon: ArrowLeft,
 						action: () => (currentGroup = null)
 					},
-					'command.go_back_screensaver'
+					'command.go_back_screensaver',
+					true
 				)
 			]
 		};
@@ -647,14 +648,14 @@
 		const suggestions = Object.entries($commandStats)
 			.map(([id, stat]) => {
 				const command = allCommands.find((c) => c.id === id);
-				if (!command) return null;
+				if (!command || !command.id) return null;
 				// Scoring: count + recency bonus (linear decay over 7 days)
 				const sevenDays = 7 * 24 * 60 * 60 * 1000;
 				const recencyBonus = Math.max(0, 1 - (Date.now() - stat.lastUsed) / sevenDays) * 10;
 				const score = stat.count + recencyBonus;
-				return { command, score };
+				return { command: { ...command, value: 'suggestion-' + command.value }, score };
 			})
-			.filter((s): s is { command: CommandData; score: number } => s !== null)
+			.filter((s): s is { command: CommandData & { value: string }; score: number } => s !== null)
 			.sort((a, b) => b.score - a.score)
 			.slice(0, $suggestionsLimit)
 			.map((s) => s.command);

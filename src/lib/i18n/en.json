@@ -130,7 +130,6 @@
 		"grid": "Grid",
 		"diagonal": "Diagonal",
 		"wave": "Wave",
-		"none": "None",
 		"themes": {
 			"zinc": "Zinc",
 			"slate": "Slate",
