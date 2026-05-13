@@ -21,7 +21,9 @@ theme.subscribe((value) => {
 	}
 });
 mode.subscribe((value) => {
-	updateMetaThemeColor(value === 'dark' ? '#000000' : '#ffffff');
+	if (browser && window?.localStorage) {
+		updateMetaThemeColor(value === 'dark' ? '#000000' : '#ffffff');
+	}
 });
 
 const initialMode = currentMode || 'dark';

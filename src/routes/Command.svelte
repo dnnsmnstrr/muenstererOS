@@ -40,8 +40,9 @@
 		Monitor,
 		Plus,
 		Globe,
-		Ticket,
-		Download
+		Download,
+		CircleCheck,
+		Circle
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -334,7 +335,11 @@
 		loadingProgress.set(loading ? 100 : 0);
 	});
 
-	const enrichLink = (link: CommandData, translationKey?: string, isGroup?: boolean): CommandData => {
+	const enrichLink = (
+		link: CommandData,
+		translationKey?: string,
+		isGroup?: boolean
+	): CommandData => {
 		let href = link.href || '';
 		if (!link.href && !link.action) {
 			href = '/' + link.name.toLowerCase();
@@ -600,7 +605,8 @@
 			screensaver: [
 				enrichLink(
 					{
-						name: i18n.t('settings.screensaver_none') + ($screensaver === 'none' ? ` ✓` : ''),
+						name: i18n.t('settings.screensaver_none'),
+						icon: $screensaver === 'none' ? CircleCheck : Circle,
 						action: () => {
 							$screensaver = 'none';
 							currentGroup = null;
@@ -611,7 +617,8 @@
 				),
 				enrichLink(
 					{
-						name: i18n.t('settings.screensaver_dvd') + ($screensaver === 'dvd' ? ` ✓` : ''),
+						name: i18n.t('settings.screensaver_dvd'),
+						icon: $screensaver === 'dvd' ? CircleCheck : Circle,
 						action: () => {
 							$screensaver = 'dvd';
 							currentGroup = null;
@@ -622,7 +629,8 @@
 				),
 				enrichLink(
 					{
-						name: i18n.t('settings.screensaver_playlists') + ($screensaver === 'playlists' ? ` ✓` : ''),
+						name: i18n.t('settings.screensaver_playlists'),
+						icon: $screensaver === 'playlists' ? CircleCheck : Circle,
 						action: () => {
 							$screensaver = 'playlists';
 							currentGroup = null;
