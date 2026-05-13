@@ -359,8 +359,17 @@
 			};
 
 		const wrappedAction = () => {
-			trackCommand(id);
+			const isInternalNavigation = !!link.group || id === 'command.go_back_screensaver';
+
+			if (!isInternalNavigation) {
+				$isCommandActive = false;
+			}
+
 			action();
+
+			setTimeout(() => {
+				trackCommand(id);
+			}, 0);
 		};
 
 		let value = link.value || link.name;
@@ -498,7 +507,6 @@
 							const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
 							await i18n.setLanguage(newLanguage);
 							toast.success(i18n.t('command.language_switched'));
-							$isCommandActive = false;
 						}
 					},
 					'command.switch_language'
@@ -521,7 +529,6 @@
 						action: () => {
 							resetDesktopFiles();
 							toast.success(i18n.t('command.reset_desktop_success'));
-							$isCommandActive = false;
 						}
 					},
 					'command.reset_desktop_files'
@@ -559,7 +566,6 @@
 										});
 										toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
 									}
-									$isCommandActive = false;
 								}
 							},
 							'command.create_desktop_shortcut'
@@ -600,7 +606,6 @@
 						name: i18n.t('settings.screensaver_none'),
 						action: () => {
 							$screensaver = 'none';
-							$isCommandActive = false;
 							currentGroup = null;
 						}
 					},
@@ -611,7 +616,6 @@
 						name: i18n.t('settings.screensaver_dvd'),
 						action: () => {
 							$screensaver = 'dvd';
-							$isCommandActive = false;
 							currentGroup = null;
 						}
 					},
@@ -622,7 +626,6 @@
 						name: i18n.t('settings.screensaver_playlists'),
 						action: () => {
 							$screensaver = 'playlists';
-							$isCommandActive = false;
 							currentGroup = null;
 						}
 					},
