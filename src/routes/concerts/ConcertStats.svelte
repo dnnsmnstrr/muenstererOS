@@ -127,9 +127,18 @@
 		<Accordion.Item value="yearly-distribution">
 			<Accordion.Trigger>{i18n.t('concerts.yearly_distribution')}</Accordion.Trigger>
 			<Accordion.Content>
-				<div class="flex h-64 items-end justify-between gap-2 border-b px-2 pt-4">
+				<div class="flex h-64 items-end justify-between gap-2 border-b px-2 pt-12">
 					{#each [...yearStats].reverse() as { year, concerts, festivals, total }}
 						<div class="group relative flex h-full flex-1 flex-col items-center justify-end">
+							<!-- Tooltip -->
+							<div
+								class="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2 scale-0 rounded bg-popover px-2 py-1 text-[10px] text-popover-foreground shadow-md transition-all group-hover:scale-100"
+								style="bottom: calc({Math.max((total / maxYearCount) * 100, 2)}% + 1.75rem)"
+							>
+								<p class="font-bold">{year}</p>
+								<p>{concerts} C / {festivals} F</p>
+							</div>
+
 							<div
 								class="flex w-full flex-col-reverse items-center justify-start overflow-hidden rounded-t-sm bg-secondary/30 transition-colors group-hover:bg-secondary/50"
 								style="height: {Math.max((total / maxYearCount) * 100, 2)}%"
@@ -148,14 +157,6 @@
 							<span class="mt-2 text-[10px] font-medium text-muted-foreground sm:text-xs">
 								{year.toString().slice(-2)}
 							</span>
-
-							<!-- Tooltip -->
-							<div
-								class="pointer-events-none absolute -top-12 left-1/2 z-10 -translate-x-1/2 scale-0 rounded bg-popover px-2 py-1 text-[10px] text-popover-foreground shadow-md transition-all group-hover:scale-100"
-							>
-								<p class="font-bold">{year}</p>
-								<p>{concerts} C / {festivals} F</p>
-							</div>
 						</div>
 					{/each}
 				</div>
