@@ -737,13 +737,23 @@
 	);
 </script>
 
+{#snippet inputIcon()}
+	{#if currentGroup}
+		<button class="mr-3 mb-1 size-4 shrink-0 opacity-50" onclick={() => (currentGroup = null)}>
+			<ArrowLeft class="" />
+		</button>
+	{:else}
+		<Search class="mr-2 size-4 shrink-0 opacity-50" />
+	{/if}
+{/snippet}
+
 <Command.Dialog
 	bind:open={$isCommandActive}
 	onOpenChange={(open) => {
 		if (!open) currentGroup = null;
 	}}
 >
-	<Command.Input bind:value={query} placeholder={i18n.t('command.placeholder')} class="text-base" />
+	<Command.Input bind:value={query} icon={inputIcon} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
 		{#each Object.entries(commandConfig).filter(([group]) => (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
