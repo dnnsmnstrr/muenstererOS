@@ -163,6 +163,7 @@
 		"go_forward": "Vorwärts",
 		"go_back": "Zurück",
 		"screensaver": "Bildschirmschoner",
+		"edit_gist": "Gist bearbeiten",
 		"reload": "Neu laden",
 		"toggle_dark_mode": "Dunkelmodus umschalten",
 		"enable_debug_mode": "Debug-Modus aktivieren",

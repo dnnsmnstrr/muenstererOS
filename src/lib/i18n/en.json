@@ -160,6 +160,7 @@
 		"go_forward": "Go Forward",
 		"go_back": "Go Back",
 		"screensaver": "Screensaver",
+		"edit_gist": "Edit Gist",
 		"reload": "Reload",
 		"toggle_dark_mode": "Toggle Dark Mode",
 		"enable_debug_mode": "Enable Debug Mode",

@@ -42,7 +42,8 @@
 		Globe,
 		Download,
 		CircleCheck,
-		Circle
+		Circle,
+		FileCode
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -61,6 +62,7 @@
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import {
 		capitalize,
 		reloadPage,
@@ -73,7 +75,7 @@
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
 	import { page } from '$app/state';
-	import { links } from '$lib/config';
+	import { links, gists } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import docsearch from '@docsearch/js';
@@ -95,6 +97,7 @@
 	let loading = false;
 	let query = $state('');
 	let lastKey = '';
+	let hasGithubToken = $state(false);
 
 	const keyboardShortcuts = $derived([
 		{ key: '?', description: i18n.t('command.shortcuts.help') },
@@ -321,6 +324,11 @@
 	onMount(() => {
 		document.addEventListener('keydown', handleKeydown);
 		initDocsearch();
+
+		if (browser) {
+			hasGithubToken = !!localStorage.getItem('github_admin_token');
+		}
+
 		return () => {
 			document.removeEventListener('keydown', handleKeydown);
 		};
@@ -362,7 +370,10 @@
 			};
 
 		const wrappedAction = () => {
-			const isInternalNavigation = !!link.group || id === 'command.go_back_screensaver';
+			const isInternalNavigation =
+				!!link.group ||
+				id === 'command.go_back_screensaver' ||
+				id === 'command.go_back_edit_gist';
 
 			if (!isInternalNavigation) {
 				$isCommandActive = false;
@@ -483,7 +494,23 @@
 				enrichLink(
 					{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage },
 					'command.reload'
-				)
+				),
+				...(hasGithubToken
+					? [
+							enrichLink(
+								{
+									name: i18n.t('command.edit_gist'),
+									icon: FileCode,
+									group: 'edit_gist',
+									action: () => {
+										currentGroup = 'edit_gist';
+										query = '';
+									}
+								},
+								'command.edit_gist_nav'
+							)
+						]
+					: [])
 			].filter((link) => {
 				// remove current page from navigation
 				return page.url.pathname !== link.href;
@@ -600,6 +627,44 @@
 						}
 					},
 					'settings.screensaver'
+				),
+				...(hasGithubToken
+					? [
+							enrichLink(
+								{
+									name: i18n.t('command.edit_gist'),
+									icon: FileCode,
+									group: 'edit_gist',
+									action: () => {
+										currentGroup = 'edit_gist';
+										query = '';
+									}
+								},
+								'command.edit_gist'
+							)
+						]
+					: [])
+			],
+			edit_gist: [
+				...Object.entries(gists).map(([key, gist]) =>
+					enrichLink(
+						{
+							name: gist.name,
+							icon: FileCode,
+							href: `/admin?file=${gist.filename.replace(/\.json$/, '')}`
+						},
+						`edit_gist.${key}`,
+						true
+					)
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.go_back'),
+						icon: ArrowLeft,
+						action: () => (currentGroup = null)
+					},
+					'command.go_back_edit_gist',
+					true
 				)
 			],
 			screensaver: [
