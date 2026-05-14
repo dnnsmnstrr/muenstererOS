@@ -494,23 +494,7 @@
 				enrichLink(
 					{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage },
 					'command.reload'
-				),
-				...(hasGithubToken
-					? [
-							enrichLink(
-								{
-									name: i18n.t('command.edit_gist'),
-									icon: FileCode,
-									group: 'edit_gist',
-									action: () => {
-										currentGroup = 'edit_gist';
-										query = '';
-									}
-								},
-								'command.edit_gist_nav'
-							)
-						]
-					: [])
+				)
 			].filter((link) => {
 				// remove current page from navigation
 				return page.url.pathname !== link.href;
