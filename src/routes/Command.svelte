@@ -42,7 +42,8 @@
 		Globe,
 		Download,
 		CircleCheck,
-		Circle
+		Circle,
+		FileCode
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -61,6 +62,7 @@
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 	import {
 		capitalize,
 		reloadPage,
@@ -73,7 +75,7 @@
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
 	import { page } from '$app/state';
-	import { links } from '$lib/config';
+	import { links, gists } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import docsearch from '@docsearch/js';
@@ -95,6 +97,7 @@
 	let loading = false;
 	let query = $state('');
 	let lastKey = '';
+	let hasGithubToken = $state(false);
 
 	const keyboardShortcuts = $derived([
 		{ key: '?', description: i18n.t('command.shortcuts.help') },
@@ -321,6 +324,11 @@
 	onMount(() => {
 		document.addEventListener('keydown', handleKeydown);
 		initDocsearch();
+
+		if (browser) {
+			hasGithubToken = !!localStorage.getItem('github_admin_token');
+		}
+
 		return () => {
 			document.removeEventListener('keydown', handleKeydown);
 		};
@@ -362,7 +370,10 @@
 			};
 
 		const wrappedAction = () => {
-			const isInternalNavigation = !!link.group || id === 'command.go_back_screensaver';
+			const isInternalNavigation =
+				!!link.group ||
+				id === 'command.go_back_screensaver' ||
+				id === 'command.go_back_edit_gist';
 
 			if (!isInternalNavigation) {
 				$isCommandActive = false;
@@ -600,6 +611,44 @@
 						}
 					},
 					'settings.screensaver'
+				),
+				...(hasGithubToken
+					? [
+							enrichLink(
+								{
+									name: i18n.t('command.edit_gist'),
+									icon: FileCode,
+									group: 'edit_gist',
+									action: () => {
+										currentGroup = 'edit_gist';
+										query = '';
+									}
+								},
+								'command.edit_gist'
+							)
+						]
+					: [])
+			],
+			edit_gist: [
+				...Object.entries(gists).map(([key, gist]) =>
+					enrichLink(
+						{
+							name: gist.name,
+							icon: FileCode,
+							href: `/admin?file=${gist.filename.replace(/\.json$/, '')}`
+						},
+						`edit_gist.${key}`,
+						true
+					)
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.go_back'),
+						icon: ArrowLeft,
+						action: () => (currentGroup = null)
+					},
+					'command.go_back_edit_gist',
+					true
 				)
 			],
 			screensaver: [
@@ -688,13 +737,23 @@
 	);
 </script>
 
+{#snippet inputIcon()}
+	{#if currentGroup}
+		<button class="mr-3 mb-1 size-4 shrink-0 opacity-50" onclick={() => (currentGroup = null)}>
+			<ArrowLeft class="" />
+		</button>
+	{:else}
+		<Search class="mr-2 size-4 shrink-0 opacity-50" />
+	{/if}
+{/snippet}
+
 <Command.Dialog
 	bind:open={$isCommandActive}
 	onOpenChange={(open) => {
 		if (!open) currentGroup = null;
 	}}
 >
-	<Command.Input bind:value={query} placeholder={i18n.t('command.placeholder')} class="text-base" />
+	<Command.Input bind:value={query} icon={inputIcon} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
 		{#each Object.entries(commandConfig).filter(([group]) => (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
