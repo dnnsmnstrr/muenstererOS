@@ -78,6 +78,7 @@
 	import { links, gists } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
+	import { unlockAchievement } from '$lib/stores/achievements';
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
@@ -207,9 +208,7 @@
 			setTimeout(shoot, 450);
 			setTimeout(shoot, 600);
 
-			toast.success(i18n.t('command.konami_success'), {
-				description: i18n.t('command.konami_description')
-			});
+			unlockAchievement('konami');
 		}
 
 		// meta
@@ -433,8 +432,11 @@
 			navigation: [
 				enrichLink({ name: i18n.t('common.home'), icon: Home, href: '/' }),
 				enrichLink({ name: i18n.t('common.about'), icon: User, href: '/about' }),
+				enrichLink({ name: i18n.t('common.achievements'), icon: PartyPopper, href: '/achievements' }),
 				...pages
-					.filter((page) => !['/', '/about', '/settings'].includes(page.href || ''))
+					.filter(
+						(page) => !['/', '/about', '/settings', '/achievements'].includes(page.href || '')
+					)
 					.map((p) => enrichLink(p)),
 				enrichLink(
 					{

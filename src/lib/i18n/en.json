@@ -17,6 +17,7 @@
 		"buttons": "Buttons",
 		"projects": "Projects",
 		"now": "Now",
+		"achievements": "Achievements",
 		"where": "Where",
 		"uses": "Uses",
 		"playlists": "Playlists",
@@ -657,5 +658,23 @@
 		"downloading": "Preparing download...",
 		"success": "Export ready!",
 		"error": "Error during export: {error}"
+	},
+	"achievements": {
+		"subtitle": "You have unlocked {count} out of {total} achievements.",
+		"overall_progress": "Overall Progress",
+		"locked": "Locked",
+		"view_all": "View All",
+		"explorer": {
+			"title": "Explorer",
+			"description": "Visit every page listed in the sitemap."
+		},
+		"konami": {
+			"title": "Konami Master",
+			"description": "Congratulations, you're a nerd! (Entered the Konami code)"
+		},
+		"lucky-spin": {
+			"title": "Lucky Spin",
+			"description": "Let the wheel decide your fate. (Spun the slashes wheel)"
+		}
 	}
 }
