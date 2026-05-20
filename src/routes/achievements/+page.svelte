@@ -2,7 +2,7 @@
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { Progress } from '$lib/components/ui/progress';
-	import { achievements } from '$lib/stores/achievements';
+	import { achievements, resetAchievements } from '$lib/stores/achievements';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import Award from '$lib/components/icons/award.svelte';
@@ -11,13 +11,15 @@
 	import CalendarDays from '$lib/components/icons/calendar-days.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
-	import { Lock, PartyPopper } from 'lucide-svelte';
+	import { Lock, PartyPopper, RotateCcw } from 'lucide-svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	const achievementIcons = {
 		explorer: ListChecks,
 		konami: Award,
 		'lucky-spin': ShipWheel,
-		streak: CalendarDays
+		streak: CalendarDays,
+		onboarding: PartyPopper
 	};
 
 	let achievementList = $derived(
@@ -51,12 +53,18 @@
 				})}
 			</p>
 		</div>
-		<div class="w-full sm:w-64">
-			<div class="mb-2 flex justify-between text-sm font-medium">
-				<span>{i18n.t('achievements.overall_progress')}</span>
-				<span>{Math.round(overallProgress)}%</span>
+		<div class="flex w-full flex-col gap-4 sm:w-64">
+			<div>
+				<div class="mb-2 flex justify-between text-sm font-medium">
+					<span>{i18n.t('achievements.overall_progress')}</span>
+					<span>{Math.round(overallProgress)}%</span>
+				</div>
+				<Progress value={overallProgress} class="h-2" />
 			</div>
-			<Progress value={overallProgress} class="h-2" />
+			<Button variant="outline" size="sm" class="w-full" onclick={resetAchievements}>
+				<RotateCcw class="mr-2 h-4 w-4" />
+				{i18n.t('achievements.reset')}
+			</Button>
 		</div>
 	</div>
 

@@ -664,6 +664,8 @@
 		"overall_progress": "Overall Progress",
 		"locked": "Locked",
 		"view_all": "View All",
+		"reset": "Reset Achievements",
+		"reset_success": "Achievements have been reset.",
 		"explorer": {
 			"title": "Explorer",
 			"description": "Visit every page listed in the sitemap."
@@ -679,6 +681,10 @@
 		"streak": {
 			"title": "Dedication",
 			"description": "Visit the website 3 days in a row."
+		},
+		"onboarding": {
+			"title": "Welcome Aboard",
+			"description": "Complete the onboarding process."
 		}
 	}
 }

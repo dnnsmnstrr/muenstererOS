@@ -667,6 +667,8 @@
 		"overall_progress": "Gesamtfortschritt",
 		"locked": "Gesperrt",
 		"view_all": "Alle ansehen",
+		"reset": "Achievements zurücksetzen",
+		"reset_success": "Achievements wurden zurückgesetzt.",
 		"explorer": {
 			"title": "Entdecker",
 			"description": "Besuche jede Seite, die in der Sitemap aufgeführt ist."
@@ -682,6 +684,10 @@
 		"streak": {
 			"title": "Durchhaltevermögen",
 			"description": "Besuche die Webseite an 3 aufeinanderfolgenden Tagen."
+		},
+		"onboarding": {
+			"title": "Willkommen an Bord",
+			"description": "Schließe den Onboarding-Prozess ab."
 		}
 	}
 }

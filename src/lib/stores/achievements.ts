@@ -38,6 +38,10 @@ function getInitialAchievements(): Record<string, Achievement> {
 			progress: 0,
 			maxProgress: 3,
 			metadata: { lastVisitDate: null, currentStreak: 0 }
+		},
+		onboarding: {
+			id: 'onboarding',
+			unlocked: false
 		}
 	};
 }
@@ -90,6 +94,14 @@ export function unlockAchievement(id: string) {
 		}
 		return state;
 	});
+}
+
+export function resetAchievements() {
+	if (!browser) return;
+	const initial = getInitialAchievements();
+	achievements.set(initial);
+	localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+	toast.success(i18n.t('achievements.reset_success'));
 }
 
 export function trackDailyVisit() {
