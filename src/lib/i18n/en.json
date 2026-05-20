@@ -675,6 +675,10 @@
 		"lucky-spin": {
 			"title": "Lucky Spin",
 			"description": "Let the wheel decide your fate. (Spun the slashes wheel)"
+		},
+		"streak": {
+			"title": "Dedication",
+			"description": "Visit the website 3 days in a row."
 		}
 	}
 }

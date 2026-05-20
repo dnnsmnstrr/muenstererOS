@@ -678,6 +678,10 @@
 		"lucky-spin": {
 			"title": "Glücksrad",
 			"description": "Lass das Rad dein Schicksal entscheiden. (Slashes-Rad gedreht)"
+		},
+		"streak": {
+			"title": "Durchhaltevermögen",
+			"description": "Besuche die Webseite an 3 aufeinanderfolgenden Tagen."
 		}
 	}
 }

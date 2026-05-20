@@ -5,6 +5,7 @@
 	 * @property {number} [size]
 	 * @property {number} [strokeWidth]
 	 * @property {string} [class]
+	 * @property {boolean} [animate]
 	 */
 
 	/** @type {Props} */
@@ -12,7 +13,8 @@
 		color = 'currentColor',
 		size = 24,
 		strokeWidth = 2,
-		class: className = ''
+		class: className = '',
+		animate = false
 	} = $props();
 
 	let isHovered = $state(false);
@@ -37,7 +39,7 @@
 		stroke-linecap="round"
 		stroke-linejoin="round"
 		class="ship-wheel-icon"
-		class:animate={isHovered}
+		class:animate={isHovered || animate}
 	>
 		<circle cx="12" cy="12" r="8" />
 		<path d="M12 2v4" />

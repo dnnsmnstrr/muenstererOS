@@ -46,7 +46,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
-	import { trackPageVisit } from '$lib/stores/achievements';
+	import { trackPageVisit, trackDailyVisit } from '$lib/stores/achievements';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -174,13 +174,16 @@
 
 			// Track page visit for achievements
 			if (browser) {
+				trackDailyVisit();
 				const path = page.url.pathname;
 				// Extract all valid sitemap paths from the data if possible, or use a predefined list
 				const allValidPaths = [
 					'/',
 					...bookmarksRaw.map((b) => b.href),
 					...otherPages.map((p) => p.path)
-				].filter((p): p is string => !!p);
+				]
+					.filter((p): p is string => !!p)
+					.filter((p) => p !== '/admin');
 				trackPageVisit(path, allValidPaths);
 			}
 		}

@@ -31,6 +31,13 @@ function getInitialAchievements(): Record<string, Achievement> {
 		'lucky-spin': {
 			id: 'lucky-spin',
 			unlocked: false
+		},
+		streak: {
+			id: 'streak',
+			unlocked: false,
+			progress: 0,
+			maxProgress: 3,
+			metadata: { lastVisitDate: null, currentStreak: 0 }
 		}
 	};
 }
@@ -82,6 +89,62 @@ export function unlockAchievement(id: string) {
 			};
 		}
 		return state;
+	});
+}
+
+export function trackDailyVisit() {
+	achievements.update((state) => {
+		const streak = state['streak'];
+		if (!streak || streak.unlocked) return state;
+
+		const now = new Date();
+		const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+		const lastVisitDate = streak.metadata?.lastVisitDate;
+		const currentStreak = streak.metadata?.currentStreak || 0;
+
+		if (!lastVisitDate) {
+			// First visit
+			return {
+				...state,
+				streak: {
+					...streak,
+					progress: 1,
+					metadata: { lastVisitDate: today, currentStreak: 1 }
+				}
+			};
+		}
+
+		if (lastVisitDate === today) {
+			// Already visited today
+			return state;
+		}
+
+		const yesterday = today - 86400000;
+		if (lastVisitDate === yesterday) {
+			// Continued streak
+			const newStreak = currentStreak + 1;
+			if (newStreak >= 3) {
+				setTimeout(() => unlockAchievement('streak'), 0);
+			}
+			return {
+				...state,
+				streak: {
+					...streak,
+					progress: newStreak,
+					metadata: { lastVisitDate: today, currentStreak: newStreak }
+				}
+			};
+		} else {
+			// Streak broken
+			return {
+				...state,
+				streak: {
+					...streak,
+					progress: 1,
+					metadata: { lastVisitDate: today, currentStreak: 1 }
+				}
+			};
+		}
 	});
 }
 

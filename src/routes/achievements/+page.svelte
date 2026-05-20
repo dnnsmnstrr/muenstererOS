@@ -8,6 +8,7 @@
 	import Award from '$lib/components/icons/award.svelte';
 	import ShipWheel from '$lib/components/icons/ship-wheel.svelte';
 	import ListChecks from '$lib/components/icons/list-checks.svelte';
+	import CalendarDays from '$lib/components/icons/calendar-days.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
 	import { Lock, PartyPopper } from 'lucide-svelte';
@@ -15,7 +16,8 @@
 	const achievementIcons = {
 		explorer: ListChecks,
 		konami: Award,
-		'lucky-spin': ShipWheel
+		'lucky-spin': ShipWheel,
+		streak: CalendarDays
 	};
 
 	let achievementList = $derived(
@@ -30,6 +32,8 @@
 	let unlockedCount = $derived(achievementList.filter((a) => a.unlocked).length);
 	let totalCount = $derived(achievementList.length);
 	let overallProgress = $derived((unlockedCount / totalCount) * 100);
+
+	let hoveredId = $state<string | null>(null);
 </script>
 
 <svelte:head>
@@ -59,6 +63,8 @@
 	<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 		{#each achievementList as achievement}
 			<Card.Root
+				onmouseenter={() => (hoveredId = achievement.id)}
+				onmouseleave={() => (hoveredId = null)}
 				class={cn(
 					'group relative overflow-hidden transition-all duration-300 hover:shadow-lg',
 					achievement.unlocked ? 'border-primary/50 bg-primary/5' : 'opacity-80'
@@ -77,7 +83,7 @@
 							)}
 						>
 							{#if achievement.unlocked}
-								<achievement.icon size={32} />
+								<achievement.icon size={32} animate={hoveredId === achievement.id} />
 							{:else}
 								<Lock size={32} />
 							{/if}

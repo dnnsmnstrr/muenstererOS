@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/**
 	 * @typedef {Object} Props
 	 * @property {string} [color]
@@ -27,7 +27,7 @@
 	}
 </script>
 
-<div class={className} aria-label="award" role="img" onmouseenter={handleMouseEnter}>
+<div class={className} aria-label="calendar-days" role="img" onmouseenter={handleMouseEnter}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}
@@ -38,11 +38,19 @@
 		stroke-width={strokeWidth}
 		stroke-linecap="round"
 		stroke-linejoin="round"
-		class="award-icon"
+		class="calendar-days-icon"
 		class:animate={isHovered || animate}
 	>
-		<circle cx="12" cy="8" r="6" />
-		<path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+		<path d="M8 2v4" />
+		<path d="M16 2v4" />
+		<rect width="18" height="18" x="3" y="4" rx="2" />
+		<path d="M3 10h18" />
+		<path d="M8 14h.01" />
+		<path d="M12 14h.01" />
+		<path d="M16 14h.01" />
+		<path d="M8 18h.01" />
+		<path d="M12 18h.01" />
+		<path d="M16 18h.01" />
 	</svg>
 </div>
 
@@ -50,21 +58,22 @@
 	div {
 		display: inline-block;
 	}
-	.award-icon {
+	.calendar-days-icon {
 		transform-origin: center center;
 		transition: transform 0.3s ease-in-out;
 	}
 
-	.award-icon.animate {
-		animation: bounce-award 0.5s ease-in-out;
+	.calendar-days-icon.animate {
+		animation: bounce-calendar 0.5s ease-in-out;
 	}
 
-	@keyframes bounce-award {
-		0%, 100% {
-			transform: scale(1);
+	@keyframes bounce-calendar {
+		0%,
+		100% {
+			transform: translateY(0);
 		}
 		50% {
-			transform: scale(1.2);
+			transform: translateY(-4px);
 		}
 	}
 </style>

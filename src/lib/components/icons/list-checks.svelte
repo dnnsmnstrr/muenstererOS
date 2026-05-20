@@ -5,6 +5,7 @@
 	 * @property {number} [size]
 	 * @property {number} [strokeWidth]
 	 * @property {string} [class]
+	 * @property {boolean} [animate]
 	 */
 
 	/** @type {Props} */
@@ -12,7 +13,8 @@
 		color = 'currentColor',
 		size = 24,
 		strokeWidth = 2,
-		class: className = ''
+		class: className = '',
+		animate = false
 	} = $props();
 
 	let isHovered = $state(false);
@@ -37,7 +39,7 @@
 		stroke-linecap="round"
 		stroke-linejoin="round"
 		class="list-checks-icon"
-		class:animate={isHovered}
+		class:animate={isHovered || animate}
 	>
 		<path d="m3 17 2 2 4-4" class="check check-1" />
 		<path d="m3 7 2 2 4-4" class="check check-2" />
