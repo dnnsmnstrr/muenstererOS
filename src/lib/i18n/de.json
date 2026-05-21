@@ -191,8 +191,6 @@
 		},
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
-		"konami_success": "Achievement freigeschaltet: Konami Code",
-		"konami_description": "Glückwunsch, du bist ein Nerd!",
 		"picked_color": "Farbe ausgewählt: {color}",
 		"copy_to_clipboard": "Klicken zum Kopieren"
 	},
@@ -674,7 +672,8 @@
 		},
 		"konami": {
 			"title": "Cheat Code",
-			"description": "Du weißt, was zu tun ist."
+			"description": "Du weißt, was zu tun ist.",
+			"message": "Glückwunsch, du bist ein Nerd!"
 		},
 		"lucky-spin": {
 			"title": "Glücksrad",
@@ -686,7 +685,8 @@
 		},
 		"onboarding": {
 			"title": "Willkommen an Bord",
-			"description": "Schließe den Onboarding-Prozess ab."
+			"description": "Schließe den Onboarding-Prozess ab.",
+			"message": "Onboarding abgeschlossen!"
 		},
 		"haxor": {
 			"title": "1337 H4X0R",

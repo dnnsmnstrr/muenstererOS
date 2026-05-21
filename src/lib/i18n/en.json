@@ -190,8 +190,6 @@
 		},
 		"switch_language": "Switch Language",
 		"language_switched": "Language switched",
-		"konami_success": "Achievement Unlocked: Konami Code",
-		"konami_description": "Congratulations, you're a nerd!",
 		"picked_color": "Picked color: {color}",
 		"copy_to_clipboard": "Click to copy to clipboard"
 	},
@@ -673,7 +671,8 @@
 		},
 		"konami": {
 			"title": "Cheat Code",
-			"description": "You know what to do."
+			"description": "You know what to do.",
+			"message": "Congratulations, you're a nerd!"
 		},
 		"lucky-spin": {
 			"title": "Lucky Spin",
@@ -685,7 +684,8 @@
 		},
 		"onboarding": {
 			"title": "Welcome Aboard",
-			"description": "Complete the onboarding process."
+			"description": "Complete the onboarding process.",
+			"message": "Onboarding completed!"
 		},
 		"haxor": {
 			"title": "1337 H4X0R",

@@ -136,6 +136,8 @@
 		'a'
 	];
 	let konamiIndex = 0;
+	const moneyCheat = 'motherlode';
+	let moneyCheatIndex = 0;
 
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
@@ -209,6 +211,25 @@
 			setTimeout(shoot, 600);
 
 			unlockAchievement('konami');
+		}
+		if (e.key.toLowerCase() === moneyCheat[moneyCheatIndex]) {
+			moneyCheatIndex += 1;
+		} else {
+			moneyCheatIndex = 0;
+		}
+		if (moneyCheatIndex === moneyCheat.length) {
+			moneyCheatIndex = 0;
+			confetti({
+				spread: 180,
+				angle: 270,
+				origin: { x: 0.5, y: -0.2 },
+				scalar: 2,
+				ticks: 220,
+				gravity: 1.2,
+				decay: 0.96,
+				startVelocity: 12,
+				shapes: ['💰', '💵', '💴', '💶', '💷', '💸', '🪙'].map(emoji => confetti.shapeFromText(emoji))
+			});
 		}
 
 		// meta

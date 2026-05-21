@@ -6,11 +6,10 @@ import * as LucideIcons from 'lucide-svelte';
 export const defaultFiles = [
 	{ id: 'projects', name: 'Projects', href: '/projects', icon: LucideIcons.FolderOpen },
 	{
-		id: 'experiment',
-		name: 'index.js',
-		href: '/experiment',
-		icon: LucideIcons.FileText,
-		leftOffset: 3
+		id: 'terminal',
+		name: 'Terminal',
+		href: '/terminal',
+		icon: LucideIcons.Terminal,
 	}
 ];
 
