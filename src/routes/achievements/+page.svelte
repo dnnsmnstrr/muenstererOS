@@ -9,6 +9,7 @@
 	import ShipWheel from '$lib/components/icons/ship-wheel.svelte';
 	import ListChecks from '$lib/components/icons/list-checks.svelte';
 	import CalendarDays from '$lib/components/icons/calendar-days.svelte';
+	import Terminal from '$lib/components/icons/terminal.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
 	import { Lock, PartyPopper, RotateCcw } from 'lucide-svelte';
@@ -19,7 +20,8 @@
 		konami: Award,
 		'lucky-spin': ShipWheel,
 		streak: CalendarDays,
-		onboarding: PartyPopper
+		onboarding: PartyPopper,
+		haxor: Terminal
 	};
 
 	let achievementList = $derived(
@@ -75,7 +77,7 @@
 				onmouseleave={() => (hoveredId = null)}
 				class={cn(
 					'group relative overflow-hidden transition-all duration-300 hover:shadow-lg',
-					achievement.unlocked ? 'border-primary/50 bg-primary/5' : 'opacity-80'
+					achievement.unlocked ? 'border-primary/50 bg-primary/80' : 'opacity-80'
 				)}
 			>
 				<div
@@ -87,7 +89,7 @@
 						<div
 							class={cn(
 								'rounded-lg p-2 transition-transform duration-300 group-hover:scale-110',
-								achievement.unlocked ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'
+								achievement.unlocked ? 'bg-primary/20 text-foreground' : 'bg-muted text-muted-foreground'
 							)}
 						>
 							{#if achievement.unlocked}

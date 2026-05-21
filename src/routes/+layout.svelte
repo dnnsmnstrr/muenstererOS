@@ -178,12 +178,12 @@
 				const path = page.url.pathname;
 				// Extract all valid sitemap paths from the data if possible, or use a predefined list
 				const allValidPaths = [
-					'/',
 					...bookmarksRaw.map((b) => b.href),
 					...otherPages.map((p) => p.path)
 				]
 					.filter((p): p is string => !!p)
-					.filter((p) => p !== '/admin');
+					.filter((p) => ['/admin', '/contact'].indexOf(p) === -1); // Exclude admin paths or any other non-visit-worthy paths
+				console.log(allValidPaths);
 				trackPageVisit(path, allValidPaths);
 			}
 		}

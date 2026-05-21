@@ -685,6 +685,10 @@
 		"onboarding": {
 			"title": "Welcome Aboard",
 			"description": "Complete the onboarding process."
+		},
+		"haxor": {
+			"title": "1337 H4X0R",
+			"description": "Explore the terminal."
 		}
 	}
 }
