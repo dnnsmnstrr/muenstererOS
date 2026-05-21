@@ -12,8 +12,9 @@
 	import Terminal from '$lib/components/icons/terminal.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
-	import { Lock, PartyPopper, RotateCcw } from 'lucide-svelte';
+	import { Check, Lock, PartyPopper, RotateCcw } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { goto } from '$app/navigation';
 
 	const achievementIcons = {
 		explorer: ListChecks,
@@ -63,10 +64,6 @@
 				</div>
 				<Progress value={overallProgress} class="h-2" />
 			</div>
-			<Button variant="outline" size="sm" class="w-full" onclick={resetAchievements}>
-				<RotateCcw class="mr-2 h-4 w-4" />
-				{i18n.t('achievements.reset')}
-			</Button>
 		</div>
 	</div>
 
@@ -89,7 +86,9 @@
 						<div
 							class={cn(
 								'rounded-lg p-2 transition-transform duration-300 group-hover:scale-110',
-								achievement.unlocked ? 'bg-primary/20 text-foreground' : 'bg-muted text-muted-foreground'
+								achievement.unlocked
+									? 'bg-primary/20 text-foreground'
+									: 'bg-muted text-muted-foreground'
 							)}
 						>
 							{#if achievement.unlocked}
@@ -99,7 +98,8 @@
 							{/if}
 						</div>
 						{#if achievement.unlocked && achievement.unlockedAt}
-							<span class="text-[10px] text-muted-foreground">
+							<span class="mt-3 text-sm text-muted-foreground">
+								<Check size={12} class="mr-1 inline-block" />
 								{formatDate(new Date(achievement.unlockedAt).toISOString())}
 							</span>
 						{/if}
@@ -117,7 +117,11 @@
 						<div class="space-y-2">
 							<div class="flex justify-between text-xs text-muted-foreground">
 								<span>{achievement.progress} / {achievement.maxProgress}</span>
-								<span>{Math.round(((achievement.progress || 0) / achievement.maxProgress) * 100)}%</span>
+								<span
+									>{Math.round(
+										((achievement.progress || 0) / achievement.maxProgress) * 100
+									)}%</span
+								>
 							</div>
 							<Progress
 								value={((achievement.progress || 0) / achievement.maxProgress) * 100}
@@ -129,15 +133,32 @@
 
 				{#if !achievement.unlocked}
 					<div
-						class="absolute inset-0 flex items-center justify-center bg-background/20 opacity-0 backdrop-blur-[1px] transition-opacity duration-300 group-hover:opacity-100"
+						class="absolute inset-0 flex items-center justify-center bg-background/20 opacity-0 backdrop-blur-[3px] transition-opacity duration-300 group-hover:opacity-100"
 					>
-						<span class="rounded-full bg-background/80 px-3 py-1 text-xs font-bold shadow-sm">
-							{i18n.t('achievements.locked')}
-						</span>
+						{#if achievement.metadata?.link}
+							<Button
+								variant="outline"
+								class="ml-4"
+								onclick={() => goto(achievement.metadata.link)}
+							>
+								{i18n.t('achievements.locked')}
+							</Button>
+						{:else}
+							<span class="rounded-full bg-background/80 px-3 py-1 text-xs font-bold shadow-sm">
+								{i18n.t('achievements.locked')}
+							</span>
+						{/if}
 					</div>
 				{/if}
 			</Card.Root>
 		{/each}
+	</div>
+
+	<div class="mt-16 flex justify-center">
+		<Button variant="outline" size="sm" onclick={resetAchievements}>
+			<RotateCcw class="mr-2 h-4 w-4" />
+			{i18n.t('achievements.reset')}
+		</Button>
 	</div>
 </div>
 

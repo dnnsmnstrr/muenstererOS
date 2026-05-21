@@ -35,6 +35,7 @@
 	const lines = $state<Line[]>([]);
     let linesContainer = $state<HTMLDivElement | null>(null);
     let currentDirectory = $state<string>('~');
+    let previousDirectory = $state<string>('');
 	let isIntroComplete = $state(false);
 
     // Command history state
@@ -121,7 +122,7 @@
         {
             name: 'hello',
             description: 'Say hello.',
-            aliases: ['hello', 'hey', 'hi', 'yo', 'test'],
+            aliases: ['hello', 'hey', 'hi', 'yo', 'test', 'asdf'],
             usage: 'hello',
             callback: async ({ lines }) => {
                 const greetings = ['Hello!', 'Hi there!', 'Greetings!', 'Salutations!', 'Howdy!', 'Hey!', 'What\'s up?', 'Welcome!'];
@@ -133,6 +134,7 @@
             name: 'goto',
             description: 'Navigate to a specific page on the website.',
             usage: 'goto <path>',
+            aliases: ['open', 'navigate'],
             example: 'goto settings',
             callback: async ({ args }) => {
                 const path = args.join('/');
@@ -163,6 +165,25 @@
                 if (args.length === 0) {
                     lines.push({ value: 'Please specify a directory to change into.', type: 'output' });
                 } else {
+                    if (args[0] === '..') {
+                        if (currentDirectory === '~') {
+                            lines.push({ value: 'Already at root directory.', type: 'output' });
+                            return;
+                        } else if (currentDirectory === '~/documents' || currentDirectory === '~/downloads') {
+                            currentDirectory = '~';
+                            lines.push({ value: `Changing directory to ${currentDirectory}`, type: 'output' });
+                            return;
+                        } else if (currentDirectory === '.secrets') {
+                            currentDirectory = '~';
+                            lines.push({ value: `Changing directory to ${currentDirectory}`, type: 'output' });
+                            return;
+                        }
+                    }
+                    if (args[0] === '-' && previousDirectory) {
+                        currentDirectory = previousDirectory;
+                        lines.push({ value: `Changing directory to ${currentDirectory}`, type: 'output' });
+                        return;
+                    }
                     const dir = directories.find(d => d.name === args[0] || d.path === args[0]);
                     if (!dir) {
                         lines.push({ value: `Directory '${args[0]}' not found.`, type: 'output' });
@@ -173,6 +194,7 @@
                     } else {
                         currentDirectory = dir.path;
                     }
+                    previousDirectory = currentDirectory;
                     lines.push({ value: `Changing directory to ${args.join(' ')}`, type: 'output' });
                 }
             }
@@ -223,6 +245,7 @@
             description: 'Read a file.',
             usage: 'cat <file>',
             example: 'cat readme.txt',
+            aliases: ['nano', 'vim', 'emacs'],
             callback: async ({ args, lines }) => {
                 if (args.length === 0) {
                     lines.push({ value: 'Please specify a file to read.', type: 'output' });
@@ -305,6 +328,7 @@
             name: 'curl',
             description: 'Fetch a URL.',
             usage: 'curl <url>',
+            aliases: ['fetch', 'wget'],
             example: 'curl /api/hello',
             callback: async ({ args, lines }) => {
                 if (args.length === 0) {

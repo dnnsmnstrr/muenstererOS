@@ -17,20 +17,19 @@ const STORAGE_KEY = 'achievements';
 
 function getInitialAchievements(): Record<string, Achievement> {
 	return {
+		onboarding: {
+			id: 'onboarding',
+			unlocked: false,
+			metadata: {
+				link: '/onboarding'
+			}
+		},
 		explorer: {
 			id: 'explorer',
 			unlocked: false,
 			progress: 0,
 			maxProgress: 23, // Default based on current sitemap, will be updated dynamically
 			metadata: { visitedPages: [] }
-		},
-		konami: {
-			id: 'konami',
-			unlocked: false
-		},
-		'lucky-spin': {
-			id: 'lucky-spin',
-			unlocked: false
 		},
 		streak: {
 			id: 'streak',
@@ -39,13 +38,23 @@ function getInitialAchievements(): Record<string, Achievement> {
 			maxProgress: 3,
 			metadata: { lastVisitDate: null, currentStreak: 0 }
 		},
-		onboarding: {
-			id: 'onboarding',
+		konami: {
+			id: 'konami',
 			unlocked: false
+		},
+		'lucky-spin': {
+			id: 'lucky-spin',
+			unlocked: false,
+			metadata: {
+				link: '/slashes'
+			}
 		},
 		haxor: {
 			id: 'haxor',
-			unlocked: false
+			unlocked: false,
+			metadata: {
+				link: '/terminal'
+			}
 		}
 	};
 }
@@ -84,7 +93,7 @@ export function unlockAchievement(id: string) {
 			};
 
 			toast.success(i18n.t(`achievements.${id}.title`), {
-				description: i18n.t(`achievements.${id}.description`),
+				description: i18n.t(`achievements.${id}.message`) !== `achievements.${id}.message` ? i18n.t(`achievements.${id}.message`) : i18n.t(`achievements.${id}.description`),
 				action: {
 					label: i18n.t('achievements.view_all'),
 					onClick: () => goto('/achievements')
@@ -102,6 +111,9 @@ export function unlockAchievement(id: string) {
 
 export function resetAchievements() {
 	if (!browser) return;
+
+	if (!confirm(i18n.t('achievements.reset_confirm'))) return;
+	
 	const initial = getInitialAchievements();
 	achievements.set(initial);
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));

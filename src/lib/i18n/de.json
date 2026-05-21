@@ -666,18 +666,19 @@
 		"locked": "Gesperrt",
 		"view_all": "Alle ansehen",
 		"reset": "Achievements zurücksetzen",
+		"reset_confirm": "Bist du sicher, dass du alle Achievements zurücksetzen möchtest?",
 		"reset_success": "Achievements wurden zurückgesetzt.",
 		"explorer": {
 			"title": "Entdecker",
 			"description": "Besuche jede Seite, die in der Sitemap aufgeführt ist."
 		},
 		"konami": {
-			"title": "Konami-Meister",
-			"description": "Glückwunsch, du bist ein Nerd! (Konami-Code eingegeben)"
+			"title": "Cheat Code",
+			"description": "Du weißt, was zu tun ist."
 		},
 		"lucky-spin": {
 			"title": "Glücksrad",
-			"description": "Lass das Rad dein Schicksal entscheiden. (Slashes-Rad gedreht)"
+			"description": "Lass das Rad dein Schicksal entscheiden. "
 		},
 		"streak": {
 			"title": "Durchhaltevermögen",

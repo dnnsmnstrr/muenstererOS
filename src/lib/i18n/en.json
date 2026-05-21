@@ -665,18 +665,19 @@
 		"locked": "Locked",
 		"view_all": "View All",
 		"reset": "Reset Achievements",
+		"reset_confirm": "Are you sure you want to reset all achievements?",
 		"reset_success": "Achievements have been reset.",
 		"explorer": {
 			"title": "Explorer",
 			"description": "Visit every page listed in the sitemap."
 		},
 		"konami": {
-			"title": "Konami Master",
-			"description": "Congratulations, you're a nerd! (Entered the Konami code)"
+			"title": "Cheat Code",
+			"description": "You know what to do."
 		},
 		"lucky-spin": {
 			"title": "Lucky Spin",
-			"description": "Let the wheel decide your fate. (Spun the slashes wheel)"
+			"description": "Let the wheel decide your fate."
 		},
 		"streak": {
 			"title": "Dedication",
