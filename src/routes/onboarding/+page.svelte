@@ -11,6 +11,7 @@
 	import { goto } from '$app/navigation';
 	import { PAGE_TITLE_SUFFIX, backgroundTextures } from '$lib/config';
 	import { browser } from '$app/environment';
+	import { unlockAchievement } from '$lib/stores/achievements';
 
 	let step = $state(1);
 
@@ -40,6 +41,7 @@
 	function finish() {
 		if (browser) {
 			localStorage.setItem('onboardingComplete', 'true');
+			unlockAchievement('onboarding');
 		}
 		goto('/');
 	}

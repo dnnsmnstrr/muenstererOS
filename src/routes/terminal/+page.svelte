@@ -23,6 +23,7 @@
 	import pagesData from '../../data/pages.json?raw';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { unlockAchievement } from '$lib/stores/achievements';
 
     type Page = {
 		date: string;
@@ -231,6 +232,7 @@
                     lines.push({ value: '', type: 'output' });
                 } else if (args[0] === 'not_a_virus.exe') {
                     lines.push({ value: 'Hack the world!', type: 'output' });
+                    unlockAchievement('haxor');
                 } else {
                     lines.push({ value: `File '${args[0]}' not found.`, type: 'output' });
                 }

@@ -11,6 +11,7 @@
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { createWebHaptics } from 'web-haptics/svelte';
 	import { Volume2, VolumeX } from 'lucide-svelte';
+	import { unlockAchievement } from '$lib/stores/achievements';
 
 	let isMuted = $state(window.localStorage.getItem('slashes_muted') === 'true');
 	const { trigger, destroy, setDebug, isSupported } = createWebHaptics({
@@ -133,6 +134,8 @@
 
 		rotation = targetRotation % 360;
 		isSpinning = false;
+
+		unlockAchievement('lucky-spin');
 
 		const winner = slashes[winningIndex];
 		if (winner.href !== '/slashes') {
