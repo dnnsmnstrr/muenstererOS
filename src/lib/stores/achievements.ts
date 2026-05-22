@@ -29,7 +29,7 @@ function getInitialAchievements(): Record<string, Achievement> {
 			unlocked: false,
 			progress: 0,
 			maxProgress: 23, // Default based on current sitemap, will be updated dynamically
-			metadata: { visitedPages: [] }
+			metadata: { visitedPages: [], link: '/sitemap' }
 		},
 		streak: {
 			id: 'streak',

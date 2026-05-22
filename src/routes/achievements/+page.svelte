@@ -82,17 +82,21 @@
 					class="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
 				></div>
 
-				<Card.Header class="pb-2 space-y-4">
+				<Card.Header class="space-y-4 pb-2">
 					<div class="flex items-start justify-between">
 						<div
 							class={cn(
-								'rounded-lg p-2 transition-transform duration-300 bg-muted h-12 group-hover:scale-110',
+								'h-12 rounded-lg bg-muted p-2 transition-transform duration-300 group-hover:scale-110',
 								achievement.unlocked
 									? 'bg-primary/20 text-foreground'
 									: 'bg-muted text-muted-foreground'
 							)}
 						>
-							{#if achievement.unlocked}
+							{#if achievement.unlocked && achievement.metadata?.link}
+								<a href={achievement.metadata?.link}>
+									<achievement.icon size={32} animate={hoveredId === achievement.id} />
+								</a>
+							{:else if achievement.unlocked}
 								<achievement.icon size={32} animate={hoveredId === achievement.id} />
 							{:else}
 								<Lock size={32} />
@@ -162,7 +166,12 @@
 		</Button>
 
 		{#if import.meta.env.DEV}
-			<Button variant="outline" size="sm" class="text-amber-600 dark:text-amber-500" onclick={unlockAllAchievements}>
+			<Button
+				variant="outline"
+				size="sm"
+				class="text-amber-600 dark:text-amber-500"
+				onclick={unlockAllAchievements}
+			>
 				<Zap class="mr-2 h-4 w-4" />
 				Unlock All (Dev)
 			</Button>

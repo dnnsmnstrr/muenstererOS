@@ -38,7 +38,25 @@
 		IdCard,
 		FerrisWheel,
 		Network,
-		Send
+		Send,
+		Siren,
+		CalendarClock,
+		BrickWallShield,
+
+		History,
+
+		MapPinned,
+
+		Gavel,
+
+		AtSign,
+
+		Ship
+
+
+
+
+
 	} from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
@@ -177,10 +195,7 @@
 				trackDailyVisit();
 				const path = page.url.pathname;
 				// Extract all valid sitemap paths from the data if possible, or use a predefined list
-				const allValidPaths = [
-					...bookmarksRaw.map((b) => b.href),
-					...otherPages.map((p) => p.path)
-				]
+				const allValidPaths = [...bookmarksRaw.map((b) => b.href), ...otherPages.map((p) => p.path)]
 					.filter((p): p is string => !!p)
 					.filter((p) => ['/admin', '/contact'].indexOf(p) === -1); // Exclude admin paths or any other non-visit-worthy paths
 				trackPageVisit(path, allValidPaths);
@@ -216,7 +231,7 @@
 	});
 
 	const bookmarksRaw: BookmarkItem[] = [
-		{ name: 'Now', href: '/now', icon: Info },
+		{ name: 'Now', href: '/now', icon: CalendarClock },
 		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
 		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
@@ -226,11 +241,17 @@
 		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
 		{ name: 'Changelog', href: '/log', icon: List, hidden: true },
 		{ name: 'API', href: '/api', icon: Webhook, hidden: true },
-		{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
+		{ name: 'Status', href: '/status', icon: Siren, hidden: true },
 		{ name: 'Buttons', href: '/buttons', icon: IdCard, hidden: true },
 		{ name: 'Concerts', href: '/concerts', icon: Ticket, hidden: true },
 		{ name: 'Sites', href: '/sites', icon: Network, hidden: true },
-		{ name: 'Ping', href: '/ping', icon: Send, hidden: true }
+		{ name: 'Ping', href: '/ping', icon: Send, hidden: true },
+		{ name: 'Admin', href: '/admin', icon: BrickWallShield, hidden: true },
+		{ name: 'Timeline', href: '/timeline', icon: History, hidden: true },
+		{ name: 'Where', href: '/where', icon: MapPinned, hidden: true },
+		{ name: 'Legal Notice', href: '/legal', icon: Gavel, hidden: true },
+		{ name: 'Contact', href: '/contact', icon: AtSign, hidden: true },
+		{ name: 'Onboarding', href: '/onboarding', icon: Ship, hidden: true },
 	];
 	const bookmarks: BookmarkItem[] = $derived(
 		bookmarksRaw.map((b) => ({

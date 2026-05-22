@@ -43,7 +43,8 @@
 		Download,
 		CircleCheck,
 		Circle,
-		FileCode
+		FileCode,
+		Trophy
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -609,7 +610,7 @@
 				})()
 			],
 			fun: [
-				enrichLink({ name: i18n.t('common.achievements'), icon: PartyPopper, href: '/achievements' }),
+				enrichLink({ name: i18n.t('common.achievements'), icon: Trophy, href: '/achievements' }),
 				enrichLink(
 					{
 						name: i18n.t('command.confetti'),
@@ -652,7 +653,7 @@
 						]
 					: [])
 			],
-			edit_gist: [
+			edit_gist: hasGithubToken ? [
 				...Object.entries(gists).map(([key, gist]) =>
 					enrichLink(
 						{
@@ -673,7 +674,7 @@
 					'command.go_back_edit_gist',
 					true
 				)
-			],
+			] : [],
 			screensaver: [
 				enrichLink(
 					{
@@ -779,7 +780,7 @@
 	<Command.Input bind:value={query} icon={inputIcon} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
-		{#each Object.entries(commandConfig).filter(([group]) => (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
+		{#each Object.entries(commandConfig).filter(([group, commands]) => commands.length && (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
 			<Command.Group
 				heading={i18n.t(`command.${group}`) !== `command.${group}`
 					? i18n.t(`command.${group}`)
