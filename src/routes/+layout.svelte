@@ -183,7 +183,6 @@
 				]
 					.filter((p): p is string => !!p)
 					.filter((p) => ['/admin', '/contact'].indexOf(p) === -1); // Exclude admin paths or any other non-visit-worthy paths
-				console.log(allValidPaths);
 				trackPageVisit(path, allValidPaths);
 			}
 		}

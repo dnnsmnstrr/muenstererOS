@@ -15,12 +15,12 @@
 	import WindowButtons from '$lib/components/WindowButtons.svelte';
 	import { cn } from '$lib/utils/utils';
 
-	let { children, class: className }: WindowProps = $props();
+	let { children, onClose, class: className }: WindowProps & { onClose?: () => {}} = $props();
 </script>
 
 <div class={cn('aspect-video w-full rounded-lg border border-border bg-background', className)}>
 	<div class="border-b border-inherit p-1">
-		<WindowButtons />
+		<WindowButtons {onClose} />
 	</div>
 	<div class="p-4">
 		{@render children?.()}
