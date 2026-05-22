@@ -183,6 +183,14 @@
 			toggleMaximize();
 			return;
 		}
+		const minimizeButton = target.closest('[data-window-action="minimize"]');
+		console.log(minimizeButton, maximizeButton)
+		if (minimizeButton) {
+			isMaximized = false;
+			toggleMaximize();
+			recenter();
+			return;
+		}
 		e.preventDefault();
 
 		// Disable bounce animation when user interacts with window
@@ -473,7 +481,7 @@
 					onpointercancel={handleWindowPointerUp}
 					ondblclick={recenter}
 				>
-					<WindowButtons {isMaximized} onMaximize={toggleMaximize} />
+					<WindowButtons {isMaximized} />
 				</div>
 				<div class={cn('flex h-full items-center justify-center', className)}>
 					{@render children?.()}

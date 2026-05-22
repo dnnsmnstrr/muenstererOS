@@ -37,6 +37,7 @@
 	let currentDirectory = $state<string>('~');
 	let previousDirectory = $state<string>('');
 	let isIntroComplete = $state(false);
+	let isMaximized = $state(false);
 
 	// Command history state
 	let commandHistory = $state<string[]>([]);
@@ -499,7 +500,7 @@
 
 <div class="container">
 	<Heading>{i18n.t('terminal.title')}</Heading>
-	<Terminal.Root class="max-w-2xl" delay={100} onClose={() => goto('/')}>
+	<Terminal.Root class={isMaximized ? 'w-full' : 'max-w-2xl'} delay={100} onClose={() => goto('/')} onMaximize={() => {isMaximized = true}} onMinimize={() => {isMaximized = false}}>
 		{#if !isIntroComplete}
 			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
 				{#snippet loadingMessage()}
@@ -511,7 +512,7 @@
 			</Terminal.Loading>
 		{:else}
 			<div
-				class="mb-1 flex max-h-40 flex-col gap-1 overflow-y-auto overflow-x-clip md:max-h-80"
+				class="mb-1 flex max-h-40 flex-col gap-1 overflow-y-auto overflow-x-clip {isMaximized ? 'max-h-[58vh]' : 'md:max-h-80'}"
 				bind:this={linesContainer}
 			>
 				{#each lines as line}

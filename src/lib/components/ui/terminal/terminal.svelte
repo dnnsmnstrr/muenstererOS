@@ -13,6 +13,8 @@
 		delay = 0,
 		speed = 1,
 		onComplete = () => {},
+		onMinimize = () => {},
+		onMaximize = () => {},
 		onClose = () => {},
 		children,
 		class: className
@@ -30,6 +32,6 @@
 	});
 </script>
 
-<Window class={cn('font-mono text-sm font-light', className)} {onClose}>
+<Window class={cn('font-mono text-sm font-light', className)} {onClose} {onMinimize} {onMaximize}>
 	{@render children?.()}
 </Window>

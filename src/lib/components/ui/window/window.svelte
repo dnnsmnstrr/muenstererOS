@@ -15,12 +15,22 @@
 	import WindowButtons from '$lib/components/WindowButtons.svelte';
 	import { cn } from '$lib/utils/utils';
 
-	let { children, onClose, class: className }: WindowProps & { onClose?: () => {}} = $props();
+	let {
+		children,
+		onClose,
+		onMinimize,
+		onMaximize,
+		class: className
+	}: WindowProps & {
+		onClose?: () => void;
+		onMinimize?: () => void;
+		onMaximize?: () => void;
+	} = $props();
 </script>
 
 <div class={cn('aspect-video w-full rounded-lg border border-border bg-background', className)}>
 	<div class="border-b border-inherit p-1">
-		<WindowButtons {onClose} />
+		<WindowButtons {onClose} {onMinimize} {onMaximize} />
 	</div>
 	<div class="p-4">
 		{@render children?.()}

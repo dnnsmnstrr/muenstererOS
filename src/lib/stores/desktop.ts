@@ -111,7 +111,7 @@ export function initializeFiles(
 				// New file - calculate position
 				const leftOffset = file.leftOffset || 0;
 				let x = padding + leftOffset;
-				let y = padding + index * spacing;
+				let y = (padding * 2) + index * spacing;
 
 				// Check if would go off-screen vertically
 				if (y + fileSize > windowSize.height - padding) {
