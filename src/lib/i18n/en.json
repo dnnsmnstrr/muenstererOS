@@ -393,7 +393,10 @@
 		"send": "Send Message",
 		"sending": "Sending...",
 		"success": "Message sent!",
-		"error": "Failed to send message."
+		"error": "Failed to send message.",
+		"latest_message": "Latest Message",
+		"no_messages": "No messages found.",
+		"fetch_error": "Failed to fetch latest message."
 	},
 	"api": {
 		"title": "API",
