@@ -453,7 +453,6 @@
 			navigation: [
 				enrichLink({ name: i18n.t('common.home'), icon: Home, href: '/' }),
 				enrichLink({ name: i18n.t('common.about'), icon: User, href: '/about' }),
-				enrichLink({ name: i18n.t('common.achievements'), icon: PartyPopper, href: '/achievements' }),
 				...pages
 					.filter(
 						(page) => !['/', '/about', '/settings', '/achievements'].includes(page.href || '')
@@ -610,6 +609,7 @@
 				})()
 			],
 			fun: [
+				enrichLink({ name: i18n.t('common.achievements'), icon: PartyPopper, href: '/achievements' }),
 				enrichLink(
 					{
 						name: i18n.t('command.confetti'),

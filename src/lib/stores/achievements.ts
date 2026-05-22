@@ -207,7 +207,7 @@ export function trackPageVisit(path: string, allPages: string[]) {
 		if (!explorer || explorer.unlocked) return state;
 
 		const visitedPages = explorer.metadata?.visitedPages || [];
-		console.log('missing', allPages.filter(p => !visitedPages.includes(p)));
+		//console.log('missing pages', allPages.filter(p => !visitedPages.includes(p)));
 		if (!visitedPages.includes(path) && allPages.includes(path)) {
 			const newVisitedPages = [...visitedPages, path];
 			const progress = newVisitedPages.length;

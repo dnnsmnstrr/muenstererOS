@@ -17,6 +17,7 @@
 	} from '$lib/components/ui/card';
 	import { toast } from 'svelte-sonner';
 	import { Send, InfoIcon } from 'lucide-svelte';
+	import { Kbd } from '$lib/components/typography';
 
 	let message = $state('');
 	let loading = $state(false);
@@ -125,6 +126,7 @@
 					{:else}
 						<Send class="mr-2 h-4 w-4" />
 						{i18n.t('ping.send')}
+						<Kbd class='text-[10px]'>cmd + enter</Kbd>
 					{/if}
 				</Button>
 			</form>
