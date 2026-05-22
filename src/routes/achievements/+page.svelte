@@ -2,23 +2,24 @@
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { Progress } from '$lib/components/ui/progress';
-	import { achievements, resetAchievements } from '$lib/stores/achievements';
+	import { achievements, resetAchievements, unlockAllAchievements } from '$lib/stores/achievements';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
-	import Award from '$lib/components/icons/award.svelte';
+	import Gamepad from '$lib/components/icons/gamepad.svelte';
 	import ShipWheel from '$lib/components/icons/ship-wheel.svelte';
 	import ListChecks from '$lib/components/icons/list-checks.svelte';
 	import CalendarDays from '$lib/components/icons/calendar-days.svelte';
 	import Terminal from '$lib/components/icons/terminal.svelte';
+	import PartyPopper from '$lib/components/icons/party-popper.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
-	import { Check, Lock, PartyPopper, RotateCcw } from 'lucide-svelte';
+	import { Check, Lock, RotateCcw, Zap } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { goto } from '$app/navigation';
 
 	const achievementIcons = {
 		explorer: ListChecks,
-		konami: Award,
+		konami: Gamepad,
 		'lucky-spin': ShipWheel,
 		streak: CalendarDays,
 		onboarding: PartyPopper,
@@ -74,18 +75,18 @@
 				onmouseleave={() => (hoveredId = null)}
 				class={cn(
 					'group relative overflow-hidden transition-all duration-300 hover:shadow-lg',
-					achievement.unlocked ? 'border-primary/50 bg-primary/80' : 'opacity-80'
+					achievement.unlocked ? 'border-primary/50' : 'opacity-80'
 				)}
 			>
 				<div
 					class="absolute inset-0 -z-10 bg-gradient-to-br from-primary/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
 				></div>
 
-				<Card.Header class="pb-2">
+				<Card.Header class="pb-2 space-y-4">
 					<div class="flex items-start justify-between">
 						<div
 							class={cn(
-								'rounded-lg p-2 transition-transform duration-300 group-hover:scale-110',
+								'rounded-lg p-2 transition-transform duration-300 bg-muted h-12 group-hover:scale-110',
 								achievement.unlocked
 									? 'bg-primary/20 text-foreground'
 									: 'bg-muted text-muted-foreground'
@@ -104,7 +105,7 @@
 							</span>
 						{/if}
 					</div>
-					<Card.Title class="mt-4 flex items-center gap-2">
+					<Card.Title class="flex items-center gap-2">
 						{achievement.title}
 					</Card.Title>
 					<Card.Description class="min-h-10">
@@ -112,7 +113,7 @@
 					</Card.Description>
 				</Card.Header>
 
-				<Card.Content>
+				<Card.Content class="pt-0">
 					{#if achievement.maxProgress && achievement.maxProgress > 1}
 						<div class="space-y-2">
 							<div class="flex justify-between text-xs text-muted-foreground">
@@ -154,11 +155,18 @@
 		{/each}
 	</div>
 
-	<div class="mt-16 flex justify-center">
+	<div class="mt-16 flex flex-col items-center gap-4">
 		<Button variant="outline" size="sm" onclick={resetAchievements}>
 			<RotateCcw class="mr-2 h-4 w-4" />
 			{i18n.t('achievements.reset')}
 		</Button>
+
+		{#if import.meta.env.DEV}
+			<Button variant="outline" size="sm" class="text-amber-600 dark:text-amber-500" onclick={unlockAllAchievements}>
+				<Zap class="mr-2 h-4 w-4" />
+				Unlock All (Dev)
+			</Button>
+		{/if}
 	</div>
 </div>
 

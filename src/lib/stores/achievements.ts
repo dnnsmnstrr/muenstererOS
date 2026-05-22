@@ -231,3 +231,28 @@ export function trackPageVisit(path: string, allPages: string[]) {
 		return state;
 	});
 }
+
+export function unlockAllAchievements() {
+	if (!browser) return;
+
+	achievements.update((state) => {
+		const updated = { ...state };
+		
+		Object.keys(updated).forEach((id) => {
+			if (!updated[id].unlocked) {
+				updated[id] = {
+					...updated[id],
+					unlocked: true,
+					unlockedAt: Date.now(),
+					progress: updated[id].maxProgress || 1
+				};
+			}
+		});
+
+		return updated;
+	});
+
+	toast.success('All achievements unlocked!', {
+		description: 'Testing mode activated'
+	});
+}

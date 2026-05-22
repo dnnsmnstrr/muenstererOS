@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	/**
 	 * @typedef {Object} Props
 	 * @property {string} [color]
@@ -23,11 +23,11 @@
 		isHovered = true;
 		setTimeout(() => {
 			isHovered = false;
-		}, 1000);
+		}, 500);
 	}
 </script>
 
-<div class={className} aria-label="list-checks" role="img" onmouseenter={handleMouseEnter}>
+<div class={className} aria-label="gamepad" role="img" onmouseenter={handleMouseEnter}>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}
@@ -38,14 +38,14 @@
 		stroke-width={strokeWidth}
 		stroke-linecap="round"
 		stroke-linejoin="round"
-		class="list-checks-icon"
+		class="gamepad-icon"
 		class:animate={isHovered || animate}
 	>
-		<path d="m3 17 2 2 4-4" class="check check-1" />
-		<path d="m3 7 2 2 4-4" class="check check-2" />
-		<path d="M13 6h8" />
-		<path d="M13 12h8" />
-		<path d="M13 18h8" />
+		<line x1="6" x2="10" y1="12" y2="12" />
+		<line x1="8" x2="8" y1="10" y2="14" />
+		<line x1="15" x2="15.01" y1="13" y2="13" />
+		<line x1="18" x2="18.01" y1="11" y2="11" />
+		<rect width="20" height="12" x="2" y="6" rx="2" />
 	</svg>
 </div>
 
@@ -53,25 +53,23 @@
 	div {
 		display: inline-block;
 	}
-	.check {
-		transition: stroke-dashoffset 0.3s ease-in-out;
+
+	.gamepad-icon {
+		transform-origin: center center;
+		transition: transform 0.3s ease-in-out;
 	}
 
-	.animate .check-1 {
-		animation: check-draw 0.5s forwards 0.3s;
-	}
-	.animate .check-2 {
-		animation: check-draw 0.5s forwards;
+	.gamepad-icon.animate {
+		animation: bounce-gamepad 0.5s ease-in-out;
 	}
 
-	@keyframes check-draw {
-		from {
-			opacity: 0;
-			transform: translateX(-5px);
+	@keyframes bounce-gamepad {
+		0%,
+		100% {
+			transform: translateY(0);
 		}
-		to {
-			opacity: 1;
-			transform: translateX(0);
+		50% {
+			transform: translateY(-4px);
 		}
 	}
 </style>
