@@ -21,33 +21,35 @@
 	let message = $state('');
 	let loading = $state(false);
 
-	let latestMessage = $state<NtfyMessage | null>(null);
+	let recentMessages = $state<NtfyMessage[]>([]);
 	let loadingLatest = $state(true);
 	let fetchError = $state(false);
 
-	async function fetchLatestMessage() {
+	async function fetchRecentMessages() {
 		loadingLatest = true;
 		fetchError = false;
 		try {
-			const response = await fetch(`${NTFY_URL}/json?poll=1&since=latest`);
+			const response = await fetch(`${NTFY_URL}/json?poll=1&since=all`);
 			if (!response.ok) throw new Error('Failed to fetch');
 
 			const text = await response.text();
 			const lines = text.trim().split('\n');
+			const messages: NtfyMessage[] = [];
 
-			for (let i = lines.length - 1; i >= 0; i--) {
+			for (const line of lines) {
 				try {
-					const msg = JSON.parse(lines[i]) as NtfyMessage;
+					if (!line.trim()) continue;
+					const msg = JSON.parse(line) as NtfyMessage;
 					if (msg.event === 'message') {
-						latestMessage = msg;
-						break;
+						messages.push(msg);
 					}
 				} catch (e) {
 					console.error('Error parsing NDJSON line:', e);
 				}
 			}
+			recentMessages = messages.reverse();
 		} catch (error) {
-			console.error('Error fetching latest message:', error);
+			console.error('Error fetching recent messages:', error);
 			fetchError = true;
 		} finally {
 			loadingLatest = false;
@@ -55,7 +57,7 @@
 	}
 
 	onMount(() => {
-		fetchLatestMessage();
+		fetchRecentMessages();
 	});
 
 	async function sendMessage() {
@@ -71,6 +73,7 @@
 			if (response.ok) {
 				toast.success(i18n.t('ping.success'));
 				message = '';
+				fetchRecentMessages();
 			} else {
 				throw new Error('Failed to send message');
 			}
@@ -131,9 +134,14 @@
 	<Accordion.Root type="single" class="mt-4">
 		<Accordion.Item value="latest">
 			<Accordion.Trigger class="text-sm">
-				<div class="flex items-center gap-2">
-					<InfoIcon class="h-4 w-4" />
-					{i18n.t('ping.latest_message')}
+				<div class="flex items-center gap-2 overflow-hidden pr-4">
+					<InfoIcon class="h-4 w-4 shrink-0" />
+					<span class="shrink-0">{i18n.t('ping.latest_message')}</span>
+					{#if recentMessages.length > 0}
+						<span class="text-muted-foreground truncate text-xs font-normal">
+							— {recentMessages[0].message}
+						</span>
+					{/if}
 				</div>
 			</Accordion.Trigger>
 			<Accordion.Content>
@@ -141,15 +149,19 @@
 					<p class="text-muted-foreground text-sm">{i18n.t('api.loading')}</p>
 				{:else if fetchError}
 					<p class="text-destructive text-sm">{i18n.t('ping.fetch_error')}</p>
-				{:else if latestMessage}
-					<div class="space-y-1">
-						{#if latestMessage.title}
-							<p class="text-sm font-semibold">{latestMessage.title}</p>
-						{/if}
-						<p class="text-sm">{latestMessage.message}</p>
-						<p class="text-muted-foreground text-xs">
-							{getFriendlyTime(new Date(latestMessage.time * 1000))}
-						</p>
+				{:else if recentMessages.length > 0}
+					<div class="divide-y divide-border">
+						{#each recentMessages as msg}
+							<div class="py-3 first:pt-0 last:pb-0">
+								{#if msg.title}
+									<p class="text-sm font-semibold">{msg.title}</p>
+								{/if}
+								<p class="text-sm">{msg.message}</p>
+								<p class="text-muted-foreground text-xs">
+									{getFriendlyTime(new Date(msg.time * 1000))}
+								</p>
+							</div>
+						{/each}
 					</div>
 				{:else}
 					<p class="text-muted-foreground text-sm">{i18n.t('ping.no_messages')}</p>
