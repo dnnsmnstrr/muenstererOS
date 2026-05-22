@@ -394,7 +394,10 @@
 		"send": "Nachricht senden",
 		"sending": "Wird gesendet...",
 		"success": "Nachricht gesendet!",
-		"error": "Nachricht konnte nicht gesendet werden."
+		"error": "Nachricht konnte nicht gesendet werden.",
+		"latest_message": "Letzte Nachricht",
+		"no_messages": "Keine Nachrichten gefunden.",
+		"fetch_error": "Fehler beim Abrufen der letzten Nachricht."
 	},
 	"api": {
 		"title": "API",

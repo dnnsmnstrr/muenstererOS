@@ -36,3 +36,25 @@ export interface PlaylistItem {
 	imageUrl?: string;
 	isHovered?: boolean;
 }
+
+export interface NtfyMessage {
+	id: string;
+	time: number;
+	expires?: number;
+	event: 'open' | 'keepalive' | 'message' | 'message_delete' | 'message_clear' | 'poll_request';
+	topic: string;
+	sequence_id?: string;
+	message?: string;
+	title?: string;
+	tags?: string[];
+	priority?: number;
+	click?: string;
+	actions?: any[];
+	attachment?: {
+		name: string;
+		url: string;
+		type?: string;
+		size?: number;
+		expires?: number;
+	};
+}
