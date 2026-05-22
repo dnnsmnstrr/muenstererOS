@@ -377,6 +377,13 @@
 		}
 	];
 
+    async function scrollToBottom() {
+        if (linesContainer) {
+			await tick();
+			linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
+		}
+    }
+
 	async function handleSubmit(value: string) {
 		// Add to command history if not empty and not duplicate of last
 		if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
@@ -400,10 +407,7 @@
 		}
 		debugLog('Command submitted:', value);
 
-		if (linesContainer) {
-			await tick();
-			linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
-		}
+		scrollToBottom();
 	}
 
 	async function handleKeyDown(event: KeyboardEvent, setInput: (value: string) => void) {
@@ -426,10 +430,7 @@
 			} else if (completions.length > 1 && !args.length) {
 				// Multiple matches: output options in terminal
 				lines.push({ value: completions.join(' '), type: 'output' });
-				if (linesContainer) {
-					await tick();
-					linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
-				}
+				scrollToBottom()
 			}
 		}
 		if (event.ctrlKey && event.key.toLowerCase() === 'c') {
@@ -491,6 +492,11 @@
 		}
 		return [];
 	}
+
+    function toggleMaximize(value: boolean) {
+        isMaximized = value;
+        scrollToBottom();
+    }
 </script>
 
 <svelte:head>
@@ -500,7 +506,7 @@
 
 <div class="container">
 	<Heading>{i18n.t('terminal.title')}</Heading>
-	<Terminal.Root class={isMaximized ? 'w-full' : 'max-w-2xl'} delay={100} onClose={() => goto('/')} onMaximize={() => {isMaximized = true}} onMinimize={() => {isMaximized = false}}>
+	<Terminal.Root class={isMaximized ? 'w-full' : 'max-w-2xl'} delay={100} onClose={() => goto('/')} onMaximize={() => toggleMaximize(true)} onMinimize={() => toggleMaximize(false)}>
 		{#if !isIntroComplete}
 			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
 				{#snippet loadingMessage()}
