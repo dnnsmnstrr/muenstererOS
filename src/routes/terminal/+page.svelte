@@ -18,6 +18,7 @@
 
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Terminal from '$lib/components/ui/terminal';
+	import { cn } from '$lib/utils/utils';
 	import { debugLog } from '$lib/stores/app';
 	import { endpoints } from '../api/+page.svelte';
 	import pagesData from '../../data/pages.json?raw';
@@ -534,7 +535,7 @@
 
 <div class="container">
 	<Heading>{i18n.t('terminal.title')}</Heading>
-	<Terminal.Root class={isMaximized ? 'w-full' : 'max-w-2xl'} delay={100} onClose={() => goto('/')} onMaximize={() => toggleMaximize(true)} onMinimize={() => toggleMaximize(false)}>
+	<Terminal.Root class={cn(isMaximized ? 'h-[60vh] w-full aspect-auto' : 'max-w-2xl')} delay={100} onClose={() => goto('/')} onMaximize={() => toggleMaximize(true)} onMinimize={() => toggleMaximize(false)}>
 		{#if !isIntroComplete}
 			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
 				{#snippet loadingMessage()}
@@ -546,7 +547,10 @@
 			</Terminal.Loading>
 		{:else}
 			<div
-				class="mb-1 flex max-h-40 flex-col gap-1 overflow-y-auto overflow-x-clip {isMaximized ? 'max-h-[58vh]' : 'md:max-h-80'}"
+				class={cn(
+					'mb-1 flex max-h-40 flex-col gap-1 overflow-y-auto overflow-x-clip',
+					isMaximized ? 'max-h-[58vh]' : 'md:max-h-80'
+				)}
 				bind:this={linesContainer}
 			>
 				{#each lines as line}
