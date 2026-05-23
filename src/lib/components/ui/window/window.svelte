@@ -20,19 +20,28 @@
 		onClose,
 		onMinimize,
 		onMaximize,
-		class: className
+		isMaximized = false,
+		class: className,
+		...rest
 	}: WindowProps & {
 		onClose?: () => void;
 		onMinimize?: () => void;
 		onMaximize?: () => void;
+		isMaximized?: boolean;
 	} = $props();
 </script>
 
-<div class={cn('aspect-video w-full rounded-lg border border-border bg-background', className)}>
+<div
+	class={cn(
+		'w-full flex flex-col rounded-lg border border-border bg-background transition-all duration-300',
+		className
+	)}
+	{...rest}
+>
 	<div class="border-b border-inherit p-1">
-		<WindowButtons {onClose} {onMinimize} {onMaximize} />
+		<WindowButtons {onClose} {onMinimize} {onMaximize} {isMaximized} />
 	</div>
-	<div class="p-4">
+	<div class="p-4 flex-grow flex flex-col min-h-0">
 		{@render children?.()}
 	</div>
 </div>

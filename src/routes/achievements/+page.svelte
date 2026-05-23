@@ -19,7 +19,7 @@
 
 	const achievementIcons = {
 		explorer: ListChecks,
-		cheatcode: Gamepad,
+		konami: Gamepad,
 		'lucky-spin': ShipWheel,
 		streak: CalendarDays,
 		onboarding: PartyPopper,
