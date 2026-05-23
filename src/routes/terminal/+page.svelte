@@ -24,6 +24,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { unlockAchievement } from '$lib/stores/achievements';
+	import { CHEAT_CODES, triggerCheatAnimation } from '$lib/utils/cheatcodes';
 	import { screensaver } from '$lib/stores/app';
 	import { screensaverActive } from '$lib/stores/desktop';
 
@@ -405,17 +406,29 @@
     }
 
 	async function handleSubmit(value: string) {
+		const trimmedValue = value.trim();
 		// Add to command history if not empty and not duplicate of last
-		if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
+		if (trimmedValue && commandHistory[commandHistory.length - 1] !== value) {
 			commandHistory.push(value);
 		}
 		historyIndex = null;
 
 		// Check for forkbomb string directly
-		if (value.trim() === ':(){ :|:& };:') {
+		if (trimmedValue === ':(){ :|:& };:') {
 			lines.length = 0;
 			$screensaver = 'crash';
 			$screensaverActive = true;
+			return;
+		}
+
+		// Check for cheat codes
+		const cheat = CHEAT_CODES.find((c) => c.code === trimmedValue.toLowerCase());
+		if (cheat) {
+			debugLog(`Cheat code detected in terminal: ${cheat.id}`);
+			triggerCheatAnimation(cheat.animation);
+			unlockAchievement('konami');
+			lines.push({ value, type: 'input' });
+			scrollToBottom();
 			return;
 		}
 

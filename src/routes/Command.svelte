@@ -80,6 +80,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
 	import { unlockAchievement } from '$lib/stores/achievements';
+	import { CHEAT_CODES, triggerCheatAnimation, findCheatCode } from '$lib/utils/cheatcodes';
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
@@ -124,21 +125,8 @@
 		t: '/terminal',
 		u: '/uses'
 	};
-	const konamiCode = [
-		'ArrowUp',
-		'ArrowUp',
-		'ArrowDown',
-		'ArrowDown',
-		'ArrowLeft',
-		'ArrowRight',
-		'ArrowLeft',
-		'ArrowRight',
-		'b',
-		'a'
-	];
-	let konamiIndex = 0;
-	const moneyCheat = 'motherlode';
-	let moneyCheatIndex = 0;
+	let keyBuffer: string[] = [];
+	const bufferLimit = Math.max(...CHEAT_CODES.map((c) => c.sequence?.length || c.code?.length || 0));
 
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
@@ -173,64 +161,16 @@
 			return;
 		}
 
-		// konami easter egg https://en.wikipedia.org/wiki/Konami_Code
-		if (e.key === konamiCode[konamiIndex]) {
-			konamiIndex += 1;
-		} else {
-			konamiIndex = 0;
-		}
-		if (konamiIndex === konamiCode.length) {
-			debugLog("That's what I call a Pro Gamer Move!");
-			var defaults = {
-				spread: 360,
-				ticks: 50,
-				gravity: 0,
-				decay: 0.94,
-				startVelocity: 30,
-				colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
-			};
+		// cheat code recognition
+		keyBuffer.push(e.key);
+		keyBuffer = keyBuffer.slice(-bufferLimit);
 
-			function shoot() {
-				confetti({
-					...defaults,
-					particleCount: 40,
-					scalar: 1.2,
-					shapes: ['star']
-				});
-
-				confetti({
-					...defaults,
-					particleCount: 10,
-					scalar: 0.75,
-					shapes: ['circle']
-				});
-			}
-			setTimeout(shoot, 0);
-			setTimeout(shoot, 150);
-			setTimeout(shoot, 300);
-			setTimeout(shoot, 450);
-			setTimeout(shoot, 600);
-
+		const cheat = findCheatCode(keyBuffer);
+		if (cheat) {
+			debugLog(`Cheat code detected: ${cheat.id}`);
+			triggerCheatAnimation(cheat.animation);
 			unlockAchievement('konami');
-		}
-		if (e.key.toLowerCase() === moneyCheat[moneyCheatIndex]) {
-			moneyCheatIndex += 1;
-		} else {
-			moneyCheatIndex = 0;
-		}
-		if (moneyCheatIndex === moneyCheat.length) {
-			moneyCheatIndex = 0;
-			confetti({
-				spread: 180,
-				angle: 270,
-				origin: { x: 0.5, y: -0.2 },
-				scalar: 2,
-				ticks: 220,
-				gravity: 1.2,
-				decay: 0.96,
-				startVelocity: 12,
-				shapes: ['💰', '💵', '💴', '💶', '💷', '💸', '🪙'].map(emoji => confetti.shapeFromText(emoji))
-			});
+			keyBuffer = [];
 		}
 
 		// meta
@@ -362,6 +302,18 @@
 
 	$effect(() => {
 		loadingProgress.set(loading ? 100 : 0);
+	});
+
+	$effect(() => {
+		if (query) {
+			const cheat = CHEAT_CODES.find((c) => c.code === query.toLowerCase());
+			if (cheat) {
+				debugLog(`Cheat code detected: ${cheat.id}`);
+				triggerCheatAnimation(cheat.animation);
+				unlockAchievement('konami');
+				query = '';
+			}
+		}
 	});
 
 	const enrichLink = (
