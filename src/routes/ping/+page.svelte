@@ -136,14 +136,25 @@
 				let failCount = 0;
 
 				try {
+					const ntfyToken = localStorage.getItem('ntfy_admin_token');
+					let needsToken = false;
 					for (const msg of recentMessages) {
 						try {
-							const response = await fetch(`${NTFY_URL}?id=${msg.id}`, {
-								method: 'DELETE'
+							const idToDelete = msg.id;
+							const response = await fetch(`${NTFY_URL}/${idToDelete}`, {
+								method: 'DELETE',
+								headers: ntfyToken
+									? {
+											Authorization: `Bearer ${ntfyToken}`
+										}
+									: {}
 							});
 							if (response.ok) {
 								successCount++;
 							} else {
+								if (response.status === 401 || response.status === 403) {
+									needsToken = true;
+								}
 								failCount++;
 							}
 						} catch (e) {
@@ -154,10 +165,15 @@
 
 					if (failCount === 0) {
 						toast.success(i18n.t('ping.clear_success'));
-					} else if (successCount > 0) {
-						toast.warning(i18n.t('ping.clear_error'));
 					} else {
-						toast.error(i18n.t('ping.clear_error'));
+						const errorMessage = needsToken
+							? `${i18n.t('ping.clear_error')} (Admin token required)`
+							: i18n.t('ping.clear_error');
+						if (successCount > 0) {
+							toast.warning(errorMessage);
+						} else {
+							toast.error(errorMessage);
+						}
 					}
 				} finally {
 					clearing = false;
