@@ -165,6 +165,7 @@
 
 					if (failCount === 0) {
 						toast.success(i18n.t('ping.clear_success'));
+						recentMessages = [];
 					} else {
 						const errorMessage = needsToken
 							? `${i18n.t('ping.clear_error')} (Admin token required)`
@@ -177,7 +178,10 @@
 					}
 				} finally {
 					clearing = false;
-					fetchRecentMessages();
+					// Wait a bit for the ntfy server to reflect changes
+					setTimeout(() => {
+						fetchRecentMessages();
+					}, 500);
 				}
 			}
 		});
