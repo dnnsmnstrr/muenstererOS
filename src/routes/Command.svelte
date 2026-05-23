@@ -312,7 +312,7 @@
 			if (cheat) {
 				debugLog(`Cheat code detected: ${cheat.id}`);
 				triggerCheatAnimation(cheat.animation);
-				unlockAchievement('konami');
+				unlockAchievement('cheatcode');
 				query = '';
 			}
 		}
