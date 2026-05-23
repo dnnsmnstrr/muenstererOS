@@ -50,7 +50,7 @@
 		},
 		{
 			name: 'Events',
-			url: '/api/events'
+			url: '/api/events',
 		},
 		{
 			name: 'Concerts',
@@ -82,17 +82,6 @@
 	let error: string | null = null;
 	let queryParams: Record<string, string> = {};
 	let paramsOpen = false;
-	let responseTime: number | null = null;
-	let responseSize: number | null = null;
-
-	function formatBytes(bytes: number, decimals = 2) {
-		if (bytes === 0) return '0 B';
-		const k = 1024;
-		const dm = decimals < 0 ? 0 : decimals;
-		const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-	}
 
 	function buildUrl(baseUrl: string, params: Record<string, string>): string {
 		const url = new URL(baseUrl, window.location.origin);
@@ -111,9 +100,6 @@
 		error = null;
 		response = null;
 		schema = null;
-		responseTime = null;
-		responseSize = null;
-		const startTime = performance.now();
 		try {
 			const url = buildUrl(endpoint.url, queryParams);
 			const res = await fetch(url, {
@@ -121,20 +107,11 @@
 				headers: { 'Content-Type': 'application/json' }
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-			const blob = await res.blob();
-			responseSize = blob.size;
-			const text = await blob.text();
-			response = JSON.parse(text);
-
-			responseTime = Math.round(performance.now() - startTime);
+			response = await res.json();
 
 			if (response?.$schema && typeof response.$schema === 'string') {
 				try {
-					let schemaUrl = new URL(
-						response.$schema,
-						new URL(url, window.location.origin)
-					).toString();
+					let schemaUrl = new URL(response.$schema, new URL(url, window.location.origin)).toString();
 					// Transform gist.github.com raw URLs to gist.githubusercontent.com to avoid CORS issues
 					if (schemaUrl.includes('gist.github.com') && schemaUrl.includes('/raw/')) {
 						schemaUrl = schemaUrl.replace('gist.github.com', 'gist.githubusercontent.com');
@@ -160,8 +137,7 @@
 	function updateUrlParams() {
 		if (!browser) return;
 		const url = new URL(window.location.href);
-		const endpoint = endpoints[selected];
-		url.searchParams.set('endpoint', endpoint.name.toLowerCase().replace(/\s+/g, '-'));
+		url.searchParams.set('endpoint', selected.toString());
 		goto(url.toString(), { replaceState: true, noScroll: true });
 	}
 
@@ -169,14 +145,6 @@
 		if (!browser) return;
 		const endpointParam = page.url.searchParams.get('endpoint');
 		if (endpointParam) {
-			const index = endpoints.findIndex(
-				(e) => e.name.toLowerCase().replace(/\s+/g, '-') === endpointParam.toLowerCase()
-			);
-			if (index !== -1) {
-				selected = index;
-				return true;
-			}
-
 			const endpointIndex = parseInt(endpointParam, 10);
 			if (endpointIndex >= 0 && endpointIndex < endpoints.length) {
 				selected = endpointIndex;
@@ -217,7 +185,11 @@
 		<label for="endpoint-select" class="mb-2 block font-semibold">
 			{i18n.t('api.select_endpoint')}
 		</label>
-		<select id="endpoint-select" bind:value={selected} class="h-9 w-full rounded border px-2 py-1">
+		<select
+			id="endpoint-select"
+			bind:value={selected}
+			class="h-9 w-full rounded border px-2 py-1"
+		>
 			{#each endpoints as ep, i}
 				<option value={i}>{ep?.method || 'GET'} {ep.url}</option>
 			{/each}
@@ -293,9 +265,7 @@
 							{/each}
 						</div>
 						<div class="mt-4 flex gap-2">
-							<Button onclick={clearParams} variant="outline" size="sm"
-								>{i18n.t('api.clear_parameters')}</Button
-							>
+							<Button onclick={clearParams} variant="outline" size="sm">{i18n.t('api.clear_parameters')}</Button>
 						</div>
 					</Card.Content>
 				</Collapsible.Content>
@@ -312,7 +282,6 @@
 	{#if error}
 		<div class="mt-4 text-red-600">{i18n.t('api.error')}: {error}</div>
 	{/if}
-
 	{#if response}
 		<Card.Root class="mt-4 max-h-96">
 			<Tabs.Root value="response">
@@ -344,22 +313,5 @@
 				{/if}
 			</Tabs.Root>
 		</Card.Root>
-	{/if}
-
-	{#if responseTime !== null || responseSize !== null}
-		<div class="mt-4 flex gap-4 text-sm text-muted-foreground">
-			{#if responseTime !== null}
-				<div>
-					<span class="font-semibold">{i18n.t('api.response_time')}:</span>
-					{responseTime}ms
-				</div>
-			{/if}
-			{#if responseSize !== null}
-				<div>
-					<span class="font-semibold">{i18n.t('api.response_size')}:</span>
-					{formatBytes(responseSize)}
-				</div>
-			{/if}
-		</div>
 	{/if}
 </div>

@@ -452,7 +452,7 @@
 			});
 
 			// Listen for value changes
-			let validationTimeout: ReturnType<typeof setTimeout>;
+			let validationTimeout: number;
 			editor.onDidChangeModelContent(() => {
 				value = editor?.getValue() || '';
 

@@ -3,10 +3,6 @@ node_modules
 /build
 /.svelte-kit
 /package
-/export
-playwright-report
-test-results
-verification
 .env
 .env.*
 !.env.example
@@ -14,4 +10,3 @@ verification
 .output
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-pnpm-lock.yaml

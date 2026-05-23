@@ -17,7 +17,6 @@
 		"buttons": "Buttons",
 		"projects": "Projects",
 		"now": "Now",
-		"achievements": "Achievements",
 		"where": "Where",
 		"uses": "Uses",
 		"playlists": "Playlists",
@@ -25,7 +24,6 @@
 		"sitemap": "Sitemap",
 		"experiment": "Experiment",
 		"slashes": "Slashes",
-		"timeline": "Timeline",
 		"hotkeys": "Hotkeys",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
@@ -34,9 +32,9 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"ping": "Ping",
+		"pap": "PAP",
 		"contact": "Contact",
 		"status": "Status",
-		"export": "Export",
 		"quit": "Quit",
 		"new_window": "New Window",
 		"close_window": "Close Window",
@@ -78,10 +76,12 @@
 		"battery": "Battery",
 		"charging": "Charging",
 		"discharging": "Discharging",
+		"brand_kit": "Brand Kit",
 		"download_logo": "Download Logo",
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
-		"copy_logo_url": "Copy image URL"
+		"copy_logo_url": "Copy image URL",
+		"brand_kit": "Brand Kit"
 	},
 	"footer": {
 		"rights_reserved": "All rights reserved"
@@ -110,12 +110,8 @@
 		"system": "System",
 		"debug_mode": "Debug mode",
 		"debug_description": "This will cause more verbose logging in the console.",
-		"screensaver": "Screensaver",
-		"screensaver_none": "None",
-		"screensaver_dvd": "DVD Bounce",
-		"screensaver_playlists": "Playlist Covers",
-		"inactivity_timeout": "Inactivity Timeout",
-		"suggestions_limit": "Command Suggestions Limit",
+		"dvd_bounce": "Screensaver",
+		"enable_dvd_bounce": "DVD Bounce",
 		"actions": "Actions",
 		"reset_desktop": "Reset Desktop",
 		"reset_success": "Desktop files reset to default positions",
@@ -125,12 +121,12 @@
 		"texture": "Background Texture",
 		"texture_size": "Texture Size",
 		"texture_spacing": "Texture Spacing",
-		"none": "None",
 		"dots": "Dots",
 		"offset-dots": "Offset Dots",
 		"grid": "Grid",
 		"diagonal": "Diagonal",
 		"wave": "Wave",
+		"none": "None",
 		"themes": {
 			"zinc": "Zinc",
 			"slate": "Slate",
@@ -149,7 +145,6 @@
 	"command": {
 		"placeholder": "Type a command or search...",
 		"no_results": "No results found.",
-		"suggestions": "Suggestions",
 		"navigation": "Navigation",
 		"links": "Links",
 		"system": "System",
@@ -160,8 +155,6 @@
 		"keyboard_shortcuts": "Keyboard Shortcuts",
 		"go_forward": "Go Forward",
 		"go_back": "Go Back",
-		"screensaver": "Screensaver",
-		"edit_gist": "Edit Gist",
 		"reload": "Reload",
 		"toggle_dark_mode": "Toggle Dark Mode",
 		"enable_debug_mode": "Enable Debug Mode",
@@ -177,7 +170,6 @@
 		"confetti": "Confetti",
 		"enable_dvd_bounce": "Enable DVD Bounce",
 		"disable_dvd_bounce": "Disable DVD Bounce",
-		"export_data": "Export Data",
 		"shortcuts_title": "Keyboard Shortcuts",
 		"shortcuts_description": "There are many different shortcuts and features to explore on this page. Here is a selection of the most obvious ones:",
 		"shortcuts": {
@@ -190,6 +182,8 @@
 		},
 		"switch_language": "Switch Language",
 		"language_switched": "Language switched",
+		"konami_success": "Achievement Unlocked: Konami Code",
+		"konami_description": "Congratulations, you're a nerd!",
 		"picked_color": "Picked color: {color}",
 		"copy_to_clipboard": "Click to copy to clipboard"
 	},
@@ -197,8 +191,7 @@
 		"close": "Close window",
 		"minimize": "Minimize window",
 		"maximize": "Maximize window",
-		"restore": "Restore window",
-		"resize": "Resize window"
+		"restore": "Restore window"
 	},
 	"now": {
 		"title": "What I'm doing Now",
@@ -275,8 +268,6 @@
 		"resolution": "Resolution",
 		"week": "Week",
 		"month": "Month",
-		"year": "Year",
-		"day": "Day",
 		"zoom": "Zoom",
 		"until": "until",
 		"until_now": "until now",
@@ -375,8 +366,6 @@
 			"personal": "Personal",
 			"fun": "Fun",
 			"political": "Political",
-			"gaming": "Gaming",
-			"tech": "Tech",
 			"other": "Other"
 		},
 		"external_link_text": "Explore at eightyeightthirty.one"
@@ -393,10 +382,7 @@
 		"send": "Send Message",
 		"sending": "Sending...",
 		"success": "Message sent!",
-		"error": "Failed to send message.",
-		"latest_message": "Latest Message",
-		"no_messages": "No messages found.",
-		"fetch_error": "Failed to fetch latest message."
+		"error": "Failed to send message."
 	},
 	"api": {
 		"title": "API",
@@ -419,9 +405,7 @@
 		"ascending": "Ascending",
 		"descending": "Descending",
 		"select": "select",
-		"number": "number",
-		"response_time": "Response Time",
-		"response_size": "Response Size"
+		"number": "number"
 	},
 	"slashes": {
 		"title": "Slashes",
@@ -430,19 +414,7 @@
 		"good_luck": "Good Luck!",
 		"wheel_label": "Wheel of Fortune",
 		"mute": "Mute haptics",
-		"unmute": "Unmute haptics",
-		"items": {
-			"about": "",
-			"contact": "how to reach me",
-			"defaults": "my main apps on iOS and macOS (more at defaults.rknight.me)",
-			"interests": "what I'm interested in",
-			"log": "a changelog for this website",
-			"now": "what i'm doing right now",
-			"slashes": "this page",
-			"uses": "things I use",
-			"where": "where I spend most of my time",
-			"playlists": "my favorite songs"
-		}
+		"unmute": "Unmute haptics"
 	},
 	"concerts": {
 		"title": "Concerts & Festivals",
@@ -460,11 +432,8 @@
 		"no_concerts": "No concerts found.",
 		"view_on_musicbrainz": "View on MusicBrainz",
 		"stats": "Stats",
-		"stats_description": "Statistics about the music events I've attended.",
 		"artist_frequency": "Artist Frequency",
 		"artist_frequency_description": "These are the artists I've seen most often live.",
-		"yearly_frequency": "Yearly Frequency",
-		"yearly_distribution": "Yearly Distribution",
 		"artists_one": "1 artist",
 		"artists_many": "{count} artists"
 	},
@@ -577,49 +546,8 @@
 		"public": "Public",
 		"versions": "Versions",
 		"no_description": "No description",
-		"view_on_github": "View on GitHub",
-		"status": {
-			"validating": "Validating...",
-			"valid": "Valid Token",
-			"invalid": "Invalid Token",
-			"set": "Token Set",
-			"none": "No Token"
-		},
-		"settings": {
-			"title": "GitHub Access Token",
-			"label": "Personal Access Token",
-			"placeholder": "ghp_xxxxxxxxxxxxxxxxxxxx",
-			"description": "Token needs 'gist' scope.",
-			"create_link": "Create one here",
-			"validation_success": "Token is valid and has required permissions",
-			"scopes": "Scopes",
-			"save_success": "Token saved locally",
-			"validation_failed": "Token validation failed",
-			"fetch_failed": "Failed to validate token",
-			"cleared": "Token cleared",
-			"save": "Save",
-			"validate": "Validate",
-			"clear": "Clear"
-		},
-		"gist_selection": {
-			"title": "Select Gist",
-			"gist_label": "Gist",
-			"custom_id": "Custom Gist ID",
-			"filename": "Filename",
-			"id_label": "Gist ID",
-			"load": "Load Gist",
-			"loading": "Loading..."
-		},
-		"editor": {
-			"editor_tab": "Editor",
-			"form_tab": "Form",
-			"select_theme": "Select theme",
-			"format": "Format",
-			"reset": "Reset",
-			"save": "Save Gist",
-			"saving": "Saving..."
-		}
-	},
+		"view_on_github": "View on GitHub"
+  },
 	"desktop": {
 		"open": "Open",
 		"open_new_tab": "Open in New Tab",
@@ -627,7 +555,6 @@
 		"rename_prompt": "Enter new name:",
 		"change_icon": "Change Icon",
 		"delete": "Delete",
-		"drag_file": "Drag {name}",
 		"icons": {
 			"folder": "Folder",
 			"file": "File",
@@ -643,56 +570,14 @@
 		"counter_decrease": "Decrease the counter by one",
 		"counter_increase": "Increase the counter by one"
 	},
-	"export": {
-		"title": "Data Export",
-		"description": "Backup your website data into a single JSON file.",
-		"options": "Export Options",
-		"static_data": "Static Data",
-		"static_data_description": "Data from local JSON files (projects, uses, etc.)",
-		"gists": "GitHub Gists",
-		"gists_description": "Current content and metadata from your configured gists",
-		"local_storage": "Local Storage",
-		"local_storage_description": "Your design preferences and desktop positions",
-		"github_token": "GitHub Token",
-		"github_token_description": "Optional: Use for accessing private gists",
-		"generate": "Generate Export",
-		"downloading": "Preparing download...",
-		"success": "Export ready!",
-		"error": "Error during export: {error}"
-	},
-	"achievements": {
-		"subtitle": "You have unlocked {count} out of {total} achievements.",
-		"overall_progress": "Overall Progress",
-		"locked": "Locked",
-		"view_all": "View All",
-		"reset": "Reset Achievements",
-		"reset_confirm": "Are you sure you want to reset all achievements?",
-		"reset_success": "Achievements have been reset.",
-		"explorer": {
-			"title": "Explorer",
-			"description": "Visit every page listed in the sitemap."
-		},
-		"konami": {
-			"title": "Cheat Code",
-			"description": "You know what to do.",
-			"message": "Congratulations, you're a nerd!"
-		},
-		"lucky-spin": {
-			"title": "Lucky Spin",
-			"description": "Let the wheel decide your fate."
-		},
-		"streak": {
-			"title": "Dedication",
-			"description": "Visit the website 3 days in a row."
-		},
-		"onboarding": {
-			"title": "Welcome Aboard",
-			"description": "Complete the onboarding process.",
-			"message": "Onboarding completed!"
-		},
-		"haxor": {
-			"title": "1337 H4X0R",
-			"description": "Explore the terminal."
-		}
+	"pap": {
+		"title": "Paula Amusement Page",
+		"password_prompt": "Enter password to access the Amusement Page",
+		"password_placeholder": "Password...",
+		"unlock": "Unlock",
+		"invalid_password": "Invalid password. Please try again.",
+		"stickers_label": "Stickers",
+		"clear_canvas": "Clear Canvas",
+		"peel_hint": "Click on a sticker to peel it off!"
 	}
 }

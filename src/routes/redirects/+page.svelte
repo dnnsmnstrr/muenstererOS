@@ -6,12 +6,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import {
-		DropdownMenu,
-		DropdownMenuContent,
-		DropdownMenuItem,
-		DropdownMenuTrigger
-	} from '$lib/components/ui/dropdown-menu';
+	import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '$lib/components/ui/dropdown-menu';
 	import { MoreHorizontal, Copy, ExternalLink } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { i18n } from '$lib/i18n/i18n.svelte';
@@ -28,18 +23,17 @@
 			return true;
 		}
 
-		const q = filterQuery.toLowerCase();
 		return (
-			redirect.name.toLowerCase().includes(q) ||
-			redirect.description?.toLowerCase().includes(q) ||
-			redirect.aliases?.some((alias) => alias.toLowerCase().includes(q)) ||
-			redirect.url?.toLowerCase().includes(q)
+			redirect.name.includes(filterQuery.toLowerCase()) ||
+			redirect.aliases?.some((alias) => alias.includes(filterQuery.toLowerCase())) ||
+			redirect.url?.includes(filterQuery.toLowerCase())
 		);
 	};
 	let filteredRedirects = $state(data.redirects);
 	$effect(() => {
 		if (filterQuery || data.redirects) {
 			filteredRedirects = data.redirects.filter(searchFilter);
+			filterQuery;
 		}
 	});
 
@@ -122,12 +116,12 @@
 			return null;
 		}
 	}
-	function handleFaviconError(event: Event) {
-		const target = event.target as HTMLImageElement;
-		target.onerror = null;
-		target.src =
-			"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='30'>🌐</text></svg>";
-	}
+function handleFaviconError(event: Event) {
+	const target = event.target as HTMLImageElement;
+	target.onerror = null;
+	target.src =
+		"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='30'>🌐</text></svg>";
+}
 
 	function copyRedirectUrl(redirect: Redirect) {
 		const url = getRedirectURL(redirect);
@@ -197,7 +191,7 @@
 						}}
 						class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
 					>
-						<Table.Cell class="flex items-center gap-2 font-medium">
+						<Table.Cell class="font-medium flex items-center gap-2">
 							{#if isAbsoluteUrl(redirect.url)}
 								<img
 									src={getFaviconUrl(redirect.url)}
@@ -227,25 +221,17 @@
 							<DropdownMenu>
 								<DropdownMenuTrigger>
 									{#snippet child({ props })}
-										<Button
-											{...props}
-											variant="ghost"
-											size="icon"
-											title={i18n.t('redirects.actions')}
-											onclick={(e) => e.stopPropagation()}
-										>
+										<Button {...props} variant="ghost" size="icon" title={i18n.t('redirects.actions')} onclick={(e) => e.stopPropagation()}>
 											<MoreHorizontal />
 										</Button>
 									{/snippet}
 								</DropdownMenuTrigger>
 								<DropdownMenuContent align="end">
 									<DropdownMenuItem onclick={() => copyRedirectUrl(redirect)}>
-										<Copy />
-										{i18n.t('redirects.copy_url')}
+										<Copy /> {i18n.t('redirects.copy_url')}
 									</DropdownMenuItem>
 									<DropdownMenuItem onclick={() => handleRedirect(redirect)}>
-										<ExternalLink />
-										{i18n.t('redirects.open')}
+										<ExternalLink /> {i18n.t('redirects.open')}
 									</DropdownMenuItem>
 								</DropdownMenuContent>
 							</DropdownMenu>
@@ -272,7 +258,7 @@
 				}}
 			>
 				<div class="p-4">
-					<h2 class="flex flex-wrap items-center gap-2 text-lg font-bold">
+					<h2 class="text-lg font-bold flex flex-wrap items-center gap-2">
 						{#if isAbsoluteUrl(redirect.url)}
 							<img
 								src={getFaviconUrl(redirect.url)}
@@ -302,36 +288,28 @@
 						<p>{redirect.description}</p>
 					{/if}
 
-					<div class="flex items-center justify-between gap-2 pb-1 pt-3">
+					  <div class="pt-3 pb-1 flex items-center justify-between gap-2">
 						<p class="overflow-hidden overflow-x-auto font-mono text-sm text-gray-500">
 							{redirect.url || '/' + redirect.name.toLocaleLowerCase()}
 						</p>
 						<DropdownMenu>
 							<DropdownMenuTrigger>
 								{#snippet child({ props })}
-									<Button
-										{...props}
-										variant="ghost"
-										size="icon"
-										title={i18n.t('redirects.actions')}
-										onclick={(e) => e.stopPropagation()}
-									>
+									<Button {...props} variant="ghost" size="icon" title={i18n.t('redirects.actions')} onclick={(e) => e.stopPropagation()}>
 										<MoreHorizontal />
 									</Button>
 								{/snippet}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
 								<DropdownMenuItem onclick={() => copyRedirectUrl(redirect)}>
-									<Copy />
-									{i18n.t('redirects.copy_url')}
+									<Copy /> {i18n.t('redirects.copy_url')}
 								</DropdownMenuItem>
 								<DropdownMenuItem onclick={() => handleRedirect(redirect)}>
-									<ExternalLink />
-									{i18n.t('redirects.open')}
+									<ExternalLink /> {i18n.t('redirects.open')}
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>
-					</div>
+					  </div>
 				</div>
 			</Card.Root>
 		{/each}

@@ -8,7 +8,7 @@
 	import {
 		desktopFiles,
 		updateFilePosition,
-		screensaverActive,
+		dvdBounceActive,
 		hideFile,
 		renameFile,
 		updateFileIcon
@@ -29,8 +29,11 @@
 		Image as ImageIcon
 	} from 'lucide-svelte';
 	import File from './File.svelte';
-	import { debugLog, screensaver, inactivityTimeout } from '$lib/stores/app';
+	import { debugLog, dvdBounceEnabled } from '$lib/stores/app';
+	import { INACTIVITY_TIMEOUT } from '$lib/config';
+	/* Localization: Import i18n service to support multi-language desktop context menu */
 	import { i18n } from '$lib/i18n/i18n.svelte';
+
 
 	const minHeight = 300;
 	const minWidth = 200;
@@ -39,13 +42,11 @@
 	let {
 		width = 0,
 		height = 0,
-		class: className,
-		children
+		class: className
 	}: {
 		width?: number;
 		height?: number;
 		class?: string;
-		children?: import('svelte').Snippet;
 	} = $props();
 
 	let fileSize = $derived(width < breakpoint ? 50 : 60);
@@ -66,8 +67,8 @@
 	let previousY = -1;
 
 	// Drag state
-	let isDraggingWindow = $state(false);
-	let draggingFileId = $state<string | null>(null);
+	let isDraggingWindow = false;
+	let draggingFileId: string | null = null;
 	let dragStartX = 0;
 	let dragStartY = 0;
 	let initialX = 0;
@@ -79,6 +80,7 @@
 
 	// Maximize/restore function
 	function toggleMaximize() {
+		console.log('maximize toggle');
 		if (isMaximized) {
 			// Restore previous size and position
 			DraggableWidth = previousWidth;
@@ -101,21 +103,14 @@
 		}
 	}
 
-	function recenter() {
-		DraggableWidth = defaultWidth;
-		DraggableHeight = minHeight;
-		DraggableX = width / 2 - DraggableWidth / 2;
-		DraggableY = height / 3 - DraggableHeight / 2;
-		isMaximized = false;
-	}
-
 	// DVD Bounce animation
 	let bounceAnimationId: number | null = null;
 	let velocityX = 2;
 	let velocityY = 2;
 
 	// Inactivity timer for auto-starting DVD bounce
-	let inactivityTimer: ReturnType<typeof setTimeout> | null = null;
+	let inactivityTimer: number | null = null;
+	let isManualBounce = $state(false); // Track if bounce was manually activated
 
 	let lastWidth = $state(0);
 	let lastHeight = $state(0);
@@ -183,19 +178,11 @@
 			toggleMaximize();
 			return;
 		}
-		const minimizeButton = target.closest('[data-window-action="minimize"]');
-		console.log(minimizeButton, maximizeButton)
-		if (minimizeButton) {
-			isMaximized = false;
-			toggleMaximize();
-			recenter();
-			return;
-		}
 		e.preventDefault();
 
 		// Disable bounce animation when user interacts with window
-		if ($screensaverActive) {
-			screensaverActive.set(false);
+		if ($dvdBounceActive) {
+			dvdBounceActive.set(false);
 		}
 
 		isDraggingWindow = true;
@@ -230,10 +217,10 @@
 
 	// DVD Bounce animation
 	function startDvdBounce() {
-		if (bounceAnimationId || $screensaver !== 'dvd') return; // Already running or not selected
+		if (bounceAnimationId || !$dvdBounceEnabled) return; // Already running
 
 		const animate = () => {
-			if (!$screensaverActive || $screensaver !== 'dvd') {
+			if (!$dvdBounceActive) {
 				bounceAnimationId = null;
 				return;
 			}
@@ -268,7 +255,7 @@
 	}
 
 	$effect(() => {
-		if ($screensaverActive && $screensaver === 'dvd') {
+		if ($dvdBounceActive) {
 			startDvdBounce();
 		}
 
@@ -277,18 +264,6 @@
 				cancelAnimationFrame(bounceAnimationId);
 				bounceAnimationId = null;
 			}
-		};
-	});
-
-	$effect(() => {
-		const handleFullscreenChange = () => {
-			// Wait for the viewport dimensions to update
-			setTimeout(recenter, 100);
-		};
-
-		document.addEventListener('fullscreenchange', handleFullscreenChange);
-		return () => {
-			document.removeEventListener('fullscreenchange', handleFullscreenChange);
 		};
 	});
 
@@ -301,10 +276,10 @@
 
 		// Set new timer to start bounce after inactivity
 		inactivityTimer = setTimeout(() => {
-			if (!$screensaverActive && $screensaver !== 'none') {
-				screensaverActive.set(true);
+			if (!$dvdBounceActive) {
+				dvdBounceActive.set(true);
 			}
-		}, $inactivityTimeout * 1000);
+		}, INACTIVITY_TIMEOUT);
 	}
 
 	// Initialize inactivity timer on mount and add global event listeners
@@ -314,8 +289,9 @@
 		const handleActivity = () => {
 			resetInactivityTimer();
 			// Stop bounce animation on any activity
-			if ($screensaverActive) {
-				screensaverActive.set(false);
+			if ($dvdBounceActive) {
+				console.log('stopping bouncex');
+				dvdBounceActive.set(false);
 			}
 		};
 
@@ -323,8 +299,6 @@
 		window.addEventListener('click', handleActivity);
 		window.addEventListener('scroll', handleActivity);
 		window.addEventListener('touchstart', handleActivity);
-		// Use document + capture to catch keydown events before stopImmediatePropagation in Command.svelte
-		document.addEventListener('keydown', handleActivity, true);
 
 		return () => {
 			if (inactivityTimer) {
@@ -335,7 +309,6 @@
 			window.removeEventListener('click', handleActivity);
 			window.removeEventListener('scroll', handleActivity);
 			window.removeEventListener('touchstart', handleActivity);
-			document.removeEventListener('keydown', handleActivity, true);
 		};
 	});
 
@@ -479,12 +452,17 @@
 					onpointermove={handleWindowPointerMove}
 					onpointerup={handleWindowPointerUp}
 					onpointercancel={handleWindowPointerUp}
-					ondblclick={recenter}
+					ondblclick={() => {
+						DraggableWidth = defaultWidth;
+						DraggableHeight = minHeight;
+						DraggableX = width / 2 - DraggableWidth / 2;
+						DraggableY = height / 3 - DraggableHeight / 2;
+					}}
 				>
-					<WindowButtons {isMaximized} />
+					<WindowButtons {isMaximized} onMaximize={toggleMaximize} />
 				</div>
 				<div class={cn('flex h-full items-center justify-center', className)}>
-					{@render children?.()}
+					<slot />
 				</div>
 				<div
 					class="absolute bottom-0 right-0 hidden h-8 w-8 cursor-nwse-resize select-none md:block"
@@ -494,7 +472,7 @@
 					onpointercancel={handleResizePointerUp}
 					role="button"
 					tabindex="-1"
-					aria-label={i18n.t('window.resize')}
+					aria-label="Resize window"
 				></div>
 			</Card.Root>
 		</div>
@@ -516,7 +494,7 @@
 						ondragstart={(e) => e.preventDefault()}
 						role="button"
 						tabindex="-1"
-						aria-label={i18n.t('desktop.drag_file', { name: fileItem.name || fileItem.id })}
+						aria-label="Drag {fileItem.name || fileItem.id}"
 					>
 						<File
 							name={fileItem.name || fileItem.id}
@@ -527,6 +505,7 @@
 					</div>
 				</ContextMenu.Trigger>
 				<ContextMenu.Content>
+					<!-- Localization: Use i18n for context menu actions and labels -->
 					<ContextMenu.Item
 						onclick={() => {
 							if (fileItem.href) {

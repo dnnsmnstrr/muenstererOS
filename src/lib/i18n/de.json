@@ -17,11 +17,9 @@
 		"buttons": "Buttons",
 		"projects": "Projekte",
 		"now": "Jetzt (Now Page)",
-		"achievements": "Achievements",
 		"where": "Standort",
 		"uses": "Uses (Tech Stack)",
 		"playlists": "Playlists",
-		"timeline": "Zeitstrahl",
 		"hotkeys": "Hotkeys",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
@@ -30,9 +28,10 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"ping": "Ping",
+		"pap": "PAP",
 		"contact": "Kontakt",
 		"status": "Status",
-		"export": "Export",
+		"quit": "Beenden",
 		"sites": "Sites",
 		"sitemap": "Sitemap",
 		"experiment": "Experiment",
@@ -66,6 +65,7 @@
 		"searching": "Suche nach Redirect"
 	},
 	"header": {
+		"brand_kit": "Brand Kit",
 		"pages": "Seiten",
 		"social": "Social Media",
 		"command_palette": "Befehlspalette",
@@ -81,7 +81,8 @@
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"brand_kit": "Marken-Assets"
 	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
@@ -110,12 +111,8 @@
 		"system": "System",
 		"debug_mode": "Debug-Modus",
 		"debug_description": "Führt zu detaillierterem Output in der Konsole.",
-		"screensaver": "Bildschirmschoner",
-		"screensaver_none": "Keiner",
-		"screensaver_dvd": "DVD Bounce",
-		"screensaver_playlists": "Playlist Cover",
-		"inactivity_timeout": "Inaktivitäts-Timeout",
-		"suggestions_limit": "Limit für Befehlsvorschläge",
+		"dvd_bounce": "Bildschirmschoner",
+		"enable_dvd_bounce": "DVD Bounce",
 		"actions": "Aktionen",
 		"reset_desktop": "Desktop zurücksetzen",
 		"reset_success": "Desktop zurückgesetzt",
@@ -125,7 +122,6 @@
 		"texture": "Hintergrundstruktur",
 		"texture_size": "Größe",
 		"texture_spacing": "Abstand",
-		"none": "Keine",
 		"dots": "Punkte",
 		"offset-dots": "Versetzte Punkte",
 		"grid": "Gitter",
@@ -150,7 +146,6 @@
 	"command": {
 		"placeholder": "Befehl eingeben oder suchen...",
 		"no_results": "Keine Ergebnisse gefunden.",
-		"suggestions": "Vorschläge",
 		"navigation": "Navigation",
 		"links": "Links",
 		"system": "System",
@@ -161,8 +156,6 @@
 		"keyboard_shortcuts": "Tastenkombinationen",
 		"go_forward": "Vorwärts",
 		"go_back": "Zurück",
-		"screensaver": "Bildschirmschoner",
-		"edit_gist": "Gist bearbeiten",
 		"reload": "Neu laden",
 		"toggle_dark_mode": "Dunkelmodus umschalten",
 		"enable_debug_mode": "Debug-Modus aktivieren",
@@ -178,7 +171,6 @@
 		"confetti": "Konfetti",
 		"enable_dvd_bounce": "DVD Bounce aktivieren",
 		"disable_dvd_bounce": "DVD Bounce deaktivieren",
-		"export_data": "Daten exportieren",
 		"shortcuts_title": "Tastenkombinationen",
 		"shortcuts_description": "Es gibt viele verschiedene Abkürzungen und Funktionen auf dieser Seite zu entdecken. Hier ist eine Auswahl der offensichtlichsten:",
 		"shortcuts": {
@@ -191,6 +183,8 @@
 		},
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
+		"konami_success": "Achievement freigeschaltet: Konami Code",
+		"konami_description": "Glückwunsch, du bist ein Nerd!",
 		"picked_color": "Farbe ausgewählt: {color}",
 		"copy_to_clipboard": "Klicken zum Kopieren"
 	},
@@ -198,8 +192,7 @@
 		"close": "Fenster schließen",
 		"minimize": "Fenster minimieren",
 		"maximize": "Fenster maximieren",
-		"restore": "Fenster wiederherstellen",
-		"resize": "Fenstergröße ändern"
+		"restore": "Fenster wiederherstellen"
 	},
 	"now": {
 		"title": "Now - Was ich gerade mache",
@@ -276,8 +269,6 @@
 		"resolution": "Auflösung",
 		"week": "Woche",
 		"month": "Monat",
-		"year": "Jahr",
-		"day": "Tag",
 		"zoom": "Zoom",
 		"until": "bis",
 		"until_now": "bis heute",
@@ -376,8 +367,6 @@
 			"personal": "Persönlich",
 			"fun": "Spaß",
 			"political": "Politisch",
-			"gaming": "Gaming",
-			"tech": "Technik",
 			"other": "Andere"
 		},
 		"external_link_text": "Mehr auf eightyeightthirty.one entdecken"
@@ -394,10 +383,7 @@
 		"send": "Nachricht senden",
 		"sending": "Wird gesendet...",
 		"success": "Nachricht gesendet!",
-		"error": "Nachricht konnte nicht gesendet werden.",
-		"latest_message": "Letzte Nachricht",
-		"no_messages": "Keine Nachrichten gefunden.",
-		"fetch_error": "Fehler beim Abrufen der letzten Nachricht."
+		"error": "Nachricht konnte nicht gesendet werden."
 	},
 	"api": {
 		"title": "API",
@@ -420,9 +406,7 @@
 		"ascending": "Aufsteigend",
 		"descending": "Absteigend",
 		"select": "Wählen",
-		"number": "Nummer",
-		"response_time": "Antwortzeit",
-		"response_size": "Antwortgröße"
+		"number": "Nummer"
 	},
 	"slashes": {
 		"title": "Slashes",
@@ -431,19 +415,7 @@
 		"good_luck": "Viel Glück!",
 		"wheel_label": "Glücksrad",
 		"mute": "Haptik stummschalten",
-		"unmute": "Haptik einschalten",
-		"items": {
-			"about": "",
-			"contact": "wie man mich erreicht",
-			"defaults": "meine Standard-Apps auf iOS und macOS (mehr auf defaults.rknight.me)",
-			"interests": "was mich interessiert",
-			"log": "ein Änderungsprotokoll für diese Webseite",
-			"now": "was ich gerade so mache",
-			"slashes": "diese Seite",
-			"uses": "Dinge, die ich benutze",
-			"where": "wo ich die meiste Zeit verbringe",
-			"playlists": "meine Lieblingslieder"
-		}
+		"unmute": "Haptik einschalten"
 	},
 	"concerts": {
 		"title": "Konzerte & Festivals",
@@ -461,11 +433,8 @@
 		"no_concerts": "Keine Konzerte gefunden.",
 		"view_on_musicbrainz": "Auf MusicBrainz ansehen",
 		"stats": "Statistiken",
-		"stats_description": "Statistiken über die Musik-Events, die ich besucht habe.",
 		"artist_frequency": "Künstler:innen-Frequenz",
 		"artist_frequency_description": "Das sind die Künstler:innen, die ich am häufigsten live gesehen habe.",
-		"yearly_frequency": "Jährliche Frequenz",
-		"yearly_distribution": "Jährliche Verteilung",
 		"artists_one": "1 Künstler:in",
 		"artists_many": "{count} Künstler:innen"
 	},
@@ -578,49 +547,8 @@
 		"public": "Öffentlich",
 		"versions": "Versionen",
 		"no_description": "Keine Beschreibung",
-		"view_on_github": "Auf GitHub ansehen",
-		"status": {
-			"validating": "Wird validiert...",
-			"valid": "Gültiger Token",
-			"invalid": "Ungültiger Token",
-			"set": "Token gesetzt",
-			"none": "Kein Token"
-		},
-		"settings": {
-			"title": "GitHub Access Token",
-			"label": "Persönlicher Access Token",
-			"placeholder": "ghp_xxxxxxxxxxxxxxxxxxxx",
-			"description": "Token benötigt 'gist' Scope.",
-			"create_link": "Hier einen erstellen",
-			"validation_success": "Token ist gültig und hat die erforderlichen Berechtigungen",
-			"scopes": "Scopes",
-			"save_success": "Token lokal gespeichert",
-			"validation_failed": "Token-Validierung fehlgeschlagen",
-			"fetch_failed": "Validierung fehlgeschlagen",
-			"cleared": "Token gelöscht",
-			"save": "Speichern",
-			"validate": "Validieren",
-			"clear": "Löschen"
-		},
-		"gist_selection": {
-			"title": "Gist auswählen",
-			"gist_label": "Gist",
-			"custom_id": "Benutzerdefinierte Gist ID",
-			"filename": "Dateiname",
-			"id_label": "Gist ID",
-			"load": "Gist laden",
-			"loading": "Wird geladen..."
-		},
-		"editor": {
-			"editor_tab": "Editor",
-			"form_tab": "Formular",
-			"select_theme": "Theme auswählen",
-			"format": "Formatieren",
-			"reset": "Zurücksetzen",
-			"save": "Gist speichern",
-			"saving": "Wird gespeichert..."
-		}
-	},
+		"view_on_github": "Auf GitHub ansehen"
+  },
 	"desktop": {
 		"open": "Öffnen",
 		"open_new_tab": "In neuem Tab öffnen",
@@ -628,7 +556,6 @@
 		"rename_prompt": "Neuen Namen eingeben:",
 		"change_icon": "Icon ändern",
 		"delete": "Löschen",
-		"drag_file": "{name} ziehen",
 		"icons": {
 			"folder": "Ordner",
 			"file": "Datei",
@@ -644,56 +571,14 @@
 		"counter_decrease": "Zähler um eins verringern",
 		"counter_increase": "Zähler um eins erhöhen"
 	},
-	"export": {
-		"title": "Datenexport",
-		"description": "Sichere deine Websitedaten in einer einzigen JSON-Datei.",
-		"options": "Export-Optionen",
-		"static_data": "Statische Daten",
-		"static_data_description": "Daten aus lokalen JSON-Dateien (Projekte, Uses, etc.)",
-		"gists": "GitHub Gists",
-		"gists_description": "Aktueller Inhalt und Metadaten deiner konfigurierten Gists",
-		"local_storage": "Lokaler Speicher",
-		"local_storage_description": "Deine Design-Einstellungen und Desktop-Positionen",
-		"github_token": "GitHub Token",
-		"github_token_description": "Optional: Für den Zugriff auf private Gists verwenden",
-		"generate": "Export generieren",
-		"downloading": "Download wird vorbereitet...",
-		"success": "Export bereit!",
-		"error": "Fehler beim Export: {error}"
-	},
-	"achievements": {
-		"subtitle": "Du hast {count} von {total} Achievements freigeschaltet.",
-		"overall_progress": "Gesamtfortschritt",
-		"locked": "Gesperrt",
-		"view_all": "Alle ansehen",
-		"reset": "Achievements zurücksetzen",
-		"reset_confirm": "Bist du sicher, dass du alle Achievements zurücksetzen möchtest?",
-		"reset_success": "Achievements wurden zurückgesetzt.",
-		"explorer": {
-			"title": "Entdecker",
-			"description": "Besuche jede Seite, die in der Sitemap aufgeführt ist."
-		},
-		"konami": {
-			"title": "Cheat Code",
-			"description": "Du weißt, was zu tun ist.",
-			"message": "Glückwunsch, du bist ein Nerd!"
-		},
-		"lucky-spin": {
-			"title": "Glücksrad",
-			"description": "Lass das Rad dein Schicksal entscheiden. "
-		},
-		"streak": {
-			"title": "Durchhaltevermögen",
-			"description": "Besuche die Webseite an 3 aufeinanderfolgenden Tagen."
-		},
-		"onboarding": {
-			"title": "Willkommen an Bord",
-			"description": "Schließe den Onboarding-Prozess ab.",
-			"message": "Onboarding abgeschlossen!"
-		},
-		"haxor": {
-			"title": "1337 H4X0R",
-			"description": "Untersuche das Terminal."
-		}
+	"pap": {
+		"title": "Paula Amusement Page",
+		"password_prompt": "Passwort eingeben, um auf die Amusement Page zuzugreifen",
+		"password_placeholder": "Passwort...",
+		"unlock": "Freischalten",
+		"invalid_password": "Falsches Passwort. Bitte erneut versuchen.",
+		"stickers_label": "Sticker",
+		"clear_canvas": "Leinwand leeren",
+		"peel_hint": "Klicke auf einen Sticker, um ihn abzuziehen!"
 	}
 }

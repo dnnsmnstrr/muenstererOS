@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import { execSync } from 'child_process';

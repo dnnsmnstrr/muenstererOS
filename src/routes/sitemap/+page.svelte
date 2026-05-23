@@ -31,6 +31,4 @@
 			</li>
 		{/each}
 	</ul>
-
-	<div class="text-muted-foreground mt-8">{data.urls.length} Pages</div>
 </div>

@@ -10,14 +10,14 @@
 		{ label: 'plays by ear', confidence: 88 },
 		{ label: 'indoor creature', confidence: 95 },
 		{ label: 'shares freely', confidence: 89 },
-		{ label: 'backup evangelist', confidence: 99 }
+		{ label: 'backup evangelist', confidence: 99 },
 	];
 
 	const artifacts = [
 		{ icon: '🖨️', name: '2× CR6-SE', note: 'Klipper + Octoprint' },
 		{ icon: '🎹', name: 'Piano', note: 'chords > sheet music' },
 		{ icon: '👻', name: 'ThereMIDI', note: 'self-built' },
-		{ icon: '🎮', name: 'Steam Deck', note: 'Portal, KSP, Astroneer' }
+		{ icon: '🎮', name: 'Steam Deck', note: 'Portal, KSP, Astroneer' },
 	];
 
 	const quote = 'Kein Backup, kein Mitleid.';
@@ -33,13 +33,12 @@
 <div class="container mx-auto flex min-h-[70vh] flex-col items-center justify-center p-8">
 	<Card class="max-w-md p-8">
 		<Heading class="mb-2 text-2xl">Reading: {FIRST_NAME}</Heading>
-		<p class="mb-6 text-sm text-muted-foreground">observed from the Zettelkasten 🍀</p>
+		<p class="text-muted-foreground mb-6 text-sm">observed from the Zettelkasten 🍀</p>
 
 		<div class="space-y-3">
 			{#each observations as obs, i}
 				<div
 					class="group flex items-center gap-3"
-					role="listitem"
 					onmouseenter={() => (hoveredIndex = i)}
 					onmouseleave={() => (hoveredIndex = null)}
 				>
@@ -68,7 +67,7 @@
 				<div class="rounded-lg bg-muted/50 p-3 text-center">
 					<div class="text-2xl">{item.icon}</div>
 					<div class="text-sm font-medium">{item.name}</div>
-					<div class="text-xs text-muted-foreground">{item.note}</div>
+					<div class="text-muted-foreground text-xs">{item.note}</div>
 				</div>
 			{/each}
 		</div>
@@ -77,7 +76,7 @@
 			"{quote}"
 		</blockquote>
 
-		<p class="mt-6 text-center text-xs text-muted-foreground">
+		<p class="text-muted-foreground mt-6 text-center text-xs">
 			source: 111 notes · calibration: zettelkasten-derived
 		</p>
 	</Card>

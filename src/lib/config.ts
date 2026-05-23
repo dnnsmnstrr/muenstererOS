@@ -10,7 +10,6 @@ export const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
 export const EMAIL_PROVIDER = 'gmail';
 export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
-export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
 
 // Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);
@@ -88,20 +87,10 @@ export const gists = {
 		name: 'Playlists',
 		filename: 'playlists.json'
 	},
-	projects: {
-		id: 'dbffdd660d34e056c6d3cf8378c1371a',
-		name: 'Projects',
-		filename: 'projects.json'
-	},
 	songs: {
 		id: '2fc6578c2a8d7375af8cfd1be3131711',
 		name: 'Songs',
 		filename: 'songs.json'
-	},
-	uses: {
-		id: 'f04d648e19c29b075dcedf89845abd67',
-		name: 'Uses Data',
-		filename: 'uses.json'
 	},
 	concerts: {
 		id: CONCERTS_GIST_ID,
@@ -129,6 +118,7 @@ export const breakpoints = {
 	xl: 1920
 };
 
+export const INACTIVITY_TIMEOUT = 1 * 60 * 1000; // 1 minute in milliseconds
 
 export const backgroundTextures = [
 	{

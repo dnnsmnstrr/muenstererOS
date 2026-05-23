@@ -11,7 +11,6 @@
 		<Tabs.Link
 			rel="me"
 			href={links.github}
-			target="_blank"
 			class={linkStyle}
 			value="account"
 		>
@@ -21,7 +20,6 @@
 		<Tabs.Link
 			rel="me"
 			href={links.linkedin}
-			target="_blank"
 			class={linkStyle}
 			value="account"
 		>
@@ -31,7 +29,6 @@
         <Tabs.Link
 			rel="me"
 			href={links.instagram}
-			target="_blank"
 			class={linkStyle}
 			value="account"
 		>

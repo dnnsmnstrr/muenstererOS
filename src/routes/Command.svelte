@@ -1,10 +1,8 @@
 <script module lang="ts">
 	type CommandData = {
-		id?: string;
 		name: string;
 		keywords?: string[];
 		value?: string;
-		group?: string;
 		icon?: ConstructorOfATypedSvelteComponent;
 		href?: string;
 		action?: () => void;
@@ -40,11 +38,7 @@
 		Monitor,
 		Plus,
 		Globe,
-		Download,
-		CircleCheck,
-		Circle,
-		FileCode,
-		Trophy
+		Ticket
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -54,38 +48,40 @@
 		isCommandActive,
 		debug,
 		debugLog,
+		primaryColor,
+		backgroundColor,
+		resetColors,
 		showHelp,
-		screensaver,
-		trackCommand,
-		commandStats,
-		suggestionsLimit
+		modifiedColors,
+		dvdBounceEnabled
 	} from '$lib/stores/app';
 	import { Tween } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
 	import { goto } from '$app/navigation';
-	import { browser } from '$app/environment';
 	import {
 		capitalize,
+		hexToHsl,
+		isMobile,
 		reloadPage,
 		scrollToBottom,
 		scrollToTop,
 		toggleFullscreen
 	} from '$lib/utils/index';
+	import { confettiAction, eyeDropperAction } from '@sveltelegos-blue/svelte-legos';
 	import { toast } from 'svelte-sonner';
 	import confetti from 'canvas-confetti';
 	import List from '$lib/components/typography/List.svelte';
 	import Kbd from '$lib/components/typography/Kbd.svelte';
 	import { page } from '$app/state';
-	import { links, gists } from '$lib/config';
+	import { links } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
-	import { unlockAchievement } from '$lib/stores/achievements';
 	import docsearch from '@docsearch/js';
 	import '@docsearch/css';
 	import type { BookmarkItem } from './Menu.svelte';
 	import {
 		resetDesktopFiles,
-		screensaverActive,
+		dvdBounceActive,
 		desktopFiles,
 		addFileToDesktop
 	} from '$lib/stores/desktop';
@@ -99,7 +95,6 @@
 	let loading = false;
 	let query = $state('');
 	let lastKey = '';
-	let hasGithubToken = $state(false);
 
 	const keyboardShortcuts = $derived([
 		{ key: '?', description: i18n.t('command.shortcuts.help') },
@@ -137,8 +132,6 @@
 		'a'
 	];
 	let konamiIndex = 0;
-	const moneyCheat = 'motherlode';
-	let moneyCheatIndex = 0;
 
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
@@ -169,7 +162,7 @@
 		}
 
 		if (document.querySelector('.DocSearch-Modal')) {
-			debugLog('DocSearch-Modal is open, ignoring keydown event');
+			console.log('DocSearch-Modal is open, ignoring keydown event');
 			return;
 		}
 
@@ -211,25 +204,8 @@
 			setTimeout(shoot, 450);
 			setTimeout(shoot, 600);
 
-			unlockAchievement('konami');
-		}
-		if (e.key.toLowerCase() === moneyCheat[moneyCheatIndex]) {
-			moneyCheatIndex += 1;
-		} else {
-			moneyCheatIndex = 0;
-		}
-		if (moneyCheatIndex === moneyCheat.length) {
-			moneyCheatIndex = 0;
-			confetti({
-				spread: 180,
-				angle: 270,
-				origin: { x: 0.5, y: -0.2 },
-				scalar: 2,
-				ticks: 220,
-				gravity: 1.2,
-				decay: 0.96,
-				startVelocity: 12,
-				shapes: ['💰', '💵', '💴', '💶', '💷', '💸', '🪙'].map(emoji => confetti.shapeFromText(emoji))
+			toast.success(i18n.t('command.konami_success'), {
+				description: i18n.t('command.konami_description')
 			});
 		}
 
@@ -345,11 +321,6 @@
 	onMount(() => {
 		document.addEventListener('keydown', handleKeydown);
 		initDocsearch();
-
-		if (browser) {
-			hasGithubToken = !!localStorage.getItem('github_admin_token');
-		}
-
 		return () => {
 			document.removeEventListener('keydown', handleKeydown);
 		};
@@ -364,18 +335,11 @@
 		loadingProgress.set(loading ? 100 : 0);
 	});
 
-	const enrichLink = (
-		link: CommandData,
-		translationKey?: string,
-		isGroup?: boolean
-	): CommandData => {
+	const enrichLink = (link: CommandData): CommandData => {
 		let href = link.href || '';
 		if (!link.href && !link.action) {
 			href = '/' + link.name.toLowerCase();
 		}
-
-		const id = link.id || href || translationKey || link.name;
-
 		const action =
 			link.action ||
 			function () {
@@ -389,30 +353,12 @@
 					window.open(href);
 				}
 			};
-
-		const wrappedAction = () => {
-			const isInternalNavigation =
-				!!link.group ||
-				id === 'command.go_back_screensaver' ||
-				id === 'command.go_back_edit_gist';
-
-			if (!isInternalNavigation) {
-				$isCommandActive = false;
-				query = '';
-			}
-
-			action();
-
-			if (!isGroup) trackCommand(id);
-		};
-
 		let value = link.value || link.name;
 		return {
 			...link,
-			id,
 			keywords: link.keywords || link.name.toLowerCase().split(' '),
 			href,
-			action: wrappedAction,
+			action,
 			value
 		};
 	};
@@ -425,7 +371,7 @@
 		{ name: 'LinkedIn', keywords: ['work', 'professional'], icon: Linkedin, href: links.linkedin },
 		{ name: 'Twitter / 𝕏', keywords: ['X'], icon: Twitter, href: links.x },
 		{ name: 'CV', keywords: ['resume', 'curriculum vitae'], icon: ScrollText, href: links.cv }
-	].map((link) => enrichLink(link));
+	].map(enrichLink);
 
 	function toggleDebug() {
 		$debug = !$debug;
@@ -443,349 +389,131 @@
 			}
 			$isCommandActive = false;
 		} catch (error) {
-			debugLog('DocSearch error', error);
+			console.log('error', error);
 		}
 	}
-
-	let currentGroup = $state<string | null>(null);
-
-	let commandConfig = $derived.by(() => {
-		const config: Record<string, CommandData[]> = {
-			navigation: [
-				enrichLink({ name: i18n.t('common.home'), icon: Home, href: '/' }),
-				enrichLink({ name: i18n.t('common.about'), icon: User, href: '/about' }),
-				...pages
-					.filter(
-						(page) => !['/', '/about', '/settings', '/achievements'].includes(page.href || '')
-					)
-					.map((p) => enrichLink(p)),
-				enrichLink(
-					{
-						name: i18n.t('command.search_zettelkasten'),
-						keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
-						icon: Search,
-						action: handleDocsearch
-					},
-					'command.search_zettelkasten'
-				),
-				enrichLink(
-					{
-						name: i18n.t('common.settings'),
-						keywords: ['preferences'],
-						icon: Settings,
-						href: '/settings'
-					},
-					'common.settings'
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.keyboard_shortcuts'),
-						keywords: ['help', 'hotkeys'],
-						icon: Keyboard,
-						action: () => {
-							$showHelp = true;
-							$isCommandActive = false;
-						}
-					},
-					'command.keyboard_shortcuts'
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.export_data'),
-						value: 'export data, backup, download data',
-						icon: Download,
-						href: '/export'
-					},
-					'command.export_data'
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.go_forward'),
-						icon: ArrowRight,
-						action: () => window.history.forward()
-					},
-					'command.go_forward'
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.go_back'),
-						icon: ArrowLeft,
-						action: () => window.history.back()
-					},
-					'command.go_back'
-				),
-				enrichLink(
-					{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage },
-					'command.reload'
-				)
-			].filter((link) => {
+	let commandConfig = $derived({
+		navigation: [
+			{ name: i18n.t('common.home'), icon: Home, href: '/' },
+			{ name: i18n.t('common.about'), icon: User, href: '/about' },
+			...pages.filter((page) => !['/', '/about', '/settings'].includes(page.href || '')), // avoid duplicates with static navigation links
+			{
+				name: i18n.t('command.search_zettelkasten'),
+				keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
+				icon: Search,
+				action: handleDocsearch
+			},
+			{
+				name: i18n.t('common.settings'),
+				keywords: ['preferences'],
+				icon: Settings,
+				href: '/settings'
+			},
+			{
+				name: i18n.t('command.keyboard_shortcuts'),
+				keywords: ['help', 'hotkeys'],
+				icon: Keyboard,
+				action: () => {
+					$showHelp = true;
+					$isCommandActive = false;
+				}
+			},
+			{
+				name: i18n.t('command.go_forward'),
+				icon: ArrowRight,
+				action: () => window.history.forward()
+			},
+			{ name: i18n.t('command.go_back'), icon: ArrowLeft, action: () => window.history.back() },
+			{ name: i18n.t('command.reload'), icon: ArrowLeft, action: reloadPage }
+		]
+			.map(enrichLink)
+			.filter((link) => {
 				// remove current page from navigation
 				return page.url.pathname !== link.href;
 			}),
-			links: externalLinks,
-			system: [
-				enrichLink(
-					{
-						name: i18n.t('command.toggle_dark_mode'),
-						value: 'toggle dark mode, theme, light',
-						icon: $mode === 'light' ? Sun : Moon,
-						action: toggleMode
-					},
-					'command.toggle_dark_mode'
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.switch_language'),
-						value:
-							'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
-						icon: Globe,
-						action: async () => {
-							const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
-							await i18n.setLanguage(newLanguage);
-							toast.success(i18n.t('command.language_switched'));
-						}
-					},
-					'command.switch_language'
-				),
-				enrichLink(
-					{
-						name: $debug
-							? i18n.t('command.disable_debug_mode')
-							: i18n.t('command.enable_debug_mode'),
-						icon: $debug ? BugOff : Bug,
-						action: toggleDebug
-					},
-					'command.toggle_debug_mode'
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.reset_desktop_files'),
-						value: 'reset desktop files, restore file positions, clear desktop',
-						icon: RotateCcw,
-						action: () => {
-							resetDesktopFiles();
-							toast.success(i18n.t('command.reset_desktop_success'));
-						}
-					},
-					'command.reset_desktop_files'
-				),
-				...(() => {
-					// Only show "Create Desktop Shortcut" if current page has a bookmark entry
-					const currentPage = pages.find(
-						(p) =>
-							p.href === page.url.pathname ||
-							p.name.toLowerCase() === page.url.pathname.replace(/^\//, '')
-					);
-					if (!currentPage || page.url.pathname === '/') return [];
-
-					return [
-						enrichLink(
-							{
-								name: i18n.t('command.create_desktop_shortcut'),
-								value: 'create desktop shortcut, add to desktop, pin to desktop',
-								keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
-								icon: Plus,
-								action: () => {
-									const fileId =
-										currentPage.name.toLocaleLowerCase() ||
-										currentPage.href?.replace(/\//g, '') ||
-										'page';
-									const existingFile = $desktopFiles.find((f) => f.id === fileId);
-									if (existingFile && !existingFile.hidden) {
-										toast.info(i18n.t('command.shortcut_exists'));
-									} else {
-										addFileToDesktop({
-											id: fileId,
-											name: currentPage.name,
-											href: currentPage.href || '/' + currentPage.name.toLowerCase(),
-											icon: currentPage.icon
-										});
-										toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
-									}
-								}
-							},
-							'command.create_desktop_shortcut'
-						)
-					];
-				})()
-			],
-			fun: [
-				enrichLink({ name: i18n.t('common.achievements'), icon: Trophy, href: '/achievements' }),
-				enrichLink(
-					{
-						name: i18n.t('command.confetti'),
-						keywords: ['party', 'celebrate'],
-						icon: PartyPopper,
-						action: () => {
-							confetti();
-						}
-					},
-					'command.confetti'
-				)
-			],
-			settings: [
-				enrichLink(
-					{
-						name: i18n.t('settings.screensaver'),
-						icon: Monitor,
-						group: 'screensaver',
-						action: () => {
-							currentGroup = 'screensaver';
-							query = '';
-						}
-					},
-					'settings.screensaver'
-				),
-				...(hasGithubToken
-					? [
-							enrichLink(
-								{
-									name: i18n.t('command.edit_gist'),
-									icon: FileCode,
-									group: 'edit_gist',
-									action: () => {
-										currentGroup = 'edit_gist';
-										query = '';
-									}
-								},
-								'command.edit_gist'
-							)
-						]
-					: [])
-			],
-			edit_gist: hasGithubToken ? [
-				...Object.entries(gists).map(([key, gist]) =>
-					enrichLink(
-						{
-							name: gist.name,
-							icon: FileCode,
-							href: `/admin?file=${gist.filename.replace(/\.json$/, '')}`
-						},
-						`edit_gist.${key}`,
-						true
-					)
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.go_back'),
-						icon: ArrowLeft,
-						action: () => (currentGroup = null)
-					},
-					'command.go_back_edit_gist',
-					true
-				)
-			] : [],
-			screensaver: [
-				enrichLink(
-					{
-						name: i18n.t('settings.screensaver_none'),
-						icon: $screensaver === 'none' ? CircleCheck : Circle,
-						action: () => {
-							$screensaver = 'none';
-							currentGroup = null;
-						}
-					},
-					'settings.screensaver_none',
-					true
-				),
-				enrichLink(
-					{
-						name: i18n.t('settings.screensaver_dvd'),
-						icon: $screensaver === 'dvd' ? CircleCheck : Circle,
-						action: () => {
-							$screensaver = 'dvd';
-							currentGroup = null;
-						}
-					},
-					'settings.screensaver_dvd',
-					true
-				),
-				enrichLink(
-					{
-						name: i18n.t('settings.screensaver_playlists'),
-						icon: $screensaver === 'playlists' ? CircleCheck : Circle,
-						action: () => {
-							$screensaver = 'playlists';
-							currentGroup = null;
-						}
-					},
-					'settings.screensaver_playlists',
-					true
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.go_back'),
-						icon: ArrowLeft,
-						action: () => (currentGroup = null)
-					},
-					'command.go_back_screensaver',
-					true
-				)
-			]
-		};
-
-		// Add Suggestions group if we have any tracked commands
-		const allCommands = Object.values(config).flat();
-		const suggestions = Object.entries($commandStats)
-			.map(([id, stat]) => {
-				const command = allCommands.find((c) => c.id === id);
-				if (!command || !command.id) return null;
-				// Scoring: count + recency bonus (linear decay over 7 days)
-				const sevenDays = 7 * 24 * 60 * 60 * 1000;
-				const recencyBonus = Math.max(0, 1 - (Date.now() - stat.lastUsed) / sevenDays) * 10;
-				const score = stat.count + recencyBonus;
-				return { command: { ...command, value: 'suggestion-' + command.value }, score };
-			})
-			.filter((s): s is { command: CommandData & { value: string }; score: number } => s !== null)
-			.sort((a, b) => b.score - a.score)
-			.slice(0, $suggestionsLimit)
-			.map((s) => s.command);
-
-		if (suggestions.length > 0) {
-			return { suggestions, ...config };
-		}
-
-		return config;
-	});
-
-	// Collect all sub-group names referenced by command items (e.g. 'screensaver')
-	const subGroups = $derived(
-		Object.values(commandConfig).reduce((acc, commands) => {
-			for (const cmd of commands) {
-				if (cmd.group && !acc.includes(cmd.group)) {
-					acc.push(cmd.group);
+		links: externalLinks,
+		system: [
+			{
+				name: i18n.t('command.toggle_dark_mode'),
+				value: 'toggle dark mode, theme, light',
+				icon: $mode === 'light' ? Sun : Moon,
+				action: toggleMode
+			},
+			{
+				name: i18n.t('command.switch_language'),
+				value:
+					'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
+				icon: Globe,
+				action: async () => {
+					const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
+					await i18n.setLanguage(newLanguage);
+					toast.success(i18n.t('command.language_switched'));
+					$isCommandActive = false;
 				}
-			}
-			return acc;
-		}, [] as string[])
-	);
+			},
+			{
+				name: $debug ? i18n.t('command.disable_debug_mode') : i18n.t('command.enable_debug_mode'),
+				icon: $debug ? BugOff : Bug,
+				action: toggleDebug
+			},
+			{
+				name: i18n.t('command.reset_desktop_files'),
+				value: 'reset desktop files, restore file positions, clear desktop',
+				icon: RotateCcw,
+				action: () => {
+					resetDesktopFiles();
+					toast.success(i18n.t('command.reset_desktop_success'));
+					$isCommandActive = false;
+				}
+			},
+			...(() => {
+				// Only show "Create Desktop Shortcut" if current page has a bookmark entry
+				const currentPage = pages.find(
+					(p) =>
+						p.href === page.url.pathname ||
+						p.name.toLowerCase() === page.url.pathname.replace(/^\//, '')
+				);
+				if (!currentPage || page.url.pathname === '/') return [];
+
+				return [
+					{
+						name: i18n.t('command.create_desktop_shortcut'),
+						value: 'create desktop shortcut, add to desktop, pin to desktop',
+						keywords: ['shortcut', 'desktop', 'add', 'pin', 'create'],
+						icon: Plus,
+						action: () => {
+							const fileId =
+								currentPage.name.toLocaleLowerCase() ||
+								currentPage.href?.replace(/\//g, '') ||
+								'page';
+							const existingFile = $desktopFiles.find((f) => f.id === fileId);
+							console.log(currentPage);
+							if (existingFile && !existingFile.hidden) {
+								toast.info(i18n.t('command.shortcut_exists'));
+							} else {
+								addFileToDesktop({
+									id: fileId,
+									name: currentPage.name,
+									href: currentPage.href || '/' + currentPage.name.toLowerCase(),
+									icon: currentPage.icon
+								});
+								toast.success(i18n.t('command.shortcut_added', { name: currentPage.name }));
+							}
+							$isCommandActive = false;
+						}
+					}
+				];
+			})()
+		]
+	} as Record<string, CommandData[]>);
 </script>
 
-{#snippet inputIcon()}
-	{#if currentGroup}
-		<button class="mr-3 mb-1 size-4 shrink-0 opacity-50" onclick={() => (currentGroup = null)}>
-			<ArrowLeft class="" />
-		</button>
-	{:else}
-		<Search class="mr-2 size-4 shrink-0 opacity-50" />
-	{/if}
-{/snippet}
-
-<Command.Dialog
-	bind:open={$isCommandActive}
-	onOpenChange={(open) => {
-		if (!open) currentGroup = null;
-	}}
->
-	<Command.Input bind:value={query} icon={inputIcon} placeholder={i18n.t('command.placeholder')} class="text-base" />
+<Command.Dialog bind:open={$isCommandActive}>
+	<Command.Input bind:value={query} placeholder={i18n.t('command.placeholder')} class="text-base" />
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
-		{#each Object.entries(commandConfig).filter(([group, commands]) => commands.length && (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
-			<Command.Group
-				heading={i18n.t(`command.${group}`) !== `command.${group}`
-					? i18n.t(`command.${group}`)
-					: capitalize(group)}
-			>
+		{#each Object.entries(commandConfig) as [group, commands]}
+			<Command.Group heading={i18n.t(`command.${group}`)}>
 				{#each commands as command}
 					<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
 						{#if command.icon}
@@ -794,7 +522,7 @@
 						{command.name}
 					</Command.Item>
 				{/each}
-				{#if group === 'links' && !currentGroup}
+				{#if group === 'links'}
 					{#each Object.entries(links)
 						.filter(([name]) => !commands.some((c) => c.name.toLowerCase() === name.toLowerCase()))
 						.map(([name, href]) => enrichLink({ name, href })) as command}
@@ -810,6 +538,85 @@
 				{/if}
 			</Command.Group>
 		{/each}
+		<Command.Group heading={i18n.t('common.settings')}>
+			{#if !isMobile.any()}
+				<button
+					use:eyeDropperAction={{
+						onDone: (color) => {
+							const message = i18n.t('command.picked_color', { color });
+							debugLog(message);
+							$primaryColor = hexToHsl(color);
+							toast.success(message, {
+								description: i18n.t('command.copy_to_clipboard'),
+								action: {
+									label: i18n.t('common.copy'),
+									onClick: () => navigator.clipboard.writeText(color)
+								}
+							});
+						},
+						onError: console.error
+					}}
+					class="w-full"
+				>
+					<Command.Item keywords={['theme']}>
+						<Pipette class="mr-2" />
+						{i18n.t('command.pick_primary_color')}
+					</Command.Item>
+				</button>
+				<button
+					use:eyeDropperAction={{
+						onDone: (color) => {
+							const message = i18n.t('command.picked_color', { color });
+							debugLog(message);
+							$backgroundColor = hexToHsl(color);
+							toast.success(message, {
+								description: i18n.t('command.copy_to_clipboard'),
+								action: {
+									label: i18n.t('common.copy'),
+									onClick: () => navigator.clipboard.writeText(color)
+								}
+							});
+						},
+						onError: console.error
+					}}
+					class="w-full"
+				>
+					<Command.Item keywords={['theme']}>
+						<Pipette class="mr-2" />
+						{i18n.t('command.pick_background_color')}
+					</Command.Item>
+				</button>
+			{/if}
+			{#if $modifiedColors}
+				<Command.Item onSelect={resetColors} keywords={['theme']}>
+					<Palette class="mr-2" />
+					{i18n.t('command.reset_theme_colors')}
+				</Command.Item>
+			{/if}
+		</Command.Group>
+		<Command.Group heading={i18n.t('command.fun')}>
+			<button use:confettiAction class="w-full">
+				<Command.Item value="confetti" keywords={['party', 'celebrate']}>
+					<PartyPopper class="mr-2" />
+					{i18n.t('command.confetti')}
+				</Command.Item>
+			</button>
+			{#if !$dvdBounceActive}
+				<Command.Item
+					onSelect={() => {
+						$dvdBounceEnabled = !$dvdBounceEnabled;
+						$isCommandActive = false;
+					}}
+					value="dvd bounce"
+					keywords={['easter egg', 'screen saver']}
+				>
+					<Monitor class="mr-2" />
+					{$dvdBounceEnabled
+						? i18n.t('command.disable_dvd_bounce')
+						: i18n.t('command.enable_dvd_bounce')}
+				</Command.Item>
+			{/if}
+		</Command.Group>
 	</Command.List>
 </Command.Dialog>
 

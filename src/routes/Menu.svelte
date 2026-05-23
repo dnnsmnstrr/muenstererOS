@@ -207,7 +207,7 @@
 </Menubar.Root>
 
 <Dialog.Root open={showPicker} onOpenChange={(value) => (showPicker = value)}>
-	<Dialog.Content class="max-w-[340px] p-0" showCloseButton={false}>
+	<Dialog.Content class="max-w-[340px] p-0" showClose={false}>
 		<div id="docsearch"></div>
 	</Dialog.Content>
 </Dialog.Root>

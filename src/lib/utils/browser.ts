@@ -64,11 +64,10 @@ export function reloadPage() {
 
 export function bookmark(title: string, url: string) {
 	debugLog('Bookmarking', title, url);
-	const win = window as any;
-	if (win?.sidebar) {
+	if (window?.sidebar) {
 		// Firefox
-		win.sidebar.addPanel(title, url, '');
-	} else if (win.opera) {
+		window.sidebar.addPanel(title, url, '');
+	} else if (window.opera && window.print) {
 		// Opera
 		var elem = document.createElement('a');
 		elem.setAttribute('href', url);
@@ -77,7 +76,7 @@ export function bookmark(title: string, url: string) {
 		elem.click(); //this.title=document.title;
 	} else if (document.all) {
 		// ie
-		win.external.AddFavorite(url, title);
+		window.external.AddFavorite(url, title);
 	}
 }
 
@@ -85,10 +84,9 @@ function getPlatform() {
 	if (!browser) {
 		return 'unknown';
 	}
-	const nav = navigator as any;
 	// 2022 way of detecting. Note : this userAgentData feature is available only in secure contexts (HTTPS)
-	if (typeof nav.userAgentData !== 'undefined' && nav.userAgentData != null) {
-		return nav.userAgentData.platform;
+	if (typeof navigator.userAgentData !== 'undefined' && navigator.userAgentData != null) {
+		return navigator.userAgentData.platform;
 	}
 	// Deprecated but still works for most of the browser
 	if (typeof navigator.platform !== 'undefined') {
