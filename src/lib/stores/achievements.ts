@@ -38,8 +38,8 @@ function getInitialAchievements(): Record<string, Achievement> {
 			maxProgress: 3,
 			metadata: { lastVisitDate: null, currentStreak: 0 }
 		},
-		konami: {
-			id: 'konami',
+		cheatcode: {
+			id: 'cheatcode',
 			unlocked: false
 		},
 		'lucky-spin': {
