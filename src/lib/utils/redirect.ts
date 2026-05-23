@@ -41,10 +41,18 @@ export const getRedirectURL = (
 	{ query, restPath, noReturn }: { query?: string; restPath?: string } & RedirectOptions = {}
 ) => {
 	let path = '';
+
+	// Robustly sanitize restPath to prevent path traversal and open redirects
+	// 1. Remove all occurrences of ../ (and variations like ..\ or encoded)
+	// 2. Ensure it doesn't start with / or \ to prevent protocol-relative redirects
+	const sanitizedRestPath = restPath
+		?.replace(/\.\.[/\\]/g, '') // Remove ../ and ..\
+		?.replace(/^[/\\]+/, ''); // Remove leading slashes
+
 	if (url) {
-		path = `${url}${path}${restPath ? `/${restPath}` : ''}`;
+		path = `${url}${path}${sanitizedRestPath ? `/${sanitizedRestPath}` : ''}`;
 	} else if (name) {
-		path = `/${name}${path}${restPath ? `/${restPath}` : ''}`;
+		path = `/${name}${path}${sanitizedRestPath ? `/${sanitizedRestPath}` : ''}`;
 	} else {
 		// a failed redirect will end up back here, therefore the 'noReturn' parameter is used to avoid endless loops on redirect attempts
 		path = `/404/${!noReturn ? query : ''}`;

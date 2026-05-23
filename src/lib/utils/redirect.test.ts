@@ -87,5 +87,28 @@ describe('redirect utils', () => {
 			const redirect: Redirect = { name: '' };
 			expect(getRedirectURL(redirect, { query: 'something', noReturn: true })).toBe('/404/');
 		});
+
+		it('should prevent path traversal in restPath', () => {
+			const redirect: Redirect = { name: 'test', url: 'https://test.com' };
+			const restPath = '../../evil.com';
+			const result = getRedirectURL(redirect, { restPath });
+			expect(result).not.toContain('../');
+			expect(result).toBe('https://test.com/evil.com');
+		});
+
+		it('should prevent open redirect via protocol-relative URLs in restPath', () => {
+			const redirect: Redirect = { name: 'test', url: 'https://test.com' };
+			const restPath = '//evil.com';
+			const result = getRedirectURL(redirect, { restPath });
+			expect(result).toBe('https://test.com/evil.com');
+		});
+
+		it('should handle backslashes in restPath traversal', () => {
+			const redirect: Redirect = { name: 'test', url: 'https://test.com' };
+			const restPath = '..\\..\\evil.com';
+			const result = getRedirectURL(redirect, { restPath });
+			expect(result).not.toContain('..\\');
+			expect(result).toBe('https://test.com/evil.com');
+		});
 	});
 });
