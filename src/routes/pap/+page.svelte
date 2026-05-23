@@ -6,7 +6,10 @@
 	import { Input } from '$lib/components/ui/input';
 	import { toast } from 'svelte-sonner';
 	import { cn } from '$lib/utils/utils';
-	import { onMount } from 'svelte';
+	import * as ContextMenu from '$lib/components/ui/context-menu';
+	import { onMount, untrack } from 'svelte';
+	import { Trash } from 'lucide-svelte';
+	import { confirmDelete, ConfirmDeleteDialog } from '$lib/components/ui/confirm-delete-dialog';
 
 	let password = $state('');
 	let isUnlocked = $state(false);
@@ -30,6 +33,7 @@
 	let selectedId = $state<string | null>(null);
 	let selectedItemHeight = $state(0);
 	let itemRefs = $state<Record<string, HTMLDivElement>>({});
+	let workspaceWidth = $state(0);
 	let newItemContent = $state('');
 
 	// Dragging state
@@ -129,6 +133,21 @@
 			isDraggingItem = false;
 		};
 
+		const handleTouchMove = (e: TouchEvent) => {
+			if (isDraggingItem && selectedId) {
+				const item = items.find((i) => i.id === selectedId);
+				if (item) {
+					item.x = e.touches[0].clientX - dragOffset.x;
+					item.y = e.touches[0].clientY - dragOffset.y;
+					saveToHash();
+				}
+			}
+		};
+
+		const handleTouchEnd = () => {
+			isDraggingItem = false;
+		};
+
 		const handlePaste = (e: ClipboardEvent) => {
 			if (!isUnlocked) return;
 			const text = e.clipboardData?.getData('text');
@@ -153,12 +172,16 @@
 
 		window.addEventListener('mousemove', handleMouseMove);
 		window.addEventListener('mouseup', handleMouseUp);
+		window.addEventListener('touchmove', handleTouchMove, { passive: false });
+		window.addEventListener('touchend', handleTouchEnd);
 		window.addEventListener('paste', handlePaste);
 
 		return () => {
 			window.removeEventListener('hashchange', loadFromHash);
 			window.removeEventListener('mousemove', handleMouseMove);
 			window.removeEventListener('mouseup', handleMouseUp);
+			window.removeEventListener('touchmove', handleTouchMove);
+			window.removeEventListener('touchend', handleTouchEnd);
 			window.removeEventListener('paste', handlePaste);
 		};
 	});
@@ -173,11 +196,64 @@
 		}
 	}
 
+	let lastWorkspaceWidth = 0;
+
+	$effect(() => {
+		if (workspaceWidth > 0 && lastWorkspaceWidth > 0 && workspaceWidth !== lastWorkspaceWidth) {
+			const ratio = workspaceWidth / lastWorkspaceWidth;
+			untrack(() => {
+				for (const item of items) {
+					item.x = Math.round(item.x * ratio);
+				}
+				saveToHash();
+			});
+		}
+		lastWorkspaceWidth = workspaceWidth;
+	});
+
 	$effect(() => {
 		if (selectedId && itemRefs[selectedId]) {
 			selectedItemHeight = itemRefs[selectedId].offsetHeight;
 		}
 	});
+
+	function bringForward(id: string) {
+		const idx = items.findIndex((i) => i.id === id);
+		if (idx < items.length - 1) {
+			const next = [...items];
+			[next[idx], next[idx + 1]] = [next[idx + 1], next[idx]];
+			items = next;
+			saveToHash();
+		}
+	}
+
+	function sendBackward(id: string) {
+		const idx = items.findIndex((i) => i.id === id);
+		if (idx > 0) {
+			const next = [...items];
+			[next[idx], next[idx - 1]] = [next[idx - 1], next[idx]];
+			items = next;
+			saveToHash();
+		}
+	}
+
+	function bringToFront(id: string) {
+		const idx = items.findIndex((i) => i.id === id);
+		if (idx !== -1) {
+			const item = items[idx];
+			items = [...items.slice(0, idx), ...items.slice(idx + 1), item];
+			saveToHash();
+		}
+	}
+
+	function sendToBack(id: string) {
+		const idx = items.findIndex((i) => i.id === id);
+		if (idx !== -1) {
+			const item = items[idx];
+			items = [item, ...items.slice(0, idx), ...items.slice(idx + 1)];
+			saveToHash();
+		}
+	}
 
 	function updateSelectedItem(props: Partial<CanvasItem>) {
 		if (!selectedId) return;
@@ -209,74 +285,79 @@
 			</div>
 		</div>
 	{:else}
-		<div class="flex h-full w-full flex-col space-y-6">
+		<div class="flex h-full w-full max-h-dvh flex-col space-y-6 overflow-hidden">
 			<div class="flex items-center justify-between">
-				<Heading class="mb-0">{i18n.t('pap.title')}</Heading>
-				<p class="hidden text-sm text-muted-foreground sm:block">
-					Move items around and share your creation!
-				</p>
-				<Button variant="outline" onclick={() => (isUnlocked = false)} size="sm">
-					{i18n.t('common.quit')}
-				</Button>
-			</div>
-
-			<div class="sticky top-0 z-50 flex w-full flex-col items-center space-y-4">
-				<div
-					class="flex items-center space-x-2 rounded-full border bg-background/80 p-2 shadow-sm backdrop-blur-sm"
-				>
-					<div class="flex items-center space-x-2 px-2">
-						<Input
-							placeholder="Paste GIF URL or type text..."
-							bind:value={newItemContent}
-							class="h-8 w-64"
-							onkeydown={(e) => e.key === 'Enter' && handleInputSubmit()}
-						/>
-						<Button size="sm" variant="secondary" onclick={handleInputSubmit}>Add</Button>
-					</div>
-
-					<div class="mx-2 h-6 w-px bg-border"></div>
-
-					<div class="flex items-center space-x-1 border-l pl-2">
-						{#each ['😊', '😂', '❤️', '🔥', '✨', '🍕', '🚀', '🎨'] as emoji}
-							<button
-								class="flex h-8 w-8 items-center justify-center rounded text-lg transition-colors hover:bg-accent"
-								onclick={() => addItem('emoji', emoji)}
-							>
-								{emoji}
-							</button>
-						{/each}
-					</div>
-
-					<div class="mx-2 h-6 w-px bg-border"></div>
-
-					<Button
-						variant="ghost"
-						size="sm"
-						onclick={() => (items = [])}
-						class="text-xs"
-						disabled={items.length === 0}
+				<div class="sticky top-0 z-50 flex w-full flex-col items-center space-y-4">
+					<div
+						class="flex items-center space-x-2 rounded-full border bg-background/80 p-2 shadow-sm backdrop-blur-sm"
 					>
-						{i18n.t('pap.clear_canvas')}
-					</Button>
-				</div>
+						<div class="flex items-center space-x-2 px-2">
+							<Input
+								placeholder="Paste GIF URL or type text..."
+								bind:value={newItemContent}
+								class="h-8 w-56 md:w-64"
+								onkeydown={(e) => e.key === 'Enter' && handleInputSubmit()}
+							/>
+							<Button size="sm" variant="secondary" onclick={handleInputSubmit}>Add</Button>
+						</div>
 
+						<div class="hidden items-center space-x-1 border-l pl-2 md:flex">
+							{#each ['😊', '😂', '❤️', '🔥', '✨', '🍕', '🚀', '🎨'] as emoji}
+								<button
+									class="flex h-8 w-8 items-center justify-center rounded text-lg transition-colors hover:bg-accent"
+									onclick={() => addItem('emoji', emoji)}
+								>
+									{emoji}
+								</button>
+							{/each}
+						</div>
+
+						<div class="mx-2 h-6 w-px bg-border"></div>
+
+						<Button
+							variant="ghost"
+							size="sm"
+							onclick={() =>
+								confirmDelete({
+									title: 'Clear Canvas',
+									description:
+										'Are you sure you want to clear the entire canvas? This cannot be undone.',
+									onConfirm: async () => {
+										items = [];
+									}
+								})}
+							class="text-xs"
+							disabled={items.length === 0}
+						>
+							<Trash class="sm:hidden" />
+							<span class="hidden sm:block">
+								{i18n.t('pap.clear_canvas')}
+							</span>
+						</Button>
+					</div>
 				</div>
+			</div>
 
 			<!-- Workspace -->
 			<div
-				class="relative min-h-[500px] flex-grow cursor-crosshair overflow-hidden rounded-xl border bg-card/50 shadow-inner"
+				role="none"
+				bind:clientWidth={workspaceWidth}
+				class="relative min-h-[500px] flex-grow cursor-crosshair overflow-auto rounded-xl border bg-card/50 shadow-inner"
 				onmousedown={(e) => {
 					if (e.target === e.currentTarget) {
 						selectedId = null;
 					}
 				}}
 			>
+				<div class="pointer-events-none" style="min-width: 2000px; min-height: 2000px"></div>
 				{#if selectedId}
 					{@const selectedItem = items.find((i) => i.id === selectedId)}
 					{#if selectedItem}
 						<div
 							class="absolute z-[60] flex items-center space-x-2 rounded-lg border bg-background/80 p-2 text-xs shadow-sm backdrop-blur-sm"
-							style="left: {selectedItem.x}px; top: {selectedItem.y - selectedItemHeight / 2 - 8}px; transform: translate(-50%, -100%);"
+							style="left: {selectedItem.x}px; top: {selectedItem.y -
+								selectedItemHeight / 2 -
+								8}px; transform: translate(-50%, -100%);"
 						>
 							<span class="font-bold">Edit:</span>
 							{#if selectedItem.type === 'text'}
@@ -304,7 +385,15 @@
 									oninput={(e) => updateSelectedItem({ fontSize: parseInt(e.currentTarget.value) })}
 								/>
 							{/if}
-							<div class="flex items-center space-x-1 border-l pl-2">
+							<div
+								class="flex items-center space-x-1 border-l pl-2"
+								onwheel={(e) => {
+									e.preventDefault();
+									updateSelectedItem({
+										scale: Math.max(0.1, selectedItem.scale + (e.deltaY > 0 ? -0.1 : 0.1))
+									});
+								}}
+							>
 								<span>Size:</span>
 								<Button
 									variant="outline"
@@ -321,7 +410,15 @@
 									onclick={() => updateSelectedItem({ scale: selectedItem.scale + 0.1 })}>+</Button
 								>
 							</div>
-							<div class="flex items-center space-x-1 border-l pl-2">
+							<div
+								class="flex items-center space-x-1 border-l pl-2"
+								onwheel={(e) => {
+									e.preventDefault();
+									updateSelectedItem({
+										rotation: selectedItem.rotation + (e.deltaY > 0 ? -15 : 15)
+									});
+								}}
+							>
 								<span>Rotate:</span>
 								<Button
 									variant="outline"
@@ -347,42 +444,71 @@
 						</div>
 					{/if}
 				{/if}
-				{#each items as item (item.id)}
-					<div
-						bind:this={itemRefs[item.id]}
-						class={cn(
-							'absolute cursor-move select-none',
-							selectedId === item.id ? 'z-50 rounded-sm ring-2 ring-primary ring-offset-2' : 'z-10'
-						)}
-						style="left: {item.x}px; top: {item.y}px; transform: translate(-50%, -50%) rotate({item.rotation}deg) scale({item.scale});"
-						onmousedown={(e) => {
-							e.stopPropagation();
-							selectedId = item.id;
-							isDraggingItem = true;
-							const rect = e.currentTarget.getBoundingClientRect();
-							dragOffset = {
-								x: e.clientX - item.x,
-								y: e.clientY - item.y
-							};
-						}}
-					>
-						{#if item.type === 'emoji'}
-							<span class="text-6xl">{item.content}</span>
-						{:else if item.type === 'gif'}
-							<img
-								src={item.content}
-								alt="GIF"
-								class="pointer-events-none max-h-48 max-w-48 object-contain drop-shadow-lg"
-							/>
-						{:else if item.type === 'text'}
+				{#each items as item, i (item.id)}
+					{@const zIndex = 10 + i}
+					<ContextMenu.Root>
+						<ContextMenu.Trigger>
 							<div
-								style="font-size: {item.fontSize}px; color: {item.color}; font-weight: {item.fontWeight};"
-								class="whitespace-nowrap px-2 py-1"
+								role="button"
+								tabindex="-1"
+								bind:this={itemRefs[item.id]}
+								class={cn(
+									'absolute cursor-move select-none',
+									selectedId === item.id && 'rounded-sm ring-2 ring-primary ring-offset-2'
+								)}
+								style="left: {item.x}px; top: {item.y}px; z-index: {zIndex}; transform: translate(-50%, -50%) rotate({item.rotation}deg) scale({item.scale});"
+								onmousedown={(e) => {
+									e.stopPropagation();
+									selectedId = item.id;
+									isDraggingItem = true;
+									const rect = e.currentTarget.getBoundingClientRect();
+									dragOffset = {
+										x: e.clientX - item.x,
+										y: e.clientY - item.y
+									};
+								}}
+								ontouchstart={(e) => {
+									e.stopPropagation();
+									selectedId = item.id;
+									isDraggingItem = true;
+									dragOffset = {
+										x: e.touches[0].clientX - item.x,
+										y: e.touches[0].clientY - item.y
+									};
+								}}
 							>
-								{item.content}
+								{#if item.type === 'emoji'}
+									<span class="text-6xl">{item.content}</span>
+								{:else if item.type === 'gif'}
+									<img
+										src={item.content}
+										alt="GIF"
+										class="pointer-events-none max-h-48 max-w-48 object-contain drop-shadow-lg"
+									/>
+								{:else if item.type === 'text'}
+									<div
+										style="font-size: {item.fontSize}px; color: {item.color}; font-weight: {item.fontWeight};"
+										class="whitespace-nowrap px-2 py-1"
+									>
+										{item.content}
+									</div>
+								{/if}
 							</div>
-						{/if}
-					</div>
+						</ContextMenu.Trigger>
+						<ContextMenu.Content class="min-w-40">
+							<ContextMenu.Item onclick={() => bringToFront(item.id)}>
+								Bring to Front
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => bringForward(item.id)}>
+								Bring Forward
+							</ContextMenu.Item>
+							<ContextMenu.Separator />
+							<ContextMenu.Item onclick={() => sendBackward(item.id)}>
+								Send Backward
+							</ContextMenu.Item>
+							<ContextMenu.Item onclick={() => sendToBack(item.id)}>Send to Back</ContextMenu.Item>
+						</ContextMenu.Content>
+					</ContextMenu.Root>
 				{/each}
 				{#if items.length === 0}
 					<div class="flex h-full items-center justify-center italic text-muted-foreground">
@@ -393,6 +519,7 @@
 		</div>
 	{/if}
 </div>
+<ConfirmDeleteDialog />
 
 <style>
 	:global(.cursor-move) {
