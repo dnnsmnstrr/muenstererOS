@@ -397,7 +397,14 @@
 		"error": "Failed to send message.",
 		"latest_message": "Latest Message",
 		"no_messages": "No messages found.",
-		"fetch_error": "Failed to fetch latest message."
+		"fetch_error": "Failed to fetch latest message.",
+		"email_prefix": "Alternatively, you can send an email to ",
+		"email_suffix": " to trigger a message.",
+		"clear_all": "Clear All Messages",
+		"clearing": "Clearing messages...",
+		"clear_confirm": "Are you sure you want to clear all displayed messages? This will delete them from the ntfy.sh server.",
+		"clear_success": "All messages cleared!",
+		"clear_error": "Failed to clear some messages."
 	},
 	"api": {
 		"title": "API",

@@ -398,7 +398,14 @@
 		"error": "Nachricht konnte nicht gesendet werden.",
 		"latest_message": "Letzte Nachricht",
 		"no_messages": "Keine Nachrichten gefunden.",
-		"fetch_error": "Fehler beim Abrufen der letzten Nachricht."
+		"fetch_error": "Fehler beim Abrufen der letzten Nachricht.",
+		"email_prefix": "Alternativ kannst du eine E-Mail an ",
+		"email_suffix": " senden, um eine Nachricht auszulösen.",
+		"clear_all": "Alle Nachrichten löschen",
+		"clearing": "Nachrichten werden gelöscht...",
+		"clear_confirm": "Bist du sicher, dass du alle angezeigten Nachrichten löschen möchtest? Dies wird sie vom ntfy.sh Server entfernen.",
+		"clear_success": "Alle Nachrichten gelöscht!",
+		"clear_error": "Fehler beim Löschen einiger Nachrichten."
 	},
 	"api": {
 		"title": "API",
