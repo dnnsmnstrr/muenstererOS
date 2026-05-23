@@ -11,7 +11,7 @@ export interface CheatCode {
 
 export const CHEAT_CODES: CheatCode[] = [
 	{
-		id: 'konami',
+		id: 'cheatcode', // https://en.wikipedia.org/wiki/Konami_Code
 		sequence: [
 			'ArrowUp',
 			'ArrowUp',
@@ -101,9 +101,7 @@ export function triggerMoney() {
 		gravity: 1.2,
 		decay: 0.96,
 		startVelocity: 12,
-		shapes: ['💰', '💵', '💴', '💶', '💷', '💸', '🪙'].map((emoji) =>
-			confetti.shapeFromText(emoji)
-		)
+		shapes: ['💰', '💵', '💴', '💶', '💷', '💸', '🪙'].map((emoji) => confetti.shapeFromText(emoji))
 	});
 }
 

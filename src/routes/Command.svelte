@@ -126,7 +126,9 @@
 		u: '/uses'
 	};
 	let keyBuffer: string[] = [];
-	const bufferLimit = Math.max(...CHEAT_CODES.map((c) => c.sequence?.length || c.code?.length || 0));
+	const bufferLimit = Math.max(
+		...CHEAT_CODES.map((c) => c.sequence?.length || c.code?.length || 0)
+	);
 
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
@@ -169,7 +171,7 @@
 		if (cheat) {
 			debugLog(`Cheat code detected: ${cheat.id}`);
 			triggerCheatAnimation(cheat.animation);
-			unlockAchievement('konami');
+			unlockAchievement('cheatcode');
 			keyBuffer = [];
 		}
 
@@ -344,9 +346,7 @@
 
 		const wrappedAction = () => {
 			const isInternalNavigation =
-				!!link.group ||
-				id === 'command.go_back_screensaver' ||
-				id === 'command.go_back_edit_gist';
+				!!link.group || id === 'command.go_back_screensaver' || id === 'command.go_back_edit_gist';
 
 			if (!isInternalNavigation) {
 				$isCommandActive = false;
@@ -605,28 +605,30 @@
 						]
 					: [])
 			],
-			edit_gist: hasGithubToken ? [
-				...Object.entries(gists).map(([key, gist]) =>
-					enrichLink(
-						{
-							name: gist.name,
-							icon: FileCode,
-							href: `/admin?file=${gist.filename.replace(/\.json$/, '')}`
-						},
-						`edit_gist.${key}`,
-						true
-					)
-				),
-				enrichLink(
-					{
-						name: i18n.t('command.go_back'),
-						icon: ArrowLeft,
-						action: () => (currentGroup = null)
-					},
-					'command.go_back_edit_gist',
-					true
-				)
-			] : [],
+			edit_gist: hasGithubToken
+				? [
+						...Object.entries(gists).map(([key, gist]) =>
+							enrichLink(
+								{
+									name: gist.name,
+									icon: FileCode,
+									href: `/admin?file=${gist.filename.replace(/\.json$/, '')}`
+								},
+								`edit_gist.${key}`,
+								true
+							)
+						),
+						enrichLink(
+							{
+								name: i18n.t('command.go_back'),
+								icon: ArrowLeft,
+								action: () => (currentGroup = null)
+							},
+							'command.go_back_edit_gist',
+							true
+						)
+					]
+				: [],
 			screensaver: [
 				enrichLink(
 					{
@@ -715,7 +717,7 @@
 
 {#snippet inputIcon()}
 	{#if currentGroup}
-		<button class="mr-3 mb-1 size-4 shrink-0 opacity-50" onclick={() => (currentGroup = null)}>
+		<button class="mb-1 mr-3 size-4 shrink-0 opacity-50" onclick={() => (currentGroup = null)}>
 			<ArrowLeft class="" />
 		</button>
 	{:else}
@@ -729,10 +731,15 @@
 		if (!open) currentGroup = null;
 	}}
 >
-	<Command.Input bind:value={query} icon={inputIcon} placeholder={i18n.t('command.placeholder')} class="text-base" />
+	<Command.Input
+		bind:value={query}
+		icon={inputIcon}
+		placeholder={i18n.t('command.placeholder')}
+		class="text-base"
+	/>
 	<Command.List>
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
-		{#each Object.entries(commandConfig).filter(([group, commands]) => commands.length && (!currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
+		{#each Object.entries(commandConfig).filter(([group, commands]) => (commands.length && !currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
 			<Command.Group
 				heading={i18n.t(`command.${group}`) !== `command.${group}`
 					? i18n.t(`command.${group}`)
