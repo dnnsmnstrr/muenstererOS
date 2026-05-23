@@ -114,6 +114,7 @@
 		"screensaver_none": "None",
 		"screensaver_dvd": "DVD Bounce",
 		"screensaver_playlists": "Playlist Covers",
+		"screensaver_crash": "Crash",
 		"inactivity_timeout": "Inactivity Timeout",
 		"suggestions_limit": "Command Suggestions Limit",
 		"actions": "Actions",
@@ -567,7 +568,13 @@
 		"description": "A command line interface for the muenstererOS website.",
 		"loading": "init muenstererOS",
 		"ready": "CLI ready",
-		"placeholder": "Type your command..."
+		"placeholder": "Type your command...",
+		"crash": {
+			"title": "Your muenstererOS ran into a problem and needs to restart.",
+			"message": "We're just collecting some error info, and then we'll restart for you.",
+			"quote": "Have you tried turning it off and on again?",
+			"reboot": "Reboot"
+		}
 	},
 	"admin": {
 		"title": "Gist Admin",

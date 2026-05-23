@@ -36,9 +36,9 @@ export default defineConfig({
 
 	// Start the SvelteKit dev server before running tests
 	webServer: {
-		command: 'npm run dev',
+		command: 'pnpm run dev',
 		url: 'http://localhost:5173',
 		reuseExistingServer: !process.env.CI,
-		timeout: 30_000
+		timeout: 120_000
 	}
 });

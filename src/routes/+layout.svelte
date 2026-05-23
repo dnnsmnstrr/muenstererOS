@@ -5,6 +5,9 @@
 	import Command from './Command.svelte';
 	import Header from './Header.svelte';
 	import Footer from './Footer.svelte';
+	import CrashScreensaver from '$lib/components/CrashScreensaver.svelte';
+	import { screensaverActive as screensaverActiveStore } from '$lib/stores/desktop';
+	import { screensaver } from '$lib/stores/app';
 	import { page } from '$app/state';
 	import {
 		theme,
@@ -301,6 +304,10 @@
 <Command pages={allPages} />
 
 <svelte:window bind:innerWidth bind:innerHeight />
+
+{#if $screensaverActiveStore && $screensaver === 'crash'}
+	<CrashScreensaver />
+{/if}
 
 <div class="flex h-screen w-full flex-grow flex-col">
 	<div class="w-fixed w-full p-6 sm:px-16 print:hidden">

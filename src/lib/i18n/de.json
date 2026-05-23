@@ -114,6 +114,7 @@
 		"screensaver_none": "Keiner",
 		"screensaver_dvd": "DVD Bounce",
 		"screensaver_playlists": "Playlist Cover",
+		"screensaver_crash": "Absturz",
 		"inactivity_timeout": "Inaktivitäts-Timeout",
 		"suggestions_limit": "Limit für Befehlsvorschläge",
 		"actions": "Aktionen",
@@ -568,7 +569,13 @@
 		"description": "Eine Kommandozeile für die muenstererOS Webseite.",
 		"loading": "init muenstererOS",
 		"ready": "CLI bereit",
-		"placeholder": "Befehl eingeben..."
+		"placeholder": "Befehl eingeben...",
+		"crash": {
+			"title": "muenstererOS hat ein Problem festgestellt und muss neu gestartet werden.",
+			"message": "Es werden einige Fehlerinformationen gesammelt, und dann wird ein Neustart durchgeführt.",
+			"quote": "Hast du schon versucht, es aus- und wieder einzuschalten?",
+			"reboot": "Neu starten"
+		}
 	},
 	"admin": {
 		"title": "Gist Admin",
