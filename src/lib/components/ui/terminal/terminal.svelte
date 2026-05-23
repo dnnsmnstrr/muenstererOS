@@ -16,9 +16,10 @@
 		onMinimize = () => {},
 		onMaximize = () => {},
 		onClose = () => {},
+		isMaximized = false,
 		children,
 		class: className
-	}: TerminalRootProps = $props();
+	}: TerminalRootProps & { isMaximized?: boolean } = $props();
 
 	const terminal = useTerminalRoot({ delay, speed, onComplete });
 
@@ -32,6 +33,12 @@
 	});
 </script>
 
-<Window class={cn('font-mono text-sm font-light', className)} {onClose} {onMinimize} {onMaximize}>
+<Window
+	class={cn('font-mono text-sm font-light', className)}
+	{onClose}
+	{onMinimize}
+	{onMaximize}
+	{isMaximized}
+>
 	{@render children?.()}
 </Window>

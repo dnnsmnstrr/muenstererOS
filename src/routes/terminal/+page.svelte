@@ -535,7 +535,14 @@
 
 <div class="container">
 	<Heading>{i18n.t('terminal.title')}</Heading>
-	<Terminal.Root class={cn(isMaximized ? 'h-[60vh] w-full aspect-auto' : 'max-w-2xl')} delay={100} onClose={() => goto('/')} onMaximize={() => toggleMaximize(true)} onMinimize={() => toggleMaximize(false)}>
+	<Terminal.Root
+		class={cn(isMaximized ? 'h-[60vh] aspect-auto' : 'aspect-video max-w-2xl')}
+		{isMaximized}
+		delay={100}
+		onClose={() => goto('/')}
+		onMaximize={() => toggleMaximize(true)}
+		onMinimize={() => toggleMaximize(false)}
+	>
 		{#if !isIntroComplete}
 			<Terminal.Loading delay={100} oncomplete={() => (isIntroComplete = true)} completeDelay={700}>
 				{#snippet loadingMessage()}
@@ -548,8 +555,8 @@
 		{:else}
 			<div
 				class={cn(
-					'mb-1 flex max-h-40 flex-col gap-1 overflow-y-auto overflow-x-clip',
-					isMaximized ? 'max-h-[58vh]' : 'md:max-h-80'
+					'mb-1 flex flex-col gap-1 overflow-y-auto overflow-x-clip',
+					isMaximized ? 'flex-grow' : 'max-h-40 md:max-h-80'
 				)}
 				bind:this={linesContainer}
 			>

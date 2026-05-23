@@ -47,7 +47,7 @@
 
 	<section class="mb-8">
 		<Heading depth={2}>Window Component</Heading>
-		<Window class="m-6 max-w-xl">
+		<Window class="m-6 aspect-video max-w-xl">
 			<strong># Window</strong>
 			<p>An awesome styled window component.</p>
 		</Window>
