@@ -494,6 +494,15 @@
 		"notification": "Willkommen! Möchtest du dein Erlebnis anpassen?",
 		"notification_link": "Onboarding starten"
 	},
+	"pap": {
+		"title": "Paula Amusement Page",
+		"password_prompt": "Passwort eingeben, um auf die Amusement Page zuzugreifen",
+		"password_placeholder": "Passwort...",
+		"unlock": "Freischalten",
+		"invalid_password": "Falsches Passwort. Bitte erneut versuchen.",
+		"stickers_label": "Sticker",
+		"clear_canvas": "Leinwand leeren"
+	},
 	"hotkeys": {
 		"title": "Hotkeys",
 		"meta_description": "Meine Raycast-Konfiguration und Tastenkombinationen",
