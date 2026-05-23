@@ -8,7 +8,7 @@
 	import { cn } from '$lib/utils/utils';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { onMount, untrack } from 'svelte';
-	import { Trash } from 'lucide-svelte';
+	import { Plus, Trash } from 'lucide-svelte';
 	import { confirmDelete, ConfirmDeleteDialog } from '$lib/components/ui/confirm-delete-dialog';
 
 	let password = $state('');
@@ -30,7 +30,7 @@
 	}
 
 	let items = $state<CanvasItem[]>([]);
-	let selectedId = $state<string | null>(null);
+	let selectedIds = $state<string[]>([]);
 	let selectedItemHeight = $state(0);
 	let itemRefs = $state<Record<string, HTMLDivElement>>({});
 	let workspaceWidth = $state(0);
@@ -38,7 +38,23 @@
 
 	// Dragging state
 	let isDraggingItem = $state(false);
-	let dragOffset = { x: 0, y: 0 };
+	let dragStart = { x: 0, y: 0 };
+	let dragItemPositions = $state<Record<string, { x: number; y: number }>>({});
+
+	// Selection rectangle state
+	let isSelecting = $state(false);
+	let selectionRect = $state<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
+	let workspaceEl: HTMLDivElement | undefined = $state(undefined);
+
+	const MARGIN = 100;
+	let canvasSize = $derived(
+		items.length > 0
+			? {
+					width: Math.max(500, ...items.map((i) => i.x + MARGIN)),
+					height: Math.max(500, ...items.map((i) => i.y + MARGIN))
+				}
+			: { width: 500, height: 500 }
+	);
 
 	function addItem(type: ItemType, content: string, x?: number, y?: number) {
 		const newItem: CanvasItem = {
@@ -81,9 +97,9 @@
 		newItemContent = '';
 	}
 
-	function removeItem(id: string) {
-		items = items.filter((i) => i.id !== id);
-		if (selectedId === id) selectedId = null;
+	function removeSelectedItems() {
+		items = items.filter((i) => !selectedIds.includes(i.id));
+		selectedIds = [];
 		saveToHash();
 	}
 
@@ -119,33 +135,81 @@
 		window.addEventListener('hashchange', loadFromHash);
 
 		const handleMouseMove = (e: MouseEvent) => {
-			if (isDraggingItem && selectedId) {
-				const item = items.find((i) => i.id === selectedId);
-				if (item) {
-					item.x = e.clientX - dragOffset.x;
-					item.y = e.clientY - dragOffset.y;
-					saveToHash();
+			if (isSelecting && workspaceEl) {
+				const rect = workspaceEl.getBoundingClientRect();
+				const x = e.clientX - rect.left + workspaceEl.scrollLeft;
+				const y = e.clientY - rect.top + workspaceEl.scrollTop;
+				selectionRect = { ...selectionRect!, x2: x, y2: y };
+				return;
+			}
+			if (isDraggingItem && selectedIds.length > 0) {
+				const dx = e.clientX - dragStart.x;
+				const dy = e.clientY - dragStart.y;
+				for (const id of selectedIds) {
+					const item = items.find((i) => i.id === id);
+					const startPos = dragItemPositions[id];
+					if (item && startPos) {
+						item.x = startPos.x + dx;
+						item.y = startPos.y + dy;
+					}
 				}
+				saveToHash();
 			}
 		};
 
 		const handleMouseUp = () => {
+			if (isSelecting && selectionRect) {
+				const x1 = Math.min(selectionRect.x1, selectionRect.x2);
+				const y1 = Math.min(selectionRect.y1, selectionRect.y2);
+				const x2 = Math.max(selectionRect.x1, selectionRect.x2);
+				const y2 = Math.max(selectionRect.y1, selectionRect.y2);
+				selectedIds = items
+					.filter((item) => item.x >= x1 && item.x <= x2 && item.y >= y1 && item.y <= y2)
+					.map((item) => item.id);
+			}
+			isSelecting = false;
+			selectionRect = null;
 			isDraggingItem = false;
+			dragItemPositions = {};
 		};
 
 		const handleTouchMove = (e: TouchEvent) => {
-			if (isDraggingItem && selectedId) {
-				const item = items.find((i) => i.id === selectedId);
-				if (item) {
-					item.x = e.touches[0].clientX - dragOffset.x;
-					item.y = e.touches[0].clientY - dragOffset.y;
-					saveToHash();
+			if (isSelecting && workspaceEl) {
+				const rect = workspaceEl.getBoundingClientRect();
+				const x = e.touches[0].clientX - rect.left + workspaceEl.scrollLeft;
+				const y = e.touches[0].clientY - rect.top + workspaceEl.scrollTop;
+				selectionRect = { ...selectionRect!, x2: x, y2: y };
+				return;
+			}
+			if (isDraggingItem && selectedIds.length > 0) {
+				const dx = e.touches[0].clientX - dragStart.x;
+				const dy = e.touches[0].clientY - dragStart.y;
+				for (const id of selectedIds) {
+					const item = items.find((i) => i.id === id);
+					const startPos = dragItemPositions[id];
+					if (item && startPos) {
+						item.x = startPos.x + dx;
+						item.y = startPos.y + dy;
+					}
 				}
+				saveToHash();
 			}
 		};
 
 		const handleTouchEnd = () => {
+			if (isSelecting && selectionRect) {
+				const x1 = Math.min(selectionRect.x1, selectionRect.x2);
+				const y1 = Math.min(selectionRect.y1, selectionRect.y2);
+				const x2 = Math.max(selectionRect.x1, selectionRect.x2);
+				const y2 = Math.max(selectionRect.y1, selectionRect.y2);
+				selectedIds = items
+					.filter((item) => item.x >= x1 && item.x <= x2 && item.y >= y1 && item.y <= y2)
+					.map((item) => item.id);
+			}
+			isSelecting = false;
+			selectionRect = null;
 			isDraggingItem = false;
+			dragItemPositions = {};
 		};
 
 		const handlePaste = (e: ClipboardEvent) => {
@@ -212,11 +276,21 @@
 	});
 
 	$effect(() => {
-		if (selectedId && itemRefs[selectedId]) {
-			selectedItemHeight = itemRefs[selectedId].offsetHeight;
+		const id = selectedIds[0];
+		if (id && itemRefs[id]) {
+			selectedItemHeight = itemRefs[id].offsetHeight;
 		}
 	});
 
+	function updateSelectedItem(props: Partial<CanvasItem>) {
+		const id = selectedIds[0];
+		if (!id) return;
+		const index = items.findIndex((i) => i.id === id);
+		if (index !== -1) {
+			items[index] = { ...items[index], ...props };
+			saveToHash();
+		}
+	}
 	function bringForward(id: string) {
 		const idx = items.findIndex((i) => i.id === id);
 		if (idx < items.length - 1) {
@@ -254,15 +328,6 @@
 			saveToHash();
 		}
 	}
-
-	function updateSelectedItem(props: Partial<CanvasItem>) {
-		if (!selectedId) return;
-		const index = items.findIndex((i) => i.id === selectedId);
-		if (index !== -1) {
-			items[index] = { ...items[index], ...props };
-			saveToHash();
-		}
-	}
 </script>
 
 <svelte:head>
@@ -291,14 +356,14 @@
 					<div
 						class="flex items-center space-x-2 rounded-full border bg-background/80 p-2 shadow-sm backdrop-blur-sm"
 					>
-						<div class="flex items-center space-x-2 px-2">
+						<div class="flex items-center space-x-2 px-1">
 							<Input
 								placeholder="Paste GIF URL or type text..."
 								bind:value={newItemContent}
-								class="h-8 w-56 md:w-64"
+								class="h-8 w-56 md:w-64 rounded-full"
 								onkeydown={(e) => e.key === 'Enter' && handleInputSubmit()}
 							/>
-							<Button size="sm" variant="secondary" onclick={handleInputSubmit}>Add</Button>
+							<Button size="sm" variant="ghost" onclick={handleInputSubmit}><Plus /> <span class="hidden md:block">Add</span></Button>
 						</div>
 
 						<div class="hidden items-center space-x-1 border-l pl-2 md:flex">
@@ -342,16 +407,31 @@
 			<div
 				role="none"
 				bind:clientWidth={workspaceWidth}
+				bind:this={workspaceEl}
 				class="relative min-h-[500px] flex-grow cursor-crosshair overflow-auto rounded-xl border bg-card/50 shadow-inner"
 				onmousedown={(e) => {
 					if (e.target === e.currentTarget) {
-						selectedId = null;
+						selectedIds = [];
+						const rect = e.currentTarget.getBoundingClientRect();
+						const x = e.clientX - rect.left + e.currentTarget.scrollLeft;
+						const y = e.clientY - rect.top + e.currentTarget.scrollTop;
+						isSelecting = true;
+						selectionRect = { x1: x, y1: y, x2: x, y2: y };
 					}
 				}}
 			>
-				<div class="pointer-events-none" style="min-width: 2000px; min-height: 2000px"></div>
-				{#if selectedId}
-					{@const selectedItem = items.find((i) => i.id === selectedId)}
+				<div
+					class="pointer-events-none"
+					style="min-width: {canvasSize.width}px; min-height: {canvasSize.height}px"
+				></div>
+				{#if selectionRect}
+					<div
+						class="pointer-events-none absolute z-50 rounded border-2 border-blue-400 bg-blue-400/10"
+						style="left: {Math.min(selectionRect.x1, selectionRect.x2)}px; top: {Math.min(selectionRect.y1, selectionRect.y2)}px; width: {Math.abs(selectionRect.x2 - selectionRect.x1)}px; height: {Math.abs(selectionRect.y2 - selectionRect.y1)}px;"
+					></div>
+				{/if}
+				{#if selectedIds.length === 1}
+					{@const selectedItem = items.find((i) => i.id === selectedIds[0])}
 					{#if selectedItem}
 						<div
 							class="absolute z-[60] flex items-center space-x-2 rounded-lg border bg-background/80 p-2 text-xs shadow-sm backdrop-blur-sm"
@@ -439,10 +519,23 @@
 								variant="destructive"
 								size="sm"
 								class="ml-4 h-6 px-2"
-								onclick={() => removeItem(selectedId!)}>Remove</Button
+								onclick={removeSelectedItems}>Remove</Button
 							>
 						</div>
 					{/if}
+				{:else if selectedIds.length > 1}
+					<div
+						class="absolute z-[60] flex items-center gap-2 rounded-lg border bg-background/80 px-3 py-2 text-xs shadow-sm backdrop-blur-sm"
+						style="left: {items.find((i) => i.id === selectedIds[0])?.x ?? 0}px; top: {items.find((i) => i.id === selectedIds[0])?.y ?? 0 - selectedItemHeight / 2 - 8}px; transform: translate(-50%, -100%);"
+					>
+						<span>{selectedIds.length} items selected</span>
+						<Button
+							variant="destructive"
+							size="sm"
+							class="h-6 px-2"
+							onclick={removeSelectedItems}>Remove all</Button
+						>
+					</div>
 				{/if}
 				{#each items as item, i (item.id)}
 					{@const zIndex = 10 + i}
@@ -454,27 +547,40 @@
 								bind:this={itemRefs[item.id]}
 								class={cn(
 									'absolute cursor-move select-none',
-									selectedId === item.id && 'rounded-sm ring-2 ring-primary ring-offset-2'
+									selectedIds.includes(item.id) && 'rounded-sm ring-2 ring-primary ring-offset-2'
 								)}
 								style="left: {item.x}px; top: {item.y}px; z-index: {zIndex}; transform: translate(-50%, -50%) rotate({item.rotation}deg) scale({item.scale});"
 								onmousedown={(e) => {
 									e.stopPropagation();
-									selectedId = item.id;
+									if (e.metaKey || e.ctrlKey) {
+										selectedIds = selectedIds.includes(item.id)
+											? selectedIds.filter((id) => id !== item.id)
+											: [...selectedIds, item.id];
+									} else if (!selectedIds.includes(item.id)) {
+										selectedIds = [item.id];
+									}
 									isDraggingItem = true;
-									const rect = e.currentTarget.getBoundingClientRect();
-									dragOffset = {
-										x: e.clientX - item.x,
-										y: e.clientY - item.y
-									};
+									dragStart = { x: e.clientX, y: e.clientY };
+									dragItemPositions = Object.fromEntries(
+										selectedIds.map((id) => {
+											const i = items.find((it) => it.id === id)!;
+											return [id, { x: i.x, y: i.y }];
+										})
+									);
 								}}
 								ontouchstart={(e) => {
 									e.stopPropagation();
-									selectedId = item.id;
+									if (!selectedIds.includes(item.id)) {
+										selectedIds = [item.id];
+									}
 									isDraggingItem = true;
-									dragOffset = {
-										x: e.touches[0].clientX - item.x,
-										y: e.touches[0].clientY - item.y
-									};
+									dragStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+									dragItemPositions = Object.fromEntries(
+										selectedIds.map((id) => {
+											const i = items.find((it) => it.id === id)!;
+											return [id, { x: i.x, y: i.y }];
+										})
+									);
 								}}
 							>
 								{#if item.type === 'emoji'}
