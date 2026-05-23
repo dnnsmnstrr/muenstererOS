@@ -19,6 +19,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Send, InfoIcon, Trash2 } from 'lucide-svelte';
 	import { Kbd } from '$lib/components/typography';
+	import { ConfirmDeleteDialog, confirmDelete } from '$lib/components/ui/confirm-delete-dialog';
 
 	let message = $state('');
 	let loading = $state(false);
@@ -123,41 +124,49 @@
 
 	async function clearAllMessages() {
 		if (recentMessages.length === 0) return;
-		if (!confirm(i18n.t('ping.clear_confirm'))) return;
 
-		clearing = true;
-		let successCount = 0;
-		let failCount = 0;
+		confirmDelete({
+			title: i18n.t('ping.clear_all'),
+			description: i18n.t('ping.clear_confirm'),
+			confirm: { text: i18n.t('common.yes') },
+			cancel: { text: i18n.t('common.no') },
+			onConfirm: async () => {
+				clearing = true;
+				let successCount = 0;
+				let failCount = 0;
 
-		try {
-			for (const msg of recentMessages) {
 				try {
-					const response = await fetch(`${NTFY_URL}?id=${msg.id}`, {
-						method: 'DELETE'
-					});
-					if (response.ok) {
-						successCount++;
-					} else {
-						failCount++;
+					for (const msg of recentMessages) {
+						try {
+							const response = await fetch(`${NTFY_URL}?id=${msg.id}`, {
+								method: 'DELETE'
+							});
+							if (response.ok) {
+								successCount++;
+							} else {
+								failCount++;
+							}
+						} catch (e) {
+							console.error(`Failed to delete message ${msg.id}:`, e);
+							failCount++;
+						}
 					}
-				} catch (e) {
-					console.error(`Failed to delete message ${msg.id}:`, e);
-					failCount++;
+
+					if (failCount === 0) {
+						toast.success(i18n.t('ping.clear_success'));
+					} else if (successCount > 0) {
+						toast.warning(i18n.t('ping.clear_error'));
+					} else {
+						toast.error(i18n.t('ping.clear_error'));
+					}
+				} finally {
+					clearing = false;
+					fetchRecentMessages();
 				}
 			}
-
-			if (failCount === 0) {
-				toast.success(i18n.t('ping.clear_success'));
-			} else if (successCount > 0) {
-				toast.warning(i18n.t('ping.clear_error'));
-			} else {
-				toast.error(i18n.t('ping.clear_error'));
-			}
-		} finally {
-			clearing = false;
-			fetchRecentMessages();
-		}
+		});
 	}
+
 </script>
 
 <svelte:head>
@@ -211,6 +220,8 @@
 			</form>
 		</CardContent>
 	</Card>
+
+	<ConfirmDeleteDialog />
 
 	<Accordion.Root type="single" class="mt-4">
 		<Accordion.Item value="latest">
