@@ -4,8 +4,10 @@
 	import { screensaverActive } from '$lib/stores/desktop';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { mode } from 'mode-watcher';
 
 	let isRebooting = $state(false);
+	let isDarkMode = $derived($mode === 'dark');
 	let progress = $state(0);
 
 	function startReboot() {
@@ -35,9 +37,13 @@
 </script>
 
 <div
-	class="fixed inset-0 z-[100] flex flex-col items-center justify-center p-8 text-white transition-colors duration-1000"
-	class:bg-primary={!isRebooting}
-	class:bg-black={isRebooting}
+	class="fixed inset-0 z-[500] flex flex-col items-center justify-center p-8 transition-colors duration-1000"
+	style:background-color={!isRebooting
+		? isDarkMode
+			? 'color-mix(in srgb, hsl(var(--primary)), black 80%)'
+			: 'hsl(var(--primary))'
+		: 'black'}
+	style:color="white"
 	transition:fade={{ duration: 500 }}
 >
 	{#if !isRebooting}
@@ -58,9 +64,9 @@
 					<p class="text-lg italic opacity-80">"{i18n.t('terminal.crash.quote')}"</p>
 				</div>
 				<Button
-					variant="secondary"
+					variant="outline"
 					size="lg"
-					class="w-full font-bold md:w-auto"
+					class="w-full bg-white font-bold text-black hover:bg-white/90 md:w-auto"
 					onclick={startReboot}
 				>
 					{i18n.t('terminal.crash.reboot')}
