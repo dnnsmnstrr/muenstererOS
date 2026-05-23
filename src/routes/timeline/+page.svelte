@@ -175,18 +175,18 @@
 					/>
 				</div>
 
-				<div class="flex items-center gap-3">
+				<div class="flex items-center gap-3" onwheel={(e) => {
+							e.preventDefault();
+							const delta = Math.sign(e.deltaY) * -1;
+							zoom = Math.min(32, Math.max(4, zoom + delta));
+						}}>
 					<span class="text-sm font-semibold">{i18n.t('timeline.zoom')}:</span>
 					<input
 						type="range"
 						min="4"
 						max="32"
 						bind:value={zoom}
-						onwheel={(e) => {
-							e.preventDefault();
-							const delta = Math.sign(e.deltaY) * -1;
-							zoom = Math.min(32, Math.max(4, zoom + delta));
-						}}
+						
 						class="h-1.5 w-32 cursor-pointer appearance-none rounded-lg bg-secondary accent-primary"
 					/>
 				</div>
