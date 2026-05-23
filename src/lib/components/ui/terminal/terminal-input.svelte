@@ -53,6 +53,7 @@
 	<input
         autofocus
 		autocapitalize="off" 
+		id="terminal-input"
 		class={cn('flex bg-transparent text-base outline-none w-full', className)}
 		type="text"
 		bind:value={inputValue}

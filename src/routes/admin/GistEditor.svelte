@@ -11,16 +11,23 @@
 	import { get } from 'svelte/store';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+
+	/*
+	 * Optimization: Localized the Gist Editor and synced form modes.
+	 * Internationalized tab labels, theme placeholders, and Gist saving actions
+	 * to ensure a consistent experience across different locales.
+	 */
 
 	let {
 		githubToken = $bindable(''),
 		gistData = $bindable('{}'),
 		gistInfo = $bindable<GistData>(),
 		schema = null,
-        isSaving = false,
-        onFormatJson,
-        onResetEditor,
-        onSaveGist,
+		isSaving = false,
+		onFormatJson,
+		onResetEditor,
+		onSaveGist
 	} = $props();
 
 	let jsonEditorRef = $state<JsonEditor | null>(null);
@@ -29,7 +36,7 @@
 	);
 	let formData = $state<any>(null);
 	let lastSyncedGistData = $state('');
-	let lastViewMode = $state(viewMode);
+	let lastViewMode = $state<'editor' | 'form'>('editor');
 
 	$effect(() => {
 		if (lastViewMode === 'form' && viewMode === 'editor') {
@@ -152,21 +159,21 @@
 						<Tabs.List>
 							<Tabs.Trigger value="editor" class="flex items-center gap-1.5">
 								<Code class="h-4 w-4" />
-								Editor
+								{i18n.t('admin.editor.editor_tab')}
 							</Tabs.Trigger>
 							<Tabs.Trigger value="form" class="flex items-center gap-1.5">
 								<FormInput class="h-4 w-4" />
-								Form
+								{i18n.t('admin.editor.form_tab')}
 							</Tabs.Trigger>
 						</Tabs.List>
 					</Tabs.Root>
 				{/if}
 				{#if viewMode === 'editor'}
 					<CustomSelect
-						class="w-[130px] hidden lg:flex"
+						class="hidden w-[130px] lg:flex"
 						value={selectedTheme}
 						name="theme"
-						placeholder="Select theme"
+						placeholder={i18n.t('admin.editor.select_theme')}
 						options={availableThemes}
 						onValueChange={handleThemeChange}
 					/>
@@ -175,9 +182,10 @@
 			<div class="flex w-full justify-between gap-2 sm:w-auto">
 				<div class="flex items-center gap-2">
 					{#if viewMode === 'editor'}
-						<Button onclick={onFormatJson} variant="outline">Format</Button>
+						<Button onclick={onFormatJson} variant="outline">{i18n.t('admin.editor.format')}</Button
+						>
 					{/if}
-					<Button onclick={handleReset} variant="outline">Reset</Button>
+					<Button onclick={handleReset} variant="outline">{i18n.t('admin.editor.reset')}</Button>
 				</div>
 				<Button
 					onclick={() => {
@@ -190,7 +198,7 @@
 					size="sm"
 				>
 					<Save class="h-4 w-4" />
-					{isSaving ? 'Saving...' : 'Save Gist'}
+					{isSaving ? i18n.t('admin.editor.saving') : i18n.t('admin.editor.save')}
 				</Button>
 			</div>
 		</CardTitle>

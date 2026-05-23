@@ -3,12 +3,6 @@
 	import { links } from "$lib/config";
 	import { i18n } from "$lib/i18n/i18n.svelte";
 	import { PAGE_TITLE_SUFFIX } from "$lib/config";
-
-	/**
-	 * Localization optimization: Aligns the Contact page with the application's standard
-	 * metadata pattern by adding the PAGE_TITLE_SUFFIX and a localized meta description
-	 * for improved i18n and SEO.
-	 */
 </script>
 
 <svelte:head>

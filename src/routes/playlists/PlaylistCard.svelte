@@ -4,7 +4,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { breakpoints } from '$lib/config';
 	import { Info } from 'lucide-svelte';
-	import { SPOTIFY_PLAYLIST_LINK, type PlaylistItem } from './+page.svelte';
+	import { SPOTIFY_PLAYLIST_LINK } from '$lib/config';
+	import type { PlaylistItem } from '$lib/types';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface Props {
@@ -78,11 +79,11 @@
 			</div>
 		</Card.Content>
 	</a>
-	{#if !!playlist.uri}
+	{#if !!playlist.uri || !!playlist.url}
 		<button
 			class="absolute right-2 top-2 rounded-full bg-background/50 p-2 backdrop-blur-sm transition-colors hover:bg-background sm:hidden sm:group-hover:block"
 			class:opacity-0={!playlist.isHovered && window?.innerWidth < breakpoints.sm}
-			onclick={stopPropagation(preventDefault(() => setSelectedPlaylistUri(playlist.uri)))}
+			onclick={stopPropagation(preventDefault(() => setSelectedPlaylistUri(playlist.url ||playlist.uri)))}
 		>
 			<Info class="h-4 w-4" />
 		</button>

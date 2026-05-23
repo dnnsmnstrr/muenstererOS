@@ -31,7 +31,9 @@ export function getRedirect(query: string, redirects: Redirect[], options?: Redi
 		}
 	}
 
-	return options?.returnObject ? redirect : getRedirectURL(redirect, { query, restPath: rest.join('/'), ...options });
+	return options?.returnObject
+		? redirect
+		: getRedirectURL(redirect, { query, restPath: rest.join('/'), ...options });
 }
 
 export const getRedirectURL = (
@@ -46,7 +48,6 @@ export const getRedirectURL = (
 	} else {
 		// a failed redirect will end up back here, therefore the 'noReturn' parameter is used to avoid endless loops on redirect attempts
 		path = `/404/${!noReturn ? query : ''}`;
-		console.log('path', path);
 	}
 
 	return path;

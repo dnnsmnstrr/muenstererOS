@@ -7,6 +7,7 @@
 	import { gists } from '$lib/config';
 	import { GitHubGistAPI, type GistData } from '$lib/utils/github-api';
 	import { Heading } from '$lib/components/typography';
+	import { Button } from '$lib/components/ui/button';
 	import GistEditor from './GistEditor.svelte';
 	import GistInfo from './GistInfo.svelte';
 	import GistSelection from './GistSelection.svelte';
@@ -14,6 +15,7 @@
 	import { goto } from '$app/navigation';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { Download } from 'lucide-svelte';
 
 	// State management
 	let githubToken = $state('');
@@ -62,8 +64,9 @@
 	function initializeFromUrl() {
 		if (!browser) return;
 		const fileParam = page.url.searchParams.get('file');
-		if (fileParam && gists[fileParam]) {
-			selectedGist = gists[fileParam].id;
+		const gistsMap = gists as Record<string, { id: string; name: string; filename: string }>;
+		if (fileParam && gistsMap[fileParam]) {
+			selectedGist = gistsMap[fileParam].id;
 		}
 		return false; // No URL parameter found
 	}
@@ -246,6 +249,17 @@
 
 			gistInfo = updatedData;
 
+			// Invalidate server-side cache
+			const gistName =
+				selectedGist === ''
+					? null
+					: Object.keys(gists).find((key) => gists[key as keyof typeof gists].id === selectedGist);
+			if (gistName) {
+				fetch(`/api/gists/${gistName}?refresh=true`).catch((err) =>
+					console.error('Failed to refresh cache:', err)
+				);
+			}
+
 			toast.success('Gist saved successfully!');
 		} catch (error) {
 			console.error('Error saving gist:', error);
@@ -286,7 +300,7 @@
 	<title>{i18n.t('common.admin')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
-<div class="container mx-auto max-w-6xl space-y-6">
+<div class="container mx-auto mb-8 max-w-6xl space-y-6">
 	<div class="flex items-center justify-between">
 		<Heading class="mb-0">{i18n.t('admin.title')}</Heading>
 		<AdminSettings bind:githubToken bind:tokenValidation bind:isValidatingToken />
@@ -322,4 +336,11 @@
 			{isSaving}
 		/>
 	{/if}
+
+	<div class="flex justify-center">
+		<Button variant="outline" size="sm" href="/export">
+			<Download class="mr-2 h-4 w-4" />
+			{i18n.t('common.export')}
+		</Button>
+	</div>
 </div>

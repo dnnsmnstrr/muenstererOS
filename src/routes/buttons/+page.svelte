@@ -8,8 +8,11 @@
 	import buttons from '../../data/buttons.json';
 	import { capitalize } from '$lib/utils/helper';
 
-	const categories = new Set(
-		buttons.reduce<string[]>((acc, button) => [...acc, button.category], [])
+	// Extract unique categories from buttons and sort them according to current locale
+	const categories = $derived(
+		Array.from(new Set(buttons.map((button) => button.category))).sort((a, b) =>
+			getCategoryName(a).localeCompare(getCategoryName(b), i18n.lang)
+		)
 	);
 
 	let selectedCategory = $state('');

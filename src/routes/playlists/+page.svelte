@@ -1,22 +1,10 @@
 <script module lang="ts">
-	export interface PlaylistItem {
-		title: string;
-		type: 'season' | 'aggregated' | 'theme';
-		season?: 'winter' | 'spring' | 'summer' | 'autumn';
-		year?: number;
-		uri: string;
-		emoji?: string;
-		description?: string;
-		tags?: string[];
-		gif?: string;
-		imageId?: string;
-		imageUrl?: string;
-		isHovered?: boolean;
-	}
-	export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
+	import type { PlaylistItem } from '$lib/types';
+	export { type PlaylistItem };
 </script>
 
 <script lang="ts">
+	import { SPOTIFY_PLAYLIST_LINK } from '$lib/config';
 	import { Heading } from '$lib/components/typography';
 	import Link from '$lib/components/typography/Link.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -27,18 +15,18 @@
 	import { breakpoints, links } from '$lib/config';
 	import PlaylistCard from './PlaylistCard.svelte';
 	import TopArtists from './TopArtists.svelte';
-	import playlistData from '../../data/playlists.json';
 	import { Users } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import type { PageProps } from './$types';
 
+	let { data }: PageProps = $props();
 
 	let showGifs = $state(false);
 	let showCurrentHighlight = $state(false);
 
-	const allPlaylists = playlistData as PlaylistItem[];
-	const latestPlaylistUri = allPlaylists[0]?.uri;
+	const allPlaylists = data.playlists as PlaylistItem[];
+	const latestPlaylist = allPlaylists[0];
 
 	let seasonPlaylists = $state(allPlaylists.filter((playlist) => playlist.type === 'season'));
 	const aggregatedPlaylists = allPlaylists.filter((playlist) => playlist.type === 'aggregated');
@@ -58,7 +46,9 @@
 		);
 	};
 
-	let filteredPlaylists = $derived(filterQuery ? allPlaylists.filter(searchFilter) : seasonPlaylists);
+	let filteredPlaylists = $derived(
+		filterQuery ? allPlaylists.filter(searchFilter) : seasonPlaylists
+	);
 	let showTopArtists = $state(false);
 
 	function createIntersectionObserver(playlist: PlaylistItem) {
@@ -105,11 +95,11 @@
 		const observers = new Map();
 
 		const playlistElements = document.querySelectorAll('[data-playlist-card]');
-			playlistElements.forEach((element, index) => {
-				const observer = createIntersectionObserver(seasonPlaylists[index]);
-				observer.observe(element);
-				observers.set(element, observer);
-			});
+		playlistElements.forEach((element, index) => {
+			const observer = createIntersectionObserver(seasonPlaylists[index]);
+			observer.observe(element);
+			observers.set(element, observer);
+		});
 
 		const gifElements = document.querySelectorAll('[data-gif-lazy]');
 		gifElements.forEach((element) => {
@@ -133,7 +123,9 @@
 
 	function getPlaylistEmojis() {
 		return allPlaylists
-			.flatMap(p => p.emoji ? [...new Intl.Segmenter().segment(p.emoji)].map(segment => segment.segment) : [])
+			.flatMap((p) =>
+				p.emoji ? [...new Intl.Segmenter().segment(p.emoji)].map((segment) => segment.segment) : []
+			)
 			.filter((emoji): emoji is string => emoji !== undefined);
 	}
 
@@ -150,11 +142,13 @@
 				clearInterval(shuffleInterval);
 				selectedPlaylist = allPlaylists[Math.floor(Math.random() * allPlaylists.length)];
 				if (selectedPlaylist.emoji) {
-					const firstEmoji = [...new Intl.Segmenter().segment(selectedPlaylist.emoji)].map(segment => segment.segment).pop();
+					const firstEmoji = [...new Intl.Segmenter().segment(selectedPlaylist.emoji)]
+						.map((segment) => segment.segment)
+						.pop();
 					shuffleEmoji = firstEmoji || '🎲';
 				}
 				setTimeout(() => {
-					const url = SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
+					const url = selectedPlaylist?.url || SPOTIFY_PLAYLIST_LINK + selectedPlaylist?.uri;
 					if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 						window.open(url, '_self'); // cannot open new tab in iOS
 					} else {
@@ -188,12 +182,15 @@
 			{#if selectedPlaylistUri}
 				<iframe
 					title={i18n.t('playlists.preview_title')}
-					src="https://open.spotify.com/embed/playlist/{selectedPlaylistUri}"
+					src={selectedPlaylistUri.startsWith('http')
+						? selectedPlaylistUri.replace('music.apple.com', 'embed.music.apple.com')
+						: `https://open.spotify.com/embed/playlist/${selectedPlaylistUri}`}
 					width="100%"
-					height="100%"
+					height="450"
 					frameBorder="0"
 					allowfullscreen={false}
-					allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+					sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+					allow="autoplay *; encrypted-media *; clipboard-write; fullscreen; picture-in-picture"
 					loading="lazy"
 				></iframe>
 			{/if}
@@ -215,7 +212,9 @@
 		</Dialog.Content>
 	</Dialog.Root>
 
-	<div class="mb-4 flex flex-col items-start sm:items-center justify-between gap-4 sm:mb-6 sm:flex-row">
+	<div
+		class="mb-4 flex flex-col items-start justify-between gap-4 sm:mb-6 sm:flex-row sm:items-center"
+	>
 		<Heading class="mb-0">{i18n.t('playlists.title')}</Heading>
 		<div class="flex w-full gap-2 sm:w-auto">
 			<Button
@@ -240,7 +239,9 @@
 		<div class="text-center opacity-50">
 			{i18n.t('playlists.no_results')}
 			<br /><br />
-			{i18n.t('playlists.spotify_profile_prefix')} <Link href={links.spotify + '/playlists'}>{i18n.t('playlists.spotify_profile_link')}</Link> {i18n.t('playlists.spotify_profile_suffix')}
+			{i18n.t('playlists.spotify_profile_prefix')}
+			<Link href={links.spotify + '/playlists'}>{i18n.t('playlists.spotify_profile_link')}</Link>
+			{i18n.t('playlists.spotify_profile_suffix')}
 		</div>
 	{/if}
 
@@ -249,9 +250,12 @@
 			{#each filteredPlaylists as playlist}
 				<PlaylistCard
 					{playlist}
-					setSelectedPlaylistUri={() => selectedPlaylistUri = playlist.uri}
+					setSelectedPlaylistUri={() => (selectedPlaylistUri = playlist.url || playlist.uri)}
 					compact={!!filterQuery}
-					isHighlighted={showCurrentHighlight && playlist.uri === latestPlaylistUri}
+					isHighlighted={showCurrentHighlight &&
+						(playlist.url
+							? playlist.url === latestPlaylist.url
+							: playlist.uri === latestPlaylist?.uri)}
 				/>
 			{/each}
 		</div>
@@ -286,10 +290,11 @@
 
 		<div class="mt-12">
 			{#if otherPlaylists.length}
-				<div class="flex justify-between items-center">
+				<div class="flex items-center justify-between">
 					<h2 class="my-4 text-2xl font-semibold">{i18n.t('playlists.other_playlists')}</h2>
 					<div class="flex items-center">
-						<Switch bind:checked={showGifs} class="mr-2"/> <span class="opacity-70">{i18n.t('playlists.show_gifs')}</span>
+						<Switch bind:checked={showGifs} class="mr-2" />
+						<span class="opacity-70">{i18n.t('playlists.show_gifs')}</span>
 					</div>
 				</div>
 			{/if}
@@ -297,7 +302,7 @@
 				{#each otherPlaylists as otherPlaylist}
 					<Card.Root class="min-h-[120px]">
 						<a href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri} target="_blank">
-							<Card.Content class="pt-6 flex justify-between items-start gap-2">
+							<Card.Content class="flex items-start justify-between gap-2 pt-6">
 								<div>
 									<h2 class="pb-2 text-xl font-semibold">
 										{otherPlaylist.title}
@@ -312,7 +317,7 @@
 										data-gif-src={otherPlaylist.gif}
 										data-gif-lazy
 										alt={i18n.t('playlists.alt_gif')}
-										class="w-16 aspect-square object-cover pb-2 transition-opacity duration-300"
+										class="aspect-square w-16 object-cover pb-2 transition-opacity duration-300"
 										class:opacity-0={!showGifs}
 									/>
 								{/if}

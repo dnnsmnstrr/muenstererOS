@@ -1,23 +1,33 @@
 [
 	{
+		"title": "Slashes",
+		"path": "/slashes",
+		"date": "2026-03-22"
+	},
+	{
+		"title": "Ping",
+		"path": "/ping",
+		"date": "2026-03-26"
+	},
+	{
 		"title": "Concerts",
 		"path": "/concerts",
-		"date": "2025-03-10"
+		"date": "2026-03-21"
 	},
 	{
 		"title": "Onboarding",
 		"path": "/onboarding",
-		"date": "2025-03-08"
+		"date": "2026-03-08"
 	},
 	{
 		"title": "Buttons",
 		"path": "/buttons",
-		"date": "2025-03-01"
+		"date": "2026-03-01"
 	},
 	{
 		"title": "Sites",
 		"path": "/sites",
-		"date": "2025-02-23"
+		"date": "2026-02-23"
 	},
 	{
 		"title": "Status",
@@ -88,11 +98,6 @@
 		"title": "Admin",
 		"path": "/admin",
 		"date": "2025-01-01"
-	},
-	{
-		"title": "Ping",
-		"path": "/ping",
-		"date": "2025-03-20"
 	},
 	{
 		"title": "Contact",

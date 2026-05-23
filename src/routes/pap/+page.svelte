@@ -59,10 +59,9 @@
 					  newItemContent.includes('tenor.com') ||
 					  newItemContent.startsWith('http');
 
-		if (isUrl && newItemContent.match(/\.(jpeg|jpg|gif|png|webp)/)) {
+		if (isUrl && (newItemContent.match(/\.(jpeg|jpg|gif|png|webp)/) || newItemContent.includes('giphy') || newItemContent.includes('tenor'))) {
 			addItem('gif', newItemContent);
 		} else if (newItemContent.length <= 2 && /\p{Emoji}/u.test(newItemContent)) {
-            // Simple emoji detection if it's 1-2 chars and contains emoji
             addItem('emoji', newItemContent);
         } else {
 			addItem('text', newItemContent);
@@ -96,7 +95,7 @@
 			const parsed = JSON.parse(data);
 			if (Array.isArray(parsed)) {
 				items = parsed;
-				isUnlocked = true; // Auto-unlock if hash is present and valid
+				isUnlocked = true;
 			}
 		} catch (e) {
 			console.error('Failed to parse hash', e);
@@ -131,7 +130,7 @@
 							  text.includes('tenor.com') ||
 							  text.startsWith('http');
 
-				if (isUrl && text.match(/\.(jpeg|jpg|gif|png|webp)/)) {
+				if (isUrl && (text.match(/\.(jpeg|jpg|gif|png|webp)/) || text.includes('giphy') || text.includes('tenor'))) {
 					addItem('gif', text);
 					toast.success('GIF pasted!');
 				}
@@ -288,7 +287,6 @@
 							selectedId = item.id;
 							isDraggingItem = true;
 							const rect = e.currentTarget.getBoundingClientRect();
-                            // Use client coords for consistency with handleMouseMove
 							dragOffset = {
 								x: e.clientX - item.x,
 								y: e.clientY - item.y

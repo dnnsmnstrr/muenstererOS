@@ -23,13 +23,48 @@
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Info, LayoutGrid, List, ListMusic, Signpost, Slash, TabletSmartphone, Terminal, Webhook, Keyboard, Ticket, IdCard, FerrisWheel, Network, Send } from 'lucide-svelte';
+	import {
+		Info,
+		LayoutGrid,
+		List,
+		ListMusic,
+		Signpost,
+		Slash,
+		TabletSmartphone,
+		Terminal,
+		Webhook,
+		Keyboard,
+		Ticket,
+		IdCard,
+		FerrisWheel,
+		Network,
+		Send,
+		Siren,
+		CalendarClock,
+		BrickWallShield,
+
+		History,
+
+		MapPinned,
+
+		Gavel,
+
+		AtSign,
+
+		Ship
+
+
+
+
+
+	} from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { capitalize } from '$lib/utils/helper';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
+	import { trackPageVisit, trackDailyVisit } from '$lib/stores/achievements';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -77,9 +112,10 @@
 		maskHeight.set(y || x, { duration });
 	}
 
-	let timeout: number | undefined = undefined;
+	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 	function handleMouseMove(event?: MouseEvent & { timeout?: number; duration?: number }) {
 		clearTimeout(timeout);
+		const largestEdge = Math.max(innerWidth, innerHeight);
 		switch (page.url.pathname) {
 			case '/':
 				if (event) {
@@ -104,21 +140,20 @@
 				break;
 			case '/settings':
 				// focus on top area
-				cursor.set({ x: innerWidth / 2.7, y: innerHeight / 4 });
-				setMaskSize(300, 600, 800);
-				changeRadius(200, 600);
+				cursor.set({ x: innerWidth / 1.8, y: innerHeight / 2.25 });
+				setMaskSize(200, 100);
+				changeRadius(750, 1000);
 				break;
 			case '/about':
 				// focus on the top left area
 				cursor.set({ x: innerWidth / 3, y: innerHeight / 2.5 });
-				setMaskSize(300, 200);
-				changeRadius(500, 900);
+				setMaskSize(200, 400);
+				changeRadius(250, 550);
 				break;
 			default:
 				// full page content, no masking
 				cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
 				setMaskSize(300, 200);
-				const largestEdge = Math.max(innerWidth, innerHeight);
 				changeRadius(largestEdge, largestEdge + 200);
 				break;
 		}
@@ -154,6 +189,23 @@
 			$isCommandActive = false;
 			debugLog('Visiting new page: ' + page.url.href);
 			handleMouseMove();
+
+			// Track page visit for achievements
+			if (browser) {
+				trackDailyVisit();
+				const path = page.url.pathname;
+				// Extract all valid sitemap paths from the data if possible, or use a predefined list
+				const allValidPaths = [...bookmarksRaw.map((b) => b.href), ...otherPages.map((p) => p.path)]
+					.filter((p): p is string => !!p)
+					.filter((p) => ['/admin', '/contact'].indexOf(p) === -1); // Exclude admin paths or any other non-visit-worthy paths
+				trackPageVisit(path, allValidPaths);
+			}
+		}
+	});
+
+	$effect(() => {
+		if (i18n.lang) {
+			document.documentElement.lang = i18n.lang;
 		}
 	});
 
@@ -168,7 +220,9 @@
 	});
 
 	let isLightMode = $derived($mode === 'light');
-	let isFullWidth = $derived(page.url.pathname === '/experiment' || page.url.pathname === '/slashes');
+	let isFullWidth = $derived(
+		page.url.pathname === '/experiment' || page.url.pathname === '/slashes'
+	);
 	let bgStyle = $derived.by(() => {
 		const color = isLightMode ? '#e5e5e5' : '#222222';
 		const texture =
@@ -177,7 +231,7 @@
 	});
 
 	const bookmarksRaw: BookmarkItem[] = [
-		{ name: 'Now', href: '/now', icon: Info },
+		{ name: 'Now', href: '/now', icon: CalendarClock },
 		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
 		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
@@ -185,29 +239,42 @@
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
 		{ name: 'Slashes', href: '/slashes', icon: FerrisWheel, hidden: true },
 		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
-	{ name: 'Changelog', href: '/log', icon: List, hidden: true },
-	{ name: 'API', href: '/api', icon: Webhook, hidden: true },
-	{ name: 'Status', href: '/status', icon: Webhook, hidden: true },
+		{ name: 'Changelog', href: '/log', icon: List, hidden: true },
+		{ name: 'API', href: '/api', icon: Webhook, hidden: true },
+		{ name: 'Status', href: '/status', icon: Siren, hidden: true },
 		{ name: 'Buttons', href: '/buttons', icon: IdCard, hidden: true },
 		{ name: 'Concerts', href: '/concerts', icon: Ticket, hidden: true },
 		{ name: 'Sites', href: '/sites', icon: Network, hidden: true },
 		{ name: 'Ping', href: '/ping', icon: Send, hidden: true },
+		{ name: 'Admin', href: '/admin', icon: BrickWallShield, hidden: true },
+		{ name: 'Timeline', href: '/timeline', icon: History, hidden: true },
+		{ name: 'Where', href: '/where', icon: MapPinned, hidden: true },
+		{ name: 'Legal Notice', href: '/legal', icon: Gavel, hidden: true },
+		{ name: 'Contact', href: '/contact', icon: AtSign, hidden: true },
+		{ name: 'Onboarding', href: '/onboarding', icon: Ship, hidden: true },
 	];
-	const bookmarks: BookmarkItem[] = $derived(bookmarksRaw.map(b => ({
-		...b,
-		name: i18n.t(`common.${b.name.toLowerCase()}`) !== `common.${b.name.toLowerCase()}`
-			? i18n.t(`common.${b.name.toLowerCase()}`)
-			: b.name
-	})));
-	const otherPages = pages.filter(page => !bookmarksRaw.some(bookmark => bookmark.name === page.title));
-	const otherBookmarks = $derived(otherPages.map(page => {
-		const translatedName = i18n.t(`common.${page.title.toLowerCase()}`);
-		return {
-			name: translatedName !== `common.${page.title.toLowerCase()}` ? translatedName : page.title,
-			href: page.path,
-			icon: Info,
-		};
-	}));
+	const bookmarks: BookmarkItem[] = $derived(
+		bookmarksRaw.map((b) => ({
+			...b,
+			name:
+				i18n.t(`common.${b.name.toLowerCase()}`) !== `common.${b.name.toLowerCase()}`
+					? i18n.t(`common.${b.name.toLowerCase()}`)
+					: b.name
+		}))
+	);
+	const otherPages = pages.filter(
+		(page) => !bookmarksRaw.some((bookmark) => bookmark.name === page.title)
+	);
+	const otherBookmarks = $derived(
+		otherPages.map((page) => {
+			const translatedName = i18n.t(`common.${page.title.toLowerCase()}`);
+			return {
+				name: translatedName !== `common.${page.title.toLowerCase()}` ? translatedName : page.title,
+				href: page.path,
+				icon: Info
+			};
+		})
+	);
 	const allPages = $derived([...bookmarks, ...otherBookmarks]);
 
 	/**
@@ -244,7 +311,7 @@
 
 	<main
 		class={cn(
-			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto ${isFullWidth ? 'p-0' : 'pt-4 sm:px-16'} print:max-h-none`,
+			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
 			`theme-${$theme}`
 		)}
 		style={bgStyle}

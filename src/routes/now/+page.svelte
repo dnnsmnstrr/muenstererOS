@@ -5,7 +5,6 @@
 	import type { PageProps } from './$types';
 	import { NOW_GIST_ID, USERNAME_SHORT } from '$lib/config';
 	import Link from '$lib/components/typography/Link.svelte';
-	import playlists from '../../data/playlists.json';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
 	import { renderers } from '$lib/components/typography';
 	import Versions from './Versions.svelte';
@@ -26,13 +25,19 @@
 	let playlistImage = $state<string | undefined>(undefined);
 
 	$effect(() => {
-		const nextPlaylist = playlists.find((p) => p.url === nowData.playlist.url || p.uri === nowData.playlist.uri);
-		const nextImage =
-			nextPlaylist?.imageUrl ||
-			(nextPlaylist?.imageId ? `https://i.scdn.co/image/${nextPlaylist.imageId}` : undefined);
-		currentPlaylist = nextPlaylist;
-		playlistImage = nextImage;
-		nowData;
+		fetch('/api/playlists?current=true')
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				currentPlaylist = data ?? null;
+				const nextImage =
+					currentPlaylist?.imageUrl ||
+					(currentPlaylist?.imageId
+						? `https://i.scdn.co/image/${currentPlaylist.imageId}`
+						: undefined);
+				playlistImage = nextImage;
+				nowData;
+			})
+			.catch(() => {});
 	});
 	let projects = $state('');
 	let plans = $state('');
@@ -69,7 +74,6 @@
 			versions: nowData.versions,
 			url: apiData?.url
 		};
-		currentPlaylist = playlists.find((p) => p.url === gistData.playlist?.url || p.uri === gistData.playlist?.uri);
 		showingVersion = true;
 		return gistData;
 	}
@@ -118,7 +122,8 @@
 	<div class="grid grid-cols-12 grid-rows-5 gap-4 md:grid-rows-3">
 		<Card class="col-span-12 col-start-1 row-span-1 row-start-1 p-4 sm:col-span-8">
 			<Heading depth={2} class="mb-4 text-xl">
-				<InfoIcon class="mb-1 mr-2 inline-block" /> {i18n.t('now.status')}
+				<InfoIcon class="mb-1 mr-2 inline-block" />
+				{i18n.t('now.status')}
 			</Heading>
 			<MdSvelte source={nowData.status} {renderers} />
 		</Card>
@@ -145,7 +150,11 @@
 							class="aspect-square w-full rounded-md object-cover"
 						/>
 					{/if}
-					<Link href={nowData.playlist.url || `https://open.spotify.com/playlist/${nowData.playlist.uri}`} target="_blank">
+					<Link
+						href={nowData.playlist.url ||
+							`https://open.spotify.com/playlist/${nowData.playlist.uri}`}
+						target="_blank"
+					>
 						{nowData.playlist.name}
 					</Link>
 				</div>
@@ -156,7 +165,8 @@
 
 		<Card class="col-span-12 row-span-1 p-4 sm:col-span-8 sm:row-span-1 lg:col-start-6">
 			<Heading depth={2} class="mb-4 flex items-center text-xl">
-				<Calendar class="mr-2 inline-block" /> {i18n.t('now.plans')}
+				<Calendar class="mr-2 inline-block" />
+				{i18n.t('now.plans')}
 			</Heading>
 			<MdSvelte source={plans} {renderers} />
 		</Card>

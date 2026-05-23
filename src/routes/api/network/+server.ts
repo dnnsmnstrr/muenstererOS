@@ -4,7 +4,7 @@ import networkSeeds from '../../../data/network_seeds.json';
 
 interface Node {
 	id: string;
-	url: string;
+	url?: string;
 	label: string;
 	depth: number;
 	type: 'root' | 'personal' | 'external';
@@ -218,7 +218,9 @@ export async function GET({ url: requestUrl }) {
 	const maxDepth = depthParam ? Math.min(Math.max(parseInt(depthParam, 10), 1), 10) : MAX_DEPTH;
 
 	const limitParam = requestUrl.searchParams.get('limit');
-	const maxNodes = limitParam ? Math.min(Math.max(parseInt(limitParam, 10), 1), 500) : MAX_NODES * MAX_DEPTH;
+	const maxNodes = limitParam
+		? Math.min(Math.max(parseInt(limitParam, 10), 1), 500)
+		: MAX_NODES * MAX_DEPTH;
 
 	const rootUrl = getBaseDomain(`https://${CURRENT_DOMAIN}/`);
 	const nodes: Node[] = [{ id: rootUrl, label: CURRENT_DOMAIN, depth: 0, type: 'root' }];

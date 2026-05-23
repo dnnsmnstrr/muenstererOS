@@ -60,7 +60,9 @@
 	);
 
 	let festivals = $derived(
-		(data.festivals as Festival[]).sort((a, b) => b.year - a.year || a.name.localeCompare(b.name))
+		(data.festivals as Festival[]).sort(
+			(a, b) => b.year - a.year || a.name.localeCompare(b.name, i18n.lang)
+		)
 	);
 
 	function getMusicBrainzUrl(mbid: string) {
@@ -239,7 +241,7 @@
 			<Dialog.Header>
 				<Dialog.Title>{i18n.t('concerts.stats')}</Dialog.Title>
 				<Dialog.Description>
-					{i18n.t('concerts.artist_frequency_description')}
+					{i18n.t('concerts.stats_description')}
 				</Dialog.Description>
 			</Dialog.Header>
 			<ConcertStats concerts={data.concerts} festivals={data.festivals} />

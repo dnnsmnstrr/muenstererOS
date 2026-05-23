@@ -6,11 +6,10 @@ import * as LucideIcons from 'lucide-svelte';
 export const defaultFiles = [
 	{ id: 'projects', name: 'Projects', href: '/projects', icon: LucideIcons.FolderOpen },
 	{
-		id: 'experiment',
-		name: 'index.js',
-		href: '/experiment',
-		icon: LucideIcons.FileText,
-		leftOffset: 3
+		id: 'terminal',
+		name: 'Terminal',
+		href: '/terminal',
+		icon: LucideIcons.Terminal,
 	}
 ];
 
@@ -60,8 +59,8 @@ export interface FileDefinition {
 	leftOffset?: number;
 }
 
-// DVD Bounce
-export const dvdBounceActive = writable(false);
+// Screensaver
+export const screensaverActive = writable(false);
 
 const storedFiles =
 	browser && window?.localStorage?.desktopFiles
@@ -112,7 +111,7 @@ export function initializeFiles(
 				// New file - calculate position
 				const leftOffset = file.leftOffset || 0;
 				let x = padding + leftOffset;
-				let y = padding + index * spacing;
+				let y = (padding * 2) + index * spacing;
 
 				// Check if would go off-screen vertically
 				if (y + fileSize > windowSize.height - padding) {
@@ -169,6 +168,8 @@ export function resetDesktopFiles() {
 	if (browser && window?.localStorage) {
 		delete window.localStorage.desktopFiles;
 		delete window.localStorage.onboardingComplete;
+		delete window.localStorage.screensaver;
+		delete window.localStorage.commandStats;
 	}
 	if (defaultFiles) {
 		// Reset to default files with new positions

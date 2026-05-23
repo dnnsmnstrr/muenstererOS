@@ -20,3 +20,41 @@ export type Event = {
 	/** A URL for more information about the event, must use HTTPS. */
 	url?: string; // Optional, as it's not in the required properties
 };
+
+export interface PlaylistItem {
+	title: string;
+	type: 'season' | 'aggregated' | 'theme' | 'hidden';
+	season?: 'winter' | 'spring' | 'summer' | 'autumn';
+	year?: number;
+	uri: string;
+	url?: string;
+	emoji?: string;
+	description?: string;
+	tags?: string[];
+	gif?: string;
+	imageId?: string;
+	imageUrl?: string;
+	isHovered?: boolean;
+}
+
+export interface NtfyMessage {
+	id: string;
+	time: number;
+	expires?: number;
+	event: 'open' | 'keepalive' | 'message' | 'message_delete' | 'message_clear' | 'poll_request';
+	topic: string;
+	sequence_id?: string;
+	message?: string;
+	title?: string;
+	tags?: string[];
+	priority?: number;
+	click?: string;
+	actions?: any[];
+	attachment?: {
+		name: string;
+		url: string;
+		type?: string;
+		size?: number;
+		expires?: number;
+	};
+}

@@ -11,30 +11,34 @@
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { createWebHaptics } from 'web-haptics/svelte';
 	import { Volume2, VolumeX } from 'lucide-svelte';
+	import { unlockAchievement } from '$lib/stores/achievements';
 
 	let isMuted = $state(window.localStorage.getItem('slashes_muted') === 'true');
-	// Localization: Initialize haptics service for the Slashes wheel
 	const { trigger, destroy, setDebug, isSupported } = createWebHaptics({
 		debug: true,
 		showSwitch: false
 	});
 
-	const slashes = [
-		{ label: '/about', href: '/about', description: '' },
-		{ label: '/contact', href: '/contact', description: 'how to reach me' },
+	const slashes = $derived([
+		{ label: '/about', href: '/about', description: i18n.t('slashes.items.about') },
+		{ label: '/contact', href: '/contact', description: i18n.t('slashes.items.contact') },
 		{
 			label: '/defaults',
 			href: '/defaults',
-			description: 'my main apps on iOS and macOS (more at defaults.rknight.me)'
+			description: i18n.t('slashes.items.defaults')
 		},
-		{ label: '/interests', href: '/zettelkasten/interests', description: "what I'm interested in" },
-		{ label: '/log', href: '/log', description: 'a changelog for this website' },
-		{ label: '/now', href: '/now', description: "what i'm doing right now" },
-		{ label: '/slashes', href: '/slashes', description: 'this page' },
-		{ label: '/uses', href: '/uses', description: 'things I use' },
-		{ label: '/where', href: '/where', description: 'where I spend most of my time' },
-		{ label: '/playlists', href: '/playlists', description: 'my favorite songs' }
-	];
+		{
+			label: '/interests',
+			href: '/zettelkasten/interests',
+			description: i18n.t('slashes.items.interests')
+		},
+		{ label: '/log', href: '/log', description: i18n.t('slashes.items.log') },
+		{ label: '/now', href: '/now', description: i18n.t('slashes.items.now') },
+		{ label: '/slashes', href: '/slashes', description: i18n.t('slashes.items.slashes') },
+		{ label: '/uses', href: '/uses', description: i18n.t('slashes.items.uses') },
+		{ label: '/where', href: '/where', description: i18n.t('slashes.items.where') },
+		{ label: '/playlists', href: '/playlists', description: i18n.t('slashes.items.playlists') }
+	]);
 
 	let rotation = $state(0);
 	let isSpinning = $state(false);
@@ -48,7 +52,7 @@
 
 	let displayRotation = $derived(isSpinning ? spinTween.current : rotation);
 
-	const segmentAngle = 360 / slashes.length;
+	const segmentAngle = $derived(360 / slashes.length);
 
 	let lastAngle = 0;
 	let lastTime = 0;
@@ -131,6 +135,8 @@
 		rotation = targetRotation % 360;
 		isSpinning = false;
 
+		unlockAchievement('lucky-spin');
+
 		const winner = slashes[winningIndex];
 		if (winner.href !== '/slashes') {
 			setTimeout(() => {
@@ -181,7 +187,6 @@
 
 		<div class="flex items-center gap-2">
 			{#if !isSupported}
-				<!-- Localization: Use localized aria-label for accessibility -->
 				<Button
 					onclick={() => {
 						setDebug(!isMuted);

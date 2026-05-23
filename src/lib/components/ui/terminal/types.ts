@@ -9,6 +9,9 @@ export type TerminalRootProps = WithChildren<{
 	class?: string;
 	delay?: number;
 	speed?: number;
+	onClose?: () => void;
+	onMinimize?: () => void;
+	onMaximize?: () => void;
 	onComplete?: () => void;
 }>;
 

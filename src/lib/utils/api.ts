@@ -1,3 +1,5 @@
+import { i18n } from '$lib/i18n/i18n.svelte';
+
 export type DataItem = {
 	title?: string;
 	description?: string;
@@ -29,8 +31,8 @@ export function sortData(items: DataItem[], key: keyof DataItem, direction: Sort
 		}
 
 		if (typeof aValue === 'string' && typeof bValue === 'string') {
-			if (direction === 'asc') return aValue.localeCompare(bValue);
-			else return bValue.localeCompare(aValue);
+			if (direction === 'asc') return aValue.localeCompare(bValue, i18n.lang);
+			else return bValue.localeCompare(aValue, i18n.lang);
 		}
 
 		if (typeof aValue === 'number' && typeof bValue === 'number') {
@@ -39,8 +41,8 @@ export function sortData(items: DataItem[], key: keyof DataItem, direction: Sort
 		}
 
 		// fallback to string comparison
-		if (direction === 'asc') return String(aValue).localeCompare(String(bValue));
-		else return String(bValue).localeCompare(String(aValue));
+		if (direction === 'asc') return String(aValue).localeCompare(String(bValue), i18n.lang);
+		else return String(bValue).localeCompare(String(aValue), i18n.lang);
 	});
 	return filteredItems;
 }
