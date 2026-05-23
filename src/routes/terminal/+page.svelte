@@ -24,6 +24,8 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { unlockAchievement } from '$lib/stores/achievements';
+	import { screensaver } from '$lib/stores/app';
+	import { screensaverActive } from '$lib/stores/desktop';
 
 	type Page = {
 		date: string;
@@ -162,11 +164,29 @@
 		},
 		{
 			name: 'rm',
-			description: 'Warn about removing files.',
-			usage: 'rm <file>',
-			example: 'rm not_a_virus.exe',
-			callback: async ({ lines }) => {
+			description: 'Remove files or directories.',
+			usage: 'rm [options] <file>',
+			example: 'rm -rf /',
+			callback: async ({ args, lines }) => {
+				const targets = ['/', '/*', '.', './', './*'];
+				if (args.includes('-rf') && args.some((arg) => targets.includes(arg))) {
+					lines.length = 0;
+					$screensaver = 'crash';
+					$screensaverActive = true;
+					return;
+				}
 				lines.push({ value: 'Careful now!', type: 'output' });
+			}
+		},
+		{
+			name: 'forkbomb',
+			description: 'Don\'t try this at home.',
+			usage: ':(){ :|:& };:',
+			hidden: true,
+			callback: async ({ lines }) => {
+				lines.length = 0;
+				$screensaver = 'crash';
+				$screensaverActive = true;
 			}
 		},
 		{
@@ -390,6 +410,14 @@
 			commandHistory.push(value);
 		}
 		historyIndex = null;
+
+		// Check for forkbomb string directly
+		if (value.trim() === ':(){ :|:& };:') {
+			lines.length = 0;
+			$screensaver = 'crash';
+			$screensaverActive = true;
+			return;
+		}
 
 		lines.push({ value, type: 'input' });
 		const { command, args } = parseInput(value);

@@ -96,6 +96,7 @@
 										<Select.Item value="none" label={i18n.t('settings.screensaver_none')} />
 										<Select.Item value="dvd" label={i18n.t('settings.screensaver_dvd')} />
 										<Select.Item value="playlists" label={i18n.t('settings.screensaver_playlists')} />
+										<Select.Item value="crash" label={i18n.t('settings.screensaver_crash')} />
 									</Select.Content>
 								</Select.Root>
 							{/snippet}
