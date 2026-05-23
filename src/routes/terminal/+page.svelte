@@ -25,7 +25,6 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { unlockAchievement } from '$lib/stores/achievements';
-	import { CHEAT_CODES, triggerCheatAnimation } from '$lib/utils/cheatcodes';
 	import { screensaver } from '$lib/stores/app';
 	import { screensaverActive } from '$lib/stores/desktop';
 
@@ -182,7 +181,7 @@
 		},
 		{
 			name: 'forkbomb',
-			description: "Don't try this at home.",
+			description: 'Don\'t try this at home.',
 			usage: ':(){ :|:& };:',
 			hidden: true,
 			callback: async ({ lines }) => {
@@ -399,37 +398,25 @@
 		}
 	];
 
-	async function scrollToBottom() {
-		if (linesContainer) {
+    async function scrollToBottom() {
+        if (linesContainer) {
 			await tick();
 			linesContainer.scrollTop = linesContainer.scrollHeight; // Scroll to the bottom
 		}
-	}
+    }
 
 	async function handleSubmit(value: string) {
-		const trimmedValue = value.trim();
 		// Add to command history if not empty and not duplicate of last
-		if (trimmedValue && commandHistory[commandHistory.length - 1] !== value) {
+		if (value.trim() && commandHistory[commandHistory.length - 1] !== value) {
 			commandHistory.push(value);
 		}
 		historyIndex = null;
 
 		// Check for forkbomb string directly
-		if (trimmedValue === ':(){ :|:& };:') {
+		if (value.trim() === ':(){ :|:& };:') {
 			lines.length = 0;
 			$screensaver = 'crash';
 			$screensaverActive = true;
-			return;
-		}
-
-		// Check for cheat codes
-		const cheat = CHEAT_CODES.find((c) => c.code === trimmedValue.toLowerCase());
-		if (cheat) {
-			debugLog(`Cheat code detected in terminal: ${cheat.id}`);
-			triggerCheatAnimation(cheat.animation);
-			unlockAchievement('cheatcode');
-			lines.push({ value, type: 'input' });
-			scrollToBottom();
 			return;
 		}
 
@@ -472,7 +459,7 @@
 			} else if (completions.length > 1 && !args.length) {
 				// Multiple matches: output options in terminal
 				lines.push({ value: completions.join(' '), type: 'output' });
-				scrollToBottom();
+				scrollToBottom()
 			}
 		}
 		if (event.ctrlKey && event.key.toLowerCase() === 'c') {
@@ -535,10 +522,10 @@
 		return [];
 	}
 
-	function toggleMaximize(value: boolean) {
-		isMaximized = value;
-		scrollToBottom();
-	}
+    function toggleMaximize(value: boolean) {
+        isMaximized = value;
+        scrollToBottom();
+    }
 </script>
 
 <svelte:head>
@@ -584,13 +571,13 @@
 						{/if}
 					</span>
 				{/each}
+				<Terminal.Input
+					placeholder={i18n.t('terminal.placeholder')}
+					prompt="muenstererOS %"
+					onsubmit={handleSubmit}
+					onkeydown={handleKeyDown}
+				/>
 			</div>
-			<Terminal.Input
-				placeholder={i18n.t('terminal.placeholder')}
-				prompt="muenstererOS %"
-				onsubmit={handleSubmit}
-				onkeydown={handleKeyDown}
-			/>
 		{/if}
 	</Terminal.Root>
 </div>
