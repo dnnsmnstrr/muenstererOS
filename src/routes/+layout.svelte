@@ -217,9 +217,21 @@
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
 		if ($isCommandActive) {
-			document.body.classList.add('overflow-hidden', 'touch-none', 'sm:touch-auto');
+			document.body.classList.add(
+				'overflow-hidden',
+				'touch-none',
+				'sm:touch-auto',
+				'fixed',
+				'w-full'
+			);
 		} else {
-			document.body.classList.remove('overflow-hidden', 'touch-none', 'sm:touch-auto');
+			document.body.classList.remove(
+				'overflow-hidden',
+				'touch-none',
+				'sm:touch-auto',
+				'fixed',
+				'w-full'
+			);
 		}
 	});
 
@@ -312,7 +324,7 @@
 	<CrashScreensaver />
 {/if}
 
-<div class="flex h-screen w-full flex-grow flex-col">
+<div class="flex h-dvh w-full flex-grow flex-col">
 	<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
 		<div class="sticky top-0 h-full w-full">
 			<Header pages={bookmarks} />
