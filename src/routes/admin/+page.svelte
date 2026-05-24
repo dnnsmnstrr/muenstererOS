@@ -255,9 +255,11 @@
 					? null
 					: Object.keys(gists).find((key) => gists[key as keyof typeof gists].id === selectedGist);
 			if (gistName) {
-				fetch(`/api/gists/${gistName}?refresh=true`).catch((err) =>
-					console.error('Failed to refresh cache:', err)
-				);
+				fetch(`/api/gists/${gistName}?refresh=true`, {
+					headers: {
+						Authorization: `token ${githubToken}`
+					}
+				}).catch((err) => console.error('Failed to refresh cache:', err));
 			}
 
 			toast.success('Gist saved successfully!');
