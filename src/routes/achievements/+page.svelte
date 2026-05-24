@@ -42,6 +42,7 @@
 	let overallProgress = $derived((unlockedCount / totalCount) * 100);
 
 	let hoveredId = $state<string | null>(null);
+	let explorerTooltipOpen = $state(false);
 
 	let missingPages = $derived.by(() => {
 		const explorer = $achievements.explorer;
@@ -174,8 +175,14 @@
 							</span>
 						{/if}
 						{#if achievement.id === 'explorer' && missingPages.length > 0 && missingPages.length <= 5}
-							<Tooltip.Root delayDuration={0}>
-								<Tooltip.Trigger class="pointer-events-auto">
+							<Tooltip.Root bind:open={explorerTooltipOpen} delayDuration={0}>
+								<Tooltip.Trigger
+									class="pointer-events-auto"
+									onclick={(e) => {
+										e.stopPropagation();
+										explorerTooltipOpen = !explorerTooltipOpen;
+									}}
+								>
 									<CircleHelp size={20} class="text-muted-foreground hover:text-foreground" />
 								</Tooltip.Trigger>
 								<Tooltip.Content>
