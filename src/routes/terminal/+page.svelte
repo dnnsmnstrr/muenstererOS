@@ -15,6 +15,7 @@
 	import { goto } from '$app/navigation';
 	import { tick } from 'svelte';
 	import { onMount } from 'svelte';
+	import { cn } from '$lib/utils/utils';
 
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import * as Terminal from '$lib/components/ui/terminal';
