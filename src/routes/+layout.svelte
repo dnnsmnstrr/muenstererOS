@@ -316,7 +316,7 @@
 
 	<main
 		class={cn(
-			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
+			`inset-0 h-max max-h-screen w-full flex-grow ${$isCommandActive ? 'overflow-hidden' : 'overflow-y-auto'} ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
 			`theme-${$theme}`
 		)}
 		style={bgStyle}
