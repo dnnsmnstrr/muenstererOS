@@ -256,7 +256,7 @@
 							target={event.url ? '_blank' : undefined}
 							rel={event.url ? 'noopener noreferrer' : undefined}
 							class="flex h-full max-w-64 flex-col items-center justify-between rounded-lg border bg-card p-4 text-center shadow-sm transition-shadow duration-200 hover:shadow-md {event.url
-								? 'cursor-pointer hover:bg-accent/50'
+								? 'cursor-pointer hover:bg-accent'
 								: ''}"
 							style="border-color: {event.color}; border-width: 1px;"
 						>
