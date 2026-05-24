@@ -5,7 +5,7 @@
 	import { formatDate, formatDuration } from '$lib/utils/helper';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import { Calendar, Grid } from 'lucide-svelte';
+	import { Calendar, Grid, ExternalLink, X } from 'lucide-svelte';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import { BIRTHDATE, PAGE_TITLE_SUFFIX } from '$lib/config';
 
@@ -250,11 +250,22 @@
 					{@const duration = Math.round(event.end.getTime() - event.start.getTime())}
 					<div class="relative flex min-w-64 flex-col">
 						<!-- Event card -->
-						<div
-							class="flex h-full max-w-64 flex-col items-center justify-between rounded-lg border bg-card p-4 text-center shadow-sm transition-shadow duration-200 hover:shadow-md"
+						<svelte:element
+							this={event.url ? 'a' : 'div'}
+							href={event.url}
+							target={event.url ? '_blank' : undefined}
+							rel={event.url ? 'noopener noreferrer' : undefined}
+							class="flex h-full max-w-64 flex-col items-center justify-between rounded-lg border bg-card p-4 text-center shadow-sm transition-shadow duration-200 hover:shadow-md {event.url
+								? 'cursor-pointer hover:bg-accent/50'
+								: ''}"
 							style="border-color: {event.color}; border-width: 1px;"
 						>
-							<h3 class="mb-2 line-clamp-3 text-lg font-semibold">{event.name}</h3>
+							<h3 class="mb-2 line-clamp-3 text-lg font-semibold">
+								{event.name}
+								{#if event.url}
+									<ExternalLink class="ml-2 inline-block h-4 w-4" />
+								{/if}
+							</h3>
 
 							<div class="mb-3 text-sm text-muted-foreground">
 								<div class="mb-1 flex items-center justify-center space-x-1">
@@ -298,7 +309,7 @@
 									<span class="line-clamp-1">{event.location}</span>
 								</div>
 							{/if}
-						</div>
+						</svelte:element>
 					</div>
 				{/each}
 			</div>
@@ -359,8 +370,18 @@
 	{#if hoveredUnit || selectedUnit}
 		{@const displayUnit = hoveredUnit || selectedUnit}
 		<div
-			class="pointer-events-none fixed bottom-16 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg"
+			class="fixed bottom-16 left-1/2 z-50 -translate-x-1/2 rounded-lg border bg-card p-3 shadow-lg {selectedUnit
+				? 'pointer-events-auto'
+				: 'pointer-events-none'}"
 		>
+			{#if selectedUnit}
+				<button
+					class="absolute -right-2 -top-2 h-6 w-6 rounded-full border bg-background p-1 shadow-md hover:bg-accent"
+					onclick={() => (selectedUnit = null)}
+				>
+					<X class="h-full w-full" />
+				</button>
+			{/if}
 			<div class="font-bold">{formatDate(displayUnit!.date.toISOString())}</div>
 			{#if displayUnit!.isBirthday}
 				<div class="mt-1 flex items-center gap-2">
@@ -376,7 +397,19 @@
 					{#each displayUnit!.events as event}
 						<div class="flex items-center gap-2">
 							<div class="h-2 w-2 rounded-full" style="background-color: {event.color}"></div>
-							<div class="text-xs">{event.name}</div>
+							{#if event.url}
+								<a
+									href={event.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-1 text-xs hover:underline"
+								>
+									{event.name}
+									<ExternalLink class="h-3 w-3" />
+								</a>
+							{:else}
+								<div class="text-xs">{event.name}</div>
+							{/if}
 						</div>
 					{/each}
 				</div>
