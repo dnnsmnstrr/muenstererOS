@@ -83,6 +83,15 @@
 		"download_logo_svg": "SVG herunterladen",
 		"copy_logo_url": "Bild-URL kopieren"
 	},
+	"experiment": {
+		"title": "Experiment.js",
+		"editor": "Editor",
+		"clear": "Leeren",
+		"reset": "Zurücksetzen",
+		"output": "Ausgabe",
+		"console_output": "Konsole",
+		"snippets": "Snippets"
+	},
 	"footer": {
 		"rights_reserved": "Alle Rechte vorbehalten"
 	},
@@ -510,8 +519,8 @@
 		"try_raycast": "Raycast ausprobieren",
 		"referral_title": "Empfehlungslink zu Raycast",
 		"intro": {
-			"prefix": "Seit Raycast den ",
-			"middle": " eingeführt hat, bin ich ein großer Fan und intensiver Nutzer dieser zusätzlichen Produktivitätsebene geworden.",
+			"prefix": "Seit ich die Idee des ",
+			"middle": " kennengelernt habe, bin ich ein großer Fan und intensiver Nutzer dieser zusätzlichen Produktivitätsebene geworden.",
 			"hyper_key": "Hyper Key",
 			"hyper_text": "Hyper",
 			"means_all": " bedeutet, dass alle Modifikatortasten (",

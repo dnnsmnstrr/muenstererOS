@@ -83,6 +83,15 @@
 		"download_logo_svg": "Download SVG",
 		"copy_logo_url": "Copy image URL"
 	},
+	"experiment": {
+		"title": "Experiment.js",
+		"editor": "Editor",
+		"clear": "Clear",
+		"reset": "Reset",
+		"output": "Output",
+		"console_output": "Console",
+		"snippets": "Snippets"
+	},
 	"footer": {
 		"rights_reserved": "All rights reserved"
 	},
@@ -509,7 +518,7 @@
 		"try_raycast": "Try Raycast",
 		"referral_title": "Referral link to Raycast",
 		"intro": {
-			"prefix": "Since Raycast introduced the ",
+			"prefix": "Since learning about the so-called ",
 			"middle": ", I've become a big fan and heavy user of this additional productivity layer.",
 			"hyper_key": "Hyper Key",
 			"hyper_text": "Hyper",
