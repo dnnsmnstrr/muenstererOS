@@ -1,12 +1,30 @@
-import { gists } from '$lib/config';
+import { gists, USERNAME_SHORT } from '$lib/config';
 import { gistCache } from '$lib/server/cache';
 import { json } from '@sveltejs/kit';
 
 const CACHE_TTL = 15 * 60; // 15 minutes in seconds
 
-export async function GET({ params, url }) {
+export async function GET({ params, url, request, fetch }) {
 	const { name } = params;
 	const refresh = url.searchParams.get('refresh') === 'true';
+
+	if (refresh) {
+		const authHeader = request.headers.get('Authorization');
+		if (!authHeader) {
+			return json({ error: 'Unauthorized: Refresh requires admin token' }, { status: 401 });
+		}
+		try {
+			const userRes = await fetch('https://api.github.com/user', {
+				headers: { Authorization: authHeader }
+			});
+			const userData = await userRes.json();
+			if (!userRes.ok || userData.login !== USERNAME_SHORT) {
+				return json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+			}
+		} catch (err) {
+			return json({ error: 'Authentication failed' }, { status: 500 });
+		}
+	}
 
 	const gist = gists[name as keyof typeof gists];
 	if (!gist) {
