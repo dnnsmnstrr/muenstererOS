@@ -129,21 +129,6 @@
 						<div class="flex items-center gap-2">
 							{achievement.title}
 						</div>
-						{#if achievement.id === 'explorer' && !achievement.unlocked && missingPages.length > 0 && missingPages.length <= 5}
-							<Tooltip.Root delayDuration={0}>
-								<Tooltip.Trigger>
-									<CircleHelp size={18} class="text-muted-foreground hover:text-foreground" />
-								</Tooltip.Trigger>
-								<Tooltip.Content>
-									<p class="mb-1 font-bold">{i18n.t('achievements.explorer.missing_hint')}</p>
-									<ul class="list-inside list-disc">
-										{#each missingPages as page}
-											<li>{page}</li>
-										{/each}
-									</ul>
-								</Tooltip.Content>
-							</Tooltip.Root>
-						{/if}
 					</Card.Title>
 					<Card.Description class="min-h-10">
 						{achievement.description}
@@ -173,6 +158,23 @@
 					<div
 						class="pointer-events-none absolute inset-0 flex items-center justify-center bg-background/20 opacity-0 backdrop-blur-[3px] transition-opacity duration-300 group-hover:opacity-100"
 					>
+						{#if achievement.id === 'explorer' && missingPages.length > 0 && missingPages.length <= 5}
+							<div class="absolute right-4 top-4">
+								<Tooltip.Root delayDuration={0}>
+									<Tooltip.Trigger class="pointer-events-auto">
+										<CircleHelp size={18} class="text-muted-foreground hover:text-foreground" />
+									</Tooltip.Trigger>
+									<Tooltip.Content>
+										<p class="mb-1 font-bold">{i18n.t('achievements.explorer.missing_hint')}</p>
+										<ul class="list-inside list-disc">
+											{#each missingPages as page}
+												<li>{page}</li>
+											{/each}
+										</ul>
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</div>
+						{/if}
 						{#if achievement.metadata?.link}
 							<Button
 								variant="outline"
