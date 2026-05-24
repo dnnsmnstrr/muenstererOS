@@ -26,6 +26,7 @@
 		"redirects": "Redirects",
 		"terminal": "Terminal",
 		"concerts": "Konzerte",
+		"log": "Änderungsprotokoll",
 		"changelog": "Änderungsprotokoll",
 		"playlist": "Playlist",
 		"api": "API",
@@ -703,7 +704,8 @@
 		"reset_success": "Achievements wurden zurückgesetzt.",
 		"explorer": {
 			"title": "Entdecker",
-			"description": "Besuche jede Seite, die in der Sitemap aufgeführt ist."
+			"description": "Besuche jede Seite, die in der Sitemap aufgeführt ist.",
+			"missing_hint": "Fehlende Seiten:"
 		},
 		"cheatcode": {
 			"title": "Cheat Code",

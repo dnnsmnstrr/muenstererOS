@@ -110,7 +110,6 @@ export const gists = {
 	}
 };
 
-
 export const defaultColors = {
 	light: {
 		primary: '222.2 47.4% 11.2%',
@@ -128,7 +127,6 @@ export const breakpoints = {
 	lg: 1280,
 	xl: 1920
 };
-
 
 export const backgroundTextures = [
 	{

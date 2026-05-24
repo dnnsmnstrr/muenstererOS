@@ -16,7 +16,9 @@ export async function GET() {
 	if (GOATCOUNTER_API_KEY) {
 		try {
 			const now = new Date();
-			const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+			const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+				.toISOString()
+				.split('T')[0];
 			const goatResponse = await fetch(
 				`https://dnnsmnstrr.goatcounter.com/api/v0/stats/total?start=${startOfMonth}`,
 				{

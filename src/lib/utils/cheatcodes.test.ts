@@ -3,7 +3,7 @@ import { CHEAT_CODES, findCheatCode } from './cheatcodes';
 
 describe('cheatcodes', () => {
 	it('should have a konami code sequence', () => {
-		const konami = CHEAT_CODES.find((c) => c.id === 'konami');
+		const konami = CHEAT_CODES.find((c) => c.id === 'cheatcode');
 		expect(konami).toBeDefined();
 		expect(konami?.sequence).toBeInstanceOf(Array);
 		expect(konami?.sequence?.length).toBeGreaterThan(0);
@@ -38,7 +38,7 @@ describe('cheatcodes', () => {
 				'a'
 			];
 			const cheat = findCheatCode(buffer);
-			expect(cheat?.id).toBe('konami');
+			expect(cheat?.id).toBe('cheatcode');
 		});
 
 		it('should find motherlode in buffer', () => {

@@ -13,8 +13,10 @@
 	import PartyPopper from '$lib/components/icons/party-popper.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
-	import { Check, Lock, RotateCcw, Zap } from 'lucide-svelte';
+	import { Check, CircleHelp, Lock, RotateCcw, Zap } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import pages from '../../data/pages.json';
 	import { goto } from '$app/navigation';
 
 	const achievementIcons = {
@@ -40,6 +42,21 @@
 	let overallProgress = $derived((unlockedCount / totalCount) * 100);
 
 	let hoveredId = $state<string | null>(null);
+	let explorerTooltipOpen = $state(false);
+
+	let missingPages = $derived.by(() => {
+		const explorer = $achievements.explorer;
+		if (!explorer || explorer.unlocked) return [];
+		const visitedPages = explorer.metadata?.visitedPages || [];
+		return pages
+			.filter((p) => p.path !== '/admin')
+			.filter((p) => !visitedPages.includes(p.path))
+			.map((p) => {
+				const slug = p.path === '/' ? 'home' : p.path.split('/').pop() || 'home';
+				const translated = i18n.t(`common.${slug}`);
+				return translated !== `common.${slug}` ? translated : p.title;
+			});
+	});
 </script>
 
 <svelte:head>
@@ -109,8 +126,10 @@
 							</span>
 						{/if}
 					</div>
-					<Card.Title class="flex items-center gap-2">
-						{achievement.title}
+					<Card.Title class="flex items-center justify-between gap-2">
+						<div class="flex items-center gap-2">
+							{achievement.title}
+						</div>
 					</Card.Title>
 					<Card.Description class="min-h-10">
 						{achievement.description}
@@ -138,20 +157,43 @@
 
 				{#if !achievement.unlocked}
 					<div
-						class="absolute inset-0 flex items-center justify-center bg-background/20 opacity-0 backdrop-blur-[3px] transition-opacity duration-300 group-hover:opacity-100"
+						class="pointer-events-none absolute inset-0 flex items-center justify-center gap-4 bg-background/20 opacity-0 backdrop-blur-[3px] transition-opacity duration-300 group-hover:opacity-100"
 					>
 						{#if achievement.metadata?.link}
 							<Button
 								variant="outline"
-								class="ml-4"
+								class="pointer-events-auto"
 								onclick={() => goto(achievement.metadata.link)}
 							>
 								{i18n.t('achievements.locked')}
 							</Button>
 						{:else}
-							<span class="rounded-full bg-background/80 px-3 py-1 text-xs font-bold shadow-sm">
+							<span
+								class="pointer-events-auto rounded-full bg-background/80 px-3 py-1 text-xs font-bold shadow-sm"
+							>
 								{i18n.t('achievements.locked')}
 							</span>
+						{/if}
+						{#if achievement.id === 'explorer' && missingPages.length > 0 && missingPages.length <= 5}
+							<Tooltip.Root bind:open={explorerTooltipOpen} delayDuration={0}>
+								<Tooltip.Trigger
+									class="pointer-events-auto"
+									onclick={(e) => {
+										e.stopPropagation();
+										explorerTooltipOpen = !explorerTooltipOpen;
+									}}
+								>
+									<CircleHelp size={20} class="text-muted-foreground hover:text-foreground" />
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p class="mb-1 font-bold">{i18n.t('achievements.explorer.missing_hint')}</p>
+									<ul class="list-inside list-disc">
+										{#each missingPages as page}
+											<li>{page}</li>
+										{/each}
+									</ul>
+								</Tooltip.Content>
+							</Tooltip.Root>
 						{/if}
 					</div>
 				{/if}

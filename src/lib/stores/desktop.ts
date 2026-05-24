@@ -9,7 +9,7 @@ export const defaultFiles = [
 		id: 'terminal',
 		name: 'Terminal',
 		href: '/terminal',
-		icon: LucideIcons.Terminal,
+		icon: LucideIcons.Terminal
 	}
 ];
 
@@ -111,7 +111,7 @@ export function initializeFiles(
 				// New file - calculate position
 				const leftOffset = file.leftOffset || 0;
 				let x = padding + leftOffset;
-				let y = (padding * 2) + index * spacing;
+				let y = (index === 0 ? padding * 2 : padding) + index * spacing;
 
 				// Check if would go off-screen vertically
 				if (y + fileSize > windowSize.height - padding) {
