@@ -129,7 +129,7 @@
 						<div class="flex items-center gap-2">
 							{achievement.title}
 						</div>
-						{#if achievement.id === 'explorer' && !achievement.unlocked && missingPages.length > 0 && missingPages.length < 5}
+						{#if achievement.id === 'explorer' && !achievement.unlocked && missingPages.length > 0 && missingPages.length <= 5}
 							<Tooltip.Root delayDuration={0}>
 								<Tooltip.Trigger>
 									<CircleHelp size={18} class="text-muted-foreground hover:text-foreground" />
@@ -171,18 +171,20 @@
 
 				{#if !achievement.unlocked}
 					<div
-						class="absolute inset-0 flex items-center justify-center bg-background/20 opacity-0 backdrop-blur-[3px] transition-opacity duration-300 group-hover:opacity-100"
+						class="pointer-events-none absolute inset-0 flex items-center justify-center bg-background/20 opacity-0 backdrop-blur-[3px] transition-opacity duration-300 group-hover:opacity-100"
 					>
 						{#if achievement.metadata?.link}
 							<Button
 								variant="outline"
-								class="ml-4"
+								class="pointer-events-auto ml-4"
 								onclick={() => goto(achievement.metadata.link)}
 							>
 								{i18n.t('achievements.locked')}
 							</Button>
 						{:else}
-							<span class="rounded-full bg-background/80 px-3 py-1 text-xs font-bold shadow-sm">
+							<span
+								class="pointer-events-auto rounded-full bg-background/80 px-3 py-1 text-xs font-bold shadow-sm"
+							>
 								{i18n.t('achievements.locked')}
 							</span>
 						{/if}
