@@ -1,12 +1,18 @@
 [
 	{
-		"date": "2025-03-20",
+		"date": "2025-03-24",
+		"title": "Achievements",
+		"description": "Set up achievements on my website, because why not?",
+		"path": "/achievements"
+	},
+	{
+		"date": "2026-03-20",
 		"title": "Ping",
 		"description": "Added a ping page to send messages to my phone with ntfy.",
 		"path": "/ping"
 	},
 	{
-		"date": "2025-03-10",
+		"date": "2026-03-10",
 		"title": "Concerts",
 		"description": "Added a page to list all the concerts and festivals I've been to.",
 		"path": "/concerts"

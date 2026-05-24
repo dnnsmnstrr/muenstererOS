@@ -1,8 +1,8 @@
 [
 	{
-		"title": "Slashes",
-		"path": "/slashes",
-		"date": "2026-03-22"
+		"title": "Achievements",
+		"path": "/achievements",
+		"date": "2026-05-22"
 	},
 	{
 		"title": "Ping",
@@ -13,6 +13,11 @@
 		"title": "Concerts",
 		"path": "/concerts",
 		"date": "2026-03-21"
+	},
+	{
+		"title": "Slashes",
+		"path": "/slashes",
+		"date": "2026-03-16"
 	},
 	{
 		"title": "Onboarding",

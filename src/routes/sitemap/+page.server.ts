@@ -7,7 +7,7 @@ export async function load({
 }: {
 	fetch: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 }) {
-	const sitemapUrl = `/static/sitemap.xml`;
+	const sitemapUrl = `/sitemap.xml`;
 	const response = await fetch(sitemapUrl);
 	const xml = await response.text();
 	const result = await xml2js.parseStringPromise(xml);

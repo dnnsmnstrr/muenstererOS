@@ -3,17 +3,28 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2026-05-09T00:10:53.073Z</updated>
+    <updated>2026-05-24T00:20:25.205Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
     <entry>
+        <title>Achievements</title>
+        <link href="https://muensterer.tech/achievements"/>
+        <id>0-achievements</id>
+        <updated>2025-03-20</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Set up some achievements, because why not?</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
         <title>Ping</title>
         <link href="https://muensterer.tech/ping"/>
         <id>0-ping</id>
-        <updated>2025-03-20</updated>
+        <updated>2026-03-20</updated>
         <content type="html">
             <![CDATA[
                 <p>Added a ping page to send messages to my phone with ntfy.</p>
@@ -24,7 +35,7 @@
         <title>Concerts</title>
         <link href="https://muensterer.tech/concerts"/>
         <id>0-concerts</id>
-        <updated>2025-03-10</updated>
+        <updated>2026-03-10</updated>
         <content type="html">
             <![CDATA[
                 <p>Added a page to list all the concerts and festivals I've been to.</p>
