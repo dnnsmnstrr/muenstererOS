@@ -8,6 +8,7 @@
 		TabletSmartphone,
 		Icon,
 		Download,
+		Linkedin,
 	} from 'lucide-svelte';
 
 	import * as ContextMenu from '$lib/components/ui/context-menu';
@@ -35,18 +36,19 @@
 			name: i18n.t('header.pages'),
 			sub: pages
 		},
-		{
-			name: i18n.t('header.social'),
-			sub: [
-				{ name: 'Instagram', href: links.instagram, icon: Instagram },
-				{ name: 'Mastodon', href: links.mastodon },
-				{ name: 'Twitter', href: links.twitter, icon: X },
-			]
-		},
 		[
 			{ name: i18n.t('common.settings'), href: '/settings', icon: Settings, hidden: true },
 			{ name: i18n.t('common.legal'), href: '/legal', icon: Gavel },
 		],
+		{
+			name: i18n.t('header.social'),
+			sub: [
+				{ name: 'Instagram', href: links.instagram, icon: Instagram },
+				{ name: 'LinkedIn', href: links.linkedin, icon: Linkedin },
+				{ name: 'Mastodon', href: links.mastodon },
+				{ name: 'Twitter', href: links.twitter, icon: X },
+			]
+		},
 	]);
 
 

@@ -59,14 +59,14 @@
 				</p>
 			</div>
 
-			<div class="flex flex-col gap-6 pt-8 md:flex-row md:items-end">
+			<div class="flex flex-col gap-6 pt-8 md:flex-row md:items-center">
 				<div class="flex-1 space-y-2">
 					<p class="text-lg italic opacity-80">"{i18n.t('terminal.crash.quote')}"</p>
 				</div>
 				<Button
 					variant="outline"
 					size="lg"
-					class="w-full bg-white font-bold text-black hover:bg-white/90 md:w-auto"
+					class="w-full bg-white font-bold text-black md:w-auto"
 					onclick={startReboot}
 				>
 					{i18n.t('terminal.crash.reboot')}

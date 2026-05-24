@@ -105,7 +105,7 @@
 					}
 				} else {
 					lines.push({
-						value: 'Available commands: ' + commands.map((c) => c.name).join(', '),
+						value: 'Available commands: ' + commands.filter(c => typeof c.hidden !== 'boolean' || !c.hidden).map((c) => c.name).join(', '),
 						type: 'output'
 					});
 				}
@@ -184,6 +184,7 @@
 			name: 'forkbomb',
 			description: "Don't try this at home.",
 			usage: ':(){ :|:& };:',
+            aliases: [':(){ :|:& };:', './$0|./$0& '],
 			hidden: true,
 			callback: async ({ lines }) => {
 				lines.length = 0;

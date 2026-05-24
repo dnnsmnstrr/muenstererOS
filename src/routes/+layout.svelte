@@ -45,19 +45,15 @@
 		Siren,
 		CalendarClock,
 		BrickWallShield,
-
 		History,
-
 		MapPinned,
-
 		Gavel,
-
 		AtSign,
+		Ship,
 
-		Ship
+		Trophy,
 
-
-
+		Cog
 
 
 	} from 'lucide-svelte';
@@ -240,6 +236,7 @@
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },
 		{ name: 'Hotkeys', href: '/hotkeys', icon: Keyboard },
 		{ name: 'Redirects', href: '/redirects', icon: Signpost },
+		{ name: 'Settings', href: '/settings', icon: Cog, hidden: true },
 		{ name: 'Slashes', href: '/slashes', icon: FerrisWheel, hidden: true },
 		{ name: 'Terminal', href: '/terminal', icon: Terminal, hidden: true },
 		{ name: 'Changelog', href: '/log', icon: List, hidden: true },
@@ -255,6 +252,7 @@
 		{ name: 'Legal Notice', href: '/legal', icon: Gavel, hidden: true },
 		{ name: 'Contact', href: '/contact', icon: AtSign, hidden: true },
 		{ name: 'Onboarding', href: '/onboarding', icon: Ship, hidden: true },
+		{ name: 'Achievements', href: '/achievements', icon: Trophy, hidden: true },
 	];
 	const bookmarks: BookmarkItem[] = $derived(
 		bookmarksRaw.map((b) => ({

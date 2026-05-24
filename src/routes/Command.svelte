@@ -408,7 +408,7 @@
 				enrichLink({ name: i18n.t('common.about'), icon: User, href: '/about' }),
 				...pages
 					.filter(
-						(page) => !['/', '/about', '/settings', '/achievements'].includes(page.href || '')
+						(page) => !['/', '/about', '/achievements'].includes(page.href || '')
 					)
 					.map((p) => enrichLink(p)),
 				enrichLink(
@@ -419,15 +419,6 @@
 						action: handleDocsearch
 					},
 					'command.search_zettelkasten'
-				),
-				enrichLink(
-					{
-						name: i18n.t('common.settings'),
-						keywords: ['preferences'],
-						icon: Settings,
-						href: '/settings'
-					},
-					'common.settings'
 				),
 				enrichLink(
 					{
