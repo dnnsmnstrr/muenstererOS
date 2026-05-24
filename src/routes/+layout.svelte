@@ -302,6 +302,7 @@
 <Command pages={allPages} />
 
 <svelte:window bind:innerWidth bind:innerHeight />
+<svelte:body class={$isCommandActive ? 'overflow-hidden touch-none sm:touch-auto' : ''} />
 
 {#if $screensaverActiveStore && $screensaver === 'crash'}
 	<CrashScreensaver />
