@@ -13,8 +13,10 @@
 	import PartyPopper from '$lib/components/icons/party-popper.svelte';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
-	import { Check, Lock, RotateCcw, Zap } from 'lucide-svelte';
+	import { Check, CircleHelp, Lock, RotateCcw, Zap } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import pages from '../../data/pages.json';
 	import { goto } from '$app/navigation';
 
 	const achievementIcons = {
@@ -40,6 +42,20 @@
 	let overallProgress = $derived((unlockedCount / totalCount) * 100);
 
 	let hoveredId = $state<string | null>(null);
+
+	let missingPages = $derived.by(() => {
+		const explorer = $achievements.explorer;
+		if (!explorer || explorer.unlocked) return [];
+		const visitedPages = explorer.metadata?.visitedPages || [];
+		return pages
+			.filter((p) => p.path !== '/admin')
+			.filter((p) => !visitedPages.includes(p.path))
+			.map((p) => {
+				const slug = p.path === '/' ? 'home' : p.path.split('/').pop() || 'home';
+				const translated = i18n.t(`common.${slug}`);
+				return translated !== `common.${slug}` ? translated : p.title;
+			});
+	});
 </script>
 
 <svelte:head>
@@ -109,8 +125,25 @@
 							</span>
 						{/if}
 					</div>
-					<Card.Title class="flex items-center gap-2">
-						{achievement.title}
+					<Card.Title class="flex items-center justify-between gap-2">
+						<div class="flex items-center gap-2">
+							{achievement.title}
+						</div>
+						{#if achievement.id === 'explorer' && !achievement.unlocked && missingPages.length > 0 && missingPages.length < 5}
+							<Tooltip.Root delayDuration={0}>
+								<Tooltip.Trigger>
+									<CircleHelp size={18} class="text-muted-foreground hover:text-foreground" />
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p class="mb-1 font-bold">{i18n.t('achievements.explorer.missing_hint')}</p>
+									<ul class="list-inside list-disc">
+										{#each missingPages as page}
+											<li>{page}</li>
+										{/each}
+									</ul>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						{/if}
 					</Card.Title>
 					<Card.Description class="min-h-10">
 						{achievement.description}

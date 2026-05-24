@@ -30,6 +30,7 @@
 		"redirects": "Redirects",
 		"terminal": "Terminal",
 		"concerts": "Concerts",
+		"log": "Changelog",
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
@@ -702,7 +703,8 @@
 		"reset_success": "Achievements have been reset.",
 		"explorer": {
 			"title": "Explorer",
-			"description": "Visit every page listed in the sitemap."
+			"description": "Visit every page listed in the sitemap.",
+			"missing_hint": "Missing pages:"
 		},
 		"cheatcode": {
 			"title": "Cheat Code",

@@ -93,7 +93,10 @@ export function unlockAchievement(id: string) {
 			};
 
 			toast.success(i18n.t(`achievements.${id}.title`), {
-				description: i18n.t(`achievements.${id}.message`) !== `achievements.${id}.message` ? i18n.t(`achievements.${id}.message`) : i18n.t(`achievements.${id}.description`),
+				description:
+					i18n.t(`achievements.${id}.message`) !== `achievements.${id}.message`
+						? i18n.t(`achievements.${id}.message`)
+						: i18n.t(`achievements.${id}.description`),
 				action: {
 					label: i18n.t('achievements.view_all'),
 					onClick: () => goto('/achievements')
@@ -113,7 +116,7 @@ export function resetAchievements() {
 	if (!browser) return;
 
 	if (!confirm(i18n.t('achievements.reset_confirm'))) return;
-	
+
 	const initial = getInitialAchievements();
 	achievements.set(initial);
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
@@ -237,7 +240,7 @@ export function unlockAllAchievements() {
 
 	achievements.update((state) => {
 		const updated = { ...state };
-		
+
 		Object.keys(updated).forEach((id) => {
 			if (!updated[id].unlocked) {
 				updated[id] = {

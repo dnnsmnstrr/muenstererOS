@@ -29,7 +29,6 @@ export async function GET({ params, url, fetch }) {
 		return gistResponse;
 	}
 
-
 	try {
 		const data = dataMap[slug];
 

@@ -50,6 +50,11 @@
 		"date": "2025-10-19"
 	},
 	{
+		"title": "Redirects",
+		"path": "/redirects",
+		"date": "2025-09-01"
+	},
+	{
 		"title": "Timeline",
 		"path": "/timeline",
 		"date": "2025-07-12"
@@ -58,6 +63,11 @@
 		"title": "Terminal",
 		"path": "/terminal",
 		"date": "2025-06-23"
+	},
+	{
+		"title": "Changelog",
+		"path": "/log",
+		"date": "2025-06-01"
 	},
 	{
 		"title": "API",
