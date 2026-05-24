@@ -216,6 +216,11 @@
 			// handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
+		if ($isCommandActive) {
+			document.body.classList.add('overflow-hidden', 'touch-none', 'sm:touch-auto');
+		} else {
+			document.body.classList.remove('overflow-hidden', 'touch-none', 'sm:touch-auto');
+		}
 	});
 
 	let isLightMode = $derived($mode === 'light');
@@ -302,7 +307,6 @@
 <Command pages={allPages} />
 
 <svelte:window bind:innerWidth bind:innerHeight />
-<svelte:body class={$isCommandActive ? 'overflow-hidden touch-none sm:touch-auto' : ''} />
 
 {#if $screensaverActiveStore && $screensaver === 'crash'}
 	<CrashScreensaver />
