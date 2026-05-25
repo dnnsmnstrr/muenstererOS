@@ -3,7 +3,7 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2026-05-24T00:20:25.205Z</updated>
+    <updated>2026-05-25T12:14:55.718Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
@@ -13,10 +13,10 @@
         <title>Achievements</title>
         <link href="https://muensterer.tech/achievements"/>
         <id>0-achievements</id>
-        <updated>2025-03-20</updated>
+        <updated>2025-03-24</updated>
         <content type="html">
             <![CDATA[
-                <p>Set up some achievements, because why not?</p>
+                <p>Set up achievements on my website, because why not?</p>
             ]]>
         </content>
     </entry>
@@ -50,6 +50,17 @@
         <content type="html">
             <![CDATA[
                 <p>Added german translations.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Snippets</title>
+        <link href="https://muensterer.tech/snippets"/>
+        <id>0-snippets</id>
+        <updated>2025-10-21</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Created a page to share my Raycast snippets.</p>
             ]]>
         </content>
     </entry>

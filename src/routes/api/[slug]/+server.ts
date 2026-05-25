@@ -3,11 +3,13 @@ import { searchData, sortData } from '$lib/utils/api';
 import type { DataItem } from '$lib/utils/api';
 import changes from '../../../data/changes.json';
 import pages from '../../../data/pages.json';
+import snippets from '../../../data/snippets.json';
 import { gists } from '$lib/config';
 
 const dataMap: Record<string, any> = {
 	changes,
-	pages
+	pages,
+	snippets
 };
 const DEFAULT_LIMIT = 50;
 

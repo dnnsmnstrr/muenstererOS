@@ -84,8 +84,8 @@ desktopFiles.subscribe((value) => {
 
 export function initializeFiles(
 	files: FileDefinition[] = defaultFiles,
-	padding = 20,
-	fileSize = 60
+	padding = 24,
+	fileSize = 64
 ) {
 	if (!browser) return;
 
@@ -111,7 +111,7 @@ export function initializeFiles(
 				// New file - calculate position
 				const leftOffset = file.leftOffset || 0;
 				let x = padding + leftOffset;
-				let y = (index === 0 ? padding * 2 : padding) + index * spacing;
+				let y = padding + index * spacing;
 
 				// Check if would go off-screen vertically
 				if (y + fileSize > windowSize.height - padding) {
@@ -213,8 +213,8 @@ export function addFileToDesktop(file: { id: string; name: string; href: string;
 		}
 
 		// Add new file - find a position that doesn't overlap
-		const padding = 20;
-		const fileSize = 60;
+		const padding = 24;
+		const fileSize = 64;
 		const spacing = fileSize + padding;
 		const windowSize = {
 			width: window.innerWidth,
