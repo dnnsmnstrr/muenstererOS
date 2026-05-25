@@ -65,7 +65,10 @@
 		// Raycast JSON import deep link
 		// Note: The actual deep link for importing snippets is raycast://extensions/raycast/snippets/import-snippets
 		// with the JSON data passed in the 'arguments' parameter as a URL-encoded JSON string.
-		const url = `raycast://extensions/raycast/snippets/import-snippets?arguments=${encodeURIComponent(JSON.stringify({ snippets: raycastData }))}`;
+		// The 'snippets' argument expects a stringified JSON array.
+		const url = `raycast://extensions/raycast/snippets/import-snippets?arguments=${encodeURIComponent(
+			JSON.stringify({ snippets: JSON.stringify(raycastData) })
+		)}`;
 		window.location.href = url;
 	}
 
