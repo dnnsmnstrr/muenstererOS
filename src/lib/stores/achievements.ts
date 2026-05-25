@@ -10,6 +10,9 @@ export interface Achievement {
 	unlockedAt?: number;
 	progress?: number;
 	maxProgress?: number;
+	level?: number;
+	maxLevel?: number;
+	milestones?: number[];
 	metadata?: any;
 }
 
@@ -29,6 +32,9 @@ function getInitialAchievements(): Record<string, Achievement> {
 			unlocked: false,
 			progress: 0,
 			maxProgress: 23, // Default based on current sitemap, will be updated dynamically
+			level: 0,
+			maxLevel: 3,
+			milestones: [5, 10, 23],
 			metadata: { visitedPages: [], link: '/sitemap' }
 		},
 		streak: {
@@ -55,6 +61,13 @@ function getInitialAchievements(): Record<string, Achievement> {
 			metadata: {
 				link: '/terminal'
 			}
+		},
+		'theme-master': {
+			id: 'theme-master',
+			unlocked: false,
+			progress: 0,
+			maxProgress: 5,
+			metadata: { usedThemes: [], link: '/settings' }
 		}
 	};
 }
@@ -82,14 +95,50 @@ if (browser) {
 	});
 }
 
-export function unlockAchievement(id: string) {
+export function unlockAchievement(id: string, level?: number) {
 	achievements.update((state) => {
-		if (state[id] && !state[id].unlocked) {
+		const achievement = state[id];
+		if (!achievement) return state;
+
+		// If it's a level-up for an already unlocked achievement
+		if (level && achievement.level !== undefined && level > (achievement.level || 0)) {
+			// Check for level-specific icon
+			let metadata = { ...achievement.metadata };
+			const updatedAchievement = {
+				...achievement,
+				unlocked: true,
+				unlockedAt: achievement.unlockedAt || Date.now(),
+				level: level
+			};
+
+			toast.success(
+				i18n.t('achievements.level_up_title', {
+					title: i18n.t(`achievements.${id}.title`),
+					level: level.toString()
+				}),
+				{
+					description: i18n.t('achievements.level_up_message', { level: level.toString() }),
+					action: {
+						label: i18n.t('achievements.view_all'),
+						onClick: () => goto('/achievements')
+					}
+				}
+			);
+
+			return {
+				...state,
+				[id]: updatedAchievement
+			};
+		}
+
+		// Standard unlock
+		if (!achievement.unlocked) {
 			const unlockedAchievement = {
-				...state[id],
+				...achievement,
 				unlocked: true,
 				unlockedAt: Date.now(),
-				progress: state[id].maxProgress || 1
+				progress: achievement.maxProgress || 1,
+				level: achievement.maxLevel ? 1 : undefined
 			};
 
 			toast.success(i18n.t(`achievements.${id}.title`), {
@@ -204,21 +253,63 @@ export function updateAchievementProgress(id: string, progress: number, maxProgr
 	});
 }
 
+export function trackThemeChange(themeName: string) {
+	achievements.update((state) => {
+		const themeMaster = state['theme-master'];
+		if (!themeMaster || themeMaster.unlocked) return state;
+
+		const usedThemes = themeMaster.metadata?.usedThemes || [];
+		if (!usedThemes.includes(themeName)) {
+			const newUsedThemes = [...usedThemes, themeName];
+			const progress = newUsedThemes.length;
+			const maxProgress = themeMaster.maxProgress || 5;
+
+			if (progress >= maxProgress) {
+				setTimeout(() => unlockAchievement('theme-master'), 0);
+			}
+
+			return {
+				...state,
+				'theme-master': {
+					...themeMaster,
+					progress,
+					metadata: { ...themeMaster.metadata, usedThemes: newUsedThemes }
+				}
+			};
+		}
+		return state;
+	});
+}
+
 export function trackPageVisit(path: string, allPages: string[]) {
 	achievements.update((state) => {
 		const explorer = state['explorer'];
-		if (!explorer || explorer.unlocked) return state;
+		if (!explorer) return state;
 
 		const visitedPages = explorer.metadata?.visitedPages || [];
-		//console.log('missing pages', allPages.filter(p => !visitedPages.includes(p)));
+		// console.log('Tracking visit to:', path, 'In allPages:', allPages.includes(path));
 		if (!visitedPages.includes(path) && allPages.includes(path)) {
 			const newVisitedPages = [...visitedPages, path];
 			const progress = newVisitedPages.length;
 			const maxProgress = allPages.length;
 
-			if (progress >= maxProgress) {
+			// Update milestones to ensure the last one is always maxProgress
+			const milestones = explorer.milestones ? [...explorer.milestones] : undefined;
+			if (milestones && milestones.length > 0) {
+				milestones[milestones.length - 1] = maxProgress;
+			}
+
+			// Handle multi-level progression
+			if (milestones) {
+				const currentLevel = explorer.level || 0;
+				const nextMilestoneIndex = currentLevel; // if level 0, next is index 0 (5), if level 1, next is index 1 (10)
+				const nextMilestone = milestones[nextMilestoneIndex];
+
+				if (nextMilestone && progress >= nextMilestone) {
+					setTimeout(() => unlockAchievement('explorer', currentLevel + 1), 0);
+				}
+			} else if (progress >= maxProgress && !explorer.unlocked) {
 				setTimeout(() => unlockAchievement('explorer'), 0);
-				// Don't set unlocked: true here, let unlockAchievement handle it to trigger toast
 			}
 
 			return {
@@ -227,6 +318,7 @@ export function trackPageVisit(path: string, allPages: string[]) {
 					...explorer,
 					progress,
 					maxProgress,
+					milestones,
 					metadata: { ...explorer.metadata, visitedPages: newVisitedPages }
 				}
 			};
@@ -242,12 +334,13 @@ export function unlockAllAchievements() {
 		const updated = { ...state };
 
 		Object.keys(updated).forEach((id) => {
-			if (!updated[id].unlocked) {
+			if (!updated[id].unlocked || (updated[id].maxLevel && updated[id].level !== updated[id].maxLevel)) {
 				updated[id] = {
 					...updated[id],
 					unlocked: true,
-					unlockedAt: Date.now(),
-					progress: updated[id].maxProgress || 1
+					unlockedAt: updated[id].unlockedAt || Date.now(),
+					progress: updated[id].maxProgress || 1,
+					level: updated[id].maxLevel || undefined
 				};
 			}
 		});
