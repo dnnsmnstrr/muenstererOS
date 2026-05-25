@@ -24,7 +24,12 @@
 </script>
 
 <Card.Root data-playlist-card class="group relative {isHighlighted ? 'ring-2 ring-primary' : ''}">
-	<a href={playlist.url || SPOTIFY_PLAYLIST_LINK + playlist.uri} target="_blank" class="h-full">
+	<a
+		href={playlist.url || SPOTIFY_PLAYLIST_LINK + playlist.uri}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="h-full"
+	>
 		<Card.Content class="h-full pt-6">
 			{#if !compact}
 				{#if playlist.gif}

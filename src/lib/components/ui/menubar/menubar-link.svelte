@@ -21,7 +21,7 @@
 	} = $props();
 </script>
 
-<a href={href || '/' + name.toLowerCase()} {target}>
+<a href={href || '/' + name.toLowerCase()} {target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>
 	<MenubarPrimitive.Item
 		bind:ref
 		class={cn(

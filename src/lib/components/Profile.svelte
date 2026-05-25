@@ -32,7 +32,9 @@
 				<Typewriter mode="loopRandom" interval={100} delay={0} cursor={false}>
 					{#each descriptions as description}
 						{#if typeof description === 'object'}
-							<a href={description.href} target="_blank">{description.name}</a>
+							<a href={description.href} target="_blank" rel="noopener noreferrer"
+								>{description.name}</a
+							>
 						{:else}
 							<span>{description}</span>
 						{/if}

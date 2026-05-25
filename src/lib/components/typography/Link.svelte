@@ -26,6 +26,7 @@
 <a
   {href}
   {target}
+  rel={target === '_blank' ? (rest.rel || 'noopener noreferrer') : rest.rel}
   {...rest}
   class={cn("font-medium text-primary underline underline-offset-4 inline-flex items-center gap-1 transition-opacity hover:opacity-80", rest.class)}
 >

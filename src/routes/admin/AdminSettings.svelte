@@ -129,6 +129,7 @@
 						<a
 							href="https://github.com/settings/tokens/new?scopes=gist"
 							target="_blank"
+							rel="noopener noreferrer"
 							class="underline hover:text-foreground"
 						>
 							{i18n.t('admin.settings.create_link')}

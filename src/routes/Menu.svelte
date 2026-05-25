@@ -63,7 +63,7 @@
 		<Menubar.Content>
 			<Menubar.Item>
 				{#snippet child({ props })}
-					<a href="/about" target="_blank" {...props}
+					<a href="/about" target="_blank" rel="noopener noreferrer" {...props}
 						>{i18n.t('common.new_window')} <Menubar.Shortcut>⌘N</Menubar.Shortcut></a
 					>
 				{/snippet}
