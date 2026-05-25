@@ -701,9 +701,15 @@
 		"reset": "Reset Achievements",
 		"reset_confirm": "Are you sure you want to reset all achievements?",
 		"reset_success": "Achievements have been reset.",
+		"level": "Level",
+		"level_up_title": "{title} - Level {level}",
+		"level_up_message": "You've reached level {level}!",
 		"explorer": {
 			"title": "Explorer",
-			"description": "Visit every page listed in the sitemap.",
+			"description": "Visit pages listed in the sitemap to level up.",
+			"level_1": "Visit 5 pages.",
+			"level_2": "Visit 15 pages.",
+			"level_3": "Visit all pages.",
 			"missing_hint": "Missing pages:"
 		},
 		"cheatcode": {
@@ -727,6 +733,10 @@
 		"haxor": {
 			"title": "1337 H4X0R",
 			"description": "Explore the terminal."
+		},
+		"theme-master": {
+			"title": "Theme Master",
+			"description": "Customize your theme."
 		}
 	}
 }

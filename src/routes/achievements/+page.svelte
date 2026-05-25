@@ -8,9 +8,11 @@
 	import Gamepad from '$lib/components/icons/gamepad.svelte';
 	import ShipWheel from '$lib/components/icons/ship-wheel.svelte';
 	import ListChecks from '$lib/components/icons/list-checks.svelte';
+	import { MapPinned, Signpost } from 'lucide-svelte';
 	import CalendarDays from '$lib/components/icons/calendar-days.svelte';
 	import Terminal from '$lib/components/icons/terminal.svelte';
 	import PartyPopper from '$lib/components/icons/party-popper.svelte';
+	import Palette from 'lucide-svelte/icons/palette';
 	import { cn } from '$lib/utils/utils';
 	import { formatDate } from '$lib/utils/helper';
 	import { Check, CircleHelp, Lock, RotateCcw, Zap } from 'lucide-svelte';
@@ -20,21 +22,43 @@
 	import { goto } from '$app/navigation';
 
 	const achievementIcons = {
-		explorer: ListChecks,
+		explorer: [ListChecks, MapPinned, Signpost],
 		cheatcode: Gamepad,
 		'lucky-spin': ShipWheel,
 		streak: CalendarDays,
 		onboarding: PartyPopper,
-		haxor: Terminal
+		haxor: Terminal,
+		'theme-master': Palette
 	};
 
 	let achievementList = $derived(
-		Object.values($achievements).map((a) => ({
-			...a,
-			title: i18n.t(`achievements.${a.id}.title`),
-			description: i18n.t(`achievements.${a.id}.description`),
-			icon: achievementIcons[a.id as keyof typeof achievementIcons] || PartyPopper
-		}))
+		Object.values($achievements).map((a) => {
+			const title = i18n.t(`achievements.${a.id}.title`);
+			const level = a.level || 0;
+			let description = i18n.t(`achievements.${a.id}.description`);
+
+			// If achievement has levels, show the next level's requirement in description
+			if (a.maxLevel) {
+				const nextLevel = Math.min(level + 1, a.maxLevel);
+				const levelDesc = i18n.t(`achievements.${a.id}.level_${nextLevel}`);
+				if (levelDesc !== `achievements.${a.id}.level_${nextLevel}`) {
+					description = levelDesc;
+				}
+			}
+
+			const levelSuffix = a.level ? ` (Lv. ${a.level})` : '';
+			const iconData = achievementIcons[a.id as keyof typeof achievementIcons] || PartyPopper;
+			const icon = Array.isArray(iconData)
+				? iconData[Math.max(0, Math.min(level - 1, iconData.length - 1))]
+				: iconData;
+
+			return {
+				...a,
+				title: `${title}${levelSuffix}`,
+				description,
+				icon
+			};
+		})
 	);
 
 	let unlockedCount = $derived(achievementList.filter((a) => a.unlocked).length);
@@ -46,7 +70,7 @@
 
 	let missingPages = $derived.by(() => {
 		const explorer = $achievements.explorer;
-		if (!explorer || explorer.unlocked) return [];
+		if (!explorer || (explorer.unlocked && explorer.level === explorer.maxLevel)) return [];
 		const visitedPages = explorer.metadata?.visitedPages || [];
 		return pages
 			.filter((p) => p.path !== '/admin')
@@ -111,10 +135,18 @@
 						>
 							{#if achievement.unlocked && achievement.metadata?.link}
 								<a href={achievement.metadata?.link}>
-									<achievement.icon size={32} animate={hoveredId === achievement.id} />
+										{#if typeof achievement.icon === 'function'}
+											<achievement.icon size={32} animate={hoveredId === achievement.id} />
+										{:else}
+											<achievement.icon size={32} />
+										{/if}
 								</a>
 							{:else if achievement.unlocked}
-								<achievement.icon size={32} animate={hoveredId === achievement.id} />
+									{#if typeof achievement.icon === 'function'}
+										<achievement.icon size={32} animate={hoveredId === achievement.id} />
+									{:else}
+										<achievement.icon size={32} />
+									{/if}
 							{:else}
 								<Lock size={32} />
 							{/if}
@@ -147,10 +179,22 @@
 									)}%</span
 								>
 							</div>
-							<Progress
-								value={((achievement.progress || 0) / achievement.maxProgress) * 100}
-								class="h-1.5"
-							/>
+							<div class="relative">
+								<Progress
+									value={((achievement.progress || 0) / achievement.maxProgress) * 100}
+									class="h-1.5"
+								/>
+								{#if achievement.milestones}
+									{#each achievement.milestones as milestone, i}
+										{#if milestone < achievement.maxProgress}
+											<div
+												class="absolute top-0 h-full w-0.5 bg-background/50"
+												style="left: {(milestone / achievement.maxProgress) * 100}%"
+											></div>
+										{/if}
+									{/each}
+								{/if}
+							</div>
 						</div>
 					{/if}
 				</Card.Content>

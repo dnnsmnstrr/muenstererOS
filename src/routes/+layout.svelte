@@ -63,7 +63,11 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
-	import { trackPageVisit, trackDailyVisit } from '$lib/stores/achievements';
+	import {
+		trackPageVisit,
+		trackDailyVisit,
+		trackCustomization
+	} from '$lib/stores/achievements';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -214,6 +218,13 @@
 			debugLog('Theme was set to ' + $mode);
 			resetColors();
 			// handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
+		}
+		if (
+			$backgroundTexture !== 'dots' ||
+			$backgroundSize !== 1 ||
+			$backgroundSpacing !== 16
+		) {
+			trackCustomization();
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
 		if ($isCommandActive) {
