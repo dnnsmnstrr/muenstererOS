@@ -10,6 +10,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX, USERNAME_SHORT } from '$lib/config';
 	import { toast } from 'svelte-sonner';
+	import { isAppleDevice } from '$lib/utils/browser';
 	import snippetsData from '../../data/snippets.json';
 
 	interface Snippet {
@@ -23,6 +24,7 @@
 	let selectedCategory = $state('All');
 	let selectedSnippetNames = $state<string[]>([]);
 	let copiedId = $state<string | null>(null);
+	let isBeta = $state(false);
 
 	const categories = ['All', ...new Set(snippetsData.map((s) => s.category).filter(Boolean))];
 
@@ -70,9 +72,15 @@
 		// Note: The actual deep link for importing snippets is raycast://extensions/raycast/snippets/import-snippets
 		// with the JSON data passed in the 'arguments' parameter as a URL-encoded JSON string.
 		// The 'snippets' argument expects a stringified JSON array.
-		const url = `raycast://extensions/raycast/snippets/import-snippets?arguments=${encodeURIComponent(
-			JSON.stringify({ snippets: JSON.stringify(raycastData) })
-		)}`;
+		const context = encodeURIComponent(JSON.stringify(raycastData));
+		const queryString = raycastData
+			.map((snippet) => {
+				const { name, text } = snippet;
+				const keyword = snippet.keyword;
+				return `snippet=${encodeURIComponent(JSON.stringify({ name, text, keyword, type: 'template' }))}`;
+			})
+			.join('&');
+		const url = `raycast${isBeta ? '-x' : ''}://${isAppleDevice() ? 'snippets/import' : 'extensions/raycast/snippets/import-snippets'}?${isAppleDevice() ? queryString : 'arguments=' + encodeURIComponent(JSON.stringify(context))}`;
 		window.location.href = url;
 	}
 
@@ -86,7 +94,10 @@
 			.replace(/'/g, '&#039;');
 
 		// Highlight placeholders like {date}, {time}, {cursor}, etc.
-		return escaped.replace(/\{[^{}]+\}/g, (match) => `<span class="text-primary font-bold">${match}</span>`);
+		return escaped.replace(
+			/\{[^{}]+\}/g,
+			(match) => `<span class="text-primary font-bold">${match}</span>`
+		);
 	}
 
 	const title = $derived(i18n.t('snippets.title'));
@@ -103,13 +114,11 @@
 		<div class="flex items-center gap-2">
 			<Button
 				variant="outline"
-				href={`https://raycast.com/?via=${USERNAME_SHORT}`}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="hidden sm:flex items-center gap-2"
+				class="hidden items-center gap-2 sm:flex"
+				onclick={() => (isBeta = !isBeta)}
 			>
 				<img src={Raycast} alt="Raycast" class="h-4 w-4" />
-				<span>{i18n.t('hotkeys.try_raycast')}</span>
+				<span>{isBeta ? 'v2' : 'v1'}</span>
 			</Button>
 			<Button
 				variant="default"
