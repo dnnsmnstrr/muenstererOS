@@ -27,6 +27,7 @@
 		"slashes": "Slashes",
 		"timeline": "Timeline",
 		"hotkeys": "Hotkeys",
+		"snippets": "Snippets",
 		"redirects": "Redirects",
 		"terminal": "Terminal",
 		"concerts": "Concerts",
@@ -511,6 +512,17 @@
 		"invalid_password": "Invalid password. Please try again.",
 		"stickers_label": "Stickers",
 		"clear_canvas": "Clear Canvas"
+	},
+	"snippets": {
+		"title": "Snippets",
+		"heading": "Raycast Snippets",
+		"meta_description": "A collection of my Raycast snippets to boost productivity.",
+		"search_placeholder": "Search snippets by name, keyword or content...",
+		"filter_category": "Filter by category",
+		"import_all": "Add all to Raycast",
+		"import_selected": "Add {count} to Raycast",
+		"no_results": "No snippets found.",
+		"copied": "Copied to clipboard"
 	},
 	"hotkeys": {
 		"title": "Hotkeys",

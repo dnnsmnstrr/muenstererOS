@@ -1,0 +1,62 @@
+[
+	{
+		"name": "Command",
+		"text": "⌘",
+		"keyword": "!cmd",
+		"category": "Symbols"
+	},
+	{
+		"name": "Option",
+		"text": "⌥",
+		"keyword": "!opt",
+		"category": "Symbols"
+	},
+	{
+		"name": "Control",
+		"text": "⌃",
+		"keyword": "!ctrl",
+		"category": "Symbols"
+	},
+	{
+		"name": "Shift",
+		"text": "⇧",
+		"keyword": "!shift",
+		"category": "Symbols"
+	},
+	{
+		"name": "Shrug",
+		"text": "¯\\_(ツ)_/¯",
+		"keyword": "!shrug",
+		"category": "Unicode"
+	},
+	{
+		"name": "Current Date",
+		"text": "{date}",
+		"keyword": "!date",
+		"category": "Date & Time"
+	},
+	{
+		"name": "Current Time",
+		"text": "{time}",
+		"keyword": "!time",
+		"category": "Date & Time"
+	},
+	{
+		"name": "Console Log",
+		"text": "console.log({cursor})",
+		"keyword": "!log",
+		"category": "Coding"
+	},
+	{
+		"name": "Svelte: If Block",
+		"text": "{#if {cursor}}\n\n{/if}",
+		"keyword": "!sif",
+		"category": "Coding"
+	},
+	{
+		"name": "GitHub Note",
+		"text": "> [!NOTE]\n> {cursor}",
+		"keyword": "!gnote",
+		"category": "GitHub"
+	}
+]
