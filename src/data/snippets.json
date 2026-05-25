@@ -5,17 +5,16 @@
 		"keyword": "!."
 	},
 	{
-		"name": "Main Email",
-		"text": "dennismuensterer@gmail.com",
-		"keyword": "!@",
-		"type": "Communication"
-	},
-	{
-		"name": "Dennis Muensterer",
+		"name": "Full Name",
 		"text": "Dennis Muensterer",
 		"keyword": "!dm"
 	},
-
+	{
+		"name": "Main Email",
+		"text": "dennismuensterer@gmail.com",
+		"keyword": "!@",
+		"category": "Communication"
+	},
 	{
 		"name": "Console Log",
 		"text": "console.log({cursor})",
@@ -34,7 +33,7 @@
 		"name": "Liebe Grüße",
 		"text": "Liebe Grüße\nDennis",
 		"keyword": "!lg",
-		"type": "Communication",
+		"category": "Communication",
 		"description": "How I end most of my emails"
 	},
 	{
@@ -78,16 +77,17 @@
 		"category": "Coding"
 	},
 	{
-		"name": "Markdown Details",
-		"text": "<details>\n<summary>Title</summary>\n{cursor}\n</details>",
-		"keyword": "!mdd",
-		"category": "Coding"
-	},
-	{
 		"name": "Markdown Table",
 		"text": "| {cursor} |  |\n| ------- | ------- |\n|  |  |\n  ",
 		"keyword": "!mdt",
 		"category": "Coding"
+	},
+	{
+		"name": "Markdown Details",
+		"text": "<details>\n<summary>Title</summary>\n{cursor}\n</details>",
+		"keyword": "!mdd",
+		"category": "Coding",
+		"description": "A collapsible details block"
 	},
 	{
 		"name": "Shrug",
