@@ -52,10 +52,9 @@
 		<link rel="me" href="https://github.com/dnnsmnstrr" />
 		<link rel="me" href="https://x.com/dnnsmnstrr" />
 		<link rel="me" href="mailto:dennismuensterer@gmail.com" />
-		
-		<script src="https://cdn.counter.dev/script.js" data-id="927a0db3-f507-4739-8fda-5a4b88d1b2e4" data-utcoffset="1"></script>
+
 		<script>
-			if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.host.includes('test')) {
+			if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.host.includes('test') && !window.location.host.includes('vercel')) {
 				const script = document.createElement('script');
 				script.dataset.goatcounter = "https://dnnsmnstrr.goatcounter.com/count";
 				script.async = true;
@@ -71,7 +70,7 @@
 			navigator.serviceWorker.register('service-worker.js');
 		}
 	</script>
-	
+
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<a style="display: none;" href="https://muensterer.tech/" class="h-card" rel="me">Dennis Muensterer</a>
