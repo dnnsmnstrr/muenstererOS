@@ -34,7 +34,7 @@ function getInitialAchievements(): Record<string, Achievement> {
 			maxProgress: 23, // Default based on current sitemap, will be updated dynamically
 			level: 0,
 			maxLevel: 3,
-			milestones: [5, 10, 23],
+			milestones: [5, 15, 23],
 			metadata: { visitedPages: [], link: '/sitemap' }
 		},
 		streak: {
@@ -65,9 +65,7 @@ function getInitialAchievements(): Record<string, Achievement> {
 		'theme-master': {
 			id: 'theme-master',
 			unlocked: false,
-			progress: 0,
-			maxProgress: 5,
-			metadata: { usedThemes: [], link: '/settings' }
+			metadata: { link: '/settings' }
 		}
 	};
 }
@@ -253,32 +251,9 @@ export function updateAchievementProgress(id: string, progress: number, maxProgr
 	});
 }
 
-export function trackThemeChange(themeName: string) {
-	achievements.update((state) => {
-		const themeMaster = state['theme-master'];
-		if (!themeMaster || themeMaster.unlocked) return state;
 
-		const usedThemes = themeMaster.metadata?.usedThemes || [];
-		if (!usedThemes.includes(themeName)) {
-			const newUsedThemes = [...usedThemes, themeName];
-			const progress = newUsedThemes.length;
-			const maxProgress = themeMaster.maxProgress || 5;
-
-			if (progress >= maxProgress) {
-				setTimeout(() => unlockAchievement('theme-master'), 0);
-			}
-
-			return {
-				...state,
-				'theme-master': {
-					...themeMaster,
-					progress,
-					metadata: { ...themeMaster.metadata, usedThemes: newUsedThemes }
-				}
-			};
-		}
-		return state;
-	});
+export function trackCustomization() {
+	unlockAchievement('theme-master');
 }
 
 export function trackPageVisit(path: string, allPages: string[]) {

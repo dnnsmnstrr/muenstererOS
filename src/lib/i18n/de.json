@@ -709,7 +709,7 @@
 			"title": "Entdecker",
 			"description": "Besuche Seiten in der Sitemap, um im Level aufzusteigen.",
 			"level_1": "Besuche 5 Seiten.",
-			"level_2": "Besuche 10 Seiten.",
+			"level_2": "Besuche 15 Seiten.",
 			"level_3": "Besuche alle Seiten.",
 			"missing_hint": "Fehlende Seiten:"
 		},
@@ -737,7 +737,7 @@
 		},
 		"theme-master": {
 			"title": "Theme Master",
-			"description": "Probiere 5 verschiedene Designs aus."
+			"description": "Passe dein Design an."
 		}
 	}
 }
