@@ -702,9 +702,15 @@
 		"reset": "Achievements zurücksetzen",
 		"reset_confirm": "Bist du sicher, dass du alle Achievements zurücksetzen möchtest?",
 		"reset_success": "Achievements wurden zurückgesetzt.",
+		"level": "Level",
+		"level_up_title": "{title} - Level {level}",
+		"level_up_message": "Du hast Level {level} erreicht!",
 		"explorer": {
 			"title": "Entdecker",
-			"description": "Besuche jede Seite, die in der Sitemap aufgeführt ist.",
+			"description": "Besuche Seiten in der Sitemap, um im Level aufzusteigen.",
+			"level_1": "Besuche 5 Seiten.",
+			"level_2": "Besuche 15 Seiten.",
+			"level_3": "Besuche alle Seiten.",
 			"missing_hint": "Fehlende Seiten:"
 		},
 		"cheatcode": {
@@ -728,6 +734,10 @@
 		"haxor": {
 			"title": "1337 H4X0R",
 			"description": "Untersuche das Terminal."
+		},
+		"theme-master": {
+			"title": "Theme Master",
+			"description": "Passe dein Design an."
 		}
 	}
 }

@@ -21,6 +21,7 @@
 		className
 	)}
 	{href}
+	rel={rest.target === '_blank' ? (rest.rel || 'noopener noreferrer') : rest.rel}
 	{...rest}
 >
 	{@render children?.()}
