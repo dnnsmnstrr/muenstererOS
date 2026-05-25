@@ -21,7 +21,7 @@
 
 	let searchQuery = $state('');
 	let selectedCategory = $state('All');
-	let selectedSnippets = $state<Snippet[]>([]);
+	let selectedSnippetNames = $state<string[]>([]);
 	let copiedId = $state<string | null>(null);
 
 	const categories = ['All', ...new Set(snippetsData.map((s) => s.category).filter(Boolean))];
@@ -37,11 +37,15 @@
 		})
 	);
 
+	const selectedSnippets = $derived(
+		snippetsData.filter((s) => selectedSnippetNames.includes(s.name))
+	);
+
 	function toggleSelection(snippet: Snippet) {
-		if (selectedSnippets.includes(snippet)) {
-			selectedSnippets = selectedSnippets.filter((s) => s !== snippet);
+		if (selectedSnippetNames.includes(snippet.name)) {
+			selectedSnippetNames = selectedSnippetNames.filter((name) => name !== snippet.name);
 		} else {
-			selectedSnippets = [...selectedSnippets, snippet];
+			selectedSnippetNames = [...selectedSnippetNames, snippet.name];
 		}
 	}
 
@@ -115,8 +119,8 @@
 			>
 				<Download class="h-4 w-4" />
 				<span>
-					{selectedSnippets.length > 0
-						? i18n.t('snippets.import_selected', { count: selectedSnippets.length.toString() })
+					{selectedSnippetNames.length > 0
+						? i18n.t('snippets.import_selected', { count: selectedSnippetNames.length.toString() })
 						: i18n.t('snippets.import_all')}
 				</span>
 			</Button>
@@ -156,8 +160,8 @@
 			<div
 				role="button"
 				tabindex="0"
-				class="group relative flex cursor-pointer flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:ring-2 hover:ring-primary/50 {selectedSnippets.includes(
-					snippet
+				class="group relative flex cursor-pointer flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:ring-2 hover:ring-primary/50 {selectedSnippetNames.includes(
+					snippet.name
 				)
 					? 'ring-2 ring-primary'
 					: ''}"
