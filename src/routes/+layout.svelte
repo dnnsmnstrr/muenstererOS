@@ -216,6 +216,23 @@
 			// handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
+		if ($isCommandActive) {
+			document.body.classList.add(
+				'overflow-hidden',
+				'touch-none',
+				'sm:touch-auto',
+				'fixed',
+				'w-full'
+			);
+		} else {
+			document.body.classList.remove(
+				'overflow-hidden',
+				'touch-none',
+				'sm:touch-auto',
+				'fixed',
+				'w-full'
+			);
+		}
 	});
 
 	let isLightMode = $derived($mode === 'light');
@@ -307,7 +324,7 @@
 	<CrashScreensaver />
 {/if}
 
-<div class="flex h-screen w-full flex-grow flex-col">
+<div class="flex h-dvh w-full flex-grow flex-col">
 	<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
 		<div class="sticky top-0 h-full w-full">
 			<Header pages={bookmarks} />
@@ -316,7 +333,7 @@
 
 	<main
 		class={cn(
-			`inset-0 h-max max-h-screen w-full flex-grow overflow-y-auto ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
+			`inset-0 h-max max-h-screen w-full flex-grow ${$isCommandActive ? 'overflow-hidden' : 'overflow-y-auto'} ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
 			`theme-${$theme}`
 		)}
 		style={bgStyle}
