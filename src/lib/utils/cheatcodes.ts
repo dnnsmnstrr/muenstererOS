@@ -11,7 +11,7 @@ export interface CheatCode {
 
 export const CHEAT_CODES: CheatCode[] = [
 	{
-		id: 'konami', // https://en.wikipedia.org/wiki/Konami_Code
+		id: 'cheatcode', // https://en.wikipedia.org/wiki/Konami_Code
 		sequence: [
 			'ArrowUp',
 			'ArrowUp',

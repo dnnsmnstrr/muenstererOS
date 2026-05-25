@@ -273,7 +273,11 @@
 							? i18n.t('playlists.seasons.' + seasonPlaylist.season)
 							: seasonPlaylist.title}
 					>
-						<a href={SPOTIFY_PLAYLIST_LINK + seasonPlaylist.uri} target="_blank">
+						<a
+							href={SPOTIFY_PLAYLIST_LINK + seasonPlaylist.uri}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<Card.Content class="flex items-center justify-center gap-4 p-4">
 								{seasonPlaylist.emoji}
 								<h2 class="hidden py-2 text-xl font-semibold md:block">
@@ -301,7 +305,11 @@
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-4">
 				{#each otherPlaylists as otherPlaylist}
 					<Card.Root class="min-h-[120px]">
-						<a href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri} target="_blank">
+						<a
+							href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<Card.Content class="flex items-start justify-between gap-2 pt-6">
 								<div>
 									<h2 class="pb-2 text-xl font-semibold">
