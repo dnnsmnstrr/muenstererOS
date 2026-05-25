@@ -708,6 +708,7 @@
 	"achievements": {
 		"subtitle": "You have unlocked {count} out of {total} achievements.",
 		"overall_progress": "Overall Progress",
+		"completed": "Completed",
 		"locked": "Locked",
 		"view_all": "View All",
 		"reset": "Reset Achievements",

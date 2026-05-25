@@ -8,7 +8,7 @@
 	import Gamepad from '$lib/components/icons/gamepad.svelte';
 	import ShipWheel from '$lib/components/icons/ship-wheel.svelte';
 	import ListChecks from '$lib/components/icons/list-checks.svelte';
-	import { MapPinned, Signpost } from 'lucide-svelte';
+	import { CircleQuestionMark, MapPinned, Signpost } from 'lucide-svelte';
 	import CalendarDays from '$lib/components/icons/calendar-days.svelte';
 	import Terminal from '$lib/components/icons/terminal.svelte';
 	import PartyPopper from '$lib/components/icons/party-popper.svelte';
@@ -46,7 +46,7 @@
 				}
 			}
 
-			const levelSuffix = a.level ? ` (Lv. ${a.level})` : '';
+			const levelSuffix = a.level && a.maxLevel && level <= a.maxLevel ? ` (Lv. ${a.level})` : '';
 			const iconData = achievementIcons[a.id as keyof typeof achievementIcons] || PartyPopper;
 			const icon = Array.isArray(iconData)
 				? iconData[Math.max(0, Math.min(level - 1, iconData.length - 1))]
@@ -70,16 +70,23 @@
 
 	let missingPages = $derived.by(() => {
 		const explorer = $achievements.explorer;
-		if (!explorer || (explorer.unlocked && explorer.level === explorer.maxLevel)) return [];
+		if (
+			!explorer ||
+			(explorer.unlocked &&
+				explorer.level &&
+				explorer.maxLevel &&
+				explorer.level > explorer.maxLevel)
+		)
+			return [];
 		const visitedPages = explorer.metadata?.visitedPages || [];
-		return pages
+		const filteredPages = pages
 			.filter((p) => p.path !== '/admin')
-			.filter((p) => !visitedPages.includes(p.path))
-			.map((p) => {
-				const slug = p.path === '/' ? 'home' : p.path.split('/').pop() || 'home';
-				const translated = i18n.t(`common.${slug}`);
-				return translated !== `common.${slug}` ? translated : p.title;
-			});
+			.filter((p) => !visitedPages.includes(p.path));
+		return filteredPages.map((p) => {
+			const slug = p.path === '/' ? 'home' : p.path.split('/').pop() || 'home';
+			const translated = i18n.t(`common.${slug}`);
+			return translated !== `common.${slug}` ? translated : p.title;
+		});
 	});
 </script>
 
@@ -135,18 +142,18 @@
 						>
 							{#if achievement.unlocked && achievement.metadata?.link}
 								<a href={achievement.metadata?.link}>
-										{#if typeof achievement.icon === 'function'}
-											<achievement.icon size={32} animate={hoveredId === achievement.id} />
-										{:else}
-											<achievement.icon size={32} />
-										{/if}
-								</a>
-							{:else if achievement.unlocked}
 									{#if typeof achievement.icon === 'function'}
 										<achievement.icon size={32} animate={hoveredId === achievement.id} />
 									{:else}
 										<achievement.icon size={32} />
 									{/if}
+								</a>
+							{:else if achievement.unlocked}
+								{#if typeof achievement.icon === 'function'}
+									<achievement.icon size={32} animate={hoveredId === achievement.id} />
+								{:else}
+									<achievement.icon size={32} />
+								{/if}
 							{:else}
 								<Lock size={32} />
 							{/if}
@@ -163,8 +170,32 @@
 							{achievement.title}
 						</div>
 					</Card.Title>
-					<Card.Description class="min-h-10">
+					<Card.Description class="flex min-h-10 items-center gap-2">
 						{achievement.description}
+						{#if achievement.id === 'explorer' && missingPages.length > 0 && missingPages.length <= 5}
+							<Tooltip.Root bind:open={explorerTooltipOpen} delayDuration={0}>
+								<Tooltip.Trigger
+									class="pointer-events-auto"
+									onclick={(e) => {
+										e.stopPropagation();
+										explorerTooltipOpen = !explorerTooltipOpen;
+									}}
+								>
+									<CircleQuestionMark
+										size={20}
+										class="text-muted-foreground hover:text-foreground"
+									/>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p class="mb-1 font-bold">{i18n.t('achievements.explorer.missing_hint')}</p>
+									<ul class="list-inside list-disc">
+										{#each missingPages as page}
+											<li>{page}</li>
+										{/each}
+									</ul>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						{/if}
 					</Card.Description>
 				</Card.Header>
 
@@ -217,27 +248,6 @@
 							>
 								{i18n.t('achievements.locked')}
 							</span>
-						{/if}
-						{#if achievement.id === 'explorer' && missingPages.length > 0 && missingPages.length <= 5}
-							<Tooltip.Root bind:open={explorerTooltipOpen} delayDuration={0}>
-								<Tooltip.Trigger
-									class="pointer-events-auto"
-									onclick={(e) => {
-										e.stopPropagation();
-										explorerTooltipOpen = !explorerTooltipOpen;
-									}}
-								>
-									<CircleHelp size={20} class="text-muted-foreground hover:text-foreground" />
-								</Tooltip.Trigger>
-								<Tooltip.Content>
-									<p class="mb-1 font-bold">{i18n.t('achievements.explorer.missing_hint')}</p>
-									<ul class="list-inside list-disc">
-										{#each missingPages as page}
-											<li>{page}</li>
-										{/each}
-									</ul>
-								</Tooltip.Content>
-							</Tooltip.Root>
 						{/if}
 					</div>
 				{/if}

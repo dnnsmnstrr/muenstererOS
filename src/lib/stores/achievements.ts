@@ -32,7 +32,7 @@ function getInitialAchievements(): Record<string, Achievement> {
 			unlocked: false,
 			progress: 0,
 			maxProgress: 23, // Default based on current sitemap, will be updated dynamically
-			level: 0,
+			level: 1,
 			maxLevel: 3,
 			milestones: [5, 15, 23],
 			metadata: { visitedPages: [], link: '/sitemap' }
@@ -112,10 +112,16 @@ export function unlockAchievement(id: string, level?: number) {
 			toast.success(
 				i18n.t('achievements.level_up_title', {
 					title: i18n.t(`achievements.${id}.title`),
-					level: level.toString()
+					level:
+						achievement.maxLevel && level <= achievement.maxLevel
+							? level.toString()
+							: achievement.level?.toString()
 				}),
 				{
-					description: i18n.t('achievements.level_up_message', { level: level.toString() }),
+					description:
+						achievement.maxLevel && level > achievement.maxLevel
+							? i18n.t('achievements.completed')
+							: i18n.t('achievements.level_up_message', { level: level.toString() }),
 					action: {
 						label: i18n.t('achievements.view_all'),
 						onClick: () => goto('/achievements')
@@ -251,7 +257,6 @@ export function updateAchievementProgress(id: string, progress: number, maxProgr
 	});
 }
 
-
 export function trackCustomization() {
 	unlockAchievement('theme-master');
 }
@@ -277,14 +282,14 @@ export function trackPageVisit(path: string, allPages: string[]) {
 			// Handle multi-level progression
 			if (milestones) {
 				const currentLevel = explorer.level || 0;
-				const nextMilestoneIndex = currentLevel; // if level 0, next is index 0 (5), if level 1, next is index 1 (10)
+				const nextMilestoneIndex = currentLevel - 1; // if level 1, next is index 0 (5), if level 2, next is index 1 (10)
 				const nextMilestone = milestones[nextMilestoneIndex];
 
 				if (nextMilestone && progress >= nextMilestone) {
-					setTimeout(() => unlockAchievement('explorer', currentLevel + 1), 0);
+					setTimeout(() => unlockAchievement('explorer', currentLevel + 1), 100);
 				}
 			} else if (progress >= maxProgress && !explorer.unlocked) {
-				setTimeout(() => unlockAchievement('explorer'), 0);
+				setTimeout(() => unlockAchievement('explorer'), 100);
 			}
 
 			return {
@@ -309,7 +314,10 @@ export function unlockAllAchievements() {
 		const updated = { ...state };
 
 		Object.keys(updated).forEach((id) => {
-			if (!updated[id].unlocked || (updated[id].maxLevel && updated[id].level !== updated[id].maxLevel)) {
+			if (
+				!updated[id].unlocked ||
+				(updated[id].maxLevel && updated[id].level !== updated[id].maxLevel)
+			) {
 				updated[id] = {
 					...updated[id],
 					unlocked: true,

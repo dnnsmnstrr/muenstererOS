@@ -50,12 +50,8 @@
 		Gavel,
 		AtSign,
 		Ship,
-
 		Trophy,
-
 		Cog
-
-
 	} from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
@@ -63,11 +59,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
-	import {
-		trackPageVisit,
-		trackDailyVisit,
-		trackCustomization
-	} from '$lib/stores/achievements';
+	import { trackPageVisit, trackDailyVisit, trackCustomization } from '$lib/stores/achievements';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -198,9 +190,7 @@
 				trackDailyVisit();
 				const path = page.url.pathname;
 				// Extract all valid sitemap paths from the data
-				const allValidPaths = pages
-					.map((p) => p.path)
-					.filter((p) => p !== '/admin'); // Exclude admin paths
+				const allValidPaths = pages.map((p) => p.path).filter((p) => p !== '/admin'); // Exclude admin paths
 				trackPageVisit(path, allValidPaths);
 			}
 		}
@@ -219,12 +209,10 @@
 			resetColors();
 			// handleMouseMove({ clientX: innerWidth / 2, clientY: -100, timeout: 0 } as MouseEvent & { timeout: number })
 		}
-		if (
-			$backgroundTexture !== 'dots' ||
-			$backgroundSize !== 1 ||
-			$backgroundSpacing !== 16
-		) {
-			trackCustomization();
+		if ($backgroundTexture !== 'dots' || $backgroundSize !== 1 || $backgroundSpacing !== 16) {
+			setTimeout(() => {
+				trackCustomization();
+			}, 100);
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
 		if ($isCommandActive) {
@@ -280,7 +268,7 @@
 		{ name: 'Legal Notice', href: '/legal', icon: Gavel, hidden: true },
 		{ name: 'Contact', href: '/contact', icon: AtSign, hidden: true },
 		{ name: 'Onboarding', href: '/onboarding', icon: Ship, hidden: true },
-		{ name: 'Achievements', href: '/achievements', icon: Trophy, hidden: true },
+		{ name: 'Achievements', href: '/achievements', icon: Trophy, hidden: true }
 	];
 	const bookmarks: BookmarkItem[] = $derived(
 		bookmarksRaw.map((b) => ({

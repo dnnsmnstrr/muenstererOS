@@ -708,6 +708,7 @@
 	"achievements": {
 		"subtitle": "Du hast {count} von {total} Achievements freigeschaltet.",
 		"overall_progress": "Gesamtfortschritt",
+		"completed": "Abgeschlossen",
 		"locked": "Gesperrt",
 		"view_all": "Alle ansehen",
 		"reset": "Achievements zurücksetzen",
