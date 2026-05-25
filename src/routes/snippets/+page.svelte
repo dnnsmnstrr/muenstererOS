@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { Heading, Link, Kbd } from '$lib/components/typography';
+	import { Heading, Kbd } from '$lib/components/typography';
 	import * as Card from '$lib/components/ui/card';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
@@ -9,10 +8,11 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import Raycast from '$lib/components/icons/raycast.svg';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { PAGE_TITLE_SUFFIX, USERNAME_SHORT } from '$lib/config';
+	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { toast } from 'svelte-sonner';
 	import { isAppleDevice } from '$lib/utils/browser';
 	import snippetsData from '../../data/snippets.json';
+	import { mode } from 'mode-watcher';
 
 	interface Snippet {
 		name: string;
@@ -112,7 +112,14 @@
 
 <div class="container pb-20">
 	<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-		<Heading class="mb-0">{i18n.t('snippets.heading')}</Heading>
+		<Heading class="mb-0 flex items-center gap-2">
+			<img
+				src={`/images/snippets-${$mode === 'light' ? 'clearLight' : 'clearDark'}.png`}
+				alt="Raycast"
+				class="mt-1 h-14 w-14"
+			/>
+			<span>{i18n.t('snippets.heading')}</span>
+		</Heading>
 		<div class="flex items-center gap-2">
 			<Button
 				variant="outline"

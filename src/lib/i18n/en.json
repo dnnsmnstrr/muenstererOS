@@ -515,7 +515,7 @@
 	},
 	"snippets": {
 		"title": "Snippets",
-		"heading": "Raycast Snippets",
+		"heading": "Snippets",
 		"meta_description": "A collection of my Raycast snippets to boost productivity.",
 		"search_placeholder": "Search snippets by name, keyword or content...",
 		"filter_category": "Filter by category",

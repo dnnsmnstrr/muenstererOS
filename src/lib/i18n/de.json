@@ -137,7 +137,6 @@
 		"texture": "Hintergrundstruktur",
 		"texture_size": "Größe",
 		"texture_spacing": "Abstand",
-		"none": "Keine",
 		"dots": "Punkte",
 		"offset-dots": "Versetzte Punkte",
 		"grid": "Gitter",
@@ -516,7 +515,7 @@
 	},
 	"snippets": {
 		"title": "Snippets",
-		"heading": "Raycast Snippets",
+		"heading": "Snippets",
 		"meta_description": "Eine Sammlung meiner Raycast-Snippets zur Produktivitätssteigerung.",
 		"search_placeholder": "Snippets nach Name, Keyword oder Inhalt suchen...",
 		"filter_category": "Nach Kategorie filtern",
