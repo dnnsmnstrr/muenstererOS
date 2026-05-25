@@ -5,7 +5,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
 	import * as Select from '$lib/components/ui/select';
-	import { Search, Copy, Check, Download } from 'lucide-svelte';
+	import { Search, Copy, Check, Download, Info } from 'lucide-svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import Raycast from '$lib/components/icons/raycast.svg';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX, USERNAME_SHORT } from '$lib/config';
@@ -18,6 +19,7 @@
 		text: string;
 		keyword?: string;
 		category?: string;
+		description?: string;
 	}
 
 	let searchQuery = $state('');
@@ -179,13 +181,25 @@
 			>
 				<Card.Header class="pb-2">
 					<div class="flex items-start justify-between">
-						<Card.Title class="text-lg">{snippet.name}</Card.Title>
+						<Card.Title class="flex items-center gap-1.5 text-lg">
+							{snippet.name}
+							{#if snippet.description}
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										<Info class="h-3.5 w-3.5 text-muted-foreground" />
+									</Tooltip.Trigger>
+									<Tooltip.Content>
+										{snippet.description}
+									</Tooltip.Content>
+								</Tooltip.Root>
+							{/if}
+						</Card.Title>
 						{#if snippet.keyword}
 							<Kbd class="text-xs">{snippet.keyword}</Kbd>
 						{/if}
 					</div>
 					{#if snippet.category}
-						<Card.Description class="text-xs uppercase tracking-wider"
+						<Card.Description class="text-[10px] uppercase tracking-wider"
 							>{snippet.category}</Card.Description
 						>
 					{/if}

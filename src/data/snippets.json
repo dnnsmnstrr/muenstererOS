@@ -1,33 +1,105 @@
 [
 	{
-		"name": "Command",
-		"text": "⌘",
-		"keyword": "!cmd",
-		"category": "Symbols"
+		"name": "muenstererOS - website",
+		"text": "https://muensterer.tech",
+		"keyword": "!."
 	},
 	{
-		"name": "Option",
-		"text": "⌥",
-		"keyword": "!opt",
-		"category": "Symbols"
+		"name": "Main Email",
+		"text": "dennismuensterer@gmail.com",
+		"keyword": "!@",
+		"type": "Communication"
 	},
 	{
-		"name": "Control",
-		"text": "⌃",
-		"keyword": "!ctrl",
-		"category": "Symbols"
+		"name": "Dennis Muensterer",
+		"text": "Dennis Muensterer",
+		"keyword": "!dm"
+	},
+
+	{
+		"name": "Console Log",
+		"text": "console.log({cursor})",
+		"keyword": "!log",
+		"category": "Coding",
+		"description": "I've started using this over a VS Code snippet, because it works globally"
 	},
 	{
-		"name": "Shift",
-		"text": "⇧",
-		"keyword": "!shift",
-		"category": "Symbols"
+		"name": "Issue Reference",
+		"text": "(#{cursor})",
+		"keyword": "/.",
+		"category": "Coding",
+		"description": "Always reference issues when possible"
+	},
+	{
+		"name": "Liebe Grüße",
+		"text": "Liebe Grüße\nDennis",
+		"keyword": "!lg",
+		"type": "Communication",
+		"description": "How I end most of my emails"
+	},
+	{
+		"name": "div - HTML",
+		"text": "<div class=\"{cursor}\">\n\n</div>",
+		"keyword": "!div",
+		"category": "Coding"
+	},
+	{
+		"name": "span - HTML",
+		"text": "<span class=\"{cursor}\"></span>",
+		"keyword": "!span",
+		"category": "Coding"
+	},
+	{
+		"name": "JS Timeout",
+		"text": "setTimeout(() => {{cursor}}, {argument name=\"Delay\" default=\"1000\"})",
+		"category": "Coding"
+	},
+	{
+		"name": "Svelte Component",
+		"text": "<script lang=\"ts\">\n  {cursor}\n</script>\n\n",
+		"keyword": "!svc",
+		"category": "Coding"
+	},
+	{
+		"name": "Svelte: If Block",
+		"text": "{#if {cursor}}\n\n{/if}",
+		"keyword": "!sif",
+		"category": "Coding"
+	},
+	{
+		"name": "Svelte Effect Log",
+		"text": "$effect(() => {\n  console.log({cursor});\n});\n",
+		"category": "Coding"
+	},
+	{
+		"name": "Markdown Link",
+		"text": "[{cursor}]({clipboard})",
+		"keyword": "!mdl",
+		"category": "Coding"
+	},
+	{
+		"name": "Markdown Details",
+		"text": "<details>\n<summary>Title</summary>\n{cursor}\n</details>",
+		"keyword": "!mdd",
+		"category": "Coding"
+	},
+	{
+		"name": "Markdown Table",
+		"text": "| {cursor} |  |\n| ------- | ------- |\n|  |  |\n  ",
+		"keyword": "!mdt",
+		"category": "Coding"
 	},
 	{
 		"name": "Shrug",
 		"text": "¯\\_(ツ)_/¯",
 		"keyword": "!shrug",
-		"category": "Unicode"
+		"category": "Fun"
+	},
+	{
+		"name": "Table Flip",
+		"text": "(╯°□°)╯︵ ┻━┻",
+		"keyword": "!tf",
+		"category": "Fun"
 	},
 	{
 		"name": "Current Date",
@@ -42,21 +114,21 @@
 		"category": "Date & Time"
 	},
 	{
-		"name": "Console Log",
-		"text": "console.log({cursor})",
-		"keyword": "!log",
-		"category": "Coding"
+		"name": "ISO Date",
+		"text": "{date format=\"yyyy-MM-dd\"}",
+		"keyword": "!iso",
+		"category": "Date & Time"
 	},
 	{
-		"name": "Svelte: If Block",
-		"text": "{#if {cursor}}\n\n{/if}",
-		"keyword": "!sif",
-		"category": "Coding"
+		"name": "Datetime",
+		"text": "{date format=\"yyyy-MM-dd'T'HH:mm:ss\"}",
+		"keyword": "!dt",
+		"category": "Date & Time"
 	},
 	{
-		"name": "GitHub Note",
-		"text": "> [!NOTE]\n> {cursor}",
-		"keyword": "!gnote",
-		"category": "GitHub"
+		"name": "Week Number",
+		"text": "KW{date \"w\"}",
+		"keyword": "!kw",
+		"category": "Date & Time"
 	}
 ]
