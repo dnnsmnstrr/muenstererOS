@@ -78,6 +78,7 @@ export async function GET({ params, url, fetch }) {
 			items: paginated
 		});
 	} catch (err: any) {
-		throw error(404, `Data file not found for slug: ${slug}, Error: ${err.message}`);
+		console.error(`Error processing slug ${slug}:`, err);
+		throw error(404, `Data file not found for slug: ${slug}`);
 	}
 }
