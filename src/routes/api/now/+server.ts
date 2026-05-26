@@ -22,7 +22,8 @@ export async function GET() {
 		}));
 		// console.log(versions)
 		return json({ ...gistData, updatedAt, gistUrl: apiData.html_url, versions });
-	} catch (error) {
-		return json({ error }, { status: 500 });
+	} catch (err) {
+		console.error('Now data fetch error:', err);
+		return json({ error: 'Failed to fetch now data' }, { status: 500 });
 	}
 }

@@ -63,6 +63,7 @@ export async function GET({ params, url, request, fetch }) {
 
 		return json(responseData);
 	} catch (err: any) {
-		return json({ error: err.message || err }, { status: 500 });
+		console.error('Gist fetch error:', err);
+		return json({ error: 'Failed to fetch gist data' }, { status: 500 });
 	}
 }
