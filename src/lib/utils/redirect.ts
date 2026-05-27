@@ -43,11 +43,17 @@ export const getRedirectURL = (
 	let path = '';
 
 	// Robustly sanitize restPath to prevent path traversal and open redirects
-	// 1. Remove all occurrences of ../ (and variations like ..\ or encoded)
-	// 2. Ensure it doesn't start with / or \ to prevent protocol-relative redirects
-	const sanitizedRestPath = restPath
-		?.replace(/\.\.[/\\]/g, '') // Remove ../ and ..\
-		?.replace(/^[/\\]+/, ''); // Remove leading slashes
+	// 1. Recursively remove all occurrences of ../ (and variations like ..\ or encoded)
+	// 2. Recursively ensure it doesn't start with / or \ to prevent protocol-relative redirects
+	let sanitizedRestPath = restPath || '';
+	let previousPath: string;
+
+	do {
+		previousPath = sanitizedRestPath;
+		sanitizedRestPath = sanitizedRestPath
+			.replace(/\.\.[/\\]/g, '') // Remove ../ and ..\
+			.replace(/^[/\\]+/, ''); // Remove leading slashes
+	} while (sanitizedRestPath !== previousPath);
 
 	if (url) {
 		path = `${url}${path}${sanitizedRestPath ? `/${sanitizedRestPath}` : ''}`;
