@@ -110,5 +110,19 @@ describe('redirect utils', () => {
 			expect(result).not.toContain('..\\');
 			expect(result).toBe('https://test.com/evil.com');
 		});
+
+		it('should recursively sanitize restPath to prevent bypasses', () => {
+			const redirect: Redirect = { name: 'test', url: 'https://test.com' };
+			const restPath = '....//evil.com';
+			const result = getRedirectURL(redirect, { restPath });
+			expect(result).toBe('https://test.com/evil.com');
+		});
+
+		it('should handle nested traversal patterns', () => {
+			const redirect: Redirect = { name: 'test', url: 'https://test.com' };
+			const restPath = '..//../..\\/evil.com';
+			const result = getRedirectURL(redirect, { restPath });
+			expect(result).toBe('https://test.com/evil.com');
+		});
 	});
 });
