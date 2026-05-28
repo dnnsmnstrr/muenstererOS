@@ -1,4 +1,11 @@
 import { RESUME_GIST_ID } from '$lib/config';
+import { json } from '@sveltejs/kit';
+
+const corsHeaders = {
+	'Access-Control-Allow-Origin': '*',
+	'Access-Control-Allow-Methods': 'GET, OPTIONS',
+	'Access-Control-Allow-Headers': 'Content-Type'
+};
 
 export async function GET({ url }) {
 	const gistApiUrl = `https://api.github.com/gists/${RESUME_GIST_ID}`;
@@ -8,7 +15,7 @@ export async function GET({ url }) {
 		const response = await fetch(gistApiUrl);
 
 		if (!response.ok) {
-			throw new Error('Failed to fetch data from GitHub');
+			return json({ error: 'Failed to fetch resume data' }, { status: response.status, headers: corsHeaders });
 		}
 
 		const apiData = await response.json();
@@ -28,32 +35,15 @@ export async function GET({ url }) {
 			result = { ...result, versions };
 		}
 
-		return new Response(JSON.stringify(result), {
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*', // Allow all origins
-				'Access-Control-Allow-Methods': 'GET, OPTIONS', // Allowed methods
-				'Access-Control-Allow-Headers': 'Content-Type' // Allowed headers
-			}
-		});
+		return json(result, { headers: corsHeaders });
 	} catch (error) {
-		const message = error instanceof Error ? error.message : String(error);
-		return new Response(JSON.stringify({ error: message }), {
-			status: 500,
-			headers: {
-				'Content-Type': 'application/json',
-				'Access-Control-Allow-Origin': '*' // Allow all origins
-			}
-		});
+		console.error('Resume fetch error:', error);
+		return json({ error: 'Failed to fetch resume data' }, { status: 500, headers: corsHeaders });
 	}
 }
 
 export async function OPTIONS() {
 	return new Response(null, {
-		headers: {
-			'Access-Control-Allow-Origin': '*', // Allow all origins
-			'Access-Control-Allow-Methods': 'GET, OPTIONS', // Allowed methods
-			'Access-Control-Allow-Headers': 'Content-Type' // Allowed headers
-		}
+		headers: corsHeaders
 	});
 }

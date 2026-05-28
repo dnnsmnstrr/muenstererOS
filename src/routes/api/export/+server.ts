@@ -17,8 +17,7 @@ const staticData = {
 export async function GET({ url, request }) {
 	const includeStatic = url.searchParams.get('static') !== 'false';
 	const includeGists = url.searchParams.get('gists') !== 'false';
-	const token =
-		request.headers.get('Authorization')?.replace('Bearer ', '') || url.searchParams.get('token');
+	const token = request.headers.get('Authorization')?.replace('Bearer ', '');
 
 	const exportData: any = {
 		metadata: {
@@ -73,13 +72,14 @@ export async function GET({ url, request }) {
 					} else {
 						gistResults[name] = {
 							id: gist.id,
-							error: `Failed to fetch: ${response.status} ${response.statusText}`
+							error: 'Failed to fetch gist data'
 						};
 					}
 				} catch (error) {
+					console.error(`Export: Failed to fetch gist ${name}:`, error);
 					gistResults[name] = {
 						id: gist.id,
-						error: error instanceof Error ? error.message : 'Unknown error'
+						error: 'Failed to fetch gist data'
 					};
 				}
 			})
