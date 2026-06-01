@@ -17,8 +17,7 @@ const staticData = {
 export async function GET({ url, request }) {
 	const includeStatic = url.searchParams.get('static') !== 'false';
 	const includeGists = url.searchParams.get('gists') !== 'false';
-	const token =
-		request.headers.get('Authorization')?.replace('Bearer ', '') || url.searchParams.get('token');
+	const token = request.headers.get('Authorization')?.replace('Bearer ', '');
 
 	const exportData: any = {
 		metadata: {
