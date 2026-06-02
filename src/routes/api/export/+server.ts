@@ -1,4 +1,4 @@
-import { gists } from '$lib/config';
+import { gists, USERNAME_SHORT } from '$lib/config';
 import { json } from '@sveltejs/kit';
 import buttons from '$lib/../data/buttons.json';
 import changes from '$lib/../data/changes.json';
@@ -14,11 +14,29 @@ const staticData = {
 	pages
 };
 
-export async function GET({ url, request }) {
+export async function GET({ url, request, fetch }) {
 	const includeStatic = url.searchParams.get('static') !== 'false';
 	const includeGists = url.searchParams.get('gists') !== 'false';
-	const token =
-		request.headers.get('Authorization')?.replace('Bearer ', '') || url.searchParams.get('token');
+	const authHeader = request.headers.get('Authorization');
+	const token = authHeader?.replace('Bearer ', '').replace('token ', '');
+
+	if (includeGists) {
+		if (!authHeader) {
+			return json({ error: 'Unauthorized: Gist export requires admin token' }, { status: 401 });
+		}
+
+		try {
+			const userRes = await fetch('https://api.github.com/user', {
+				headers: { Authorization: authHeader }
+			});
+			const userData = await userRes.json();
+			if (!userRes.ok || userData.login !== USERNAME_SHORT) {
+				return json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+			}
+		} catch (err) {
+			return json({ error: 'Authentication failed' }, { status: 500 });
+		}
+	}
 
 	const exportData: any = {
 		metadata: {
@@ -43,11 +61,9 @@ export async function GET({ url, request }) {
 			gistEntries.map(async ([name, gist]) => {
 				const gistApiUrl = `https://api.github.com/gists/${gist.id}`;
 				const headers: Record<string, string> = {
-					Accept: 'application/vnd.github.v3+json'
+					Accept: 'application/vnd.github.v3+json',
+					Authorization: `token ${token}`
 				};
-				if (token) {
-					headers['Authorization'] = `token ${token}`;
-				}
 
 				try {
 					const response = await fetch(gistApiUrl, { headers });
