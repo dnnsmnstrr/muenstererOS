@@ -41,7 +41,14 @@
 	$effect(() => {
 		if (lastViewMode === 'form' && viewMode === 'editor') {
 			// Sync form data back to editor
-			const newGistData = JSON.stringify(formData, null, 2);
+			let dataToSync = formData;
+			// If it's an array root, DynamicForm wraps it in { root: data }
+			const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
+			if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
+				dataToSync = formData.root;
+			}
+
+			const newGistData = JSON.stringify(dataToSync, null, 2);
 			if (newGistData !== gistData) {
 				gistData = newGistData;
 				lastSyncedGistData = newGistData;
@@ -111,7 +118,12 @@
 
 	export function getValue() {
 		if (viewMode === 'form') {
-			return JSON.stringify(formData, null, 2);
+			let dataToSync = formData;
+			const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
+			if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
+				dataToSync = formData.root;
+			}
+			return JSON.stringify(dataToSync, null, 2);
 		}
 		return jsonEditorRef?.getValue() || gistData;
 	}
@@ -190,7 +202,12 @@
 				<Button
 					onclick={() => {
 						if (viewMode === 'form') {
-							gistData = JSON.stringify(formData, null, 2);
+							let dataToSync = formData;
+							const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
+							if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
+								dataToSync = formData.root;
+							}
+							gistData = JSON.stringify(dataToSync, null, 2);
 						}
 						onSaveGist();
 					}}

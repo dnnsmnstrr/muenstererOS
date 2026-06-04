@@ -36,6 +36,7 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"ping": "Ping",
+		"faq": "FAQ",
 		"contact": "Contact",
 		"status": "Status",
 		"export": "Export",
@@ -422,6 +423,19 @@
 		"clear_confirm": "Are you sure you want to clear all displayed messages? This will delete them from the ntfy.sh server.",
 		"clear_success": "All messages cleared!",
 		"clear_error": "Failed to clear some messages."
+	},
+	"faq": {
+		"title": "FAQ",
+		"description": "Frequently asked questions about me.",
+		"ask_title": "Ask a question",
+		"ask_description": "Can't find what you're looking for? Ask me directly!",
+		"placeholder": "Type your question here...",
+		"submit": "Submit Question",
+		"submitting": "Submitting...",
+		"success": "Question submitted! I'll get back to you soon.",
+		"error": "Failed to submit question. Please try again later.",
+		"pending_questions": "Pending Questions",
+		"no_data": "No FAQ data available yet."
 	},
 	"api": {
 		"title": "API",

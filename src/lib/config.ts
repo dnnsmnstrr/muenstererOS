@@ -6,6 +6,7 @@ export const NOW_GIST_ID = 'f18bfa6e4f02dc480426d05cf7adff79';
 export const RESUME_GIST_ID = '548256752a08213eded1c5c90dbe7767';
 export const CONCERTS_GIST_ID = 'dfbfe91a2270618febfc7c58f10cff48';
 export const NTFY_TOPIC = 'muensterer_tech';
+export const NTFY_TOPIC_FAQ = 'muensterer_tech_faq';
 export const NTFY_URL = `https://ntfy.sh/${NTFY_TOPIC}`;
 export const EMAIL_PROVIDER = 'gmail';
 export const CURRENT_DOMAIN = 'muensterer.tech';
@@ -108,6 +109,11 @@ export const gists = {
 		id: CONCERTS_GIST_ID,
 		name: 'Concerts',
 		filename: 'concerts.json'
+	},
+	faq: {
+		id: '49786b4c67501a0accf3abfa9c3294c3',
+		name: 'FAQ Data',
+		filename: 'faq.json'
 	}
 };
 

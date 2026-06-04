@@ -566,31 +566,51 @@
 {/snippet}
 
 <div class="space-y-6">
-	{#if schema && (schema.type === 'object' || schema.properties) && data}
-		<div class="flex justify-end gap-2">
-			<Button variant="outline" size="sm" onclick={() => setAllOpen(true)}>
-				<ChevronsDown class="mr-2 h-4 w-4" />
-				Expand All
-			</Button>
-			<Button variant="outline" size="sm" onclick={() => setAllOpen(false)}>
-				<ChevronsUp class="mr-2 h-4 w-4" />
-				Collapse All
-			</Button>
-		</div>
-		<div class="grid gap-6">
-			{#each Object.entries(schema.properties || {}).sort(([a], [b]) => (a === '$schema' ? 1 : b === '$schema' ? -1 : 0)) as [key, s]}
+	{#if schema && data}
+		{@const type = schema.type || (schema.properties ? 'object' : schema.items ? 'array' : 'string')}
+		{#if type === 'object'}
+			<div class="flex justify-end gap-2">
+				<Button variant="outline" size="sm" onclick={() => setAllOpen(true)}>
+					<ChevronsDown class="mr-2 h-4 w-4" />
+					Expand All
+				</Button>
+				<Button variant="outline" size="sm" onclick={() => setAllOpen(false)}>
+					<ChevronsUp class="mr-2 h-4 w-4" />
+					Collapse All
+				</Button>
+			</div>
+			<div class="grid gap-6">
+				{#each Object.entries(schema.properties || {}).sort(([a], [b]) => (a === '$schema' ? 1 : b === '$schema' ? -1 : 0)) as [key, s]}
+					{@render renderField(
+						s,
+						data,
+						key,
+						key,
+						key,
+						Array.isArray(schema.required) && schema.required.includes(key)
+					)}
+				{/each}
+			</div>
+		{:else if type === 'array'}
+			<div class="grid gap-6">
 				{@render renderField(
-					s,
-					data,
-					key,
-					key,
-					key,
-					Array.isArray(schema.required) && schema.required.includes(key)
+					schema,
+					{
+						get root() {
+							return data;
+						},
+						set root(v) {
+							data = v;
+						}
+					},
+					'root',
+					schema.title || 'Items',
+					'root'
 				)}
-			{/each}
-		</div>
-	{:else if schema}
-		<p class="text-destructive">Only object-type root schemas are supported currently.</p>
+			</div>
+		{:else}
+			<p class="text-destructive">Unsupported root schema type: {type}</p>
+		{/if}
 	{/if}
 
 	<Dialog.Root bind:open={schemaInspectorOpen}>

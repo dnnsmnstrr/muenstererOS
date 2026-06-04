@@ -5,7 +5,7 @@
 	import { PAGE_TITLE_SUFFIX, NTFY_URL, NTFY_TOPIC, USERNAME_SHORT } from '$lib/config';
 	import Heading from '$lib/components/typography/Heading.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
+	import MessageInput from '$lib/components/MessageInput.svelte';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { getFriendlyTime } from '$lib/utils/helper';
 	import type { NtfyMessage } from '$lib/types';
@@ -21,8 +21,6 @@
 	import { Kbd } from '$lib/components/typography';
 	import { ConfirmDeleteDialog, confirmDelete } from '$lib/components/ui/confirm-delete-dialog';
 
-	let message = $state('');
-	let loading = $state(false);
 	let clearing = $state(false);
 	let isAdmin = $state(false);
 
@@ -96,31 +94,6 @@
 		fetchRecentMessages();
 		checkAdminStatus();
 	});
-
-	async function sendMessage() {
-		if (!message.trim()) return;
-
-		loading = true;
-		try {
-			const response = await fetch(NTFY_URL, {
-				method: 'POST',
-				body: message
-			});
-
-			if (response.ok) {
-				toast.success(i18n.t('ping.success'));
-				message = '';
-				fetchRecentMessages();
-			} else {
-				throw new Error('Failed to send message');
-			}
-		} catch (error) {
-			console.error(error);
-			toast.error(i18n.t('ping.error'));
-		} finally {
-			loading = false;
-		}
-	}
 
 	async function clearAllMessages() {
 		if (recentMessages.length === 0) return;
@@ -207,37 +180,7 @@
 			</CardDescription>
 		</CardHeader>
 		<CardContent>
-			<form
-				onsubmit={(e) => {
-					e.preventDefault();
-					sendMessage();
-				}}
-				class="space-y-4"
-			>
-				<Textarea
-					bind:value={message}
-					autofocus
-					placeholder={i18n.t('ping.placeholder')}
-					rows={5}
-					required
-					disabled={loading}
-					onkeydown={(e) => {
-						if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && !e.shiftKey) {
-							e.preventDefault();
-							sendMessage();
-						}
-					}}
-				/>
-				<Button type="submit" disabled={loading || !message.trim()} class="w-full">
-					{#if loading}
-						{i18n.t('ping.sending')}
-					{:else}
-						<Send class="mr-2 h-4 w-4" />
-						{i18n.t('ping.send')}
-						<Kbd class='text-[10px]'>cmd + enter</Kbd>
-					{/if}
-				</Button>
-			</form>
+			<MessageInput topic={NTFY_TOPIC} onSuccess={fetchRecentMessages} />
 		</CardContent>
 	</Card>
 
