@@ -339,7 +339,11 @@
 		/>
 	{/if}
 
-	<div class="flex justify-center">
+	<div class="flex justify-center gap-4">
+		<Button variant="outline" size="sm" href="/admin/og">
+			<LucideIcons.Image class="mr-2 h-4 w-4" />
+			OG Image Builder
+		</Button>
 		<Button variant="outline" size="sm" href="/export">
 			<Download class="mr-2 h-4 w-4" />
 			{i18n.t('common.export')}

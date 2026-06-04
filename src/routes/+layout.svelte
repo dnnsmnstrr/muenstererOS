@@ -304,6 +304,15 @@
 		const translated = i18n.t(`common.${segment}`);
 		return translated !== `common.${segment}` ? translated : capitalize(segment);
 	});
+
+	const ogImage = $derived.by(() => {
+		const name =
+			page.url.pathname === '/' ? 'home' : page.url.pathname.replace(/^\//, '').replace(/\//g, '-');
+		const t = $mode || 'dark';
+		return `${page.url.origin}/images/og/${name}-${t}.png`;
+	});
+
+	const pageDescription = $derived(i18n.t(`common.description`) || 'muenstererOS - Personal website of Dennis Muensterer');
 </script>
 
 <svelte:head>
@@ -311,6 +320,20 @@
 		@import '/themes.css';
 	</style>
 	<title>{pageTitle}{PAGE_TITLE_SUFFIX}</title>
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content={page.url.href} />
+	<meta property="og:title" content="{pageTitle}{PAGE_TITLE_SUFFIX}" />
+	<meta property="og:description" content={pageDescription} />
+	<meta property="og:image" content={ogImage} />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content={page.url.href} />
+	<meta property="twitter:title" content="{pageTitle}{PAGE_TITLE_SUFFIX}" />
+	<meta property="twitter:description" content={pageDescription} />
+	<meta property="twitter:image" content={ogImage} />
 </svelte:head>
 
 <ModeWatcher />
