@@ -591,7 +591,7 @@
 					)}
 				{/each}
 			</div>
-		{#else if type === 'array'}
+		{:else if type === 'array'}
 			<div class="grid gap-6">
 				{@render renderField(schema, { root: data }, 'root', schema.title || 'Items', 'root')}
 			</div>
