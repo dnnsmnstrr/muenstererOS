@@ -110,7 +110,7 @@ export const gists = {
 		filename: 'concerts.json'
 	},
 	faq: {
-		id: '',
+		id: '49786b4c67501a0accf3abfa9c3294c3',
 		name: 'FAQ Data',
 		filename: 'faq.json'
 	}
