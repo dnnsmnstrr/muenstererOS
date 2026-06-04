@@ -7,15 +7,14 @@
 	import Dialer from "./dialer.svelte";
 	import { toast } from "svelte-sonner";
 	import { Badge } from "$lib/components/ui/badge";
-	import { Phone, Mail, Github, Instagram, Send, Linkedin, Twitter, MessageSquare } from "lucide-svelte";
+	import { Mail, Instagram, Send, Linkedin, Twitter, MessageSquare } from "lucide-svelte";
 
 	const contactMethods = [
 		{ name: "Email", value: links.email, href: links.mailto, icon: Mail, code: "362" }, // EMA
 		{ name: "Telegram", value: "@" + links.telegram.split('/').pop(), href: links.telegram, icon: Send, code: "835" }, // TEL
 		{ name: "Discord", value: links.discord, href: null, icon: MessageSquare, code: "347" }, // DIS
-		{ name: "GitHub", value: links.github.split('/').pop(), href: links.github, icon: Github, code: "448" }, // GIT
 		{ name: "LinkedIn", value: "Dennis Muensterer", href: links.linkedin, icon: Linkedin, code: "546" }, // LIN
-		{ name: "Instagram", value: "@" + links.instagram.split('/').pop(), href: links.instagram, icon: Instagram, code: "467" }, // INS
+		{ name: "Instagram", value: "@" + links.instagram.split('/').pop(), href: links.instagram, icon: Instagram, code: "44" }, // IG
 		{ name: "X / Twitter", value: "@" + links.x.split('/').pop(), href: links.x, icon: Twitter, code: "9" }, // X
 	];
 
@@ -49,11 +48,6 @@
 	<div class="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
 		<!-- Phonebook Section -->
 		<div class="flex flex-col gap-6">
-			<div class="flex items-center gap-2 border-b pb-2">
-				<Phone class="h-5 w-5" />
-				<h2 class="text-xl font-semibold">{i18n.t('contact.phonebook')}</h2>
-			</div>
-
 			<div class="grid gap-4">
 				{#each contactMethods as method}
 					<div class="flex items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50">
@@ -83,12 +77,7 @@
 		</div>
 
 		<!-- Dialer Section -->
-		<div class="flex flex-col items-center justify-center gap-6 lg:border-l lg:pl-12">
-			<div class="text-center">
-				<h2 class="text-xl font-semibold">{i18n.t('contact.dialer')}</h2>
-				<p class="text-sm text-muted-foreground">{i18n.t('contact.speed_dial')}</p>
-			</div>
-
+		<div class="flex flex-col items-center justify-start lg:sticky lg:top-24 h-fit">
 			<Dialer {codes} onMatch={handleMatch} />
 		</div>
 	</div>
