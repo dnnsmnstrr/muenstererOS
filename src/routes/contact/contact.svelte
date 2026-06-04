@@ -7,13 +7,12 @@
 	import Dialer from "./dialer.svelte";
 	import { toast } from "svelte-sonner";
 	import { Badge } from "$lib/components/ui/badge";
-	import { Mail, Instagram, Send, Linkedin, Twitter, MessageSquare } from "lucide-svelte";
+	import { Mail, Instagram, Send, Linkedin, Twitter } from "lucide-svelte";
 
 	const contactMethods = [
-		{ name: "Email", value: links.email, href: links.mailto, icon: Mail, code: "362" }, // EMA
-		{ name: "Telegram", value: "@" + links.telegram.split('/').pop(), href: links.telegram, icon: Send, code: "835" }, // TEL
-		{ name: "Discord", value: links.discord, href: null, icon: MessageSquare, code: "347" }, // DIS
-		{ name: "LinkedIn", value: "Dennis Muensterer", href: links.linkedin, icon: Linkedin, code: "546" }, // LIN
+		{ name: "Email", value: links.email, href: links.mailto, icon: Mail, code: "46" }, // GM
+		{ name: "Telegram", value: "@" + links.telegram.split('/').pop(), href: links.telegram, icon: Send, code: "84" }, // TG
+		{ name: "LinkedIn", value: "Dennis Muensterer", href: links.linkedin, icon: Linkedin, code: "54" }, // LI
 		{ name: "Instagram", value: "@" + links.instagram.split('/').pop(), href: links.instagram, icon: Instagram, code: "44" }, // IG
 		{ name: "X / Twitter", value: "@" + links.x.split('/').pop(), href: links.x, icon: Twitter, code: "9" }, // X
 	];
@@ -29,9 +28,6 @@
 			toast.success(`Dialing ${method.name}...`);
 			if (method.href) {
 				window.open(method.href, "_blank");
-			} else if (method.name === "Discord") {
-				navigator.clipboard.writeText(method.value);
-				toast.info("Discord username copied to clipboard!");
 			}
 		}
 	}
