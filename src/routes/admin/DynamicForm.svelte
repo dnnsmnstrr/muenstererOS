@@ -593,7 +593,20 @@
 			</div>
 		{:else if type === 'array'}
 			<div class="grid gap-6">
-				{@render renderField(schema, { root: data }, 'root', schema.title || 'Items', 'root')}
+				{@render renderField(
+					schema,
+					{
+						get root() {
+							return data;
+						},
+						set root(v) {
+							data = v;
+						}
+					},
+					'root',
+					schema.title || 'Items',
+					'root'
+				)}
 			</div>
 		{:else}
 			<p class="text-destructive">Unsupported root schema type: {type}</p>
