@@ -19,7 +19,7 @@
 
 	const title = $derived(props.title || 'muenstererOS');
 	const theme = $derived(props.theme || 'dark');
-	const iconName = $derived(props.iconName || 'Info');
+	const iconName = $derived(props.iconName || 'favicon');
 	const texture = $derived(props.texture || 'dots');
 	const size = $derived(props.size ?? 1);
 	const spacing = $derived(props.spacing ?? 16);
@@ -28,6 +28,7 @@
 	const isMaximized = $derived(props.isMaximized ?? false);
 
 	const Icon = $derived((LucideIcons as any)[iconName] || LucideIcons.Info) as Component;
+	const isFavicon = $derived(iconName === 'favicon');
 
 	let bgStyle = $derived.by(() => {
 		const color = theme === 'light' ? '#e5e5e5' : '#222222';
@@ -77,7 +78,11 @@
 						? 'rgba(0,0,0,0.05)'
 						: 'rgba(255,255,255,0.1)'}"
 				>
-					<Icon size={128} strokeWidth={1.5} />
+					{#if isFavicon}
+						<img src="/favicon.ico" alt="Favicon" class="h-32 w-32 object-contain" />
+					{:else}
+						<Icon size={128} strokeWidth={1.5} />
+					{/if}
 				</div>
 				<h1 class="text-6xl font-bold tracking-tight">{title}</h1>
 			</div>

@@ -215,22 +215,24 @@
 			}, 100);
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
-		if ($isCommandActive) {
-			document.body.classList.add(
-				'overflow-hidden',
-				'touch-none',
-				'sm:touch-auto',
-				'fixed',
-				'w-full'
-			);
-		} else {
-			document.body.classList.remove(
-				'overflow-hidden',
-				'touch-none',
-				'sm:touch-auto',
-				'fixed',
-				'w-full'
-			);
+		if (!isOGPreview) {
+			if ($isCommandActive) {
+				document.body.classList.add(
+					'overflow-hidden',
+					'touch-none',
+					'sm:touch-auto',
+					'fixed',
+					'w-full'
+				);
+			} else {
+				document.body.classList.remove(
+					'overflow-hidden',
+					'touch-none',
+					'sm:touch-auto',
+					'fixed',
+					'w-full'
+				);
+			}
 		}
 	});
 
@@ -312,7 +314,9 @@
 		return `${page.url.origin}/images/og/${name}-${t}.png`;
 	});
 
-	const pageDescription = $derived(i18n.t(`common.description`) || 'muenstererOS - Personal website of Dennis Muensterer');
+	const pageDescription = $derived(i18n.t(`common.description`));
+
+	const isOGPreview = $derived(page.url.pathname.startsWith('/og-preview'));
 </script>
 
 <svelte:head>
@@ -338,42 +342,47 @@
 
 <ModeWatcher />
 <Toaster />
-<Command pages={allPages} />
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-{#if $screensaverActiveStore && $screensaver === 'crash'}
-	<CrashScreensaver />
-{/if}
+{#if isOGPreview}
+	{@render children?.()}
+{:else}
+	<Command pages={allPages} />
 
-<div class="flex h-dvh w-full flex-grow flex-col">
-	<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
-		<div class="sticky top-0 h-full w-full">
-			<Header pages={bookmarks} />
+	{#if $screensaverActiveStore && $screensaver === 'crash'}
+		<CrashScreensaver />
+	{/if}
+
+	<div class="flex h-dvh w-full flex-grow flex-col">
+		<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
+			<div class="sticky top-0 h-full w-full">
+				<Header pages={bookmarks} />
+			</div>
 		</div>
-	</div>
 
-	<main
-		class={cn(
-			`inset-0 h-max max-h-screen w-full flex-grow ${$isCommandActive ? 'overflow-hidden' : 'overflow-y-auto'} ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
-			`theme-${$theme}`
-		)}
-		style={bgStyle}
-	>
-		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-		<div
-			role="region"
-			onmousedown={() => setMaskSize(50)}
-			onmouseup={() => setMaskSize(100)}
-			class="pointer-events-none absolute inset-0 top-20 transition-[background-position] duration-100"
-			style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode
-				? '255, 255, 255'
-				: '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current
-				.x}px; --y: {cursor.current.y}px;"
-		></div>
-		<Tooltip.Provider>
-			{@render children?.()}
-		</Tooltip.Provider>
-	</main>
-	<Footer />
-</div>
+		<main
+			class={cn(
+				`inset-0 h-max max-h-screen w-full flex-grow ${$isCommandActive ? 'overflow-hidden' : 'overflow-y-auto'} ${isFullWidth ? 'p-0' : 'py-4 sm:px-16'} print:max-h-none`,
+				`theme-${$theme}`
+			)}
+			style={bgStyle}
+		>
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+			<div
+				role="region"
+				onmousedown={() => setMaskSize(50)}
+				onmouseup={() => setMaskSize(100)}
+				class="pointer-events-none absolute inset-0 top-20 transition-[background-position] duration-100"
+				style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode
+					? '255, 255, 255'
+					: '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current
+					.x}px; --y: {cursor.current.y}px;"
+			></div>
+			<Tooltip.Provider>
+				{@render children?.()}
+			</Tooltip.Provider>
+		</main>
+		<Footer />
+	</div>
+{/if}
