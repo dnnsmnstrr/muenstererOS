@@ -215,22 +215,24 @@
 			}, 100);
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
-		if ($isCommandActive) {
-			document.body.classList.add(
-				'overflow-hidden',
-				'touch-none',
-				'sm:touch-auto',
-				'fixed',
-				'w-full'
-			);
-		} else {
-			document.body.classList.remove(
-				'overflow-hidden',
-				'touch-none',
-				'sm:touch-auto',
-				'fixed',
-				'w-full'
-			);
+		if (!isOGPreview) {
+			if ($isCommandActive) {
+				document.body.classList.add(
+					'overflow-hidden',
+					'touch-none',
+					'sm:touch-auto',
+					'fixed',
+					'w-full'
+				);
+			} else {
+				document.body.classList.remove(
+					'overflow-hidden',
+					'touch-none',
+					'sm:touch-auto',
+					'fixed',
+					'w-full'
+				);
+			}
 		}
 	});
 
@@ -314,7 +316,7 @@
 
 	const pageDescription = $derived(i18n.t(`common.description`));
 
-	const isOGPreview = $derived(page.url.pathname === '/og-preview');
+	const isOGPreview = $derived(page.url.pathname.startsWith('/og-preview'));
 </script>
 
 <svelte:head>
