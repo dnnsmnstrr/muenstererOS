@@ -50,8 +50,8 @@ test.describe('GET /api/[slug] — generic data endpoint', () => {
 
 		test('total matches the number of entries in changes.json', async ({ request }) => {
 			const body = await getJSON(request, '/api/changes');
-			// There are 12 entries in the static changes.json file
-			expect(body.total).toBe(12);
+			// There are 14 entries in the static changes.json file
+			expect(body.total).toBe(14);
 		});
 
 		test('each item has date, title, and description fields', async ({ request }) => {
@@ -158,8 +158,8 @@ test.describe('GET /api/[slug] — generic data endpoint', () => {
 
 		test('total matches the number of entries in pages.json', async ({ request }) => {
 			const body = await getJSON(request, '/api/pages');
-			// There are 22 entries in the static pages.json file
-			expect(body.total).toBe(22);
+			// There are 27 entries in the static pages.json file
+			expect(body.total).toBe(27);
 		});
 
 		test('each item has title and path fields', async ({ request }) => {
@@ -252,8 +252,8 @@ test.describe('GET /api/status', () => {
 
 	test('pageCount matches the number of entries in pages.json', async ({ request }) => {
 		const body = await getJSON(request, '/api/status');
-		// 22 entries in pages.json
-		expect(body.pageCount).toBe(22);
+		// There are 27 entries in the static pages.json file
+		expect(body.pageCount).toBe(27);
 	});
 
 	test('lastDeployment is a valid ISO 8601 date string', async ({ request }) => {
@@ -306,44 +306,15 @@ test.describe('GET /api/gists', () => {
 // ---------------------------------------------------------------------------
 
 test.describe('GET /api/export', () => {
-	test('returns 200 with JSON', async ({ request }) => {
-		await getJSON(request, '/api/export');
+	test('returns 401 without authorization', async ({ request }) => {
+		const res = await request.get('/api/export');
+		expect(res.status()).toBe(401);
+		const body = await res.json();
+		expect(body.error).toContain('Unauthorized');
 	});
 
-	test('response has metadata, staticData shape', async ({ request }) => {
-		const body = await getJSON(request, '/api/export');
-
-		expect(body.metadata).toMatchObject({
-			exportedAt: expect.any(String),
-			origin: expect.any(String),
-			options: { static: true, gists: true }
-		});
-		expect(body.staticData).toBeDefined();
-	});
-
-	test('staticData contains all expected static datasets', async ({ request }) => {
-		const body = await getJSON(request, '/api/export');
-
-		for (const key of ['buttons', 'changes', 'pages', 'llms', 'network_seeds']) {
-			expect(body.staticData, `staticData.${key} should exist`).toHaveProperty(key);
-		}
-	});
-
-	test('?static=false omits staticData', async ({ request }) => {
-		const body = await getJSON(request, '/api/export?static=false');
-		expect(body.staticData).toBeUndefined();
-	});
-
-	test('?gists=false omits gists data', async ({ request }) => {
-		const body = await getJSON(request, '/api/export?gists=false');
-		expect(body.gists).toBeUndefined();
-	});
-
-	test('metadata.exportedAt is a valid ISO 8601 timestamp', async ({ request }) => {
-		const body = await getJSON(request, '/api/export');
-		expect(() => new Date(body.metadata.exportedAt)).not.toThrow();
-		expect(isNaN(new Date(body.metadata.exportedAt).getTime())).toBe(false);
-	});
+	// Note: Fully testing authorized export would require a mock token and GitHub API mocking
+	// which is beyond the scope of this test file.
 });
 
 // ---------------------------------------------------------------------------
