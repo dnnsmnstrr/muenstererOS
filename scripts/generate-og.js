@@ -45,7 +45,7 @@ const iconMap = {
 	'Admin': 'BrickWallShield',
 	'Contact': 'AtSign',
 	'About': 'Info',
-	'Home': 'Home'
+	'Home': 'favicon'
 };
 
 async function generateOGImages() {
@@ -61,7 +61,7 @@ async function generateOGImages() {
 
 	for (const p of pages) {
 		const title = p.title;
-		const icon = iconMap[title] || 'Info';
+		const icon = iconMap[title] || 'favicon';
 		const fileName = p.path === '/' ? 'home' : p.path.replace(/^\//, '').replace(/\//g, '-');
 
 		for (const theme of ['dark', 'light']) {
