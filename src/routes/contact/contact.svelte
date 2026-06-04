@@ -66,10 +66,6 @@
 					</div>
 				{/each}
 			</div>
-
-			<p class="mt-4 text-sm text-muted-foreground">
-				{i18n.t('contact.description')} <a href={links.mailto} class="text-primary hover:underline">{links.email}</a>
-			</p>
 		</div>
 
 		<!-- Dialer Section -->

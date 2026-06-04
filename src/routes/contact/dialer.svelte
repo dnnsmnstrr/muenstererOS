@@ -125,11 +125,11 @@
 		{#each buttons as { digit, letters }}
 			<Button
 				variant="outline"
-				class="h-16 w-16 flex flex-col items-center justify-center rounded-full p-0"
+				class="h-16 w-16 flex flex-col items-center justify-center rounded-full p-0 pt-1"
 				onclick={() => handlePress(digit)}
 			>
-				<span class="text-xl font-bold">{digit}</span>
-				<span class="text-[10px] uppercase opacity-60">{letters}</span>
+				<span class="text-xl font-bold leading-none">{digit}</span>
+				<span class="text-[10px] uppercase opacity-60 h-3 leading-none flex items-center justify-center">{letters}</span>
 			</Button>
 		{/each}
 	</div>
