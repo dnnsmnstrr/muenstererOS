@@ -58,3 +58,12 @@ export interface NtfyMessage {
 		expires?: number;
 	};
 }
+
+export interface FAQItem {
+	question: string;
+	question_de?: string;
+	answer: string;
+	answer_de?: string;
+	category?: string;
+	tags?: string[];
+}

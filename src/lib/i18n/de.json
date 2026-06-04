@@ -32,6 +32,7 @@
 		"playlist": "Playlist",
 		"api": "API",
 		"ping": "Ping",
+		"faq": "FAQ",
 		"contact": "Kontakt",
 		"status": "Status",
 		"export": "Export",
@@ -416,6 +417,19 @@
 		"clear_confirm": "Bist du sicher, dass du alle angezeigten Nachrichten löschen möchtest? Dies wird sie vom ntfy.sh Server entfernen.",
 		"clear_success": "Alle Nachrichten gelöscht!",
 		"clear_error": "Fehler beim Löschen einiger Nachrichten."
+	},
+	"faq": {
+		"title": "FAQ",
+		"description": "Häufig gestellte Fragen über mich.",
+		"ask_title": "Stelle eine Frage",
+		"ask_description": "Nicht gefunden, wonach du suchst? Frag mich direkt!",
+		"placeholder": "Schreibe deine Frage hier...",
+		"submit": "Frage senden",
+		"submitting": "Wird gesendet...",
+		"success": "Frage gesendet! Ich werde mich bald bei dir melden.",
+		"error": "Frage konnte nicht gesendet werden. Bitte versuche es später erneut.",
+		"pending_questions": "Ausstehende Fragen",
+		"no_data": "Noch keine FAQ-Daten verfügbar."
 	},
 	"api": {
 		"title": "API",
