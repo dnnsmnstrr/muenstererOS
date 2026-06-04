@@ -67,3 +67,7 @@ export interface FAQItem {
 	category?: string;
 	tags?: string[];
 }
+
+export interface FAQData {
+	items: FAQItem[];
+}

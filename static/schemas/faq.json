@@ -1,36 +1,42 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "FAQ Data",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "question": {
-        "type": "string",
-        "description": "The question in English"
-      },
-      "question_de": {
-        "type": "string",
-        "description": "The question in German"
-      },
-      "answer": {
-        "type": "string",
-        "description": "The answer in English"
-      },
-      "answer_de": {
-        "type": "string",
-        "description": "The answer in German"
-      },
-      "category": {
-        "type": "string"
-      },
-      "tags": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "The question in English"
+          },
+          "question_de": {
+            "type": "string",
+            "description": "The question in German"
+          },
+          "answer": {
+            "type": "string",
+            "description": "The answer in English"
+          },
+          "answer_de": {
+            "type": "string",
+            "description": "The answer in German"
+          },
+          "category": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["question", "answer"]
       }
-    },
-    "required": ["question", "answer"]
-  }
+    }
+  },
+  "required": ["items"]
 }
