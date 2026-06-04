@@ -50,6 +50,7 @@ export const links = {
 	linkedin: 'https://www.linkedin.com/in/' + USERNAME_LONG,
 	youtube: 'https://www.youtube.com/user/' + USERNAME_LONG,
 	telegram: 'https://t.me/' + USERNAME_SHORT,
+	discord: 'local_h0rst',
 	bereal: 'https://bere.al/' + USERNAME_SHORT,
 	tiktok: 'https://www.tiktok.com/@' + USERNAME_SHORT,
 	makerer: 'https://www.tiktok.com/@dennis.makerer',
