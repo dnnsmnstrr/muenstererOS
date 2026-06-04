@@ -6,9 +6,8 @@ export const load: PageLoad = async ({ fetch }) => {
 
 	if (response.ok) {
 		const data = await response.json();
-		// api endpoint returns pagination object if it's an array, or the raw data object
-		// our new structure is { items: FAQItem[] }
-		const faqData: FAQItem[] = data.items || [];
+		// api endpoint returns pagination object if it's an array
+		const faqData: FAQItem[] = data.items || (Array.isArray(data) ? data : []);
 		return {
 			faqData
 		};
