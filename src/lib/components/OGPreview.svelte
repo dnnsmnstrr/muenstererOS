@@ -15,6 +15,7 @@
 		width?: number;
 		height?: number;
 		isMaximized?: boolean;
+		children?: import('svelte').Snippet;
 	}>();
 
 	const title = $derived(props.title || 'muenstererOS');
@@ -71,21 +72,25 @@
 
 		<!-- Content -->
 		<div class="relative flex flex-grow items-center justify-center p-8">
-			<div class="flex flex-col items-center gap-6">
-				<div
-					class="rounded-2xl p-8"
-					style="background-color: {theme === 'light'
-						? 'rgba(0,0,0,0.05)'
-						: 'rgba(255,255,255,0.1)'}"
-				>
-					{#if isFavicon}
-						<img src="/favicon.ico" alt="Favicon" class="h-32 w-32 object-contain" />
-					{:else}
-						<Icon size={128} strokeWidth={1.5} />
-					{/if}
+			{#if props.children}
+				{@render props.children()}
+			{:else}
+				<div class="flex flex-col items-center gap-6">
+					<div
+						class="rounded-2xl p-8"
+						style="background-color: {theme === 'light'
+							? 'rgba(0,0,0,0.05)'
+							: 'rgba(255,255,255,0.1)'}"
+					>
+						{#if isFavicon}
+							<img src="/favicon.ico" alt="Favicon" class="h-32 w-32 object-contain" />
+						{:else}
+							<Icon size={128} strokeWidth={1.5} />
+						{/if}
+					</div>
+					<h1 class="text-6xl font-bold tracking-tight">{title}</h1>
 				</div>
-				<h1 class="text-6xl font-bold tracking-tight">{title}</h1>
-			</div>
+			{/if}
 
 			<!-- Fade-out Overlay at the bottom -->
 			<div

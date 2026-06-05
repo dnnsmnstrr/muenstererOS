@@ -10,7 +10,7 @@
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { Download, Copy, ExternalLink, RefreshCcw } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import * as LucideIcons from 'lucide-svelte';
+	import IconPicker from '$lib/components/IconPicker.svelte';
 
 	let title = $state('muenstererOS');
 	let iconName = $state('Info');
@@ -20,10 +20,6 @@
 	let spacing = $state(16);
 	let width = $state(1200);
 	let height = $state(630);
-
-	const allIconNames = Object.keys(LucideIcons).filter(
-		(key) => typeof (LucideIcons as any)[key] === 'function' || typeof (LucideIcons as any)[key] === 'object'
-	).sort();
 
 	const previewUrl = $derived.by(() => {
 		const params = new URLSearchParams({
@@ -93,16 +89,7 @@
 
 			<div class="space-y-2">
 				<Label for="icon">Icon Name</Label>
-				<Select.Root type="single" bind:value={iconName}>
-					<Select.Trigger>
-						{iconName}
-					</Select.Trigger>
-					<Select.Content class="max-h-80">
-						{#each allIconNames as name}
-							<Select.Item value={name}>{name}</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
+				<IconPicker value={iconName} onSelect={(icon) => (iconName = icon)} />
 			</div>
 
 			<div class="grid grid-cols-2 gap-4">

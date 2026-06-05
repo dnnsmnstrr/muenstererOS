@@ -15,7 +15,7 @@
 	import { goto } from '$app/navigation';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
-	import { Download } from 'lucide-svelte';
+	import { Download, Image as ImageIcon } from 'lucide-svelte';
 
 	// State management
 	let githubToken = $state('');
@@ -341,7 +341,7 @@
 
 	<div class="flex justify-center gap-4">
 		<Button variant="outline" size="sm" href="/admin/og">
-			<LucideIcons.Image class="mr-2 h-4 w-4" />
+			<ImageIcon class="mr-2 h-4 w-4" />
 			OG Image Builder
 		</Button>
 		<Button variant="outline" size="sm" href="/export">
