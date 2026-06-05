@@ -435,7 +435,16 @@
 		"success": "Frage gesendet! Ich werde mich bald bei dir melden.",
 		"error": "Frage konnte nicht gesendet werden. Bitte versuche es später erneut.",
 		"pending_questions": "Ausstehende Fragen",
-		"no_data": "Noch keine FAQ-Daten verfügbar."
+		"no_data": "Noch keine FAQ-Daten verfügbar.",
+		"answer": "Antworten",
+		"answer_question": "Frage beantworten",
+		"question_en": "Frage (EN)",
+		"question_de": "Frage (DE)",
+		"answer_en": "Antwort (EN)",
+		"answer_de": "Antwort (DE)",
+		"category": "Kategorie",
+		"tags_placeholder": "Tags (kommagetrennt)",
+		"save_faq": "Zu FAQ hinzufügen"
 	},
 	"api": {
 		"title": "API",
