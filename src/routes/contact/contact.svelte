@@ -41,7 +41,7 @@
 <div class="container mx-auto px-4 py-8">
 	<Heading>{i18n.t('contact.title')}</Heading>
 
-	<div class="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2">
+	<div class="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2">
 		<!-- Phonebook Section -->
 		<div class="flex flex-col gap-6">
 			<div class="grid gap-4">
@@ -69,7 +69,7 @@
 		</div>
 
 		<!-- Dialer Section -->
-		<div class="flex flex-col items-center justify-start lg:sticky lg:top-24 h-fit">
+		<div class="flex flex-col items-center justify-start md:sticky md:top-24 h-fit">
 			<Dialer {codes} onMatch={handleMatch} />
 		</div>
 	</div>
