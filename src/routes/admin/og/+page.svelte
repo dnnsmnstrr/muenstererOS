@@ -122,7 +122,7 @@
 				{#if !showFavicon}
 					<div class="space-y-2">
 						<Label for="icon">Icon Name</Label>
-				    <IconPicker value={iconName} onSelect={(icon) => (iconName = icon)}
+				    	<IconPicker value={iconName} onSelect={(icon) => (iconName = icon)} />
 					</div>
 				{/if}
 			</div>
