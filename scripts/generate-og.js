@@ -60,13 +60,14 @@ async function generateOGImages() {
 	page.setDefaultTimeout(60000);
 
 	for (const p of pages) {
-		const title = p.title;
-		const icon = iconMap[title] || 'favicon';
+		const pageTitle = p.title;
+		const icon = iconMap[pageTitle] || 'favicon';
 		const fileName = p.path === '/' ? 'home' : p.path.replace(/^\//, '').replace(/\//g, '-');
 
 		for (const theme of ['dark', 'light']) {
 			const params = new URLSearchParams({
-				title,
+				title: 'muenstererOS',
+				name: pageTitle === 'Home' ? 'Dennis Muensterer' : pageTitle,
 				icon,
 				theme,
 				width: '1200',
@@ -76,7 +77,8 @@ async function generateOGImages() {
 			const url = `${BASE_URL}/og-preview?${params.toString()}`;
 			const outputPath = path.join(OUTPUT_DIR, `${fileName}-${theme}.png`);
 
-			console.log(`📸 Generating ${theme} OG image for: ${title} -> ${outputPath}`);
+			console.log(`📸 Generating ${theme} OG image for: ${pageTitle} -> ${outputPath}`);
+			console.log(`🔗 URL: ${url}`);
 
 			try {
 				await page.goto(url, { waitUntil: 'networkidle' });

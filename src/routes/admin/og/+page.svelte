@@ -13,6 +13,7 @@
 	import IconPicker from '$lib/components/IconPicker.svelte';
 
 	let title = $state('muenstererOS');
+	let pageName = $state('');
 	let iconName = $state('Info');
 	let theme = $state<'light' | 'dark'>('dark');
 	let texture = $state('dots');
@@ -24,6 +25,7 @@
 	const previewUrl = $derived.by(() => {
 		const params = new URLSearchParams({
 			title,
+			name: pageName,
 			icon: iconName,
 			theme,
 			texture,
@@ -47,6 +49,7 @@
 
     function reset() {
         title = 'muenstererOS';
+        pageName = '';
         iconName = 'Info';
         theme = 'dark';
         texture = 'dots';
@@ -83,8 +86,13 @@
 		<!-- Sidebar Controls -->
 		<div class="space-y-6 rounded-xl border border-border bg-card p-6 shadow-sm">
 			<div class="space-y-2">
-				<Label for="title">Title</Label>
+				<Label for="title">Title Bar</Label>
 				<Input id="title" bind:value={title} />
+			</div>
+
+			<div class="space-y-2">
+				<Label for="name">Page Name</Label>
+				<Input id="name" bind:value={pageName} placeholder={title} />
 			</div>
 
 			<div class="space-y-2">
@@ -156,6 +164,7 @@
 						<div class="mx-auto shadow-2xl" style="width: {width}px; height: {height}px; transform: scale({width > 800 ? 0.4 : 0.8}); transform-origin: top center;">
 							<OGPreview
 								{title}
+								name={pageName}
 								{iconName}
 								{theme}
 								{texture}
