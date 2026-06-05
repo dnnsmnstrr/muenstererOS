@@ -391,7 +391,7 @@
 						<div class="mx-2 h-6 w-px bg-border"></div>
 
 						<div class="w-40">
-							<IconPicker onSelect={(icon) => addItem('icon', icon)} />
+							<IconPicker onSelect={(icon) => addItem('icon', icon)} clearOnSelect />
 						</div>
 
 						<div class="mx-2 h-6 w-px bg-border"></div>

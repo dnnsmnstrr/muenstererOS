@@ -17,10 +17,12 @@
 	});
 
 	const theme = $derived((page.url.searchParams.get('theme') as 'light' | 'dark') || 'dark');
+	const showWindow = $derived(page.url.searchParams.get('window') === 'true');
+	const title = $derived(page.url.searchParams.get('title') || 'Canvas Export');
 </script>
 
 <div class="flex min-h-screen items-center justify-center bg-black p-0">
-	<OGPreview title="Canvas Export" {theme} width={1200} height={630}>
+	<OGPreview {title} {theme} {showWindow} width={1200} height={630}>
 		<div class="relative h-full w-full overflow-hidden">
 			{#each items as item}
 				<div

@@ -7,10 +7,12 @@
 
 	let {
 		value = $bindable('Info'),
-		onSelect
+		onSelect,
+		clearOnSelect = false
 	}: {
 		value?: string;
 		onSelect?: (icon: string) => void;
+		clearOnSelect?: boolean;
 	} = $props();
 
 	const allIconNames = Object.keys(LucideIcons)
@@ -31,9 +33,11 @@
 		value = name;
 		onSelect?.(name);
 		// Reset value to allow selecting the same icon again
-		setTimeout(() => {
-			value = '';
-		}, 100);
+		if (clearOnSelect) {
+			setTimeout(() => {
+				value = '';
+			}, 100);
+		}
 	}
 </script>
 
