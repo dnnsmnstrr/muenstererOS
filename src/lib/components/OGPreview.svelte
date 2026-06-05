@@ -7,6 +7,7 @@
 
 	let props = $props<{
 		title?: string;
+		name?: string;
 		iconName?: string;
 		theme?: 'light' | 'dark';
 		texture?: string;
@@ -18,6 +19,7 @@
 	}>();
 
 	const title = $derived(props.title || 'muenstererOS');
+	const name = $derived(props.name || title);
 	const theme = $derived(props.theme || 'dark');
 	const iconName = $derived(props.iconName || 'favicon');
 	const texture = $derived(props.texture || 'dots');
@@ -84,7 +86,7 @@
 						<Icon size={128} strokeWidth={1.5} />
 					{/if}
 				</div>
-				<h1 class="text-6xl font-bold tracking-tight">{title}</h1>
+				<h1 class="text-6xl font-bold tracking-tight">{name}</h1>
 			</div>
 
 			<!-- Fade-out Overlay at the bottom -->
