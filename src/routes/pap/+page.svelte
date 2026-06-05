@@ -8,13 +8,16 @@
 	import { cn } from '$lib/utils/utils';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { onMount, untrack } from 'svelte';
-	import { Plus, Trash } from 'lucide-svelte';
+	import { Plus, Trash, Download } from 'lucide-svelte';
 	import { confirmDelete, ConfirmDeleteDialog } from '$lib/components/ui/confirm-delete-dialog';
+	import IconPicker from '$lib/components/IconPicker.svelte';
+	import * as LucideIcons from 'lucide-svelte';
+	import type { Component } from 'svelte';
 
 	let password = $state('');
 	let isUnlocked = $state(false);
 
-	type ItemType = 'emoji' | 'gif' | 'text';
+	type ItemType = 'emoji' | 'gif' | 'text' | 'icon';
 
 	interface CanvasItem {
 		id: string;
@@ -91,6 +94,8 @@
 			addItem('gif', newItemContent);
 		} else if (newItemContent.length <= 2 && /\p{Emoji}/u.test(newItemContent)) {
 			addItem('emoji', newItemContent);
+		} else if ((LucideIcons as any)[newItemContent]) {
+			addItem('icon', newItemContent);
 		} else {
 			addItem('text', newItemContent);
 		}
@@ -328,6 +333,12 @@
 			saveToHash();
 		}
 	}
+
+	function exportImage() {
+		const data = JSON.stringify(items);
+		const hash = btoa(encodeURIComponent(data));
+		window.open(`/pap/preview?data=${hash}`, '_blank');
+	}
 </script>
 
 <svelte:head>
@@ -378,6 +389,23 @@
 						</div>
 
 						<div class="mx-2 h-6 w-px bg-border"></div>
+
+						<div class="w-40">
+							<IconPicker onSelect={(icon) => addItem('icon', icon)} clearOnSelect />
+						</div>
+
+						<div class="mx-2 h-6 w-px bg-border"></div>
+
+						<Button
+							variant="ghost"
+							size="sm"
+							onclick={exportImage}
+							class="text-xs"
+							disabled={items.length === 0}
+						>
+							<Download class="sm:hidden" />
+							<span class="hidden sm:block">Export</span>
+						</Button>
 
 						<Button
 							variant="ghost"
@@ -440,28 +468,30 @@
 								8}px; transform: translate(-50%, -100%);"
 						>
 							<span class="font-bold">Edit:</span>
-							{#if selectedItem.type === 'text'}
+							{#if selectedItem.type === 'text' || selectedItem.type === 'icon'}
 								<Input
 									type="color"
 									class="h-6 w-10 border-none p-0"
 									value={selectedItem.color}
 									oninput={(e) => updateSelectedItem({ color: e.currentTarget.value })}
 								/>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() =>
-										updateSelectedItem({
-											fontWeight: selectedItem.fontWeight === 'bold' ? 'normal' : 'bold'
-										})}
-								>
-									<b>B</b>
-								</Button>
+								{#if selectedItem.type === 'text'}
+									<Button
+										variant="outline"
+										size="sm"
+										class="h-6 px-2"
+										onclick={() =>
+											updateSelectedItem({
+												fontWeight: selectedItem.fontWeight === 'bold' ? 'normal' : 'bold'
+											})}
+									>
+										<b>B</b>
+									</Button>
+								{/if}
 								<Input
 									type="number"
 									class="h-6 w-12"
-									value={selectedItem.fontSize}
+									value={selectedItem.fontSize || (selectedItem.type === 'icon' ? 32 : 24)}
 									oninput={(e) => updateSelectedItem({ fontSize: parseInt(e.currentTarget.value) })}
 								/>
 							{/if}
@@ -597,6 +627,11 @@
 										class="whitespace-nowrap px-2 py-1"
 									>
 										{item.content}
+									</div>
+								{:else if item.type === 'icon'}
+									{@const Icon = (LucideIcons as any)[item.content] as Component}
+									<div style="color: {item.color || 'currentColor'}">
+										<Icon size={item.fontSize ? item.fontSize * 2 : 64} />
 									</div>
 								{/if}
 							</div>

@@ -215,7 +215,7 @@
 			}, 100);
 		}
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
-		if (!isOGPreview) {
+		if (!isIsolatedPage) {
 			if ($isCommandActive) {
 				document.body.classList.add(
 					'overflow-hidden',
@@ -316,7 +316,9 @@
 
 	const pageDescription = $derived(i18n.t(`common.description`));
 
-	const isOGPreview = $derived(page.url.pathname.startsWith('/og-preview'));
+	const isIsolatedPage = $derived(
+		page.url.pathname.startsWith('/og-preview') || page.url.pathname.startsWith('/pap/preview')
+	);
 </script>
 
 <svelte:head>
@@ -345,7 +347,7 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-{#if isOGPreview}
+{#if isIsolatedPage}
 	{@render children?.()}
 {:else}
 	<Command pages={allPages} />

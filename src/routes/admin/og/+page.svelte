@@ -4,20 +4,17 @@
 	import { backgroundTextures } from '$lib/config';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
-	import { Switch } from '$lib/components/ui/switch';
 	import * as Select from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { Download, Copy, ExternalLink, RefreshCcw } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import * as LucideIcons from 'lucide-svelte';
+	import IconPicker from '$lib/components/IconPicker.svelte';
 
 	let title = $state('muenstererOS');
-	let name = $state('muenstererOS');
+	let pageName = $state('');
 	let iconName = $state('Info');
-	let iconSearch = $state('');
-	let showFavicon = $state(false);
 	let theme = $state<'light' | 'dark'>('dark');
 	let texture = $state('dots');
 	let size = $state(1);
@@ -25,23 +22,11 @@
 	let width = $state(1200);
 	let height = $state(630);
 
-	const allIconNames = Object.keys(LucideIcons)
-		.filter(
-			(key) =>
-				typeof (LucideIcons as any)[key] === 'function' ||
-				typeof (LucideIcons as any)[key] === 'object'
-		)
-		.sort();
-
-	const filteredIconNames = $derived(
-		allIconNames.filter((name) => name.toLowerCase().includes(iconSearch.toLowerCase()))
-	);
-
 	const previewUrl = $derived.by(() => {
 		const params = new URLSearchParams({
 			title,
-			name,
-			icon: showFavicon ? 'favicon' : iconName,
+			name: pageName,
+			icon: iconName,
 			theme,
 			texture,
 			size: size.toString(),
@@ -62,13 +47,11 @@
 		toast.info('To download, please use the "Open in New Tab" button and save the screenshot or use the generation script.');
 	}
 
-	function reset() {
-		title = 'muenstererOS';
-		name = 'muenstererOS';
-		iconName = 'Info';
-		iconSearch = '';
-		showFavicon = false;
-		theme = 'dark';
+    function reset() {
+        title = 'muenstererOS';
+        pageName = '';
+        iconName = 'Info';
+        theme = 'dark';
         texture = 'dots';
         size = 1;
         spacing = 16;
@@ -102,50 +85,19 @@
 	<div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
 		<!-- Sidebar Controls -->
 		<div class="space-y-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-			<div class="grid grid-cols-2 gap-4">
-				<div class="space-y-2">
-					<Label for="title">Title Bar</Label>
-					<Input id="title" bind:value={title} />
-				</div>
-				<div class="space-y-2">
-					<Label for="name">Page Name</Label>
-					<Input id="name" bind:value={name} />
-				</div>
+			<div class="space-y-2">
+				<Label for="title">Title Bar</Label>
+				<Input id="title" bind:value={title} />
 			</div>
 
-			<div class="space-y-4">
-				<div class="flex items-center justify-between">
-					<Label for="favicon-toggle">Use Favicon</Label>
-					<Switch id="favicon-toggle" bind:checked={showFavicon} />
-				</div>
+			<div class="space-y-2">
+				<Label for="name">Page Name</Label>
+				<Input id="name" bind:value={pageName} placeholder={title} />
+			</div>
 
-				{#if !showFavicon}
-					<div class="space-y-2">
-						<Label for="icon-search">Search Icons</Label>
-						<Input
-							id="icon-search"
-							placeholder="Search lucide icons..."
-							bind:value={iconSearch}
-						/>
-					</div>
-
-					<div class="space-y-2">
-						<Label for="icon">Icon Name</Label>
-						<Select.Root type="single" bind:value={iconName}>
-							<Select.Trigger>
-								{iconName}
-							</Select.Trigger>
-							<Select.Content class="max-h-80">
-								{#each filteredIconNames as name}
-									<Select.Item value={name}>{name}</Select.Item>
-								{/each}
-								{#if filteredIconNames.length === 0}
-									<div class="p-2 text-center text-sm text-muted-foreground">No icons found</div>
-								{/if}
-							</Select.Content>
-						</Select.Root>
-					</div>
-				{/if}
+			<div class="space-y-2">
+				<Label for="icon">Icon Name</Label>
+				<IconPicker value={iconName} onSelect={(icon) => (iconName = icon)} />
 			</div>
 
 			<div class="grid grid-cols-2 gap-4">
@@ -205,18 +157,15 @@
 		</div>
 
 		<!-- Preview Area -->
-		<div class="flex items-start justify-center lg:col-span-2">
-			<div class="w-full overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm">
+		<div class="lg:col-span-2">
+			<div class="overflow-hidden rounded-xl border border-border bg-black/5 p-4 dark:bg-white/5">
 				<div class="flex flex-col items-center gap-4">
 					<div class="w-full overflow-auto">
-						<div
-							class="mx-auto shadow-2xl"
-							style="width: {width}px; height: {height}px; transform: scale({width > 800 ? 0.4 : 0.8}); transform-origin: top center;"
-						>
+						<div class="mx-auto shadow-2xl" style="width: {width}px; height: {height}px; transform: scale({width > 800 ? 0.4 : 0.8}); transform-origin: top center;">
 							<OGPreview
 								{title}
-								{name}
-								iconName={showFavicon ? 'favicon' : iconName}
+								name={pageName}
+								{iconName}
 								{theme}
 								{texture}
 								{size}
