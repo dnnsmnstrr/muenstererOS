@@ -7,7 +7,6 @@
 
 	let props = $props<{
 		title?: string;
-		name?: string;
 		iconName?: string;
 		theme?: 'light' | 'dark';
 		texture?: string;
@@ -21,7 +20,6 @@
 	}>();
 
 	const title = $derived(props.title || 'muenstererOS');
-	const name = $derived(props.name || title);
 	const theme = $derived(props.theme || 'dark');
 	const iconName = $derived(props.iconName || 'favicon');
 	const texture = $derived(props.texture || 'dots');

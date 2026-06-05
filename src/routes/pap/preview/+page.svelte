@@ -17,7 +17,7 @@
 	});
 
 	const theme = $derived((page.url.searchParams.get('theme') as 'light' | 'dark') || 'dark');
-	const showWindow = $derived(page.url.searchParams.get('window') === 'true');
+	const showWindow = $derived(page.url.searchParams.get('window') !== 'false');
 	const title = $derived(page.url.searchParams.get('title') || 'Canvas Export');
 </script>
 

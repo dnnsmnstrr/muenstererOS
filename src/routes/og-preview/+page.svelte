@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 
 	const title = $derived(page.url.searchParams.get('title') || 'muenstererOS');
-	const name = $derived(page.url.searchParams.get('name') || undefined);
 	const icon = $derived(page.url.searchParams.get('icon') || 'Info');
 	const theme = $derived((page.url.searchParams.get('theme') as 'light' | 'dark') || 'dark');
 	const texture = $derived(page.url.searchParams.get('texture') || 'dots');
@@ -16,7 +15,6 @@
 <div class="flex min-h-screen items-center justify-center bg-black p-0">
 	<OGPreview
 		{title}
-		{name}
 		iconName={icon}
 		{theme}
 		{texture}

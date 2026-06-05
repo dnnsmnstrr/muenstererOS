@@ -60,15 +60,13 @@ async function generateOGImages() {
 	page.setDefaultTimeout(60000);
 
 	for (const p of pages) {
-		const titleBar = 'muenstererOS';
-		const pageName = p.path === '/' ? 'Dennis Muensterer' : p.title;
-		const icon = iconMap[p.title] || 'favicon';
+		const title = p.title;
+		const icon = iconMap[title] || 'favicon';
 		const fileName = p.path === '/' ? 'home' : p.path.replace(/^\//, '').replace(/\//g, '-');
 
 		for (const theme of ['dark', 'light']) {
 			const params = new URLSearchParams({
-				title: titleBar,
-				name: pageName,
+				title,
 				icon,
 				theme,
 				width: '1200',
@@ -78,7 +76,7 @@ async function generateOGImages() {
 			const url = `${BASE_URL}/og-preview?${params.toString()}`;
 			const outputPath = path.join(OUTPUT_DIR, `${fileName}-${theme}.png`);
 
-			console.log(`📸 Generating ${theme} OG image for: ${p.title} -> ${outputPath}`);
+			console.log(`📸 Generating ${theme} OG image for: ${title} -> ${outputPath}`);
 
 			try {
 				await page.goto(url, { waitUntil: 'networkidle' });
@@ -86,7 +84,7 @@ async function generateOGImages() {
 				await page.waitForTimeout(500);
 				await page.screenshot({ path: outputPath });
 			} catch (error) {
-				console.error(`❌ Failed to generate image for ${p.title}:`, error);
+				console.error(`❌ Failed to generate image for ${title}:`, error);
 			}
 		}
 	}

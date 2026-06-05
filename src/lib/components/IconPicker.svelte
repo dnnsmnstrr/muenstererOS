@@ -8,18 +8,22 @@
 	let {
 		value = $bindable('Info'),
 		onSelect,
-		clearOnSelect = false
+		clearOnSelect = false,
+		class: className
 	}: {
 		value?: string;
 		onSelect?: (icon: string) => void;
 		clearOnSelect?: boolean;
+		class?: string;
 	} = $props();
 
 	const allIconNames = Object.keys(LucideIcons)
 		.filter(
 			(key) =>
-				typeof (LucideIcons as any)[key] === 'function' ||
-				typeof (LucideIcons as any)[key] === 'object'
+				(typeof (LucideIcons as any)[key] === 'function' ||
+					typeof (LucideIcons as any)[key] === 'object') &&
+				/^[A-Z]/.test(key) &&
+				key !== 'createLucideIcon'
 		)
 		.sort();
 
@@ -41,7 +45,6 @@
 	}
 </script>
 
-<div class="space-y-2">
 	<Select.Root
 		type="single"
 		bind:value
@@ -49,19 +52,15 @@
 			if (v) handleSelect(v);
 		}}
 	>
-		<Select.Trigger class="w-full" asChild>
-			{#snippet children(params)}
-				{@const triggerProps = params?.props || {}}
-				<button {...triggerProps} class="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
-					<div class="flex items-center gap-2">
-						{#if value && (LucideIcons as any)[value]}
-							{@const Icon = (LucideIcons as any)[value] as Component}
-							<Icon size={16} />
-						{/if}
-						<span>{value || 'Select icon...'}</span>
-					</div>
-				</button>
-			{/snippet}
+		<div class={className}>
+		<Select.Trigger class="w-full">
+			<div class="flex items-center gap-2">
+				{#if value && (LucideIcons as any)[value]}
+					{@const Icon = (LucideIcons as any)[value] as Component}
+					<Icon size={16} />
+				{/if}
+				<span>{value || 'Select icon...'}</span>
+			</div>
 		</Select.Trigger>
 		<Select.Content class="max-h-80">
 			<div class="sticky top-0 z-10 bg-popover p-2">
@@ -73,12 +72,14 @@
 			<div class="overflow-y-auto">
 				{#each filteredIcons.slice(0, 100) as name}
 					{@const Icon = (LucideIcons as any)[name] as Component}
-					<Select.Item value={name} label={name}>
-						<div class="flex items-center gap-2">
-							<Icon size={16} />
-							<span>{name}</span>
-						</div>
-					</Select.Item>
+					{#if Icon}
+						<Select.Item value={name} label={name}>
+							<div class="flex items-center gap-2">
+								<Icon size={16} />
+								<span>{name}</span>
+							</div>
+						</Select.Item>
+					{/if}
 				{/each}
 				{#if filteredIcons.length > 100}
 					<div class="p-2 text-center text-xs text-muted-foreground">
@@ -90,5 +91,5 @@
 				{/if}
 			</div>
 		</Select.Content>
+		</div>
 	</Select.Root>
-</div>

@@ -78,7 +78,7 @@
 	import { page } from '$app/state';
 	import { links, gists } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { PUBLIC_ALGOLIA_APP_ID, PUBLIC_ALGOLIA_API_KEY } from '$env/static/public';
+	import * as env from '$env/static/public';
 	import { unlockAchievement } from '$lib/stores/achievements';
 	import { CHEAT_CODES, triggerCheatAnimation, findCheatCode } from '$lib/utils/cheatcodes';
 	import docsearch from '@docsearch/js';
@@ -263,10 +263,18 @@
 	}
 
 	function initDocsearch() {
+		const appId = (env as any).PUBLIC_ALGOLIA_APP_ID;
+		const apiKey = (env as any).PUBLIC_ALGOLIA_API_KEY;
+
+		if (!appId || !apiKey) {
+			debugLog('Algolia credentials not found, skipping DocSearch initialization');
+			return;
+		}
+
 		docsearch({
 			container: '#docsearch',
-			appId: PUBLIC_ALGOLIA_APP_ID,
-			apiKey: PUBLIC_ALGOLIA_API_KEY,
+			appId,
+			apiKey,
 			indexName: 'dnnsmnstrr-gitlab',
 			placeholder: i18n.t('command.search_zettelkasten'),
 			insights: true,
