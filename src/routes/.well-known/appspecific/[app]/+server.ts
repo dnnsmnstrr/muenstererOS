@@ -1,4 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 import crypto from 'crypto';
 
 const TARGET_APP = 'com.chrome.devtools.json';
@@ -12,7 +13,8 @@ function uuidFromString(value: string): string {
 }
 
 export const GET: RequestHandler = async ({ params }) => {
-	if (params.app !== TARGET_APP) {
+	// Only allow this endpoint in development mode to avoid leaking absolute server paths
+	if (!dev || params.app !== TARGET_APP) {
 		return new Response(null, { status: 404 });
 	}
 
