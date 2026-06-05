@@ -13,16 +13,23 @@
 		CardHeader,
 		CardTitle
 	} from '$lib/components/ui/card';
+	import { Button } from '$lib/components/ui/button';
+	import { toast } from 'svelte-sonner';
+	import AnswerModal from './AnswerModal.svelte';
 	import type { PageProps } from './$types';
 	import type { NtfyMessage, FAQItem } from '$lib/types';
 	import { getFriendlyTime } from '$lib/utils/helper';
-	import { MessageCircleQuestion, InfoIcon } from 'lucide-svelte';
+	import { MessageCircleQuestion, InfoIcon, Copy, MessageSquarePlus } from 'lucide-svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	let { data }: PageProps = $props();
 
 	let isAdmin = $state(false);
 	let recentQuestions = $state<NtfyMessage[]>([]);
 	let loadingQuestions = $state(false);
+	let isAnswerModalOpen = $state(false);
+	let selectedQuestion = $state('');
+	let selectedNtfyId = $state('');
 
 	async function checkAdminStatus() {
 		if (!browser) return;
@@ -89,6 +96,22 @@
 			fetchRecentQuestions();
 		}
 	});
+
+	function handleCopy(text: string) {
+		navigator.clipboard.writeText(text);
+		toast.success(i18n.t('snippets.copied'));
+	}
+
+	function openAnswerModal(msg: NtfyMessage) {
+		selectedQuestion = msg.message || '';
+		selectedNtfyId = msg.id;
+		isAnswerModalOpen = true;
+	}
+
+	function handleAnswerSuccess() {
+		fetchRecentQuestions();
+		invalidateAll();
+	}
 
 	const getLocalized = (item: FAQItem, key: 'question' | 'answer') => {
 		if (i18n.lang === 'de' && item[`${key}_de` as keyof FAQItem]) {
@@ -180,11 +203,33 @@
 						{:else if recentQuestions.length > 0}
 							<div class="divide-y divide-border">
 								{#each recentQuestions as msg}
-									<div class="py-3 first:pt-0 last:pb-0">
-										<p class="text-sm">{msg.message}</p>
-										<p class="text-muted-foreground text-xs">
-											{getFriendlyTime(new Date(msg.time * 1000))}
-										</p>
+									<div class="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0">
+										<div class="flex-grow">
+											<p class="text-sm">{msg.message}</p>
+											<p class="text-muted-foreground text-xs">
+												{getFriendlyTime(new Date(msg.time * 1000))}
+											</p>
+										</div>
+										<div class="flex shrink-0 gap-2">
+											<Button
+												variant="outline"
+												size="icon"
+												class="h-8 w-8"
+												onclick={() => handleCopy(msg.message || '')}
+												title={i18n.t('common.copy')}
+											>
+												<Copy class="h-4 w-4" />
+											</Button>
+											<Button
+												variant="outline"
+												size="sm"
+												class="h-8 gap-2"
+												onclick={() => openAnswerModal(msg)}
+											>
+												<MessageSquarePlus class="h-4 w-4" />
+												{i18n.t('faq.answer')}
+											</Button>
+										</div>
 									</div>
 								{/each}
 							</div>
@@ -197,3 +242,10 @@
 		</div>
 	{/if}
 </div>
+
+<AnswerModal
+	bind:open={isAnswerModalOpen}
+	question={selectedQuestion}
+	ntfyId={selectedNtfyId}
+	onSuccess={handleAnswerSuccess}
+/>

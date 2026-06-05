@@ -56,7 +56,12 @@ export async function GET({ params, url, request, fetch }) {
 			changes: item.change_status?.total
 		}));
 
-		const responseData = { ...gistData, updatedAt, gistUrl: apiData.html_url, versions };
+		const responseData = {
+			...(Array.isArray(gistData) ? { items: gistData } : gistData),
+			updatedAt,
+			gistUrl: apiData.html_url,
+			versions
+		};
 
 		// Update cache
 		gistCache.set(name, responseData, CACHE_TTL);

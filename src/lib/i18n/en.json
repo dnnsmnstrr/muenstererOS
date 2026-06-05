@@ -435,7 +435,16 @@
 		"success": "Question submitted! I'll get back to you soon.",
 		"error": "Failed to submit question. Please try again later.",
 		"pending_questions": "Pending Questions",
-		"no_data": "No FAQ data available yet."
+		"no_data": "No FAQ data available yet.",
+		"answer": "Answer",
+		"answer_question": "Answer Question",
+		"question_en": "Question (EN)",
+		"question_de": "Question (DE)",
+		"answer_en": "Answer (EN)",
+		"answer_de": "Answer (DE)",
+		"category": "Category",
+		"tags_placeholder": "Tags (comma separated)",
+		"save_faq": "Save to FAQ"
 	},
 	"api": {
 		"title": "API",
