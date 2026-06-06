@@ -8,11 +8,15 @@
 	import { cn } from '$lib/utils/utils';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { onMount, untrack } from 'svelte';
-	import { Plus, Trash, Download } from 'lucide-svelte';
+	import { Plus, Trash, Download, Share, Edit3 } from 'lucide-svelte';
 	import { confirmDelete, ConfirmDeleteDialog } from '$lib/components/ui/confirm-delete-dialog';
 	import IconPicker from '$lib/components/IconPicker.svelte';
 	import * as LucideIcons from 'lucide-svelte';
 	import type { Component } from 'svelte';
+	import * as EmojiPicker from '$lib/components/ui/emoji-picker';
+	import * as Popover from '$lib/components/ui/popover';
+	import * as SplitButton from '$lib/components/ui/split-button';
+	import { Smile } from 'lucide-svelte';
 
 	let password = $state('');
 	let isUnlocked = $state(false);
@@ -334,10 +338,23 @@
 		}
 	}
 
-	function exportImage() {
+	function getPreviewUrl() {
 		const data = JSON.stringify(items);
 		const hash = btoa(encodeURIComponent(data));
-		window.open(`/pap/preview?data=${hash}`, '_blank');
+		return `${window.location.origin}/pap/preview?data=${hash}`;
+	}
+
+	function exportImage() {
+		window.open(getPreviewUrl(), '_blank');
+	}
+
+	async function shareCanvas() {
+		try {
+			await navigator.clipboard.writeText(getPreviewUrl());
+			toast.success('Preview link copied to clipboard!');
+		} catch (err) {
+			toast.error('Failed to copy link');
+		}
 	}
 </script>
 
@@ -378,6 +395,49 @@
 						</div>
 
 						<div class="hidden items-center space-x-1 border-l pl-2 md:flex">
+							<Popover.Root>
+								<Popover.Trigger>
+									{#snippet child({ props })}
+										<Button variant="ghost" size="sm" {...props} class="h-8 w-8 p-0">
+											<Smile size={20} />
+										</Button>
+									{/snippet}
+								</Popover.Trigger>
+								<Popover.Content class="w-full p-0" align="start">
+									<EmojiPicker.Root
+										onSelect={(v) => {
+											addItem('emoji', v.emoji);
+										}}
+										showRecents
+										recentsKey="pap-emoji-recents"
+									>
+										<EmojiPicker.Viewport>
+											<EmojiPicker.Search />
+											<EmojiPicker.List />
+											<EmojiPicker.Footer>
+												{#snippet children({ active })}
+													<div class="flex items-center justify-between">
+														<div class="flex items-center gap-2">
+															{#if active}
+																<span class="text-2xl">{active.emoji}</span>
+																<span class="text-xs text-muted-foreground"
+																	>:{active.data.id}:</span
+																>
+															{:else}
+																<Smile class="size-5 text-muted-foreground" />
+																<span class="text-xs text-muted-foreground"
+																	>Select an emoji...</span
+																>
+															{/if}
+														</div>
+														<EmojiPicker.SkinToneSelector />
+													</div>
+												{/snippet}
+											</EmojiPicker.Footer>
+										</EmojiPicker.Viewport>
+									</EmojiPicker.Root>
+								</Popover.Content>
+							</Popover.Root>
 							{#each ['😊', '😂', '❤️', '🔥', '✨', '🍕', '🚀', '🎨'] as emoji}
 								<button
 									class="flex h-8 w-8 items-center justify-center rounded text-lg transition-colors hover:bg-accent"
@@ -390,43 +450,71 @@
 
 						<div class="mx-2 h-6 w-px bg-border"></div>
 
-						<div class="w-40">
-							<IconPicker onSelect={(icon) => addItem('icon', icon)} clearOnSelect />
-						</div>
+						<IconPicker
+							onSelect={(icon) => addItem('icon', icon)}
+							clearOnSelect
+							triggerMode="button"
+						/>
 
 						<div class="mx-2 h-6 w-px bg-border"></div>
 
-						<Button
-							variant="ghost"
-							size="sm"
-							onclick={exportImage}
-							class="text-xs"
+						<SplitButton.Root
+							value="share"
+							onclick={(e) => {
+								if (e.action === 'share') shareCanvas();
+								if (e.action === 'export') exportImage();
+								if (e.action === 'editor') {
+									toast.info('You are already in the editor!');
+								}
+								if (e.action === 'clear') {
+									confirmDelete({
+										title: 'Clear Canvas',
+										description:
+											'Are you sure you want to clear the entire canvas? This cannot be undone.',
+										onConfirm: async () => {
+											items = [];
+										}
+									});
+								}
+							}}
 							disabled={items.length === 0}
 						>
-							<Download class="sm:hidden" />
-							<span class="hidden sm:block">Export</span>
-						</Button>
-
-						<Button
-							variant="ghost"
-							size="sm"
-							onclick={() =>
-								confirmDelete({
-									title: 'Clear Canvas',
-									description:
-										'Are you sure you want to clear the entire canvas? This cannot be undone.',
-									onConfirm: async () => {
-										items = [];
-									}
-								})}
-							class="text-xs"
-							disabled={items.length === 0}
-						>
-							<Trash class="sm:hidden" />
-							<span class="hidden sm:block">
-								{i18n.t('pap.clear_canvas')}
-							</span>
-						</Button>
+							<SplitButton.Action value="share" variant="ghost" size="sm" class="text-xs">
+								<Share class="mr-1 size-4" /> Share
+							</SplitButton.Action>
+							<SplitButton.Action value="export" variant="ghost" size="sm" class="text-xs">
+								<Download class="mr-1 size-4" /> Export
+							</SplitButton.Action>
+							<SplitButton.Action value="editor" variant="ghost" size="sm" class="text-xs">
+								<Edit3 class="mr-1 size-4" /> Editor
+							</SplitButton.Action>
+							<SplitButton.Action
+								value="clear"
+								variant="ghost"
+								size="sm"
+								class="text-xs text-destructive"
+							>
+								<Trash class="mr-1 size-4" /> {i18n.t('pap.clear_canvas')}
+							</SplitButton.Action>
+							<SplitButton.Select>
+								<SplitButton.SelectTrigger variant="ghost" size="sm" class="px-2" />
+								<SplitButton.SelectContent>
+									<SplitButton.SelectAction value="share">
+										<Share class="mr-2 size-4" /> Share
+									</SplitButton.SelectAction>
+									<SplitButton.SelectAction value="export">
+										<Download class="mr-2 size-4" /> Export
+									</SplitButton.SelectAction>
+									<SplitButton.SelectAction value="editor">
+										<Edit3 class="mr-2 size-4" /> Editor
+									</SplitButton.SelectAction>
+									<SplitButton.SelectSeparator />
+									<SplitButton.SelectAction value="clear" class="text-destructive">
+										<Trash class="mr-2 size-4" /> {i18n.t('pap.clear_canvas')}
+									</SplitButton.SelectAction>
+								</SplitButton.SelectContent>
+							</SplitButton.Select>
+						</SplitButton.Root>
 					</div>
 				</div>
 			</div>
