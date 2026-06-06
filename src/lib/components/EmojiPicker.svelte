@@ -16,7 +16,7 @@
 </script>
 
 <Popover.Root>
-	<Popover.Trigger>
+	<Popover.Trigger asChild>
 		{#snippet child({ props })}
 			<Button variant="ghost" size="sm" {...props} class={className}>
 				{#if value}

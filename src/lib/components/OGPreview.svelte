@@ -88,7 +88,7 @@
 								: 'rgba(255,255,255,0.1)'}"
 						>
 							{#if isFavicon}
-								<img src="/images/muenstererOS.svg" alt="Favicon" class="h-32 w-32 object-contain" />
+								<img src="/favicon.ico" alt="Favicon" class="h-32 w-32 object-contain" />
 							{:else}
 								<Icon size={128} strokeWidth={1.5} />
 							{/if}
@@ -111,7 +111,7 @@
 			{:else}
 				<div class="flex flex-col items-center gap-6">
 					{#if isFavicon}
-						<img src="/images/muenstererOS.svg" alt="Favicon" class="h-32 w-32 object-contain" />
+						<img src="/favicon.ico" alt="Favicon" class="h-32 w-32 object-contain" />
 					{:else}
 						<Icon size={128} strokeWidth={1.5} />
 					{/if}
