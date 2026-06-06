@@ -16,7 +16,7 @@ export const redirects: Redirect[] = [
 	{
 		name: 'contact',
 		description: 'Send me an email',
-		url: links.mailto,
+		url: links.contact,
 		aliases: ['email', 'message', 'mail', '📧']
 	},
 	{

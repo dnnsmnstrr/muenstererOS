@@ -65,6 +65,7 @@ export const links = {
 	applemusic: 'https://music.apple.com/profile/' + USERNAME_SHORT,
 	email: EMAIL,
 	mailto: 'mailto:' + EMAIL,
+	contact: '/contact',
 	cv: 'https://cv.muensterer.tech',
 	pages: `https://${USERNAME_SHORT}.github.io`
 } as const;
