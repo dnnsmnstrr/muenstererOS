@@ -211,7 +211,7 @@
 					debugLog($showHelp ? 'Showing' : 'Closing', 'help dialog...');
 					break;
 				case '@':
-					goto(links.contact);
+					window.location.href = links.mailto;
 					break;
 				default:
 					break;

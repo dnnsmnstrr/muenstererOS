@@ -65,6 +65,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@emoji-mart/data": "^1.2.1",
 		"@jazzymcjazz/mdsvelte": "^0.3.3",
 		"@lucide/lab": "^0.1.2",
 		"@sveltelegos-blue/svelte-legos": "^0.5.1",

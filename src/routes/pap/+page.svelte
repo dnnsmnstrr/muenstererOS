@@ -8,11 +8,13 @@
 	import { cn } from '$lib/utils/utils';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { onMount, untrack } from 'svelte';
-	import { Plus, Trash, Download } from 'lucide-svelte';
+	import { Plus, Trash, Download, Share, Pen } from 'lucide-svelte';
 	import { confirmDelete, ConfirmDeleteDialog } from '$lib/components/ui/confirm-delete-dialog';
 	import IconPicker from '$lib/components/IconPicker.svelte';
+	import EmojiPicker from '$lib/components/EmojiPicker.svelte';
 	import * as LucideIcons from 'lucide-svelte';
 	import type { Component } from 'svelte';
+	import * as SplitButton from '$lib/components/ui/split-button';
 
 	let password = $state('');
 	let isUnlocked = $state(false);
@@ -334,11 +336,26 @@
 		}
 	}
 
-	function exportImage() {
+	function encodeUrl(preview = false) {
 		const data = JSON.stringify(items);
 		const hash = btoa(encodeURIComponent(data));
-		window.open(`/pap/preview?data=${hash}`, '_blank');
+		return `${window.location.origin}/pap${preview ? '/preview' : ''}?data=${hash}`;
 	}
+
+	function exportImage() {
+		window.open(encodeUrl(true), '_blank');
+	}
+
+	async function shareCanvas({ editor = false } = {}) {
+		try {
+			await navigator.clipboard.writeText(encodeUrl(!editor));
+			toast.success('Preview link copied to clipboard!');
+		} catch (err) {
+			toast.error('Failed to copy link');
+		}
+	}
+
+	let currentAction = $state<string>('share');
 </script>
 
 <svelte:head>
@@ -361,72 +378,123 @@
 			</div>
 		</div>
 	{:else}
-		<div class="flex h-full w-full max-h-dvh flex-col space-y-6 overflow-hidden">
+		<div class="flex h-full max-h-dvh w-full flex-col space-y-6 overflow-hidden">
 			<div class="flex items-center justify-between">
 				<div class="sticky top-0 z-50 flex w-full flex-col items-center space-y-4">
 					<div
-						class="flex items-center space-x-2 rounded-full border bg-background/80 p-2 shadow-sm backdrop-blur-sm"
+						class="flex flex-col items-center rounded-2xl border bg-background/80 p-2 shadow-sm backdrop-blur-sm md:flex-row md:space-x-2 md:rounded-full"
 					>
-						<div class="flex items-center space-x-2 px-1">
+						<div class="flex w-full items-center space-x-2 px-1 md:w-auto">
 							<Input
 								placeholder="Paste GIF URL or type text..."
 								bind:value={newItemContent}
-								class="h-8 w-56 md:w-64 rounded-full"
+								class="h-8 flex-grow rounded-full md:w-64"
 								onkeydown={(e) => e.key === 'Enter' && handleInputSubmit()}
 							/>
-							<Button size="sm" variant="ghost" onclick={handleInputSubmit}><Plus /> <span class="hidden md:block">Add</span></Button>
+							<Button size="sm" variant="ghost" onclick={handleInputSubmit}>
+								<Plus /> <span class="hidden md:block">Add</span>
+							</Button>
 						</div>
 
-						<div class="hidden items-center space-x-1 border-l pl-2 md:flex">
-							{#each ['😊', '😂', '❤️', '🔥', '✨', '🍕', '🚀', '🎨'] as emoji}
-								<button
-									class="flex h-8 w-8 items-center justify-center rounded text-lg transition-colors hover:bg-accent"
-									onclick={() => addItem('emoji', emoji)}
-								>
-									{emoji}
-								</button>
-							{/each}
-						</div>
-
-						<div class="mx-2 h-6 w-px bg-border"></div>
-
-						<div class="w-40">
-							<IconPicker onSelect={(icon) => addItem('icon', icon)} clearOnSelect />
-						</div>
-
-						<div class="mx-2 h-6 w-px bg-border"></div>
-
-						<Button
-							variant="ghost"
-							size="sm"
-							onclick={exportImage}
-							class="text-xs"
-							disabled={items.length === 0}
+						<div
+							class="mt-2 flex w-full items-center justify-between border-t pt-2 md:mt-0 md:w-auto md:justify-start md:border-l md:border-t-0 md:pl-1 md:pt-0"
 						>
-							<Download class="sm:hidden" />
-							<span class="hidden sm:block">Export</span>
-						</Button>
+							<div class="flex items-center gap-1 md:mx-2">
+								<EmojiPicker
+									onSelect={(emoji) => addItem('emoji', emoji)}
+									class="h-8 w-8 p-0"
+									showLast={false}
+								/>
 
-						<Button
-							variant="ghost"
-							size="sm"
-							onclick={() =>
-								confirmDelete({
-									title: 'Clear Canvas',
-									description:
-										'Are you sure you want to clear the entire canvas? This cannot be undone.',
-									onConfirm: async () => {
-										items = [];
+								<div class="mx-1 h-6 w-px bg-border md:mx-2"></div>
+
+								<IconPicker
+									value="Sticker"
+									onSelect={(icon) => addItem('icon', icon)}
+									clearOnSelect
+									triggerMode="button"
+									class="h-8 w-8 p-0"
+								/>
+							</div>
+
+							<div class="mx-2 hidden h-6 w-px bg-border md:ml-1 md:block"></div>
+
+							<SplitButton.Root
+								bind:value={currentAction}
+								onclick={(e) => {
+									if (e.action === 'share') shareCanvas();
+									if (e.action === 'export') exportImage();
+									if (e.action === 'editor') {
+										toast.info('You are already in the editor!');
 									}
-								})}
-							class="text-xs"
-							disabled={items.length === 0}
-						>
-							<Trash class="sm:hidden" />
-							<span class="hidden sm:block">
-								{i18n.t('pap.clear_canvas')}
-							</span>
-						</Button>
+									if (e.action === 'clear') {
+										confirmDelete({
+											title: 'Clear Canvas',
+											description:
+												'Are you sure you want to clear the entire canvas? This cannot be undone.',
+											onConfirm: async () => {
+												items = [];
+											}
+										});
+									}
+								}}
+								onActionSelect={(action) => {
+									currentAction = 'share';
+									if (action === 'share') shareCanvas();
+									if (action === 'export') exportImage();
+									if (action === 'editor') shareCanvas({ editor: true });
+									if (action === 'clear') {
+										confirmDelete({
+											title: 'Clear Canvas',
+											description:
+												'Are you sure you want to clear the entire canvas? This cannot be undone.',
+											onConfirm: async () => {
+												items = [];
+											}
+										});
+									}
+								}}
+								disabled={items.length === 0}
+							>
+								<SplitButton.Action value="share" variant="ghost" size="sm" class="text-xs">
+									<Share class="mr-1 size-4" /> Share
+								</SplitButton.Action>
+								<SplitButton.Action value="export" variant="ghost" size="sm" class="text-xs">
+									<Download class="mr-1 size-4" /> Export
+								</SplitButton.Action>
+								<SplitButton.Action value="editor" variant="ghost" size="sm" class="text-xs">
+									<Pen class="mr-1 size-4" /> Editor Link
+								</SplitButton.Action>
+								<SplitButton.Action
+									value="clear"
+									variant="ghost"
+									size="sm"
+									class="text-xs text-destructive"
+								>
+									<Trash class="mr-1 size-4" />
+									{i18n.t('pap.clear_canvas')}
+								</SplitButton.Action>
+								<SplitButton.Select>
+									<SplitButton.SelectTrigger variant="ghost" size="sm" class="px-2" />
+									<SplitButton.SelectContent>
+										<SplitButton.SelectAction value="share">
+											<Share class="mr-2 size-4" /> Share
+										</SplitButton.SelectAction>
+										<SplitButton.SelectAction value="export">
+											<Download class="mr-2 size-4" /> Export
+										</SplitButton.SelectAction>
+										<SplitButton.SelectAction value="editor">
+											<Pen class="mr-2 size-4" /> Editor
+										</SplitButton.SelectAction>
+										<SplitButton.SelectSeparator />
+										<SplitButton.SelectAction value="clear" class="text-destructive">
+											<Trash class="mr-2 size-4" />
+											{i18n.t('pap.clear_canvas')}
+										</SplitButton.SelectAction>
+									</SplitButton.SelectContent>
+								</SplitButton.Select>
+							</SplitButton.Root>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -455,115 +523,130 @@
 				{#if selectionRect}
 					<div
 						class="pointer-events-none absolute z-50 rounded border-2 border-blue-400 bg-blue-400/10"
-						style="left: {Math.min(selectionRect.x1, selectionRect.x2)}px; top: {Math.min(selectionRect.y1, selectionRect.y2)}px; width: {Math.abs(selectionRect.x2 - selectionRect.x1)}px; height: {Math.abs(selectionRect.y2 - selectionRect.y1)}px;"
+						style="left: {Math.min(selectionRect.x1, selectionRect.x2)}px; top: {Math.min(
+							selectionRect.y1,
+							selectionRect.y2
+						)}px; width: {Math.abs(selectionRect.x2 - selectionRect.x1)}px; height: {Math.abs(
+							selectionRect.y2 - selectionRect.y1
+						)}px;"
 					></div>
 				{/if}
 				{#if selectedIds.length === 1}
 					{@const selectedItem = items.find((i) => i.id === selectedIds[0])}
 					{#if selectedItem}
 						<div
-							class="absolute z-[60] flex items-center space-x-2 rounded-lg border bg-background/80 p-2 text-xs shadow-sm backdrop-blur-sm"
+							class="absolute z-[60] flex flex-col items-center gap-2 space-x-2 rounded-lg border bg-background/80 p-2 text-xs shadow-sm backdrop-blur-sm md:flex-row"
 							style="left: {selectedItem.x}px; top: {selectedItem.y -
 								selectedItemHeight / 2 -
 								8}px; transform: translate(-50%, -100%);"
 						>
-							<span class="font-bold">Edit:</span>
 							{#if selectedItem.type === 'text' || selectedItem.type === 'icon'}
-								<Input
-									type="color"
-									class="h-6 w-10 border-none p-0"
-									value={selectedItem.color}
-									oninput={(e) => updateSelectedItem({ color: e.currentTarget.value })}
-								/>
-								{#if selectedItem.type === 'text'}
+								<div class="flex items-center gap-1">
+									<span class="font-bold">Color:</span>
+									<Input
+										type="color"
+										class="h-6 w-10 border-none p-0"
+										value={selectedItem.color}
+										oninput={(e) => updateSelectedItem({ color: e.currentTarget.value })}
+									/>
+									{#if selectedItem.type === 'text'}
+										<Button
+											variant="outline"
+											size="sm"
+											class="h-6 px-2"
+											onclick={() =>
+												updateSelectedItem({
+													fontWeight: selectedItem.fontWeight === 'bold' ? 'normal' : 'bold'
+												})}
+										>
+											<b>B</b>
+										</Button>
+									{/if}
+									<Input
+										type="number"
+										class="h-6 w-16"
+										value={selectedItem.fontSize || (selectedItem.type === 'icon' ? 32 : 24)}
+										oninput={(e) =>
+											updateSelectedItem({ fontSize: parseInt(e.currentTarget.value) })}
+									/>
+								</div>
+							{/if}
+							<div class="flex items-center gap-1">
+								{#if selectedItem.type !== 'text'}
+									<div
+										class="flex items-center gap-1 {selectedItem.type === 'text' ||
+										selectedItem.type === 'icon'
+											? 'border-l'
+											: ''} pl-2"
+										onwheel={(e) => {
+											e.preventDefault();
+											updateSelectedItem({
+												scale: Math.max(0.1, selectedItem.scale + (e.deltaY > 0 ? -0.1 : 0.1))
+											});
+										}}
+									>
+										<span>Size:</span>
+										<Button
+											variant="outline"
+											size="sm"
+											class="h-6 px-2"
+											onclick={() =>
+												updateSelectedItem({ scale: Math.max(0.1, selectedItem.scale - 0.1) })}
+											>-</Button
+										>
+										<Button
+											variant="outline"
+											size="sm"
+											class="h-6 px-2"
+											onclick={() => updateSelectedItem({ scale: selectedItem.scale + 0.1 })}
+											>+</Button
+										>
+									</div>
+								{/if}
+								<div
+									class="flex items-center gap-1 md:border-l pl-2"
+									onwheel={(e) => {
+										e.preventDefault();
+										updateSelectedItem({
+											rotation: selectedItem.rotation + (e.deltaY > 0 ? -15 : 15)
+										});
+									}}
+								>
+									<span>Rotate:</span>
 									<Button
 										variant="outline"
 										size="sm"
 										class="h-6 px-2"
-										onclick={() =>
-											updateSelectedItem({
-												fontWeight: selectedItem.fontWeight === 'bold' ? 'normal' : 'bold'
-											})}
+										onclick={() => updateSelectedItem({ rotation: selectedItem.rotation - 15 })}
+										>↺</Button
 									>
-										<b>B</b>
-									</Button>
-								{/if}
-								<Input
-									type="number"
-									class="h-6 w-12"
-									value={selectedItem.fontSize || (selectedItem.type === 'icon' ? 32 : 24)}
-									oninput={(e) => updateSelectedItem({ fontSize: parseInt(e.currentTarget.value) })}
-								/>
-							{/if}
-							<div
-								class="flex items-center space-x-1 border-l pl-2"
-								onwheel={(e) => {
-									e.preventDefault();
-									updateSelectedItem({
-										scale: Math.max(0.1, selectedItem.scale + (e.deltaY > 0 ? -0.1 : 0.1))
-									});
-								}}
-							>
-								<span>Size:</span>
+									<Button
+										variant="outline"
+										size="sm"
+										class="h-6 px-2"
+										onclick={() => updateSelectedItem({ rotation: selectedItem.rotation + 15 })}
+										>↻</Button
+									>
+								</div>
 								<Button
-									variant="outline"
+									variant="destructive"
 									size="sm"
-									class="h-6 px-2"
-									onclick={() =>
-										updateSelectedItem({ scale: Math.max(0.1, selectedItem.scale - 0.1) })}
-									>-</Button
-								>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() => updateSelectedItem({ scale: selectedItem.scale + 0.1 })}>+</Button
+									class="ml-4 h-6 px-2"
+									onclick={removeSelectedItems}>Remove</Button
 								>
 							</div>
-							<div
-								class="flex items-center space-x-1 border-l pl-2"
-								onwheel={(e) => {
-									e.preventDefault();
-									updateSelectedItem({
-										rotation: selectedItem.rotation + (e.deltaY > 0 ? -15 : 15)
-									});
-								}}
-							>
-								<span>Rotate:</span>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() => updateSelectedItem({ rotation: selectedItem.rotation - 15 })}
-									>↺</Button
-								>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() => updateSelectedItem({ rotation: selectedItem.rotation + 15 })}
-									>↻</Button
-								>
-							</div>
-							<Button
-								variant="destructive"
-								size="sm"
-								class="ml-4 h-6 px-2"
-								onclick={removeSelectedItems}>Remove</Button
-							>
 						</div>
 					{/if}
 				{:else if selectedIds.length > 1}
 					<div
 						class="absolute z-[60] flex items-center gap-2 rounded-lg border bg-background/80 px-3 py-2 text-xs shadow-sm backdrop-blur-sm"
-						style="left: {items.find((i) => i.id === selectedIds[0])?.x ?? 0}px; top: {items.find((i) => i.id === selectedIds[0])?.y ?? 0 - selectedItemHeight / 2 - 8}px; transform: translate(-50%, -100%);"
+						style="left: {items.find((i) => i.id === selectedIds[0])?.x ?? 0}px; top: {items.find(
+							(i) => i.id === selectedIds[0]
+						)?.y ?? 0 - selectedItemHeight / 2 - 8}px; transform: translate(-50%, -100%);"
 					>
 						<span>{selectedIds.length} items selected</span>
-						<Button
-							variant="destructive"
-							size="sm"
-							class="h-6 px-2"
-							onclick={removeSelectedItems}>Remove all</Button
+						<Button variant="destructive" size="sm" class="h-6 px-2" onclick={removeSelectedItems}
+							>Remove all</Button
 						>
 					</div>
 				{/if}

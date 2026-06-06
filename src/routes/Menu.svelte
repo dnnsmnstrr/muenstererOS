@@ -198,7 +198,7 @@
 				<Menubar.Shortcut>?</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
-			<Menubar.Link href={links.contact}>
+			<Menubar.Link href={links.mailto} target="_blank">
 				{i18n.t('common.contact')}
 				<Menubar.Shortcut>@</Menubar.Shortcut>
 			</Menubar.Link>
