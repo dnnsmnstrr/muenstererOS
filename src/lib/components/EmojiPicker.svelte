@@ -7,35 +7,41 @@
 	let {
 		value = $bindable(''),
 		onSelect,
-		class: className
+		class: className,
+		showLast = true
 	}: {
 		value?: string;
 		onSelect?: (emoji: string) => void;
 		class?: string;
+		showLast?: boolean;
 	} = $props();
+
+	let open = $state(false);
 </script>
 
-<Popover.Root>
-	<Popover.Trigger asChild>
-		{#snippet child({ props })}
-			<Button variant="ghost" size="sm" {...props} class={className}>
-				{#if value}
-					<span class="text-lg leading-none">{value}</span>
-				{:else}
-					<Smile size={20} />
-				{/if}
-			</Button>
-		{/snippet}
-	</Popover.Trigger>
-	<Popover.Content class="w-80 p-0" align="start">
-		<EmojiPicker.Root
-			onSelect={(v) => {
-				value = v.emoji;
-				onSelect?.(v.emoji);
-			}}
-			showRecents
-			recentsKey="pap-emoji-recents"
-		>
+<EmojiPicker.Root
+	bind:value
+	onSelect={(v) => {
+		open = false;
+		value = v.emoji;
+		onSelect?.(v.emoji);
+	}}
+	showRecents
+	recentsKey="pap-emoji-recents"
+>
+	<Popover.Root bind:open>
+		<Popover.Trigger asChild>
+			{#snippet child({ props })}
+				<Button variant="ghost" size="sm" {...props} class={className}>
+					{#if value && showLast}
+						<span class="text-lg leading-none">{value}</span>
+					{:else}
+						<Smile size={20} />
+					{/if}
+				</Button>
+			{/snippet}
+		</Popover.Trigger>
+		<Popover.Content class="w-auto p-0" align="start">
 			<EmojiPicker.Viewport>
 				<EmojiPicker.Search />
 				<EmojiPicker.List />
@@ -56,6 +62,6 @@
 					{/snippet}
 				</EmojiPicker.Footer>
 			</EmojiPicker.Viewport>
-		</EmojiPicker.Root>
-	</Popover.Content>
-</Popover.Root>
+		</Popover.Content>
+	</Popover.Root>
+</EmojiPicker.Root>

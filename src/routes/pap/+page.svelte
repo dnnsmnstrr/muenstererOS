@@ -8,7 +8,7 @@
 	import { cn } from '$lib/utils/utils';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { onMount, untrack } from 'svelte';
-	import { Plus, Trash, Download, Share, Edit3 } from 'lucide-svelte';
+	import { Plus, Trash, Download, Share, Pen } from 'lucide-svelte';
 	import { confirmDelete, ConfirmDeleteDialog } from '$lib/components/ui/confirm-delete-dialog';
 	import IconPicker from '$lib/components/IconPicker.svelte';
 	import EmojiPicker from '$lib/components/EmojiPicker.svelte';
@@ -336,24 +336,26 @@
 		}
 	}
 
-	function getPreviewUrl() {
+	function encodeUrl(preview = false) {
 		const data = JSON.stringify(items);
 		const hash = btoa(encodeURIComponent(data));
-		return `${window.location.origin}/pap/preview?data=${hash}`;
+		return `${window.location.origin}/pap${preview ? '/preview' : ''}?data=${hash}`;
 	}
 
 	function exportImage() {
-		window.open(getPreviewUrl(), '_blank');
+		window.open(encodeUrl(true), '_blank');
 	}
 
-	async function shareCanvas() {
+	async function shareCanvas({ editor = false } = {}) {
 		try {
-			await navigator.clipboard.writeText(getPreviewUrl());
+			await navigator.clipboard.writeText(encodeUrl(!editor));
 			toast.success('Preview link copied to clipboard!');
 		} catch (err) {
 			toast.error('Failed to copy link');
 		}
 	}
+
+	let currentAction = $state<string>('share');
 </script>
 
 <svelte:head>
@@ -396,28 +398,19 @@
 						</div>
 
 						<div
-							class="mt-2 flex w-full items-center justify-between border-t pt-2 md:mt-0 md:w-auto md:justify-start md:border-l md:border-t-0 md:pt-0"
+							class="mt-2 flex w-full items-center justify-between border-t pt-2 md:mt-0 md:w-auto md:justify-start md:border-l md:border-t-0 md:pt-0 md:pl-1"
 						>
 							<div class="flex items-center space-x-1">
 								<EmojiPicker
 									onSelect={(emoji) => addItem('emoji', emoji)}
 									class="h-8 w-8 p-0"
+									showLast={false}
 								/>
-
-								<div class="hidden items-center space-x-1 md:flex">
-									{#each ['😊', '😂', '❤️', '🔥', '✨', '🍕', '🚀', '🎨'] as emoji}
-										<button
-											class="flex h-8 w-8 items-center justify-center rounded text-lg transition-colors hover:bg-accent"
-											onclick={() => addItem('emoji', emoji)}
-										>
-											{emoji}
-										</button>
-									{/each}
-								</div>
 
 								<div class="mx-1 h-6 w-px bg-border md:mx-2"></div>
 
 								<IconPicker
+									value="Sticker"
 									onSelect={(icon) => addItem('icon', icon)}
 									clearOnSelect
 									triggerMode="button"
@@ -425,10 +418,10 @@
 								/>
 							</div>
 
-							<div class="mx-2 h-6 w-px bg-border md:hidden"></div>
+							<div class="hidden md:block mx-2 h-6 w-px bg-border md:ml-1"></div>
 
 							<SplitButton.Root
-								value="share"
+								bind:value={currentAction}
 								onclick={(e) => {
 									if (e.action === 'share') shareCanvas();
 									if (e.action === 'export') exportImage();
@@ -436,6 +429,22 @@
 										toast.info('You are already in the editor!');
 									}
 									if (e.action === 'clear') {
+										confirmDelete({
+											title: 'Clear Canvas',
+											description:
+												'Are you sure you want to clear the entire canvas? This cannot be undone.',
+											onConfirm: async () => {
+												items = [];
+											}
+										});
+									}
+								}}
+								onActionSelect={(action) => {
+									currentAction = 'share';
+									if (action === 'share') shareCanvas();
+									if (action === 'export') exportImage();
+									if (action === 'editor') shareCanvas({ editor: true });
+									if (action === 'clear') {
 										confirmDelete({
 											title: 'Clear Canvas',
 											description:
@@ -455,7 +464,7 @@
 									<Download class="mr-1 size-4" /> Export
 								</SplitButton.Action>
 								<SplitButton.Action value="editor" variant="ghost" size="sm" class="text-xs">
-									<Edit3 class="mr-1 size-4" /> Editor
+									<Pen class="mr-1 size-4" /> Editor Link
 								</SplitButton.Action>
 								<SplitButton.Action
 									value="clear"
@@ -475,7 +484,7 @@
 											<Download class="mr-2 size-4" /> Export
 										</SplitButton.SelectAction>
 										<SplitButton.SelectAction value="editor">
-											<Edit3 class="mr-2 size-4" /> Editor
+											<Pen class="mr-2 size-4" /> Editor
 										</SplitButton.SelectAction>
 										<SplitButton.SelectSeparator />
 										<SplitButton.SelectAction value="clear" class="text-destructive">

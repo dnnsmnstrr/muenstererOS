@@ -39,15 +39,18 @@
 	);
 
 	function handleSelect(name: string) {
-		value = name;
+		console.log(name)
+		if (triggerMode === 'select') {
+			value = name;
+		} 
 		onSelect?.(name);
 		open = false;
 		// Reset value to allow selecting the same icon again
-		if (clearOnSelect) {
-			setTimeout(() => {
-				value = '';
-			}, 100);
-		}
+		// if (clearOnSelect) {
+		// 	setTimeout(() => {
+		// 		value = '';
+		// 	}, 100);
+		// }
 	}
 </script>
 
@@ -105,8 +108,8 @@
 		<Popover.Trigger asChild>
 			{#snippet child({ props })}
 				<Button variant="ghost" size="sm" {...props} class={className}>
-					{#if value && (LucideIcons as any)[value]}
-						{@const Icon = (LucideIcons as any)[value] as Component}
+					{@const Icon = (LucideIcons as any)[value] as Component}
+					{#if Icon}
 						<Icon size={16} />
 					{:else}
 						<Search size={16} />
