@@ -21,15 +21,18 @@
 		triggerMode?: 'select' | 'button';
 	} = $props();
 
-	const allIconNames = Object.keys(LucideIcons)
-		.filter(
-			(key) =>
-				(typeof (LucideIcons as any)[key] === 'function' ||
-					typeof (LucideIcons as any)[key] === 'object') &&
-				/^[A-Z]/.test(key) &&
-				key !== 'createLucideIcon'
-		)
-		.sort();
+	const allIconNames = [
+		'favicon',
+		...Object.keys(LucideIcons)
+			.filter(
+				(key) =>
+					(typeof (LucideIcons as any)[key] === 'function' ||
+						typeof (LucideIcons as any)[key] === 'object') &&
+					/^[A-Z]/.test(key) &&
+					key !== 'createLucideIcon'
+			)
+			.sort()
+	];
 
 	let searchQuery = $state('');
 	let open = $state(false);
@@ -60,11 +63,43 @@
 		}}
 	>
 		<div class={className}>
-			<Select.Trigger class="w-full">
-				<div class="flex items-center gap-2">
-					{#if value && (LucideIcons as any)[value]}
-						{@const Icon = (LucideIcons as any)[value] as Component}
-						<Icon size={16} />
+		<Select.Trigger class="w-full">
+			<div class="flex items-center gap-2">
+				{#if value === 'favicon'}
+					<img src="/images/muenstererOS.svg" alt="favicon" class="h-4 w-4" />
+				{:else if value && (LucideIcons as any)[value]}
+					{@const Icon = (LucideIcons as any)[value] as Component}
+					<Icon size={16} />
+				{/if}
+				<span>{value || 'Select icon...'}</span>
+			</div>
+		</Select.Trigger>
+		<Select.Content class="max-h-80">
+			<div class="sticky top-0 z-10 bg-popover p-2">
+				<div class="relative">
+					<Search class="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+					<Input placeholder="Search icons..." bind:value={searchQuery} class="pl-8 h-9" />
+				</div>
+			</div>
+			<div class="overflow-y-auto">
+				{#each filteredIcons.slice(0, 100) as name}
+					{#if name === 'favicon'}
+						<Select.Item value={name} label={name}>
+							<div class="flex items-center gap-2">
+								<img src="/images/muenstererOS.svg" alt="favicon" class="h-4 w-4" />
+								<span>{name}</span>
+							</div>
+						</Select.Item>
+					{:else}
+						{@const Icon = (LucideIcons as any)[name] as Component}
+						{#if Icon}
+							<Select.Item value={name} label={name}>
+								<div class="flex items-center gap-2">
+									<Icon size={16} />
+									<span>{name}</span>
+								</div>
+							</Select.Item>
+						{/if}
 					{/if}
 					<span>{value || 'Select icon...'}</span>
 				</div>
