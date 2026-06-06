@@ -362,7 +362,6 @@
 	<title>{i18n.t('pap.title')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
-
 <div class="container mx-auto flex h-full flex-col items-center justify-center space-y-8 p-4">
 	{#if !isUnlocked}
 		<div class="flex w-full max-w-md flex-col space-y-4 rounded-lg border bg-card p-8 shadow-lg">
@@ -379,11 +378,11 @@
 			</div>
 		</div>
 	{:else}
-		<div class="flex h-full w-full max-h-dvh flex-col space-y-6 overflow-hidden">
+		<div class="flex h-full max-h-dvh w-full flex-col space-y-6 overflow-hidden">
 			<div class="flex items-center justify-between">
 				<div class="sticky top-0 z-50 flex w-full flex-col items-center space-y-4">
 					<div
-						class="flex flex-col items-center border bg-background/80 p-2 shadow-sm backdrop-blur-sm md:flex-row md:space-x-2 md:rounded-full rounded-2xl"
+						class="flex flex-col items-center rounded-2xl border bg-background/80 p-2 shadow-sm backdrop-blur-sm md:flex-row md:space-x-2 md:rounded-full"
 					>
 						<div class="flex w-full items-center space-x-2 px-1 md:w-auto">
 							<Input
@@ -398,9 +397,9 @@
 						</div>
 
 						<div
-							class="mt-2 flex w-full items-center justify-between border-t pt-2 md:mt-0 md:w-auto md:justify-start md:border-l md:border-t-0 md:pt-0 md:pl-1"
+							class="mt-2 flex w-full items-center justify-between border-t pt-2 md:mt-0 md:w-auto md:justify-start md:border-l md:border-t-0 md:pl-1 md:pt-0"
 						>
-							<div class="flex items-center space-x-1">
+							<div class="flex items-center gap-1 md:mx-2">
 								<EmojiPicker
 									onSelect={(emoji) => addItem('emoji', emoji)}
 									class="h-8 w-8 p-0"
@@ -418,7 +417,7 @@
 								/>
 							</div>
 
-							<div class="hidden md:block mx-2 h-6 w-px bg-border md:ml-1"></div>
+							<div class="mx-2 hidden h-6 w-px bg-border md:ml-1 md:block"></div>
 
 							<SplitButton.Root
 								bind:value={currentAction}
@@ -472,7 +471,8 @@
 									size="sm"
 									class="text-xs text-destructive"
 								>
-									<Trash class="mr-1 size-4" /> {i18n.t('pap.clear_canvas')}
+									<Trash class="mr-1 size-4" />
+									{i18n.t('pap.clear_canvas')}
 								</SplitButton.Action>
 								<SplitButton.Select>
 									<SplitButton.SelectTrigger variant="ghost" size="sm" class="px-2" />
@@ -488,7 +488,8 @@
 										</SplitButton.SelectAction>
 										<SplitButton.SelectSeparator />
 										<SplitButton.SelectAction value="clear" class="text-destructive">
-											<Trash class="mr-2 size-4" /> {i18n.t('pap.clear_canvas')}
+											<Trash class="mr-2 size-4" />
+											{i18n.t('pap.clear_canvas')}
 										</SplitButton.SelectAction>
 									</SplitButton.SelectContent>
 								</SplitButton.Select>
@@ -522,115 +523,130 @@
 				{#if selectionRect}
 					<div
 						class="pointer-events-none absolute z-50 rounded border-2 border-blue-400 bg-blue-400/10"
-						style="left: {Math.min(selectionRect.x1, selectionRect.x2)}px; top: {Math.min(selectionRect.y1, selectionRect.y2)}px; width: {Math.abs(selectionRect.x2 - selectionRect.x1)}px; height: {Math.abs(selectionRect.y2 - selectionRect.y1)}px;"
+						style="left: {Math.min(selectionRect.x1, selectionRect.x2)}px; top: {Math.min(
+							selectionRect.y1,
+							selectionRect.y2
+						)}px; width: {Math.abs(selectionRect.x2 - selectionRect.x1)}px; height: {Math.abs(
+							selectionRect.y2 - selectionRect.y1
+						)}px;"
 					></div>
 				{/if}
 				{#if selectedIds.length === 1}
 					{@const selectedItem = items.find((i) => i.id === selectedIds[0])}
 					{#if selectedItem}
 						<div
-							class="absolute z-[60] flex items-center space-x-2 rounded-lg border bg-background/80 p-2 text-xs shadow-sm backdrop-blur-sm"
+							class="absolute z-[60] flex flex-col items-center gap-2 space-x-2 rounded-lg border bg-background/80 p-2 text-xs shadow-sm backdrop-blur-sm md:flex-row"
 							style="left: {selectedItem.x}px; top: {selectedItem.y -
 								selectedItemHeight / 2 -
 								8}px; transform: translate(-50%, -100%);"
 						>
-							<span class="font-bold">Edit:</span>
 							{#if selectedItem.type === 'text' || selectedItem.type === 'icon'}
-								<Input
-									type="color"
-									class="h-6 w-10 border-none p-0"
-									value={selectedItem.color}
-									oninput={(e) => updateSelectedItem({ color: e.currentTarget.value })}
-								/>
-								{#if selectedItem.type === 'text'}
+								<div class="flex items-center gap-1">
+									<span class="font-bold">Color:</span>
+									<Input
+										type="color"
+										class="h-6 w-10 border-none p-0"
+										value={selectedItem.color}
+										oninput={(e) => updateSelectedItem({ color: e.currentTarget.value })}
+									/>
+									{#if selectedItem.type === 'text'}
+										<Button
+											variant="outline"
+											size="sm"
+											class="h-6 px-2"
+											onclick={() =>
+												updateSelectedItem({
+													fontWeight: selectedItem.fontWeight === 'bold' ? 'normal' : 'bold'
+												})}
+										>
+											<b>B</b>
+										</Button>
+									{/if}
+									<Input
+										type="number"
+										class="h-6 w-16"
+										value={selectedItem.fontSize || (selectedItem.type === 'icon' ? 32 : 24)}
+										oninput={(e) =>
+											updateSelectedItem({ fontSize: parseInt(e.currentTarget.value) })}
+									/>
+								</div>
+							{/if}
+							<div class="flex items-center gap-1">
+								{#if selectedItem.type !== 'text'}
+									<div
+										class="flex items-center gap-1 {selectedItem.type === 'text' ||
+										selectedItem.type === 'icon'
+											? 'border-l'
+											: ''} pl-2"
+										onwheel={(e) => {
+											e.preventDefault();
+											updateSelectedItem({
+												scale: Math.max(0.1, selectedItem.scale + (e.deltaY > 0 ? -0.1 : 0.1))
+											});
+										}}
+									>
+										<span>Size:</span>
+										<Button
+											variant="outline"
+											size="sm"
+											class="h-6 px-2"
+											onclick={() =>
+												updateSelectedItem({ scale: Math.max(0.1, selectedItem.scale - 0.1) })}
+											>-</Button
+										>
+										<Button
+											variant="outline"
+											size="sm"
+											class="h-6 px-2"
+											onclick={() => updateSelectedItem({ scale: selectedItem.scale + 0.1 })}
+											>+</Button
+										>
+									</div>
+								{/if}
+								<div
+									class="flex items-center gap-1 md:border-l pl-2"
+									onwheel={(e) => {
+										e.preventDefault();
+										updateSelectedItem({
+											rotation: selectedItem.rotation + (e.deltaY > 0 ? -15 : 15)
+										});
+									}}
+								>
+									<span>Rotate:</span>
 									<Button
 										variant="outline"
 										size="sm"
 										class="h-6 px-2"
-										onclick={() =>
-											updateSelectedItem({
-												fontWeight: selectedItem.fontWeight === 'bold' ? 'normal' : 'bold'
-											})}
+										onclick={() => updateSelectedItem({ rotation: selectedItem.rotation - 15 })}
+										>↺</Button
 									>
-										<b>B</b>
-									</Button>
-								{/if}
-								<Input
-									type="number"
-									class="h-6 w-12"
-									value={selectedItem.fontSize || (selectedItem.type === 'icon' ? 32 : 24)}
-									oninput={(e) => updateSelectedItem({ fontSize: parseInt(e.currentTarget.value) })}
-								/>
-							{/if}
-							<div
-								class="flex items-center space-x-1 border-l pl-2"
-								onwheel={(e) => {
-									e.preventDefault();
-									updateSelectedItem({
-										scale: Math.max(0.1, selectedItem.scale + (e.deltaY > 0 ? -0.1 : 0.1))
-									});
-								}}
-							>
-								<span>Size:</span>
+									<Button
+										variant="outline"
+										size="sm"
+										class="h-6 px-2"
+										onclick={() => updateSelectedItem({ rotation: selectedItem.rotation + 15 })}
+										>↻</Button
+									>
+								</div>
 								<Button
-									variant="outline"
+									variant="destructive"
 									size="sm"
-									class="h-6 px-2"
-									onclick={() =>
-										updateSelectedItem({ scale: Math.max(0.1, selectedItem.scale - 0.1) })}
-									>-</Button
-								>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() => updateSelectedItem({ scale: selectedItem.scale + 0.1 })}>+</Button
+									class="ml-4 h-6 px-2"
+									onclick={removeSelectedItems}>Remove</Button
 								>
 							</div>
-							<div
-								class="flex items-center space-x-1 border-l pl-2"
-								onwheel={(e) => {
-									e.preventDefault();
-									updateSelectedItem({
-										rotation: selectedItem.rotation + (e.deltaY > 0 ? -15 : 15)
-									});
-								}}
-							>
-								<span>Rotate:</span>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() => updateSelectedItem({ rotation: selectedItem.rotation - 15 })}
-									>↺</Button
-								>
-								<Button
-									variant="outline"
-									size="sm"
-									class="h-6 px-2"
-									onclick={() => updateSelectedItem({ rotation: selectedItem.rotation + 15 })}
-									>↻</Button
-								>
-							</div>
-							<Button
-								variant="destructive"
-								size="sm"
-								class="ml-4 h-6 px-2"
-								onclick={removeSelectedItems}>Remove</Button
-							>
 						</div>
 					{/if}
 				{:else if selectedIds.length > 1}
 					<div
 						class="absolute z-[60] flex items-center gap-2 rounded-lg border bg-background/80 px-3 py-2 text-xs shadow-sm backdrop-blur-sm"
-						style="left: {items.find((i) => i.id === selectedIds[0])?.x ?? 0}px; top: {items.find((i) => i.id === selectedIds[0])?.y ?? 0 - selectedItemHeight / 2 - 8}px; transform: translate(-50%, -100%);"
+						style="left: {items.find((i) => i.id === selectedIds[0])?.x ?? 0}px; top: {items.find(
+							(i) => i.id === selectedIds[0]
+						)?.y ?? 0 - selectedItemHeight / 2 - 8}px; transform: translate(-50%, -100%);"
 					>
 						<span>{selectedIds.length} items selected</span>
-						<Button
-							variant="destructive"
-							size="sm"
-							class="h-6 px-2"
-							onclick={removeSelectedItems}>Remove all</Button
+						<Button variant="destructive" size="sm" class="h-6 px-2" onclick={removeSelectedItems}
+							>Remove all</Button
 						>
 					</div>
 				{/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as LucideIcons from 'lucide-svelte';
+	import * as LucideIcons from 'lucide-svelte/icons/index';
 	import * as Select from '$lib/components/ui/select';
 	import * as Popover from '$lib/components/ui/popover';
 	import { Button } from '$lib/components/ui/button';
