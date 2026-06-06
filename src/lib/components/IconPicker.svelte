@@ -17,15 +17,18 @@
 		class?: string;
 	} = $props();
 
-	const allIconNames = Object.keys(LucideIcons)
-		.filter(
-			(key) =>
-				(typeof (LucideIcons as any)[key] === 'function' ||
-					typeof (LucideIcons as any)[key] === 'object') &&
-				/^[A-Z]/.test(key) &&
-				key !== 'createLucideIcon'
-		)
-		.sort();
+	const allIconNames = [
+		'favicon',
+		...Object.keys(LucideIcons)
+			.filter(
+				(key) =>
+					(typeof (LucideIcons as any)[key] === 'function' ||
+						typeof (LucideIcons as any)[key] === 'object') &&
+					/^[A-Z]/.test(key) &&
+					key !== 'createLucideIcon'
+			)
+			.sort()
+	];
 
 	let searchQuery = $state('');
 
@@ -55,7 +58,9 @@
 		<div class={className}>
 		<Select.Trigger class="w-full">
 			<div class="flex items-center gap-2">
-				{#if value && (LucideIcons as any)[value]}
+				{#if value === 'favicon'}
+					<img src="/images/muenstererOS.svg" alt="favicon" class="h-4 w-4" />
+				{:else if value && (LucideIcons as any)[value]}
 					{@const Icon = (LucideIcons as any)[value] as Component}
 					<Icon size={16} />
 				{/if}
@@ -71,14 +76,23 @@
 			</div>
 			<div class="overflow-y-auto">
 				{#each filteredIcons.slice(0, 100) as name}
-					{@const Icon = (LucideIcons as any)[name] as Component}
-					{#if Icon}
+					{#if name === 'favicon'}
 						<Select.Item value={name} label={name}>
 							<div class="flex items-center gap-2">
-								<Icon size={16} />
+								<img src="/images/muenstererOS.svg" alt="favicon" class="h-4 w-4" />
 								<span>{name}</span>
 							</div>
 						</Select.Item>
+					{:else}
+						{@const Icon = (LucideIcons as any)[name] as Component}
+						{#if Icon}
+							<Select.Item value={name} label={name}>
+								<div class="flex items-center gap-2">
+									<Icon size={16} />
+									<span>{name}</span>
+								</div>
+							</Select.Item>
+						{/if}
 					{/if}
 				{/each}
 				{#if filteredIcons.length > 100}
