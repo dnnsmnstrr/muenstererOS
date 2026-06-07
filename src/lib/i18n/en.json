@@ -222,7 +222,8 @@
 		"welcome": "Select a note from the sidebar to start reading.",
 		"back_to_list": "Back to list",
 		"not_found": "Note not found",
-		"not_found_desc": "The requested note could not be loaded or does not exist."
+		"not_found_desc": "The requested note could not be loaded or does not exist.",
+		"on_this_page": "On this page"
 	},
 	"now": {
 		"title": "What I'm doing Now",

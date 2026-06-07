@@ -222,7 +222,8 @@
 		"welcome": "Wähle eine Notiz aus der Seitenleiste aus, um mit dem Lesen zu beginnen.",
 		"back_to_list": "Zurück zur Liste",
 		"not_found": "Notiz nicht gefunden",
-		"not_found_desc": "Die angeforderte Notiz konnte nicht geladen werden oder existiert nicht."
+		"not_found_desc": "Die angeforderte Notiz konnte nicht geladen werden oder existiert nicht.",
+		"on_this_page": "Auf dieser Seite"
 	},
 	"now": {
 		"title": "Now - Was ich gerade mache",

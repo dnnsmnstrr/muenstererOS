@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
         <url>
+            <loc>https://muensterer.tech/notes</loc>
+            <lastmod>2026-05-30</lastmod>
+        </url>
+
+        <url>
             <loc>https://muensterer.tech/achievements</loc>
             <lastmod>2026-05-22</lastmod>
         </url>

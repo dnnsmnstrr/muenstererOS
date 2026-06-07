@@ -9,7 +9,7 @@
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
 	import { renderers } from '$lib/components/typography';
 	import { formatDate } from '$lib/utils/helper';
-	import { goto } from '$app/navigation';
+	import { Toc } from '$lib/components/ui/toc';
 
 	let notes = $state<any[]>([]);
 	let note = $state<any>(null);
@@ -82,15 +82,12 @@
 	<title>{note?.title || slug}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
-<div class="container mx-auto p-4 h-full flex flex-col">
-	<Window class="flex-grow flex flex-col min-h-0">
-		<div class="flex flex-col md:flex-row h-full divide-y md:divide-y-0 md:divide-x divide-border">
+<div class="container mx-auto p-4 h-[calc(100vh-8rem)] flex flex-col">
+	<Window class="flex-grow flex flex-col min-h-0 overflow-hidden">
+		<div class="flex flex-col md:flex-row h-full divide-y md:divide-y-0 md:divide-x divide-border overflow-hidden">
 			<!-- Sidebar -->
-			<div class="w-full md:w-64 flex flex-col bg-muted/30 hidden md:flex">
-				<div class="p-4 border-b border-border flex items-center gap-2">
-					<a href="/notes" class="md:hidden">
-						<ArrowLeft class="size-4" />
-					</a>
+			<div class="w-full md:w-64 flex flex-col bg-muted/30 hidden md:flex h-full overflow-hidden">
+				<div class="p-4 border-b border-border shrink-0">
 					<div class="relative flex-grow">
 						<Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
 						<input
@@ -125,50 +122,58 @@
 			</div>
 
 			<!-- Main Panel -->
-			<div class="flex-grow flex flex-col overflow-y-auto p-4 md:p-8">
-				<div class="max-w-3xl mx-auto w-full">
-					{#if loadingNote}
-						<div class="flex items-center justify-center h-64">
-							<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-						</div>
-					{:else if note}
-						<div class="mb-8">
-							<div class="flex items-center gap-4 mb-4 md:hidden">
-								<a href="/notes" class="text-primary hover:underline flex items-center gap-1">
-									<ArrowLeft class="size-4" /> {i18n.t('notes.back_to_list') || 'Back'}
-								</a>
+			<div class="flex-grow flex flex-col md:flex-row overflow-hidden h-full">
+				<div class="flex-grow overflow-y-auto p-4 md:p-8">
+					<div class="max-w-3xl mx-auto w-full">
+						{#if loadingNote}
+							<div class="flex items-center justify-center h-64">
+								<div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
 							</div>
-							<Heading class="mb-2">{note.title}</Heading>
-							<div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
-								{#if note.date}
-									<div class="flex items-center gap-1">
-										<Calendar class="size-4" />
-										{formatDate(note.date)}
-									</div>
-								{/if}
-								{#if note.tags && note.tags.length > 0}
-									<div class="flex items-center gap-1">
-										<Tag class="size-4" />
-										<div class="flex gap-2">
-											{#each note.tags as tag}
-												<span class="bg-muted px-2 py-0.5 rounded-md">{tag}</span>
-											{/each}
+						{:else if note}
+							<div class="mb-8">
+								<div class="flex items-center gap-4 mb-4 md:hidden">
+									<a href="/notes" class="text-primary hover:underline flex items-center gap-1">
+										<ArrowLeft class="size-4" /> {i18n.t('notes.back_to_list') || 'Back'}
+									</a>
+								</div>
+								<Heading class="mb-2">{note.title}</Heading>
+								<div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
+									{#if note.date}
+										<div class="flex items-center gap-1">
+											<Calendar class="size-4" />
+											{formatDate(note.date)}
 										</div>
-									</div>
-								{/if}
+									{/if}
+									{#if note.tags && note.tags.length > 0}
+										<div class="flex items-center gap-1">
+											<Tag class="size-4" />
+											<div class="flex gap-2">
+												{#each note.tags as tag}
+													<span class="bg-muted px-2 py-0.5 rounded-md">{tag}</span>
+												{/each}
+											</div>
+										</div>
+									{/if}
+								</div>
 							</div>
-						</div>
-						<div class="prose dark:prose-invert max-w-none font-mono text-sm leading-relaxed">
-							<MdSvelte source={processedContent} {renderers} />
-						</div>
-					{:else}
-						<div class="text-center py-12">
-							<Heading depth={2} class="mb-4">{i18n.t('notes.not_found') || 'Note not found'}</Heading>
-							<p class="mb-8">{i18n.t('notes.not_found_desc') || 'The requested note could not be loaded.'}</p>
-							<a href="/notes" class="text-primary hover:underline">{i18n.t('notes.back_to_list') || 'Return to overview'}</a>
-						</div>
-					{/if}
+							<div class="prose dark:prose-invert max-w-none font-mono text-sm leading-relaxed mb-12">
+								<MdSvelte source={processedContent} {renderers} />
+							</div>
+						{:else}
+							<div class="text-center py-12">
+								<Heading depth={2} class="mb-4">{i18n.t('notes.not_found') || 'Note not found'}</Heading>
+								<p class="mb-8">{i18n.t('notes.not_found_desc') || 'The requested note could not be loaded.'}</p>
+								<a href="/notes" class="text-primary hover:underline">{i18n.t('notes.back_to_list') || 'Return to overview'}</a>
+							</div>
+						{/if}
+					</div>
 				</div>
+				<!-- TOC Sidebar (Desktop only) -->
+				{#if note && !loadingNote}
+					<aside class="hidden xl:block w-64 p-8 border-l border-border h-full overflow-y-auto shrink-0">
+						<Toc selector=".prose" />
+					</aside>
+				{/if}
 			</div>
 		</div>
 	</Window>
@@ -182,5 +187,8 @@
 	}
 	:global(.prose a:hover) {
 		opacity: 0.8;
+	}
+	:global(.prose h1, .prose h2, .prose h3) {
+		scroll-margin-top: 2rem;
 	}
 </style>
