@@ -1,27 +1,35 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { cn } from '$lib/utils/utils';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 
 	interface Props {
 		selector?: string;
+		rootSelector?: string;
 		class?: string;
+		content?: string; // Add content prop to trigger updates
 	}
 
-	let { selector = '.prose', class: className }: Props = $props();
+	let { selector = '.prose', rootSelector, class: className, content }: Props = $props();
 
 	let headings = $state<{ id: string; text: string; level: number }[]>([]);
 	let activeId = $state('');
+	let observer: IntersectionObserver | null = null;
 
-	function updateHeadings() {
+	async function updateHeadings() {
+		await tick(); // Wait for content to render
 		const container = document.querySelector(selector);
 		if (!container) return;
 
 		const elements = Array.from(container.querySelectorAll('h1, h2, h3'));
 		headings = elements.map((el) => {
 			if (!el.id) {
-				el.id =
-					el.textContent?.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).substr(2, 9);
+				// Generate a clean ID if missing
+				el.id = el.textContent
+					?.toLowerCase()
+					.trim()
+					.replace(/[^\w\s-]/g, '')
+					.replace(/\s+/g, '-') || Math.random().toString(36).substr(2, 9);
 			}
 			return {
 				id: el.id,
@@ -29,12 +37,14 @@
 				level: parseInt(el.tagName[1])
 			};
 		});
+
+		setupObserver();
 	}
 
-	onMount(() => {
-		updateHeadings();
+	function setupObserver() {
+		if (observer) observer.disconnect();
 
-		const observer = new IntersectionObserver(
+		observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
@@ -42,20 +52,26 @@
 					}
 				});
 			},
-			{ rootMargin: '0% 0% -80% 0%' }
+			{
+				root: rootSelector ? document.querySelector(rootSelector) : null,
+				rootMargin: '0% 0% -80% 0%'
+			}
 		);
 
 		const container = document.querySelector(selector);
 		if (container) {
-			container.querySelectorAll('h1, h2, h3').forEach((el) => observer.observe(el));
+			container.querySelectorAll('h1, h2, h3').forEach((el) => observer?.observe(el));
 		}
+	}
 
-		return () => observer.disconnect();
+	onMount(() => {
+		updateHeadings();
+		return () => observer?.disconnect();
 	});
 
-	// Re-run if selector content changes
+	// Re-run when selector or content changes
 	$effect(() => {
-		if (selector) {
+		if (selector || content) {
 			updateHeadings();
 		}
 	});
@@ -72,12 +88,16 @@
 					<a
 						href="#{heading.id}"
 						class={cn(
-							'hover:text-primary transition-colors',
+							'block hover:text-primary transition-colors py-1',
 							activeId === heading.id ? 'font-medium text-primary' : 'text-muted-foreground'
 						)}
 						onclick={(e) => {
 							e.preventDefault();
-							document.getElementById(heading.id)?.scrollIntoView({ behavior: 'smooth' });
+							const el = document.getElementById(heading.id);
+							if (el) {
+								el.scrollIntoView({ behavior: 'smooth' });
+								activeId = heading.id;
+							}
 						}}
 					>
 						{heading.text}

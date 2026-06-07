@@ -281,12 +281,26 @@
 			navigator: {
 				// https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/keyboard-navigation/
 				navigate({ itemUrl }) {
+					if (itemUrl.includes('zettelkasten')) {
+						const slug = itemUrl.split('/').pop()?.replace('.md', '');
+						if (slug) {
+							goto(`/notes/${slug}`);
+							return;
+						}
+					}
 					const windowReference = window.open(itemUrl, '_blank', 'noopener');
 					if (windowReference) {
 						windowReference.focus();
 					}
 				},
 				navigateNewTab({ itemUrl }) {
+					if (itemUrl.includes('zettelkasten')) {
+						const slug = itemUrl.split('/').pop()?.replace('.md', '');
+						if (slug) {
+							goto(`/notes/${slug}`);
+							return;
+						}
+					}
 					window.location.assign(itemUrl); // switched this from the default navigate function
 				}
 			}

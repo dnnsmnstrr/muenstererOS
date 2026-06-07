@@ -125,7 +125,7 @@
 
 			<!-- Main Panel -->
 			<div class="flex-grow flex flex-col lg:flex-row overflow-hidden h-full">
-				<div class="flex-grow overflow-y-auto p-4 md:p-8">
+				<div id="notes-content-area" class="flex-grow overflow-y-auto p-4 md:p-8">
 					<div class="max-w-3xl mx-auto w-full">
 						{#if loadingNote}
 							<div class="flex items-center justify-center h-64">
@@ -149,7 +149,11 @@
 												{/snippet}
 											</Popover.Trigger>
 											<Popover.Content class="w-64 p-4">
-												<Toc selector=".prose" />
+												<Toc
+													selector=".prose"
+													rootSelector="#notes-content-area"
+													content={processedContent}
+												/>
 											</Popover.Content>
 										</Popover.Root>
 									</div>
@@ -188,8 +192,10 @@
 				</div>
 				<!-- TOC Sidebar (Desktop only) -->
 				{#if note && !loadingNote}
-					<aside class="hidden lg:block w-64 p-8 border-l border-border h-full overflow-y-auto shrink-0">
-						<Toc selector=".prose" />
+					<aside
+						class="hidden h-full w-64 shrink-0 overflow-y-auto border-l border-border p-8 lg:block"
+					>
+						<Toc selector=".prose" rootSelector="#notes-content-area" content={processedContent} />
 					</aside>
 				{/if}
 			</div>
