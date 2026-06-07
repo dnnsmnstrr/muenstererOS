@@ -68,6 +68,7 @@
 	let { children }: Props = $props();
 	let innerWidth = $state(0);
 	let innerHeight = $state(0);
+	let canHover = $state(false);
 
 	const cursor = Spring.of(() => ({ x: 0, y: 0 }), {
 		stiffness: 0.05,
@@ -109,6 +110,7 @@
 
 	let timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 	function handleMouseMove(event?: MouseEvent & { timeout?: number; duration?: number }) {
+		if (!canHover) return;
 		clearTimeout(timeout);
 		const largestEdge = Math.max(innerWidth, innerHeight);
 		switch (page.url.pathname) {
@@ -155,6 +157,7 @@
 	}
 
 	onMount(() => {
+		canHover = window.matchMedia('(hover: hover)').matches;
 		cursor.set({ x: innerWidth / 2, y: innerHeight / 2 });
 		if (page.url.pathname === '/') {
 			cursor.set({ x: innerWidth / 2, y: innerHeight / 3 }); // initial positioning around hero window
@@ -163,11 +166,13 @@
 			changeRadius(innerWidth * 4, innerWidth * 4, 0);
 		}
 		handleMouseMove();
-		setTimeout(() => {
-			// wait a bit before following cursor after page is loaded
-			document.addEventListener('mousemove', handleMouseMove);
-			document.addEventListener('dragover', handleMouseMove);
-		}, 1000);
+		if (canHover) {
+			setTimeout(() => {
+				// wait a bit before following cursor after page is loaded
+				document.addEventListener('mousemove', handleMouseMove);
+				document.addEventListener('dragover', handleMouseMove);
+			}, 1000);
+		}
 
 		return () => {
 			document.removeEventListener('mousemove', handleMouseMove);
@@ -370,17 +375,19 @@
 			)}
 			style={bgStyle}
 		>
-			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-			<div
-				role="region"
-				onmousedown={() => setMaskSize(50)}
-				onmouseup={() => setMaskSize(100)}
-				class="pointer-events-none absolute inset-0 top-20 transition-[background-position] duration-100"
-				style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode
-					? '255, 255, 255'
-					: '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current
-					.x}px; --y: {cursor.current.y}px;"
-			></div>
+			{#if canHover}
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+				<div
+					role="region"
+					onmousedown={() => setMaskSize(50)}
+					onmouseup={() => setMaskSize(100)}
+					class="pointer-events-none absolute inset-0 top-20 transition-[background-position] duration-100"
+					style="--tw-bg-opacity: 0.8; background-image: radial-gradient({maskWidth.current}px {maskHeight.current}px at var(--x) var(--y), transparent 0%, transparent {innerRadius.current}px, rgba({isLightMode
+						? '255, 255, 255'
+						: '0, 0, 0'}, var(--tw-bg-opacity)) {outerRadius.current}px); --x: {cursor.current
+						.x}px; --y: {cursor.current.y}px;"
+				></div>
+			{/if}
 			<Tooltip.Provider>
 				{@render children?.()}
 			</Tooltip.Provider>

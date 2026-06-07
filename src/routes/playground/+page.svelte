@@ -38,15 +38,19 @@
     }
   })
   onMount(() => {
-    document.addEventListener('mousemove', handleMouseMove);
+    canHover = window.matchMedia('(hover: hover)').matches;
+    if (canHover) {
+      document.addEventListener('mousemove', handleMouseMove);
+    }
     window.addEventListener('resize', handleResize);
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
     };
   })
-  let container: HTMLDivElement | null = null;
+  let container = $state<HTMLDivElement | null>(null);
   const basis = 'basis-full md:basis-1/2 lg:basis-1/3'
+  let canHover = $state(false);
 
 </script>
 
@@ -58,29 +62,31 @@
   }}
 >
   <Carousel.Content>
-    <Carousel.Item class="{basis} h-full">
-      <div class="p-2 sm:p-0.5 h-full">
-        <Card.Root class="min-h-[500px]">
-          <Card.Header>
-            <Card.Title>Cursor Tracking</Card.Title>
-          </Card.Header>
-          <Card.Content class="flex flex-col aspect-square border-2 border-bg rounded-lg m-2">
-            <div 
-              bind:this={container} 
-              class="flex items-center justify-center p-6 relative h-full w-full inset-0" 
-            >
-                <div 
-                class="absolute rounded-full bg-primary w-4 h-4" 
-                style="left: {Math.min(Math.max(cursor.current.x - cursorContainer.x, -16), cursorContainer.width)}px; 
-                     top: {Math.min(Math.max(cursor.current.y - cursorContainer.y * 5, 8), cursorContainer.height)}px">
-                </div>
-              x: {Math.round(cursor.current.x)}px <br>
-              y: {Math.round(cursor.current.y)}px
-            </div>
-          </Card.Content>
-        </Card.Root>
-      </div>
-    </Carousel.Item>
+    {#if canHover}
+      <Carousel.Item class="{basis} h-full">
+        <div class="p-2 sm:p-0.5 h-full">
+          <Card.Root class="min-h-[500px]">
+            <Card.Header>
+              <Card.Title>Cursor Tracking</Card.Title>
+            </Card.Header>
+            <Card.Content class="flex flex-col aspect-square border-2 border-bg rounded-lg m-2">
+              <div
+                bind:this={container}
+                class="flex items-center justify-center p-6 relative h-full w-full inset-0"
+              >
+                  <div
+                  class="absolute rounded-full bg-primary w-4 h-4"
+                  style="left: {Math.min(Math.max(cursor.current.x - cursorContainer.x, -16), cursorContainer.width)}px;
+                       top: {Math.min(Math.max(cursor.current.y - cursorContainer.y * 5, 8), cursorContainer.height)}px">
+                  </div>
+                x: {Math.round(cursor.current.x)}px <br>
+                y: {Math.round(cursor.current.y)}px
+              </div>
+            </Card.Content>
+          </Card.Root>
+        </div>
+      </Carousel.Item>
+    {/if}
     <Carousel.Item class={basis}>
       <div class="p-2 sm:p-0.5">
         <Card.Root class="min-h-[500px]">
