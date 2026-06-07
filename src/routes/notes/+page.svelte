@@ -36,9 +36,9 @@
 
 <div class="container mx-auto p-4 h-[calc(100vh-8rem)] flex flex-col">
 	<Window class="flex-grow flex flex-col min-h-0 overflow-hidden">
-		<div class="flex flex-col md:flex-row h-full divide-y md:divide-y-0 md:divide-x divide-border">
+		<div class="flex flex-col md:flex-row h-full md:divide-x divide-border">
 			<!-- Sidebar -->
-			<div class="w-full md:w-64 flex flex-col bg-muted/30 h-1/3 md:h-full overflow-hidden">
+			<div class="w-full md:w-64 flex flex-col bg-muted/30 h-full overflow-hidden">
 				<div class="p-4 border-b border-border shrink-0">
 					<div class="relative">
 						<Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
@@ -77,8 +77,8 @@
 				</div>
 			</div>
 
-			<!-- Main Panel -->
-			<div class="flex-grow flex flex-col overflow-y-auto p-8 h-2/3 md:h-full">
+			<!-- Main Panel - Hidden on mobile -->
+			<div class="hidden md:flex flex-grow flex-col overflow-y-auto p-8 h-full">
 				<div class="max-w-3xl mx-auto w-full">
 					<Heading class="mb-8">{i18n.t('notes.title') || 'Notes'}</Heading>
 					<div class="prose dark:prose-invert">

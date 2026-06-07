@@ -3,13 +3,15 @@
 	import { Heading } from '$lib/components/typography';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { onMount } from 'svelte';
-	import { FileText, Search, ArrowLeft, Tag, Calendar } from 'lucide-svelte';
+	import { FileText, Search, ArrowLeft, Tag, Calendar, List } from 'lucide-svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { page } from '$app/state';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
 	import { renderers } from '$lib/components/typography';
 	import { formatDate } from '$lib/utils/helper';
 	import { Toc } from '$lib/components/ui/toc';
+	import * as Popover from '$lib/components/ui/popover';
+	import { Button } from '$lib/components/ui/button';
 
 	let notes = $state<any[]>([]);
 	let note = $state<any>(null);
@@ -84,7 +86,7 @@
 
 <div class="container mx-auto p-4 h-[calc(100vh-8rem)] flex flex-col">
 	<Window class="flex-grow flex flex-col min-h-0 overflow-hidden">
-		<div class="flex flex-col md:flex-row h-full divide-y md:divide-y-0 md:divide-x divide-border overflow-hidden">
+		<div class="flex flex-col md:flex-row h-full md:divide-x divide-border overflow-hidden">
 			<!-- Sidebar -->
 			<div class="w-full md:w-64 flex flex-col bg-muted/30 hidden md:flex h-full overflow-hidden">
 				<div class="p-4 border-b border-border shrink-0">
@@ -122,7 +124,7 @@
 			</div>
 
 			<!-- Main Panel -->
-			<div class="flex-grow flex flex-col md:flex-row overflow-hidden h-full">
+			<div class="flex-grow flex flex-col lg:flex-row overflow-hidden h-full">
 				<div class="flex-grow overflow-y-auto p-4 md:p-8">
 					<div class="max-w-3xl mx-auto w-full">
 						{#if loadingNote}
@@ -131,10 +133,26 @@
 							</div>
 						{:else if note}
 							<div class="mb-8">
-								<div class="flex items-center gap-4 mb-4 md:hidden">
-									<a href="/notes" class="text-primary hover:underline flex items-center gap-1">
+								<div class="flex items-center justify-between gap-4 mb-4">
+									<a href="/notes" class="text-primary hover:underline flex items-center gap-1 md:hidden">
 										<ArrowLeft class="size-4" /> {i18n.t('notes.back_to_list') || 'Back'}
 									</a>
+
+									<!-- Mobile TOC Trigger -->
+									<div class="lg:hidden">
+										<Popover.Root>
+											<Popover.Trigger asChild>
+												{#snippet child({ props })}
+													<Button variant="ghost" size="icon" {...props}>
+														<List class="size-4" />
+													</Button>
+												{/snippet}
+											</Popover.Trigger>
+											<Popover.Content class="w-64 p-4">
+												<Toc selector=".prose" />
+											</Popover.Content>
+										</Popover.Root>
+									</div>
 								</div>
 								<Heading class="mb-2">{note.title}</Heading>
 								<div class="flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -170,7 +188,7 @@
 				</div>
 				<!-- TOC Sidebar (Desktop only) -->
 				{#if note && !loadingNote}
-					<aside class="hidden xl:block w-64 p-8 border-l border-border h-full overflow-y-auto shrink-0">
+					<aside class="hidden lg:block w-64 p-8 border-l border-border h-full overflow-y-auto shrink-0">
 						<Toc selector=".prose" />
 					</aside>
 				{/if}
