@@ -275,8 +275,7 @@
 					>
 						<a
 							href={SPOTIFY_PLAYLIST_LINK + seasonPlaylist.uri}
-							target="_blank"
-							rel="noopener noreferrer"
+							target="_blank" rel="noopener noreferrer"
 						>
 							<Card.Content class="flex items-center justify-center gap-4 p-4">
 								{seasonPlaylist.emoji}
@@ -307,8 +306,7 @@
 					<Card.Root class="min-h-[120px]">
 						<a
 							href={SPOTIFY_PLAYLIST_LINK + otherPlaylist.uri}
-							target="_blank"
-							rel="noopener noreferrer"
+							target="_blank" rel="noopener noreferrer"
 						>
 							<Card.Content class="flex items-start justify-between gap-2 pt-6">
 								<div>

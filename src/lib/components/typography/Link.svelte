@@ -3,7 +3,7 @@
   import { ExternalLink } from "lucide-svelte";
   import { getContext } from "svelte";
 	import type { TypographyContext } from ".";
-	import { cn } from "$lib/utils";
+	import { cn, getRel } from "$lib/utils";
   const typography = getContext<TypographyContext>('typography')
 
   interface Props {
@@ -26,7 +26,7 @@
 <a
   {href}
   {target}
-  rel={target === '_blank' ? (rest.rel || 'noopener noreferrer') : rest.rel}
+  rel={getRel(rest.rel, target)}
   {...rest}
   class={cn("font-medium text-primary underline underline-offset-4 inline-flex items-center gap-1 transition-opacity hover:opacity-80", rest.class)}
 >

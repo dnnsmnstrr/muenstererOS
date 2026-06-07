@@ -170,8 +170,7 @@
 						{#if standalone}
 							<a
 								href={playlist.url || SPOTIFY_PLAYLIST_LINK + playlist.uri}
-								target="_blank"
-								rel="noopener noreferrer"
+								target="_blank" rel="noopener noreferrer"
 								class="block h-full w-full"
 							>
 								<img

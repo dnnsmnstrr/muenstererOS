@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Menubar as MenubarPrimitive } from 'bits-ui';
-	import { cn } from '$lib/utils';
+	import { cn, getRel } from '$lib/utils';
 
     type LinkTarget = '_self' | '_blank' | '_parent' | '_top' | string;
 
@@ -21,7 +21,7 @@
 	} = $props();
 </script>
 
-<a href={href || '/' + name.toLowerCase()} {target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>
+<a href={href || '/' + name.toLowerCase()} {target} rel={getRel(undefined, target)}>
 	<MenubarPrimitive.Item
 		bind:ref
 		class={cn(
