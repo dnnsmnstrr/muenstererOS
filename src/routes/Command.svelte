@@ -276,14 +276,23 @@
 			appId,
 			apiKey,
 			indexName: 'dnnsmnstrr-gitlab',
-			placeholder: i18n.t('command.search_zettelkasten'),
+			placeholder: i18n.t('command.search_zettelkasten') === 'command.search_zettelkasten' ? 'Search...' : i18n.t('command.search_zettelkasten'),
 			insights: true,
 			navigator: {
 				// https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/keyboard-navigation/
-				navigate({ itemUrl }) {
-					const windowReference = window.open(itemUrl, '_blank', 'noopener');
-					if (windowReference) {
-						windowReference.focus();
+				navigate({ itemUrl, item, ...rest}) {
+					if (itemUrl.includes('zettelkasten')) {
+						const slug = itemUrl.split('/').pop()?.replace('.md', '').replace('#', '');
+						console.log('slug:', item, rest);
+						if (item.hierarchy.lvl1) {
+							goto(`/notes/${item.hierarchy.lvl1.toLowerCase().replaceAll(' ', '') || slug}${item.hierarchy.lvl2 ? `#${item.hierarchy.lvl2.toLowerCase().replace(/\s+/g, '-')}` : ''}`);
+							return;
+						}
+					} else {
+						const windowReference = window.open(itemUrl, '_blank', 'noopener');
+						if (windowReference) {
+							windowReference.focus();
+						}
 					}
 				},
 				navigateNewTab({ itemUrl }) {

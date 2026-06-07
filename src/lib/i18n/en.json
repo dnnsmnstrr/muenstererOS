@@ -16,6 +16,7 @@
 		"about": "About",
 		"buttons": "Buttons",
 		"projects": "Projects",
+		"notes": "Notes",
 		"now": "Now",
 		"achievements": "Achievements",
 		"where": "Where",
@@ -32,6 +33,7 @@
 		"terminal": "Terminal",
 		"concerts": "Concerts",
 		"log": "Changelog",
+		"loading": "Loading...",
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
@@ -213,6 +215,18 @@
 		"maximize": "Maximize window",
 		"restore": "Restore window",
 		"resize": "Resize window"
+	},
+	"notes": {
+		"title": "Notes",
+		"search_placeholder": "Search notes...",
+		"no_notes": "No notes found",
+		"welcome": "Select a note from the sidebar to start reading.",
+		"back_to_list": "Back to list",
+		"not_found": "Note not found",
+		"not_found_desc": "The requested note could not be loaded or does not exist.",
+		"on_this_page": "On this page",
+		"view_on_github": "View on GitHub",
+		"view_on_web": "View on Website"
 	},
 	"now": {
 		"title": "What I'm doing Now",

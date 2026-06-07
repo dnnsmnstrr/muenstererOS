@@ -5,13 +5,12 @@ import SelectTrigger from '$lib/components/ui/split-button/split-button-select-t
 import SelectAction from '$lib/components/ui/split-button/split-button-select-action.svelte';
 import SelectContent from '$lib/components/ui/split-button/split-button-content.svelte';
 // re-export select components
-import {
-	SelectGroup,
-	SelectGroupHeading,
-	SelectSeparator
-} from '$lib/components/ui/select';
+import { SelectGroup, SelectGroupHeading, SelectSeparator } from '$lib/components/ui/select';
 
-export type { SplitButtonProps, SplitButtonPropsWithoutHTML } from '$lib/components/ui/split-button/split-button.svelte';
+export type {
+	SplitButtonProps,
+	SplitButtonPropsWithoutHTML
+} from '$lib/components/ui/split-button/split-button.svelte';
 export type { SplitButtonActionProps } from '$lib/components/ui/split-button/split-button-action.svelte';
 export type { SplitButtonSelectProps } from '$lib/components/ui/split-button/split-button-select.svelte';
 export type { SplitButtonSelectTriggerProps } from '$lib/components/ui/split-button/split-button-select-trigger.svelte';
