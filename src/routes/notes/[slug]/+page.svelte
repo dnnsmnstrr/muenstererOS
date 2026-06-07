@@ -108,7 +108,7 @@
 {/snippet}
 
 <div class="container mx-auto flex h-[calc(100vh-8rem)] flex-col p-4">
-	<Window class="flex min-h-0 flex-grow flex-col overflow-hidden" {titlebarRight}>
+	<Window class="flex min-h-0 flex-grow flex-col overflow-hidden" {titlebarRight} childClassName="p-0">
 		<div class="flex h-full flex-col divide-border overflow-hidden md:flex-row">
 			<!-- Sidebar -->
 			<div class="hidden h-full w-full flex-col overflow-hidden bg-muted/30 md:flex md:w-52 md:min-w-52">

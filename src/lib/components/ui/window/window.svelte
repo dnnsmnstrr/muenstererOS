@@ -9,6 +9,7 @@
 	export type WindowPropsWithoutHTML = WithChildren & {
 		titlebarRight?: Snippet;
 		titlebarCenter?: Snippet;
+		childClassName?: string;
 	};
 
 	export type WindowProps = HTMLAttributes<HTMLDivElement> & WindowPropsWithoutHTML;
@@ -28,6 +29,7 @@
 		onMaximize,
 		isMaximized = false,
 		class: className,
+		childClassName,
 		...rest
 	}: WindowProps & {
 		onClose?: () => void;
@@ -53,7 +55,7 @@
 			{@render titlebarRight?.()}
 		</div>
 	</div>
-	<div class="p-4 flex-grow flex flex-col min-h-0">
+	<div class={cn("p-4 flex-grow flex flex-col min-h-0", childClassName)}>
 		{@render children?.()}
 	</div>
 </div>
