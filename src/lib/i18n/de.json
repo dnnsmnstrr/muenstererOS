@@ -29,6 +29,7 @@
 		"terminal": "Terminal",
 		"concerts": "Konzerte",
 		"log": "Änderungsprotokoll",
+		"loading": "Laden...",
 		"changelog": "Änderungsprotokoll",
 		"playlist": "Playlist",
 		"api": "API",
@@ -223,7 +224,9 @@
 		"back_to_list": "Zurück zur Liste",
 		"not_found": "Notiz nicht gefunden",
 		"not_found_desc": "Die angeforderte Notiz konnte nicht geladen werden oder existiert nicht.",
-		"on_this_page": "Auf dieser Seite"
+		"on_this_page": "Auf dieser Seite",
+		"view_on_github": "Auf GitHub ansehen",
+		"view_on_web": "Auf Webseite ansehen"
 	},
 	"now": {
 		"title": "Now - Was ich gerade mache",

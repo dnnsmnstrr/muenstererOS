@@ -33,6 +33,7 @@
 		"terminal": "Terminal",
 		"concerts": "Concerts",
 		"log": "Changelog",
+		"loading": "Loading...",
 		"changelog": "Changelog",
 		"playlist": "Playlist",
 		"api": "API",
@@ -223,7 +224,9 @@
 		"back_to_list": "Back to list",
 		"not_found": "Note not found",
 		"not_found_desc": "The requested note could not be loaded or does not exist.",
-		"on_this_page": "On this page"
+		"on_this_page": "On this page",
+		"view_on_github": "View on GitHub",
+		"view_on_web": "View on Website"
 	},
 	"now": {
 		"title": "What I'm doing Now",

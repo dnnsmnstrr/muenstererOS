@@ -1,3 +1,4 @@
+import { USERNAME_SHORT } from '$lib/config.js';
 import { gistCache } from '$lib/server/cache';
 import { json } from '@sveltejs/kit';
 
@@ -13,8 +14,10 @@ export async function GET({ params, fetch }) {
 	}
 
 	try {
+		const githubUrl = `https://github.com/${USERNAME_SHORT}/zettelkasten/tree/main/notes/${slug}.md`;
+		const webUrl = `https://${USERNAME_SHORT}.github.io/zettelkasten/${slug}`;
 		const response = await fetch(
-			`https://raw.githubusercontent.com/dnnsmnstrr/zettelkasten/main/notes/${slug}.md`
+			`https://raw.githubusercontent.com/${USERNAME_SHORT}/zettelkasten/main/notes/${slug}.md`
 		);
 
 		if (!response.ok) {
@@ -33,7 +36,9 @@ export async function GET({ params, fetch }) {
 			tags: frontmatter.tags || [],
 			date: frontmatter.date || '',
 			content,
-			raw: markdown
+			raw: markdown,
+			githubUrl,
+			webUrl
 		};
 
 		gistCache.set(cacheKey, noteData, CACHE_TTL);
