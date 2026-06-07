@@ -148,8 +148,7 @@
 									<div class="pt-2">
 										<a
 											href={getMusicBrainzUrl(concert.mbid)}
-											target="_blank"
-											rel="noopener noreferrer"
+											target="_blank" rel="noopener noreferrer"
 										>
 											<Info class="mb-1 h-3 w-3" />
 										</a>
@@ -205,8 +204,7 @@
 											{#if festival.url}
 												<a
 													href={festival.url}
-													target="_blank"
-													rel="noopener noreferrer"
+													target="_blank" rel="noopener noreferrer"
 													class="text-muted-foreground hover:text-primary"
 													onclick={(e) => e.stopPropagation()}
 												>
@@ -227,8 +225,7 @@
 												{#if artist.mbid}
 													<a
 														href={getMusicBrainzUrl(artist.mbid)}
-														target="_blank"
-														rel="noopener noreferrer"
+														target="_blank" rel="noopener noreferrer"
 													>
 														<Info class="h-3 w-3 text-muted-foreground hover:text-primary" />
 													</a>

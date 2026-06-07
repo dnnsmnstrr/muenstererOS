@@ -222,8 +222,7 @@
 			variant="outline"
 			title={i18n.t('hotkeys.referral_title')}
 			href={raycastUrl}
-			target="_blank"
-			rel="noopener noreferrer"
+			target="_blank" rel="noopener noreferrer"
 			class="flex items-center gap-2 text-sm text-muted-foreground ring-1 ring-red-500/50 mt-1"
 		>
 			<img src={Raycast} alt="Raycast" class="h-4 w-4" />
@@ -234,7 +233,7 @@
 	<div class="my-8">
 		<p class="text-card-foreground leading-loose">
 			{i18n.t('hotkeys.intro.prefix')}
-			<Link href="https://manual.raycast.com/hyperkey" target="_blank" rel="noopener noreferrer">
+			<Link href="https://manual.raycast.com/hyperkey" target="_blank">
 				{i18n.t('hotkeys.intro.hyper_key')}
 			</Link>
 			{i18n.t('hotkeys.intro.middle')}
@@ -312,7 +311,7 @@
 		<p class="text-sm text-muted-foreground pb-4">
 			{i18n.t('hotkeys.about.description')}
 			<br><br>
-			<Link href={raycastUrl} target="_blank" rel="noopener noreferrer">
+			<Link href={raycastUrl} target="_blank">
 				{i18n.t('hotkeys.about.link_text')}
 			</Link>
 			{i18n.t('hotkeys.about.referral_note')}

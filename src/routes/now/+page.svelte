@@ -154,7 +154,6 @@
 						href={nowData.playlist.url ||
 							`https://open.spotify.com/playlist/${nowData.playlist.uri}`}
 						target="_blank"
-						rel="noopener noreferrer"
 					>
 						{nowData.playlist.name}
 					</Link>

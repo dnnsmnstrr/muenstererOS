@@ -75,7 +75,7 @@
 				<Copy class="mr-2 h-4 w-4" />
 				Copy URL
 			</Button>
-			<Button variant="outline" href={previewUrl} target="_blank">
+			<Button variant="outline" href={previewUrl} target="_blank" rel="noopener noreferrer">
 				<ExternalLink class="mr-2 h-4 w-4" />
 				Open Preview
 			</Button>
