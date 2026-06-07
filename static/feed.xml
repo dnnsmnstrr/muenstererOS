@@ -3,12 +3,23 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2026-05-25T12:14:55.718Z</updated>
+    <updated>2026-06-07T07:33:19.889Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
+    <entry>
+        <title>Notes App</title>
+        <link href="https://muensterer.tech/notes"/>
+        <id>0-notes</id>
+        <updated>2026-05-30</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Integrated my Zettelkasten notes directly into the website with markdown rendering and wikilink support.</p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Achievements</title>
         <link href="https://muensterer.tech/achievements"/>

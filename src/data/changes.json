@@ -1,5 +1,11 @@
 [
 	{
+		"date": "2026-05-30",
+		"title": "Notes App",
+		"description": "Integrated my Zettelkasten notes directly into the website with markdown rendering and wikilink support.",
+		"path": "/notes"
+	},
+	{
 		"date": "2025-03-24",
 		"title": "Achievements",
 		"description": "Set up achievements on my website, because why not?",
