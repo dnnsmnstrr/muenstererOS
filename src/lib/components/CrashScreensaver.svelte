@@ -5,6 +5,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { mode } from 'mode-watcher';
+	import { isCommandActive } from '$lib/stores/app';
 
 	let isRebooting = $state(false);
 	let isDarkMode = $derived($mode === 'dark');
@@ -36,8 +37,24 @@
 	}
 </script>
 
+<svelte:window
+	onkeydowncapture={(e) => {
+		if (isRebooting) return;
+		if (e.key === 'Enter' || e.key === ' ') {
+			// Allow Enter/Space to reach the button if it's focused
+			return;
+		}
+		$screensaverActive = false;
+	}}
+/>
+
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
 	class="fixed inset-0 z-[500] flex flex-col items-center justify-center p-8 transition-colors duration-1000"
+	onclick={() => {
+		if (!isRebooting) $screensaverActive = false;
+	}}
 	style:background-color={!isRebooting
 		? isDarkMode
 			? 'color-mix(in srgb, hsl(var(--primary)), black 80%)'
@@ -66,8 +83,12 @@
 				<Button
 					variant="outline"
 					size="lg"
+					autofocus
 					class="w-full bg-white font-bold text-black md:w-auto"
-					onclick={startReboot}
+					onclick={(e) => {
+						e.stopPropagation();
+						startReboot();
+					}}
 				>
 					{i18n.t('terminal.crash.reboot')}
 				</Button>

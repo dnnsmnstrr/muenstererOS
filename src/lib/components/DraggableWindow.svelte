@@ -194,7 +194,7 @@
 		e.preventDefault();
 
 		// Disable bounce animation when user interacts with window
-		if ($screensaverActive) {
+		if ($screensaverActive && $screensaver !== 'crash') {
 			screensaverActive.set(false);
 		}
 
@@ -314,7 +314,7 @@
 		const handleActivity = () => {
 			resetInactivityTimer();
 			// Stop bounce animation on any activity
-			if ($screensaverActive) {
+			if ($screensaverActive && $screensaver !== 'crash') {
 				screensaverActive.set(false);
 			}
 		};
