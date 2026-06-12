@@ -22,7 +22,7 @@ test.describe('Where page', () => {
         expect(markerSrc).not.toContain('undefined');
 
 		// Check if airplane overlay exists
-		const airplaneOverlay = page.locator('.pointer-events-none.absolute.inset-0.z-10');
+		const airplaneOverlay = page.locator('.pointer-events-none.absolute.inset-0.z-\\[9999\\]');
 		await expect(airplaneOverlay).toBeVisible();
 	});
 });

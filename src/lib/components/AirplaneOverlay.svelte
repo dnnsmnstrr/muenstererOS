@@ -14,6 +14,8 @@
 
 	let airplanes = $state<Airplane[]>([]);
 	let nextId = 0;
+	let width = $state(0);
+	let height = $state(0);
 	const timeouts = new Set<ReturnType<typeof setTimeout>>();
 
 	const emojis = ['✈️', '🛩️', '🛫', '🛬'];
@@ -64,7 +66,8 @@
 		// Calculate rotation
 		const dx = targetX - x;
 		const dy = targetY - y;
-		const rotation = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+		// Account for container aspect ratio if known
+		const rotation = Math.atan2(dy * height, dx * width) * (180 / Math.PI) + 90;
 
 		const airplane: Airplane = {
 			id,
@@ -102,17 +105,21 @@
 	});
 </script>
 
-<div class="pointer-events-none absolute inset-0 z-[9999] overflow-hidden">
+<div
+	bind:clientWidth={width}
+	bind:clientHeight={height}
+	class="pointer-events-none absolute inset-0 z-[9999] overflow-hidden"
+>
 	{#each airplanes as airplane (airplane.id)}
 		<div
-			class="absolute text-2xl ease-linear"
+			class="airplane absolute text-2xl ease-linear"
 			style="
                 left: {airplane.x}%;
                 top: {airplane.y}%;
                 transform: rotate({airplane.rotation}deg);
                 --target-x: {airplane.targetX}%;
                 --target-y: {airplane.targetY}%;
-                animation: fly {airplane.duration}ms linear forwards;
+                --duration: {airplane.duration}ms;
             "
 		>
 			{airplane.emoji}
@@ -121,10 +128,14 @@
 </div>
 
 <style>
-	@keyframes fly {
+	@keyframes airplane-fly {
 		to {
 			left: var(--target-x);
 			top: var(--target-y);
 		}
+	}
+
+	.airplane {
+		animation: airplane-fly var(--duration) linear forwards;
 	}
 </style>
