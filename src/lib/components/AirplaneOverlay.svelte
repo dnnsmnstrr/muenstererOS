@@ -92,10 +92,10 @@
 
 	onMount(() => {
 		const interval = setInterval(() => {
-			if (airplanes.length < 5) {
+			if (airplanes.length < 3) {
 				spawnAirplane();
 			}
-		}, 1000);
+		}, 4000);
 
 		return () => {
 			clearInterval(interval);
