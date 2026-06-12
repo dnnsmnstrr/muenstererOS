@@ -77,7 +77,7 @@
 			emoji
 		};
 
-		airplanes.push(airplane);
+		airplanes = [...airplanes, airplane];
 
 		// Remove airplane after animation
 		const timeout = setTimeout(() => {
@@ -92,7 +92,7 @@
 			if (airplanes.length < 5) {
 				spawnAirplane();
 			}
-		}, 3000);
+		}, 1000);
 
 		return () => {
 			clearInterval(interval);
@@ -102,7 +102,7 @@
 	});
 </script>
 
-<div class="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+<div class="pointer-events-none absolute inset-0 z-[9999] overflow-hidden">
 	{#each airplanes as airplane (airplane.id)}
 		<div
 			class="absolute text-2xl ease-linear"
