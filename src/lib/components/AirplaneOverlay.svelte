@@ -18,7 +18,7 @@
 	let height = $state(0);
 	const timeouts = new Set<ReturnType<typeof setTimeout>>();
 
-	const emojis = ['✈️', '🛩️', '🛫', '🛬'];
+	const emojis = ['✈️'];
 
 	function spawnAirplane() {
 		const id = nextId++;
@@ -67,7 +67,7 @@
 		const dx = targetX - x;
 		const dy = targetY - y;
 		// Account for container aspect ratio if known
-		const rotation = Math.atan2(dy * height, dx * width) * (180 / Math.PI) + 90;
+		const rotation = Math.atan2(dy * height, dx * width) * (180 / Math.PI) + 45;
 
 		const airplane: Airplane = {
 			id,
