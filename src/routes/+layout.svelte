@@ -322,8 +322,17 @@
 	const pageDescription = $derived(i18n.t(`common.description`));
 
 	const isIsolatedPage = $derived(
-		page.url.pathname.startsWith('/og-preview') || page.url.pathname.startsWith('/pap/preview')
+		page.route.id === '/og-preview' || page.route.id === '/pap/preview'
 	);
+
+	$effect(() => {
+		if (window.location.host.includes('vercel') || window.location.host.includes('test')) {
+			debugLog('Preview environment detected');
+			debugLog('Route ID:', page.route.id);
+			debugLog('Pathname:', page.url.pathname);
+			debugLog('Is isolated page:', isIsolatedPage);
+		}
+	});
 </script>
 
 <svelte:head>
@@ -353,7 +362,9 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 {#if isIsolatedPage}
-	{@render children?.()}
+	<Tooltip.Provider>
+		{@render children?.()}
+	</Tooltip.Provider>
 {:else}
 	<Command pages={allPages} />
 
