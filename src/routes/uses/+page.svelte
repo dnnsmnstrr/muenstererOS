@@ -263,8 +263,7 @@
 									<a
 										class="hover:underline"
 										href={item.url}
-										target="_blank"
-										rel="noopener noreferrer"
+										target="_blank" rel="noopener noreferrer"
 									>
 										{item.title}
 									</a>
@@ -359,8 +358,7 @@
 									<a
 										class="hover:underline"
 										href={item.url}
-										target="_blank"
-										rel="noopener noreferrer"
+										target="_blank" rel="noopener noreferrer"
 									>
 										{item.title}
 									</a>

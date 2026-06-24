@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tabs as TabsPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils";
+	import { cn, getRel } from "$lib/utils";
 
 	type $$Props = TabsPrimitive.TriggerProps & { href: string };
 
@@ -21,7 +21,7 @@
 		className
 	)}
 	{href}
-	rel={rest.target === '_blank' ? (rest.rel || 'noopener noreferrer') : rest.rel}
+	rel={getRel(rest.rel, rest.target)}
 	{...rest}
 >
 	{@render children?.()}

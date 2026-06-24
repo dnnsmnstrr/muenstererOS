@@ -97,8 +97,7 @@
 						{#if project.webUrl}
 							<a
 								href={project.webUrl}
-								target="_blank"
-								rel="noopener noreferrer"
+								target="_blank" rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
 								{i18n.t('projects.website')} →
@@ -107,8 +106,7 @@
 						{#if project.appUrl}
 							<a
 								href={project.appUrl}
-								target="_blank"
-								rel="noopener noreferrer"
+								target="_blank" rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
 								{i18n.t('projects.app')} →
@@ -117,8 +115,7 @@
 						{#if project.githubUrl}
 							<a
 								href={project.githubUrl}
-								target="_blank"
-								rel="noopener noreferrer"
+								target="_blank" rel="noopener noreferrer"
 								class="text-sm hover:underline"
 							>
 								{i18n.t('projects.github')} →

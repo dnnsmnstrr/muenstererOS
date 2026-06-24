@@ -400,8 +400,7 @@
 							{#if event.url}
 								<a
 									href={event.url}
-									target="_blank"
-									rel="noopener noreferrer"
+									target="_blank" rel="noopener noreferrer"
 									class="flex items-center gap-1 text-xs hover:underline"
 								>
 									{event.name}
