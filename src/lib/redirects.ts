@@ -113,6 +113,12 @@ export const redirects: Redirect[] = [
 		aliases: ['badge']
 	},
 	{
+		name: 'poke',
+		url: 'https://dnnsmnstrr.poke.site/',
+		description: 'A collection of pages created by the Poke agent',
+		aliases: ['🌴']
+	},
+	{
 		name: 'making',
 		url: links.makerer,
 		aliases: ['makerer', 'make', 'maker', 'makermonday', '🛠️']
