@@ -5,15 +5,22 @@
 	import { formatDate, formatDuration } from '$lib/utils/helper';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import { Calendar, Grid, ExternalLink, X } from 'lucide-svelte';
+	import { Calendar, Grid, Map as MapIcon, ExternalLink, X } from 'lucide-svelte';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
+	import { Slider } from '$lib/components/ui/slider';
+	import L from 'leaflet';
+	import 'leaflet/dist/leaflet.css';
+	import markerIcon from 'leaflet/dist/images/marker-icon.png';
+	import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+	import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+	import { browser } from '$app/environment';
 	import { BIRTHDATE, PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	let events: Event[] = $state([]);
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 
-	let viewMode = $state<'timeline' | 'grid'>('timeline');
+	let viewMode = $state<'timeline' | 'grid' | 'map'>('timeline');
 	let resolution = $state<'day' | 'week' | 'month' | 'year'>('week');
 	let zoom = $state(12);
 	let hoveredUnit = $state<(typeof gridUnits)[0] | null>(null);
@@ -22,6 +29,7 @@
 	let showBirthdays = $state(true);
 	let targetAge = $state(80);
 
+	let dateRange = $state([0, 80 * 12]); // in months from birth
 	const birthDate = $derived(new Date(BIRTHDATE));
 	const now = new Date();
 
@@ -110,8 +118,10 @@
 				throw new Error('Failed to fetch events');
 			}
 			const data = await response.json();
-			events = data.events || [];
+			events = data.events || (Array.isArray(data.items) ? data.items : []);
+			console.log('Loaded events:', events.length);
 		} catch (err) {
+			console.error('Error loading events:', err);
 			error = err instanceof Error ? err.message : 'An error occurred';
 		} finally {
 			loading = false;
@@ -128,6 +138,82 @@
 			}))
 			.sort((a, b) => a.start.getTime() - b.start.getTime())
 	);
+
+	let map = $state<L.Map | null>(null);
+	let markers: L.Marker[] = [];
+	let mapInitialized = $state(false);
+
+	const minDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[0], 1));
+	const maxDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[1] + 1, 0));
+
+	const filteredEvents = $derived(
+		parsedEvents.filter((event) => {
+			return event.start <= maxDate && event.end >= minDate;
+		})
+	);
+
+	const mapEvents = $derived(filteredEvents.filter((event) => event.lat !== undefined && event.lng !== undefined));
+
+	$effect(() => {
+		if (viewMode === 'map' && browser && !map) {
+			// Fix for Leaflet marker icon issue
+			delete (L.Icon.Default.prototype as any)._getIconUrl;
+			L.Icon.Default.mergeOptions({
+				iconUrl: markerIcon,
+				iconRetinaUrl: markerIcon2x,
+				shadowUrl: markerShadow
+			});
+
+			const mapInstance = L.map('timeline-map').setView([50.0, 8.2711], 4);
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(mapInstance);
+			map = mapInstance;
+			mapInitialized = true;
+
+			return () => {
+				mapInstance.remove();
+				map = null;
+				mapInitialized = false;
+			};
+		}
+	});
+
+	$effect(() => {
+		if (map && mapEvents) {
+			markers.forEach((m) => m.remove());
+			markers = [];
+
+			mapEvents.forEach((event) => {
+				if (event.lat !== undefined && event.lng !== undefined) {
+					const marker = L.marker([event.lat, event.lng], {
+						icon: L.divIcon({
+							className: 'custom-div-icon',
+							html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
+							iconSize: [12, 12],
+							iconAnchor: [6, 6]
+						})
+					})
+						.addTo(map!)
+						.bindPopup(`
+							<div class="p-1">
+								<div class="font-bold">${event.name}</div>
+								<div class="text-xs text-muted-foreground">${formatDate(event.startDate)} - ${event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}</div>
+								${event.location ? `<div class="mt-1 text-xs italic">${event.location}</div>` : ''}
+							</div>
+						`);
+					markers.push(marker);
+				}
+			});
+
+			// Only fitBounds on initial load to avoid jarring jumps when scrubbing the slider
+			if (markers.length > 0 && map && mapInitialized) {
+				const group = L.featureGroup(markers);
+				map.fitBounds(group.getBounds(), { padding: [50, 50] });
+				mapInitialized = false; // Prevent further automatic jumps
+			}
+		}
+	});
 </script>
 
 <svelte:head>
@@ -143,7 +229,7 @@
 				<p class="text-muted-foreground">{i18n.t('timeline.description')}</p>
 			</div>
 
-			<Tabs.Root value={viewMode} onValueChange={(v) => (viewMode = v as 'timeline' | 'grid')}>
+			<Tabs.Root value={viewMode} onValueChange={(v) => (viewMode = v as 'timeline' | 'grid' | 'map')}>
 				<Tabs.List>
 					<Tabs.Trigger value="timeline" class="flex items-center gap-2">
 						<Calendar class="h-4 w-4" />
@@ -152,6 +238,10 @@
 					<Tabs.Trigger value="grid" class="flex items-center gap-2">
 						<Grid class="h-4 w-4" />
 						{i18n.t('timeline.grid')}
+					</Tabs.Trigger>
+					<Tabs.Trigger value="map" class="flex items-center gap-2">
+						<MapIcon class="h-4 w-4" />
+						{i18n.t('timeline.map')}
 					</Tabs.Trigger>
 				</Tabs.List>
 			</Tabs.Root>
@@ -315,7 +405,7 @@
 			</div>
 		</div>
 	</div>
-{:else}
+{:else if viewMode === 'grid'}
 	<!-- Grid view -->
 	<div class="container mx-auto overflow-x-hidden px-4 pb-20">
 		<div
@@ -416,6 +506,33 @@
 			{/if}
 		</div>
 	{/if}
+{:else if viewMode === 'map'}
+	<div class="container mx-auto px-4">
+		<div id="timeline-map" class="z-0 h-[500px] w-full rounded-lg border bg-card shadow-sm"></div>
+
+		<div class="mt-8 rounded-lg border bg-card p-6 shadow-sm">
+			<div class="mb-4 flex items-center justify-between">
+				<h3 class="text-lg font-semibold">
+					{formatDate(minDate.toISOString())} — {formatDate(maxDate.toISOString())}
+				</h3>
+				<span class="text-sm text-muted-foreground">
+					{mapEvents.length} {i18n.t('timeline.map')} {mapEvents.length === 1 ? 'event' : 'events'}
+				</span>
+			</div>
+			<Slider
+				bind:value={dateRange}
+				type="multiple"
+				min={0}
+				max={targetAge * 12}
+				step={1}
+				class="w-full"
+			/>
+			<div class="mt-2 flex justify-between text-xs text-muted-foreground">
+				<span>{birthDate.getFullYear()}</span>
+				<span>{birthDate.getFullYear() + targetAge}</span>
+			</div>
+		</div>
+	</div>
 {/if}
 
 <style>

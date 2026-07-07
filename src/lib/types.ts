@@ -19,6 +19,12 @@ export type Event = {
 
 	/** A URL for more information about the event, must use HTTPS. */
 	url?: string; // Optional, as it's not in the required properties
+
+	/** Latitude for map view */
+	lat?: number;
+
+	/** Longitude for map view */
+	lng?: number;
 };
 
 export interface PlaylistItem {
