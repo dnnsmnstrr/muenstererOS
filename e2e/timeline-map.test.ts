@@ -6,13 +6,6 @@ test('timeline has map view', async ({ page }) => {
   // Wait for loading to finish
   await expect(page.locator('text=Loading...')).not.toBeVisible();
 
-  // Check if we have events
-  const noEvents = await page.locator('text=No events found').isVisible();
-  if (noEvents) {
-    console.log('Skipping map check because no events are available');
-    return;
-  }
-
   // Find the tab trigger
   const mapTab = page.getByRole('tab').filter({ hasText: /Map|Karte/ });
   await expect(mapTab).toBeVisible();
@@ -24,6 +17,6 @@ test('timeline has map view', async ({ page }) => {
   await expect(mapContainer).toBeVisible({ timeout: 10000 });
 
   // Verify slider exists
-  const slider = page.locator('.relative.flex.w-full.touch-none.select-none.items-center');
+  const slider = page.locator('span[data-slider-root]');
   await expect(slider).toBeVisible();
 });

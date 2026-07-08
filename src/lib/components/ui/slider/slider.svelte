@@ -4,18 +4,20 @@
 
 	let {
 		ref = $bindable(null),
-		value = $bindable([0]),
+		value = $bindable(),
 		class: className,
-		type = "single",
 		...restProps
 	}: WithElementRef<SliderPrimitive.RootProps> = $props();
 </script>
 
-<!-- @svelte-ignore state_referenced_locally -->
 <SliderPrimitive.Root
 	bind:ref
 	bind:value
-	{type}
+	onValueChange={(v) => {
+		if (v !== value) {
+			value = v;
+		}
+	}}
 	class={cn("relative flex w-full touch-none select-none items-center", className)}
 	{...restProps}
 >

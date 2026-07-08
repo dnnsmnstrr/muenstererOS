@@ -32,7 +32,7 @@ async function run() {
 
 	const content = fs.readFileSync(filePath, 'utf8');
 	const data = JSON.parse(content);
-	const events = Array.isArray(data) ? data : data.events;
+	const events = Array.isArray(data) ? data : (data.events || data.items);
 
 	if (!events) {
 		console.error('No events found in the provided file.');

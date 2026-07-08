@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, untrack } from 'svelte';
 	import type { Event } from '$lib/types';
 	import Loader from '$lib/components/Loader.svelte';
 	import { formatDate, formatDuration } from '$lib/utils/helper';
@@ -29,9 +29,17 @@
 	let showBirthdays = $state(true);
 	let targetAge = $state(80);
 
-	let dateRange = $state([0, 80 * 12]); // in months from birth
 	const birthDate = $derived(new Date(BIRTHDATE));
 	const now = new Date();
+	const monthsSinceBirth = $derived.by(() => {
+		return (now.getFullYear() - birthDate.getFullYear()) * 12 + (now.getMonth() - birthDate.getMonth());
+	});
+
+	let dateRange = $state<number[]>([0, 300]);
+
+	onMount(() => {
+		dateRange = [0, monthsSinceBirth];
+	});
 
 	const gridUnits = $derived.by(() => {
 		const units = [];
@@ -139,9 +147,8 @@
 			.sort((a, b) => a.start.getTime() - b.start.getTime())
 	);
 
-	let map = $state<L.Map | null>(null);
 	let markers: L.Marker[] = [];
-	let mapInitialized = $state(false);
+	let mapContainer = $state<HTMLDivElement | null>(null);
 
 	const minDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[0], 1));
 	const maxDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[1] + 1, 0));
@@ -155,7 +162,7 @@
 	const mapEvents = $derived(filteredEvents.filter((event) => event.lat !== undefined && event.lng !== undefined));
 
 	$effect(() => {
-		if (viewMode === 'map' && browser && !map) {
+		if (viewMode === 'map' && browser && mapContainer) {
 			// Fix for Leaflet marker icon issue
 			delete (L.Icon.Default.prototype as any)._getIconUrl;
 			L.Icon.Default.mergeOptions({
@@ -164,54 +171,54 @@
 				shadowUrl: markerShadow
 			});
 
-			const mapInstance = L.map('timeline-map').setView([50.0, 8.2711], 4);
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			const mapInstance = L.map(mapContainer).setView([50.0, 8.2711], 4);
+			L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+				attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 			}).addTo(mapInstance);
-			map = mapInstance;
-			mapInitialized = true;
+
+			let needsFitBounds = true;
+
+			// Inner effect for markers
+			$effect(() => {
+				const currentEvents = mapEvents;
+				untrack(() => {
+					markers.forEach((m) => m.remove());
+					markers = [];
+
+					currentEvents.forEach((event) => {
+						if (event.lat !== undefined && event.lng !== undefined) {
+							const marker = L.marker([event.lat, event.lng], {
+								icon: L.divIcon({
+									className: 'custom-div-icon',
+									html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
+									iconSize: [12, 12],
+									iconAnchor: [6, 6]
+								})
+							})
+								.addTo(mapInstance)
+								.bindPopup(`
+									<div class="p-1">
+										<div class="font-bold">${event.name}</div>
+										<div class="text-xs text-muted-foreground">${formatDate(event.startDate)} - ${event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}</div>
+										${event.location ? `<div class="mt-1 text-xs italic">${event.location}</div>` : ''}
+									</div>
+								`);
+							markers.push(marker);
+						}
+					});
+
+					if (markers.length > 0 && needsFitBounds) {
+						const group = L.featureGroup(markers);
+						mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
+						needsFitBounds = false;
+					}
+				});
+			});
 
 			return () => {
 				mapInstance.remove();
-				map = null;
-				mapInitialized = false;
+				markers = [];
 			};
-		}
-	});
-
-	$effect(() => {
-		if (map && mapEvents) {
-			markers.forEach((m) => m.remove());
-			markers = [];
-
-			mapEvents.forEach((event) => {
-				if (event.lat !== undefined && event.lng !== undefined) {
-					const marker = L.marker([event.lat, event.lng], {
-						icon: L.divIcon({
-							className: 'custom-div-icon',
-							html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
-							iconSize: [12, 12],
-							iconAnchor: [6, 6]
-						})
-					})
-						.addTo(map!)
-						.bindPopup(`
-							<div class="p-1">
-								<div class="font-bold">${event.name}</div>
-								<div class="text-xs text-muted-foreground">${formatDate(event.startDate)} - ${event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}</div>
-								${event.location ? `<div class="mt-1 text-xs italic">${event.location}</div>` : ''}
-							</div>
-						`);
-					markers.push(marker);
-				}
-			});
-
-			// Only fitBounds on initial load to avoid jarring jumps when scrubbing the slider
-			if (markers.length > 0 && map && mapInitialized) {
-				const group = L.featureGroup(markers);
-				map.fitBounds(group.getBounds(), { padding: [50, 50] });
-				mapInitialized = false; // Prevent further automatic jumps
-			}
 		}
 	});
 </script>
@@ -508,9 +515,9 @@
 	{/if}
 {:else if viewMode === 'map'}
 	<div class="container mx-auto px-4">
-		<div id="timeline-map" class="z-0 h-[500px] w-full rounded-lg border bg-card shadow-sm"></div>
+		<div bind:this={mapContainer} id="timeline-map" class="relative z-0 h-[500px] w-full rounded-lg border bg-card shadow-sm"></div>
 
-		<div class="mt-8 rounded-lg border bg-card p-6 shadow-sm">
+		<div class="relative z-10 mt-8 rounded-lg border bg-card p-6 shadow-sm">
 			<div class="mb-4 flex items-center justify-between">
 				<h3 class="text-lg font-semibold">
 					{formatDate(minDate.toISOString())} — {formatDate(maxDate.toISOString())}
@@ -519,17 +526,19 @@
 					{mapEvents.length} {i18n.t('timeline.map')} {mapEvents.length === 1 ? 'event' : 'events'}
 				</span>
 			</div>
-			<Slider
-				bind:value={dateRange}
-				type="multiple"
-				min={0}
-				max={targetAge * 12}
-				step={1}
-				class="w-full"
-			/>
+			<div class="px-2">
+				<Slider
+					bind:value={dateRange}
+					type="multiple"
+					min={0}
+					max={monthsSinceBirth}
+					step={1}
+					class="w-full"
+				/>
+			</div>
 			<div class="mt-2 flex justify-between text-xs text-muted-foreground">
 				<span>{birthDate.getFullYear()}</span>
-				<span>{birthDate.getFullYear() + targetAge}</span>
+				<span>{now.getFullYear()}</span>
 			</div>
 		</div>
 	</div>
