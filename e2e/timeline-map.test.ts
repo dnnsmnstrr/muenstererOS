@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test';
 
 test('timeline has map view', async ({ page }) => {
+  // Register before navigating so a fast response is not missed
+  const eventsResponse = page.waitForResponse('**/api/events');
   await page.goto('/timeline');
 
-  // Wait for loading to finish
-  await expect(page.locator('text=Loading...')).not.toBeVisible();
+  // Wait for the events fetch so the page leaves its loading state
+  await eventsResponse;
 
   // Find the tab trigger
   const mapTab = page.getByRole('tab').filter({ hasText: /Map|Karte/ });

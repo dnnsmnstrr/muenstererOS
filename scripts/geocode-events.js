@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 
 async function geocode(location) {
 	if (!location) return null;
@@ -10,6 +9,9 @@ async function geocode(location) {
 				'User-Agent': 'muenstererOS-geocoder'
 			}
 		});
+		if (!response.ok) {
+			throw new Error(`Nominatim responded with status ${response.status}`);
+		}
 		const data = await response.json();
 		if (data && data.length > 0) {
 			return {
@@ -39,6 +41,7 @@ async function run() {
 		process.exit(1);
 	}
 
+	let failures = 0;
 	for (const event of events) {
 		if (event.location && (event.lat === undefined || event.lng === undefined)) {
 			const coords = await geocode(event.location);
@@ -47,6 +50,7 @@ async function run() {
 				event.lng = coords.lng;
 				console.log(`  Found: ${coords.lat}, ${coords.lng}`);
 			} else {
+				failures++;
 				console.log(`  Not found.`);
 			}
 			// Sleep to respect Nominatim usage policy (1 request per second)
@@ -55,7 +59,12 @@ async function run() {
 	}
 
 	fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-	console.log('Done!');
+	if (failures > 0) {
+		console.warn(`Done, but ${failures} location(s) could not be geocoded. Re-run to retry.`);
+		process.exitCode = 1;
+	} else {
+		console.log('Done!');
+	}
 }
 
 run();

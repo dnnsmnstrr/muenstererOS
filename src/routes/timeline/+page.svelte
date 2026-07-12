@@ -8,11 +8,8 @@
 	import { Calendar, Grid, Map as MapIcon, ExternalLink, X } from 'lucide-svelte';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import { Slider } from '$lib/components/ui/slider';
-	import 'leaflet/dist/leaflet.css';
-	import markerIcon from 'leaflet/dist/images/marker-icon.png';
-	import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-	import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-	import { browser } from '$app/environment';
+	import { loadLeaflet, createOsmMap } from '$lib/utils/leaflet';
+	import type * as Leaflet from 'leaflet';
 	import { BIRTHDATE, PAGE_TITLE_SUFFIX } from '$lib/config';
 
 	let events: Event[] = $state([]);
@@ -28,17 +25,12 @@
 	let showBirthdays = $state(true);
 	let targetAge = $state(80);
 
-	const birthDate = $derived(new Date(BIRTHDATE));
+	const birthDate = new Date(BIRTHDATE);
 	const now = new Date();
-	const monthsSinceBirth = $derived.by(() => {
-		return (now.getFullYear() - birthDate.getFullYear()) * 12 + (now.getMonth() - birthDate.getMonth());
-	});
+	const monthsSinceBirth =
+		(now.getFullYear() - birthDate.getFullYear()) * 12 + (now.getMonth() - birthDate.getMonth());
 
-	let dateRange = $state<number[]>([0, 300]);
-
-	onMount(() => {
-		dateRange = [0, monthsSinceBirth];
-	});
+	let dateRange = $state<number[]>([0, monthsSinceBirth]);
 
 	const gridUnits = $derived.by(() => {
 		const units = [];
@@ -125,8 +117,7 @@
 				throw new Error('Failed to fetch events');
 			}
 			const data = await response.json();
-			events = data.events || (Array.isArray(data.items) ? data.items : []);
-			console.log('Loaded events:', events.length);
+			events = data.events || [];
 		} catch (err) {
 			console.error('Error loading events:', err);
 			error = err instanceof Error ? err.message : 'An error occurred';
@@ -141,96 +132,115 @@
 			.map((event) => ({
 				...event,
 				start: new Date(event.startDate),
-				end: event.endDate ? new Date(event.endDate) : new Date()
+				end: event.endDate ? new Date(event.endDate) : now
 			}))
 			.sort((a, b) => a.start.getTime() - b.start.getTime())
 	);
 
-	let markers: any[] = [];
 	let mapContainer = $state<HTMLDivElement | null>(null);
 
 	const minDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[0], 1));
 	const maxDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[1] + 1, 0));
 
-	const filteredEvents = $derived(
-		parsedEvents.filter((event) => {
-			return event.start <= maxDate && event.end >= minDate;
-		})
+	const geoEvents = $derived(
+		parsedEvents.filter((event) => event.lat !== undefined && event.lng !== undefined)
 	);
 
-	const mapEvents = $derived(filteredEvents.filter((event) => event.lat !== undefined && event.lng !== undefined));
+	const mapEvents = $derived(
+		geoEvents.filter((event) => event.start <= maxDate && event.end >= minDate)
+	);
 
-	let leaflet = $state<any>(null);
+	let leaflet = $state<Awaited<ReturnType<typeof loadLeaflet>> | null>(null);
 
+	// Leaflet is only needed for the map tab, so load it on first switch
 	$effect(() => {
-		if (browser && !leaflet) {
-			import('leaflet').then((mod) => {
-				leaflet = mod;
-			});
+		if (viewMode === 'map' && !leaflet) {
+			loadLeaflet().then((mod) => (leaflet = mod));
 		}
 	});
+
+	// Event data is fetched from a remote gist at runtime, so escape it before
+	// injecting into Leaflet's HTML sinks (divIcon html, popup content)
+	function escapeHtml(value: string): string {
+		return value.replace(
+			/[&<>"']/g,
+			(char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!
+		);
+	}
+
+	const SAFE_CSS_COLOR = /^[#a-zA-Z0-9(),.%\s-]+$/;
 
 	$effect(() => {
 		if (viewMode === 'map' && leaflet && mapContainer) {
 			const L = leaflet;
-			// Fix for Leaflet marker icon issue
-			delete (L.Icon.Default.prototype as any)._getIconUrl;
-			L.Icon.Default.mergeOptions({
-				iconUrl: markerIcon,
-				iconRetinaUrl: markerIcon2x,
-				shadowUrl: markerShadow
-			});
+			const mapInstance = createOsmMap(L, mapContainer);
 
-			const mapInstance = L.map(mapContainer).setView([50.0, 8.2711], 4);
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution:
-					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-			}).addTo(mapInstance);
-
+			const markersByEvent = new Map<(typeof geoEvents)[number], Leaflet.Marker>();
 			let needsFitBounds = true;
 
-			// Inner effect for markers
-			$effect(() => {
-				const currentEvents = mapEvents;
-				untrack(() => {
-					markers.forEach((m) => m.remove());
-					markers = [];
+			function createMarker(event: (typeof geoEvents)[number]) {
+				const color =
+					event.color && SAFE_CSS_COLOR.test(event.color) ? event.color : 'transparent';
+				return L.marker([event.lat!, event.lng!], {
+					icon: L.divIcon({
+						className: 'custom-div-icon',
+						html: `<div style="background-color: ${color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
+						iconSize: [12, 12],
+						iconAnchor: [6, 6]
+					})
+				}).bindPopup(
+					`
+					<div class="p-1">
+						<div class="font-bold">${escapeHtml(event.name)}</div>
+						<div class="text-xs text-muted-foreground">${escapeHtml(formatDate(event.startDate))} - ${escapeHtml(event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now'))}</div>
+						${event.location ? `<div class="mt-1 text-xs italic">${escapeHtml(event.location)}</div>` : ''}
+					</div>
+				`
+				);
+			}
 
-					currentEvents.forEach((event) => {
-						if (event.lat !== undefined && event.lng !== undefined) {
-							const marker = L.marker([event.lat, event.lng], {
-								icon: L.divIcon({
-									className: 'custom-div-icon',
-									html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
-									iconSize: [12, 12],
-									iconAnchor: [6, 6]
-								})
-							})
-								.addTo(mapInstance)
-								.bindPopup(
-									`
-									<div class="p-1">
-										<div class="font-bold">${event.name}</div>
-										<div class="text-xs text-muted-foreground">${formatDate(event.startDate)} - ${event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}</div>
-										${event.location ? `<div class="mt-1 text-xs italic">${event.location}</div>` : ''}
-									</div>
-								`
-								);
-							markers.push(marker);
-						}
-					});
-
-					if (markers.length > 0 && needsFitBounds) {
-						const group = L.featureGroup(markers);
-						mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
-						needsFitBounds = false;
+			function syncVisibleMarkers(visibleEvents: Set<(typeof geoEvents)[number]>) {
+				markersByEvent.forEach((marker, event) => {
+					if (visibleEvents.has(event)) {
+						marker.addTo(mapInstance);
+					} else {
+						marker.remove();
 					}
 				});
+				if (needsFitBounds && visibleEvents.size > 0) {
+					const visibleMarkers = [...visibleEvents]
+						.map((event) => markersByEvent.get(event))
+						.filter((marker) => marker !== undefined);
+					mapInstance.fitBounds(L.featureGroup(visibleMarkers).getBounds(), {
+						padding: [50, 50],
+						maxZoom: 12
+					});
+					needsFitBounds = false;
+				}
+			}
+
+			// Markers are created once per geocoded event and rebuilt on locale
+			// change (popups embed localized text)
+			$effect(() => {
+				const currentEvents = geoEvents;
+				i18n.lang;
+				untrack(() => {
+					markersByEvent.forEach((marker) => marker.remove());
+					markersByEvent.clear();
+					currentEvents.forEach((event) => markersByEvent.set(event, createMarker(event)));
+					syncVisibleMarkers(new Set(mapEvents));
+				});
+			});
+
+			// The range slider only toggles marker visibility
+			$effect(() => {
+				const visibleEvents = new Set(mapEvents);
+				untrack(() => syncVisibleMarkers(visibleEvents));
 			});
 
 			return () => {
 				mapInstance.remove();
-				markers = [];
+				markersByEvent.clear();
 			};
 		}
 	});
@@ -534,7 +544,9 @@
 					{formatDate(minDate.toISOString())} — {formatDate(maxDate.toISOString())}
 				</h3>
 				<span class="text-sm text-muted-foreground">
-					{mapEvents.length} {i18n.t('timeline.map')} {mapEvents.length === 1 ? 'event' : 'events'}
+					{mapEvents.length === 1
+						? i18n.t('timeline.events_one')
+						: i18n.t('timeline.events_many', { count: mapEvents.length.toString() })}
 				</span>
 			</div>
 			<div class="px-2">

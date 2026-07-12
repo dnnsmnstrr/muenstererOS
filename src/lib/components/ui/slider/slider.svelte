@@ -12,12 +12,7 @@
 
 <SliderPrimitive.Root
 	bind:ref
-	bind:value
-	onValueChange={(v) => {
-		if (v !== value) {
-			value = v;
-		}
-	}}
+	bind:value={value as never}
 	class={cn("relative flex w-full touch-none select-none items-center", className)}
 	{...restProps}
 >

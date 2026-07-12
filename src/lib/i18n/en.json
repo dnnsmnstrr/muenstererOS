@@ -309,6 +309,8 @@
 		"until": "until",
 		"until_now": "until now",
 		"map": "Map",
+		"events_one": "1 event",
+		"events_many": "{count} events",
 		"no_events": "No events found",
 		"loading": "Loading timeline...",
 		"show_future": "Show Future",
