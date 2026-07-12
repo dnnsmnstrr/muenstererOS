@@ -160,72 +160,76 @@
 
 	const mapEvents = $derived(filteredEvents.filter((event) => event.lat !== undefined && event.lng !== undefined));
 
+	let leaflet = $state<any>(null);
+
 	$effect(() => {
-		if (viewMode === 'map' && browser && mapContainer) {
-			let mapInstance: any;
+		if (browser && !leaflet) {
+			import('leaflet').then((mod) => {
+				leaflet = mod;
+			});
+		}
+	});
 
-			import('leaflet').then((L) => {
-				// Fix for Leaflet marker icon issue
-				delete (L.Icon.Default.prototype as any)._getIconUrl;
-				L.Icon.Default.mergeOptions({
-					iconUrl: markerIcon,
-					iconRetinaUrl: markerIcon2x,
-					shadowUrl: markerShadow
-				});
+	$effect(() => {
+		if (viewMode === 'map' && leaflet && mapContainer) {
+			const L = leaflet;
+			// Fix for Leaflet marker icon issue
+			delete (L.Icon.Default.prototype as any)._getIconUrl;
+			L.Icon.Default.mergeOptions({
+				iconUrl: markerIcon,
+				iconRetinaUrl: markerIcon2x,
+				shadowUrl: markerShadow
+			});
 
-				mapInstance = L.map(mapContainer!).setView([50.0, 8.2711], 4);
-				L.tileLayer(
-					'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-					{
-						attribution:
-							'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-					}
-				).addTo(mapInstance);
+			const mapInstance = L.map(mapContainer).setView([50.0, 8.2711], 4);
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution:
+					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(mapInstance);
 
-				let needsFitBounds = true;
+			let needsFitBounds = true;
 
-				// Inner effect for markers
-				$effect(() => {
-					const currentEvents = mapEvents;
-					untrack(() => {
-						markers.forEach((m) => m.remove());
-						markers = [];
+			// Inner effect for markers
+			$effect(() => {
+				const currentEvents = mapEvents;
+				untrack(() => {
+					markers.forEach((m) => m.remove());
+					markers = [];
 
-						currentEvents.forEach((event) => {
-							if (event.lat !== undefined && event.lng !== undefined) {
-								const marker = L.marker([event.lat, event.lng], {
-									icon: L.divIcon({
-										className: 'custom-div-icon',
-										html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
-										iconSize: [12, 12],
-										iconAnchor: [6, 6]
-									})
+					currentEvents.forEach((event) => {
+						if (event.lat !== undefined && event.lng !== undefined) {
+							const marker = L.marker([event.lat, event.lng], {
+								icon: L.divIcon({
+									className: 'custom-div-icon',
+									html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
+									iconSize: [12, 12],
+									iconAnchor: [6, 6]
 								})
-									.addTo(mapInstance)
-									.bindPopup(
-										`
+							})
+								.addTo(mapInstance)
+								.bindPopup(
+									`
 									<div class="p-1">
 										<div class="font-bold">${event.name}</div>
 										<div class="text-xs text-muted-foreground">${formatDate(event.startDate)} - ${event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}</div>
 										${event.location ? `<div class="mt-1 text-xs italic">${event.location}</div>` : ''}
 									</div>
 								`
-									);
-								markers.push(marker);
-							}
-						});
-
-						if (markers.length > 0 && needsFitBounds) {
-							const group = L.featureGroup(markers);
-							mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
-							needsFitBounds = false;
+								);
+							markers.push(marker);
 						}
 					});
+
+					if (markers.length > 0 && needsFitBounds) {
+						const group = L.featureGroup(markers);
+						mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
+						needsFitBounds = false;
+					}
 				});
 			});
 
 			return () => {
-				if (mapInstance) mapInstance.remove();
+				mapInstance.remove();
 				markers = [];
 			};
 		}
