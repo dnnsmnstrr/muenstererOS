@@ -8,7 +8,6 @@
 	import { Calendar, Grid, Map as MapIcon, ExternalLink, X } from 'lucide-svelte';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import { Slider } from '$lib/components/ui/slider';
-	import L from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import markerIcon from 'leaflet/dist/images/marker-icon.png';
 	import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -147,7 +146,7 @@
 			.sort((a, b) => a.start.getTime() - b.start.getTime())
 	);
 
-	let markers: L.Marker[] = [];
+	let markers: any[] = [];
 	let mapContainer = $state<HTMLDivElement | null>(null);
 
 	const minDate = $derived(new Date(birthDate.getFullYear(), birthDate.getMonth() + dateRange[0], 1));
@@ -163,60 +162,70 @@
 
 	$effect(() => {
 		if (viewMode === 'map' && browser && mapContainer) {
-			// Fix for Leaflet marker icon issue
-			delete (L.Icon.Default.prototype as any)._getIconUrl;
-			L.Icon.Default.mergeOptions({
-				iconUrl: markerIcon,
-				iconRetinaUrl: markerIcon2x,
-				shadowUrl: markerShadow
-			});
+			let mapInstance: any;
 
-			const mapInstance = L.map(mapContainer).setView([50.0, 8.2711], 4);
-			L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-				attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-			}).addTo(mapInstance);
+			import('leaflet').then((L) => {
+				// Fix for Leaflet marker icon issue
+				delete (L.Icon.Default.prototype as any)._getIconUrl;
+				L.Icon.Default.mergeOptions({
+					iconUrl: markerIcon,
+					iconRetinaUrl: markerIcon2x,
+					shadowUrl: markerShadow
+				});
 
-			let needsFitBounds = true;
+				mapInstance = L.map(mapContainer!).setView([50.0, 8.2711], 4);
+				L.tileLayer(
+					'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+					{
+						attribution:
+							'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+					}
+				).addTo(mapInstance);
 
-			// Inner effect for markers
-			$effect(() => {
-				const currentEvents = mapEvents;
-				untrack(() => {
-					markers.forEach((m) => m.remove());
-					markers = [];
+				let needsFitBounds = true;
 
-					currentEvents.forEach((event) => {
-						if (event.lat !== undefined && event.lng !== undefined) {
-							const marker = L.marker([event.lat, event.lng], {
-								icon: L.divIcon({
-									className: 'custom-div-icon',
-									html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
-									iconSize: [12, 12],
-									iconAnchor: [6, 6]
+				// Inner effect for markers
+				$effect(() => {
+					const currentEvents = mapEvents;
+					untrack(() => {
+						markers.forEach((m) => m.remove());
+						markers = [];
+
+						currentEvents.forEach((event) => {
+							if (event.lat !== undefined && event.lng !== undefined) {
+								const marker = L.marker([event.lat, event.lng], {
+									icon: L.divIcon({
+										className: 'custom-div-icon',
+										html: `<div style="background-color: ${event.color}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.3);"></div>`,
+										iconSize: [12, 12],
+										iconAnchor: [6, 6]
+									})
 								})
-							})
-								.addTo(mapInstance)
-								.bindPopup(`
+									.addTo(mapInstance)
+									.bindPopup(
+										`
 									<div class="p-1">
 										<div class="font-bold">${event.name}</div>
 										<div class="text-xs text-muted-foreground">${formatDate(event.startDate)} - ${event.endDate ? formatDate(event.endDate) : i18n.t('timeline.until_now')}</div>
 										${event.location ? `<div class="mt-1 text-xs italic">${event.location}</div>` : ''}
 									</div>
-								`);
-							markers.push(marker);
+								`
+									);
+								markers.push(marker);
+							}
+						});
+
+						if (markers.length > 0 && needsFitBounds) {
+							const group = L.featureGroup(markers);
+							mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
+							needsFitBounds = false;
 						}
 					});
-
-					if (markers.length > 0 && needsFitBounds) {
-						const group = L.featureGroup(markers);
-						mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
-						needsFitBounds = false;
-					}
 				});
 			});
 
 			return () => {
-				mapInstance.remove();
+				if (mapInstance) mapInstance.remove();
 				markers = [];
 			};
 		}
@@ -332,17 +341,15 @@
 	</div>
 {:else if viewMode === 'timeline'}
 	<!-- Horizontal scrollable timeline -->
-	<div class="">
+	<div class="relative flex min-h-[600px] flex-col justify-center overflow-hidden">
 		<!-- Timeline line -->
-		<div
-			class="absolute left-0 right-0 top-1/2 z-0 mt-24 h-0.5 -translate-y-1/2 transform bg-border"
-		></div>
+		<div class="absolute left-0 right-0 top-1/2 z-0 h-0.5 -translate-y-1/2 transform bg-border"></div>
 
 		<!-- Timeline container -->
 		<div
-			class="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 absolute inset-0 top-48 flex items-center overflow-x-auto"
+			class="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 relative z-10 flex items-center overflow-x-auto py-16"
 		>
-			<div class="flex h-4/6 min-w-max space-x-8 px-4 sm:max-h-80 sm:px-20">
+			<div class="flex min-w-max items-stretch space-x-8 px-4 sm:px-20">
 				{#each parsedEvents as event, index}
 					{@const duration = Math.round(event.end.getTime() - event.start.getTime())}
 					<div class="relative flex min-w-64 flex-col">
