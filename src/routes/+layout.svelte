@@ -1,5 +1,10 @@
 <script lang="ts">
 	import '../app.pcss';
+	import { MdProcessor } from '@jazzymcjazz/mdsvelte';
+	import remarkGfm from 'remark-gfm';
+
+	MdProcessor.setGlobalPlugins({ remarkPlugins: [remarkGfm] });
+
 	import { ModeWatcher, mode } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import Command from './Command.svelte';

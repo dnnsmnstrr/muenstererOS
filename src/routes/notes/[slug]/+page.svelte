@@ -257,4 +257,21 @@
 	:global(.prose h1, .prose h2, .prose h3) {
 		scroll-margin-top: 2rem;
 	}
+	:global(.prose table) {
+		width: 100%;
+		border-collapse: collapse;
+		margin: 1.5rem 0;
+	}
+	:global(.prose th, .prose td) {
+		border: 1px solid hsl(var(--border));
+		padding: 0.5rem 0.75rem;
+		text-align: left;
+	}
+	:global(.prose th) {
+		background-color: hsl(var(--muted) / 0.5);
+		font-weight: 600;
+	}
+	:global(.prose tr:nth-child(even)) {
+		background-color: hsl(var(--muted) / 0.2);
+	}
 </style>
