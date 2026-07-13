@@ -6,6 +6,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { getRedirectURL, type Redirect } from '$lib/utils/redirect';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { trackRedirect } from '$lib/utils/analytics';
 	import {
 		DropdownMenu,
 		DropdownMenuContent,
@@ -20,6 +21,7 @@
 	let { data } = $props();
 	function handleRedirect(redirect: Redirect) {
 		const redirectUrl = getRedirectURL(redirect);
+		trackRedirect(redirect.name);
 		window.open(redirectUrl, '_blank');
 	}
 	let filterQuery = $state('');
@@ -92,8 +94,11 @@
 					if (redirect) {
 						const url = getRedirectURL(redirect);
 						if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-							window.open(url, '_self');
+							trackRedirect(redirect.name, () => {
+								window.open(url, '_self');
+							});
 						} else {
+							trackRedirect(redirect.name);
 							window.open(url, '_blank', 'noopener,noreferrer');
 						}
 					}

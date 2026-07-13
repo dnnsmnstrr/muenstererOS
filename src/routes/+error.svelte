@@ -6,6 +6,7 @@
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { trackRedirect } from '$lib/utils/analytics';
 
 	// During SSR there is no window, so show the error content immediately.
 	// On the client, onMount will attempt a redirect lookup first.
@@ -17,7 +18,12 @@
 		const hasLoopedBack = window.location.search.includes('noRedirect');
 		if (foundRedirect && !foundRedirect.toString().includes('404') && !hasLoopedBack) {
 			const isExternal = typeof foundRedirect === 'string' && foundRedirect.startsWith('http');
-			window.location.replace(foundRedirect + (!isExternal ? '?noRedirect=true' : ''));
+			const redirectObj = getRedirect(query, redirects, { returnObject: true });
+			const name = (typeof redirectObj === 'object' && redirectObj?.name) ? redirectObj.name : query;
+
+			trackRedirect(name, () => {
+				window.location.replace(foundRedirect + (!isExternal ? '?noRedirect=true' : ''));
+			});
 		} else {
 			loading = false;
 		}
