@@ -49,3 +49,47 @@ export function trackRedirect(name: string, callback?: () => void) {
 		}
 	}, 100);
 }
+
+/**
+ * Tracks a command execution using GoatCounter's JavaScript API.
+ * Since count.js is loaded asynchronously, this function attempts to wait
+ * for the API to load before sending the event. It uses a timeout to prevent
+ * hanging if GoatCounter is blocked by an ad-blocker.
+ *
+ * @param id The command identifier (e.g., 'command.toggle_dark_mode')
+ * @param name The localized or human-readable name of the command
+ */
+export function trackCommandEvent(id: string, name?: string) {
+	if (typeof window === 'undefined') {
+		return;
+	}
+
+	const track = () => {
+		const goatcounter = (window as any).goatcounter;
+		if (goatcounter && typeof goatcounter.count === 'function') {
+			goatcounter.count({
+				path: 'command-' + id.toLowerCase(),
+				title: 'Command: ' + (name || id),
+				event: true
+			});
+		}
+	};
+
+	// If goatcounter is already loaded, track
+	if ((window as any).goatcounter && typeof (window as any).goatcounter.count === 'function') {
+		track();
+		return;
+	}
+
+	// If goatcounter is not yet loaded, wait up to 500ms
+	let attempts = 0;
+	const interval = setInterval(() => {
+		attempts++;
+		if ((window as any).goatcounter && typeof (window as any).goatcounter.count === 'function') {
+			clearInterval(interval);
+			track();
+		} else if (attempts >= 5) { // 500ms timeout
+			clearInterval(interval);
+		}
+	}, 100);
+}
