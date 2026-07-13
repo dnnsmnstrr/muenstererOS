@@ -372,7 +372,7 @@
 
 			action();
 
-			if (!isGroup) trackCommand(id);
+			trackCommand(id, link.name, isGroup);
 		};
 
 		let value = link.value || link.name;

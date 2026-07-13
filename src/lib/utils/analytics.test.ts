@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { trackRedirect } from './analytics';
+import { trackRedirect, trackCommandEvent } from './analytics';
 
 describe('analytics utilities', () => {
 	beforeEach(() => {
@@ -90,5 +90,76 @@ describe('analytics utilities', () => {
 
 		// Callback should have been called despite missing GoatCounter
 		expect(callback).toHaveBeenCalled();
+	});
+
+	describe('trackCommandEvent', () => {
+		it('should gracefully handle server-side environments (no window)', () => {
+			const originalWindow = global.window;
+			delete (global as any).window;
+
+			// Should run without throwing errors
+			expect(() => trackCommandEvent('command.toggle_dark_mode', 'Toggle Dark Mode')).not.toThrow();
+
+			global.window = originalWindow;
+		});
+
+		it('should track immediately if goatcounter is already loaded', () => {
+			const mockCount = vi.fn();
+			(window as any).goatcounter = { count: mockCount };
+
+			trackCommandEvent('command.toggle_dark_mode', 'Toggle Dark Mode');
+
+			expect(mockCount).toHaveBeenCalledWith({
+				path: 'command-command.toggle_dark_mode',
+				title: 'Command: Toggle Dark Mode',
+				event: true
+			});
+		});
+
+		it('should use id as fallback for name if name is not provided', () => {
+			const mockCount = vi.fn();
+			(window as any).goatcounter = { count: mockCount };
+
+			trackCommandEvent('command.toggle_dark_mode');
+
+			expect(mockCount).toHaveBeenCalledWith({
+				path: 'command-command.toggle_dark_mode',
+				title: 'Command: command.toggle_dark_mode',
+				event: true
+			});
+		});
+
+		it('should track after polling if goatcounter loads with a delay', () => {
+			const mockCount = vi.fn();
+
+			trackCommandEvent('command.confetti', 'Confetti');
+
+			// Not loaded initially
+			expect(mockCount).not.toHaveBeenCalled();
+
+			// Advance timer to first interval (100ms)
+			vi.advanceTimersByTime(100);
+			expect(mockCount).not.toHaveBeenCalled();
+
+			// Simulate GoatCounter loading
+			(window as any).goatcounter = { count: mockCount };
+
+			// Advance to next interval (200ms)
+			vi.advanceTimersByTime(100);
+			expect(mockCount).toHaveBeenCalledWith({
+				path: 'command-command.confetti',
+				title: 'Command: Confetti',
+				event: true
+			});
+		});
+
+		it('should timeout if goatcounter fails to load within 500ms', () => {
+			trackCommandEvent('command.search_zettelkasten', 'Search');
+
+			// Advance time 500ms (5 attempts)
+			vi.advanceTimersByTime(500);
+
+			// Should not throw or cause issue
+		});
 	});
 });

@@ -3,6 +3,7 @@ import { get, writable } from 'svelte/store';
 import { defaultColors } from '$lib/config';
 import { mode } from 'mode-watcher';
 import { updateMetaThemeColor } from '$lib/utils/browser';
+import { trackCommandEvent } from '$lib/utils/analytics';
 
 function setCssVar(name: string, value: string) {
 	if (browser && typeof document !== 'undefined') {
@@ -136,17 +137,21 @@ commandStats.subscribe((value) => {
 	}
 });
 
-export function trackCommand(id: string) {
-	commandStats.update((stats) => {
-		const stat = stats[id] || { count: 0, lastUsed: 0 };
-		return {
-			...stats,
-			[id]: {
-				count: stat.count + 1,
-				lastUsed: Date.now()
-			}
-		};
-	});
+export function trackCommand(id: string, name?: string, skipLocalStats = false) {
+	if (!skipLocalStats) {
+		commandStats.update((stats) => {
+			const stat = stats[id] || { count: 0, lastUsed: 0 };
+			return {
+				...stats,
+				[id]: {
+					count: stat.count + 1,
+					lastUsed: Date.now()
+				}
+			};
+		});
+	}
+
+	trackCommandEvent(id, name);
 }
 
 export const DEFAULT_SUGGESTIONS_LIMIT = 5;
