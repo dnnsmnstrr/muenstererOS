@@ -124,7 +124,9 @@ export function hexToHsl(hex: string): string {
 
 	// Calculate the hue (H) value
 	let hue = 0;
-	if (max === normalizedR) {
+	if (max === min) {
+		hue = 0;
+	} else if (max === normalizedR) {
 		hue = ((normalizedG - normalizedB) / (max - min) + 6) % 6;
 	} else if (max === normalizedG) {
 		hue = (normalizedB - normalizedR) / (max - min) + 2;
