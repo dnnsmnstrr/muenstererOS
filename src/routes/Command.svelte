@@ -8,6 +8,41 @@
 		icon?: ConstructorOfATypedSvelteComponent;
 		href?: string;
 		action?: () => void;
+		description?: string;
+	};
+
+	type NoteListItem = {
+		name: string;
+		path: string;
+		sha: string;
+	};
+
+	type NoteSearchResult = {
+		title: string;
+		description?: string;
+		href: string;
+	};
+
+	type PagefindData = {
+		url: string;
+		plain_excerpt?: string;
+		meta?: { title?: string };
+		sub_results?: Array<{
+			title: string;
+			url: string;
+			plain_excerpt?: string;
+		}>;
+	};
+
+	type PagefindModule = {
+		init: () => Promise<void>;
+		debouncedSearch: (
+			query: string,
+			options?: Record<string, unknown>,
+			debounceMs?: number
+		) => Promise<{
+			results: Array<{ data: () => Promise<PagefindData> }>;
+		} | null>;
 	};
 </script>
 
@@ -44,7 +79,9 @@
 		CircleCheck,
 		Circle,
 		FileCode,
-		Trophy
+		Trophy,
+		FileText,
+		LoaderCircle
 	} from 'lucide-svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -101,6 +138,17 @@
 	let query = $state('');
 	let lastKey = '';
 	let hasGithubToken = $state(false);
+	let notes = $state<NoteListItem[]>([]);
+	let noteSearchResults = $state<NoteSearchResult[]>([]);
+	let notesLoading = $state(false);
+	let noteSearchLoading = $state(false);
+	let noteSearchAvailable = $state(true);
+	let notesLoadPromise: Promise<void> | null = null;
+	let pagefindPromise: Promise<PagefindModule> | null = null;
+	let noteSearchRequest = 0;
+
+	const NOTES_SITE_URL = 'https://dnnsmnstrr.github.io/zettelkasten/';
+	const PAGEFIND_URL = `${NOTES_SITE_URL}pagefind/pagefind.js`;
 
 	const keyboardShortcuts = $derived([
 		{ key: '?', description: i18n.t('command.shortcuts.help') },
@@ -418,6 +466,124 @@
 
 	let currentGroup = $state<string | null>(null);
 
+	function leaveCurrentGroup() {
+		currentGroup = null;
+		query = '';
+		noteSearchResults = [];
+	}
+
+	async function loadNotes() {
+		if (notes.length > 0) return;
+		if (notesLoadPromise) return notesLoadPromise;
+
+		notesLoading = true;
+		notesLoadPromise = (async () => {
+			try {
+				const response = await fetch('/api/notes');
+				if (!response.ok) throw new Error(`Notes request failed with ${response.status}`);
+
+				const data: unknown = await response.json();
+				if (!Array.isArray(data)) throw new Error('Notes response was not a list');
+				notes = data as NoteListItem[];
+			} catch (error) {
+				debugLog('Failed to load notes for the command palette', error);
+				toast.error(i18n.t('command.notes_load_error'));
+			} finally {
+				notesLoading = false;
+				notesLoadPromise = null;
+			}
+		})();
+
+		return notesLoadPromise;
+	}
+
+	async function loadPagefind() {
+		if (pagefindPromise) return pagefindPromise;
+
+		pagefindPromise = (async () => {
+			const pagefind = (await import(/* @vite-ignore */ PAGEFIND_URL)) as PagefindModule;
+			await pagefind.init();
+			return pagefind;
+		})();
+
+		try {
+			return await pagefindPromise;
+		} catch (error) {
+			noteSearchAvailable = false;
+			debugLog('Pagefind note search is unavailable; using filename search', error);
+			throw error;
+		}
+	}
+
+	function noteHref(url: string) {
+		const parsed = new URL(url, NOTES_SITE_URL);
+		const slug = decodeURIComponent(parsed.pathname)
+			.replace(/^\/zettelkasten\/?/, '')
+			.replace(/\/$/, '');
+
+		return slug ? `/notes/${slug}${parsed.hash}` : '/notes';
+	}
+
+	async function searchNotes(searchQuery: string) {
+		const request = ++noteSearchRequest;
+		noteSearchLoading = true;
+
+		try {
+			const pagefind = await loadPagefind();
+			const search = await pagefind.debouncedSearch(searchQuery, {}, 150);
+			if (!search || request !== noteSearchRequest) return;
+
+			const pages = await Promise.all(search.results.slice(0, 8).map((result) => result.data()));
+			if (request !== noteSearchRequest) return;
+
+			noteSearchResults = pages.map((result) => {
+				const section = result.sub_results?.[0];
+				return {
+					title: section?.title || result.meta?.title || noteHref(result.url).split('/').pop() || '',
+					description: section?.plain_excerpt || result.plain_excerpt,
+					href: noteHref(section?.url || result.url)
+				};
+			});
+		} catch {
+			// Filename matching remains available when the remote index cannot be loaded.
+		} finally {
+			if (request === noteSearchRequest) noteSearchLoading = false;
+		}
+	}
+
+	function enterNotes() {
+		currentGroup = 'notes';
+		query = '';
+		void loadNotes();
+		void loadPagefind().catch(() => undefined);
+	}
+
+	$effect(() => {
+		if (currentGroup !== 'notes') return;
+
+		const searchQuery = query.trim();
+		if (!searchQuery) {
+			noteSearchRequest++;
+			noteSearchResults = [];
+			noteSearchLoading = false;
+			return;
+		}
+
+		void searchNotes(searchQuery);
+	});
+
+	const visibleNotes = $derived.by<NoteSearchResult[]>(() => {
+		if (query.trim() && noteSearchAvailable && noteSearchResults.length > 0) {
+			return noteSearchResults;
+		}
+
+		const normalizedQuery = query.trim().toLowerCase();
+		return notes
+			.filter((note) => !normalizedQuery || note.name.toLowerCase().includes(normalizedQuery))
+			.slice(0, normalizedQuery ? 20 : notes.length)
+			.map((note) => ({ title: note.name, description: undefined, href: `/notes/${note.name}` }));
+	});
+
 	let commandConfig = $derived.by(() => {
 		const config: Record<string, CommandData[]> = {
 			navigation: [
@@ -430,12 +596,13 @@
 					.map((p) => enrichLink(p)),
 				enrichLink(
 					{
-						name: i18n.t('command.search_zettelkasten'),
-						keywords: ['algolia', 'search', 'notes', 'knowledge', 'second brain'],
+						name: i18n.t('command.search_notes'),
+						keywords: ['search', 'notes', 'zettelkasten', 'knowledge', 'second brain'],
 						icon: Search,
-						action: handleDocsearch
+						group: 'notes',
+						action: enterNotes
 					},
-					'command.search_zettelkasten'
+					'command.search_notes'
 				),
 				enrichLink(
 					{
@@ -613,6 +780,70 @@
 						]
 					: [])
 			],
+			notes: [
+				...(notesLoading && visibleNotes.length === 0
+					? [
+							enrichLink(
+								{
+									name: i18n.t('common.loading'),
+									icon: LoaderCircle,
+									group: 'notes',
+									action: () => undefined
+								},
+								'command.notes_loading',
+								true
+							)
+						]
+					: visibleNotes.map((note) =>
+							enrichLink(
+								{
+									name: note.title,
+									description: note.description,
+									icon: FileText,
+									href: note.href
+								},
+								`note.${note.href}`,
+								true
+							)
+						)),
+				...(noteSearchLoading
+					? [
+							enrichLink(
+								{
+									name: i18n.t('command.searching_notes'),
+									icon: LoaderCircle,
+									group: 'notes',
+									action: () => undefined
+								},
+								'command.searching_notes',
+								true
+							)
+						]
+					: []),
+				...(!noteSearchAvailable
+					? [
+							enrichLink(
+								{
+									name: i18n.t('command.search_zettelkasten'),
+									icon: Search,
+									action: handleDocsearch
+								},
+								'command.search_zettelkasten',
+								true
+							)
+						]
+					: []),
+				enrichLink(
+					{
+						name: i18n.t('command.go_back'),
+						icon: ArrowLeft,
+						group: 'notes',
+						action: leaveCurrentGroup
+					},
+					'command.go_back_notes',
+					true
+				)
+			],
 			edit_gist: hasGithubToken
 				? [
 						...Object.entries(gists).map(([key, gist]) =>
@@ -725,7 +956,7 @@
 
 {#snippet inputIcon()}
 	{#if currentGroup}
-		<button class="mb-1 mr-3 size-4 shrink-0 opacity-50" onclick={() => (currentGroup = null)}>
+		<button class="mb-1 mr-3 size-4 shrink-0 opacity-50" onclick={leaveCurrentGroup}>
 			<ArrowLeft class="" />
 		</button>
 	{:else}
@@ -735,8 +966,9 @@
 
 <Command.Dialog
 	bind:open={$isCommandActive}
+	shouldFilter={currentGroup !== 'notes'}
 	onOpenChange={(open) => {
-		if (!open) currentGroup = null;
+		if (!open) leaveCurrentGroup();
 	}}
 >
 	<Command.Input
@@ -756,9 +988,14 @@
 				{#each commands as command}
 					<Command.Item onSelect={command.action} value={command.value} keywords={command.keywords}>
 						{#if command.icon}
-							<command.icon class="mr-2" />
+							<command.icon class={command.icon === LoaderCircle ? 'mr-2 animate-spin' : 'mr-2'} />
 						{/if}
-						{command.name}
+						<div class="min-w-0">
+							<div class="truncate">{command.name}</div>
+							{#if command.description}
+								<div class="truncate text-xs text-muted-foreground">{command.description}</div>
+							{/if}
+						</div>
 					</Command.Item>
 				{/each}
 				{#if group === 'links' && !currentGroup}
