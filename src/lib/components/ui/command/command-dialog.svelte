@@ -20,10 +20,24 @@
 			portalProps?: DialogPrimitive.PortalProps;
 			children: Snippet;
 		} = $props();
+
+	let contentRef: HTMLElement | null = $state(null);
+
+	function handleOpenAutoFocus(event: Event) {
+		if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+
+		// Focusing an input while opening a fixed dialog makes iOS Safari move the
+		// visual viewport. Keep focus in the dialog without summoning the keyboard;
+		// the user can still tap the input when they are ready to type.
+		event.preventDefault();
+		contentRef?.focus({ preventScroll: true });
+	}
 </script>
 
 <Dialog.Root bind:open {...restProps}>
 	<Dialog.Content
+		bind:ref={contentRef}
+		onOpenAutoFocus={handleOpenAutoFocus}
 		class="top-[5vh] w-[95vw] max-w-lg translate-y-0 overflow-hidden p-0 shadow-lg sm:top-[50%] sm:w-full sm:-translate-y-40"
 		{portalProps}
 	>
