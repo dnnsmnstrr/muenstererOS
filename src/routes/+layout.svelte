@@ -30,6 +30,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { browser } from '$app/environment';
 	import { cn } from '$lib/utils/utils';
+	import { lockCommandPaletteScroll } from '$lib/utils/scroll-lock';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import {
 		Info,
@@ -224,26 +225,11 @@
 				trackCustomization();
 			}, 100);
 		}
+	});
+
+	$effect(() => {
 		debugLog(`${$isCommandActive ? 'Opening' : 'Closing'} command window`);
-		if (!isIsolatedPage) {
-			if ($isCommandActive) {
-				document.body.classList.add(
-					'overflow-hidden',
-					'touch-none',
-					'sm:touch-auto',
-					'fixed',
-					'w-full'
-				);
-			} else {
-				document.body.classList.remove(
-					'overflow-hidden',
-					'touch-none',
-					'sm:touch-auto',
-					'fixed',
-					'w-full'
-				);
-			}
-		}
+		if ($isCommandActive && !isIsolatedPage) return lockCommandPaletteScroll();
 	});
 
 	let isLightMode = $derived($mode === 'light');

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Command as CommandPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils";
+	import { Command as CommandPrimitive } from 'bits-ui';
+	import { cn } from '$lib/utils';
 
 	let {
 		ref = $bindable(null),
@@ -10,7 +10,11 @@
 </script>
 
 <CommandPrimitive.List
-	class={cn("max-h-[35dvh] sm:max-h-[300px] overflow-y-auto overflow-x-hidden overscroll-contain touch-pan-y", className)}
+	data-command-list
+	class={cn(
+		'max-h-[35dvh] touch-pan-y overflow-y-auto overflow-x-hidden overscroll-contain sm:max-h-[300px]',
+		className
+	)}
 	{...restProps}
 	bind:ref
 />
