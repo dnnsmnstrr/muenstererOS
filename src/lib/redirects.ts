@@ -164,6 +164,11 @@ export const redirects: Redirect[] = [
 		aliases: ['p', 'pp', 'pay', 'donate', 'sendmoney', 'wheremymoneyat', '💰', '💸', '🫰']
 	},
 	{
+		name: 'coffee',
+		url: 'https://buymeacoffee.com/dnnsmnstrr',
+		aliases: ['buymeacoffee', '☕']
+	},
+	{
 		name: 'imdb',
 		url: links.imdb,
 		aliases: ['movies', 'ratings', 'watchlist', '🎥', '🎬', '🍿']

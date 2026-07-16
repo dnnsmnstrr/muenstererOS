@@ -14,6 +14,13 @@ describe('redirects definition', () => {
 		expect(result?.name).toBe('github');
 	});
 
+	it('should resolve the coffee redirect', () => {
+		for (const query of ['coffee', 'buymeacoffee', '☕']) {
+			const result = getRedirectByName(query);
+			expect(result?.url).toBe('https://buymeacoffee.com/dnnsmnstrr');
+		}
+	});
+
 	it('should ensure all redirects have a name', () => {
 		redirects.forEach((redirect) => {
 			expect(redirect.name).toBeDefined();
