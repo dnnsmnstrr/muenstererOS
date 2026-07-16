@@ -12,6 +12,7 @@
 	import { Toc } from '$lib/components/ui/toc';
 	import * as Popover from '$lib/components/ui/popover';
 	import { Button } from '$lib/components/ui/button';
+	import { isNotesMaximized, isNotesSidebarCollapsed } from '$lib/stores/notes';
 
 	let notes = $state<any[]>([]);
 	let note = $state<any>(null);
@@ -19,9 +20,25 @@
 	let loadingNote = $state(true);
 	let searchQuery = $state('');
 
-	// State for maximized view and collapsible sidebar
+	// Sync local component state with the shared notes store
 	let isMaximized = $state(false);
 	let isLeftSidebarCollapsed = $state(false);
+
+	isNotesMaximized.subscribe((val) => {
+		isMaximized = val;
+	});
+
+	isNotesSidebarCollapsed.subscribe((val) => {
+		isLeftSidebarCollapsed = val;
+	});
+
+	function toggleMaximize(val: boolean) {
+		isNotesMaximized.set(val);
+	}
+
+	function toggleSidebar(val: boolean) {
+		isNotesSidebarCollapsed.set(val);
+	}
 
 	const slug = $derived(page.params.slug);
 
@@ -121,7 +138,7 @@
 					<Button
 						variant="ghost"
 						size="icon"
-						onclick={() => (isLeftSidebarCollapsed = false)}
+						onclick={() => toggleSidebar(false)}
 						title={i18n.t('notes.expand_sidebar') || 'Expand Sidebar'}
 						class="size-8"
 					>
@@ -163,7 +180,7 @@
 				<Button
 					variant="ghost"
 					size="icon"
-					onclick={() => (isMaximized = false)}
+					onclick={() => toggleMaximize(false)}
 					title={i18n.t('window.restore') || 'Restore Window'}
 					class="size-8"
 				>
@@ -191,7 +208,7 @@
 						<Button
 							variant="ghost"
 							size="icon"
-							onclick={() => (isLeftSidebarCollapsed = true)}
+							onclick={() => toggleSidebar(true)}
 							title={i18n.t('notes.collapse_sidebar') || 'Collapse Sidebar'}
 							class="size-8 shrink-0"
 						>
@@ -322,7 +339,7 @@
 {:else}
 	<!-- Standard Window layout -->
 	<div class="container mx-auto flex h-[calc(100vh-8rem)] flex-col p-4">
-		<Window class="flex min-h-0 flex-grow flex-col overflow-hidden" {titlebarRight} childClassName="p-0" onMaximize={() => isMaximized = true} {isMaximized}>
+		<Window class="flex min-h-0 flex-grow flex-col overflow-hidden" {titlebarRight} childClassName="p-0" onMaximize={() => toggleMaximize(true)} {isMaximized}>
 			<div class="flex h-full flex-col divide-border overflow-hidden md:flex-row">
 				<!-- Sidebar -->
 				<div class="hidden h-full w-full flex-col overflow-hidden bg-muted/30 md:flex md:w-52 md:min-w-52">
