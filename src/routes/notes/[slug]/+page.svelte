@@ -145,6 +145,16 @@
 					>
 						<PanelLeftOpen class="size-5" />
 					</Button>
+				{:else}
+					<Button
+						variant="ghost"
+						size="icon"
+						onclick={() => toggleSidebar(true)}
+						title={i18n.t('notes.collapse_sidebar') || 'Collapse Sidebar'}
+						class="size-8"
+					>
+						<PanelLeftClose class="size-5" />
+					</Button>
 				{/if}
 				<span class="text-sm font-semibold tracking-tight text-muted-foreground">
 					{note?.title || slug}
@@ -195,7 +205,7 @@
 			<!-- Sidebar -->
 			{#if !isLeftSidebarCollapsed}
 				<div class="hidden h-full w-full flex-col overflow-hidden bg-muted/30 md:flex md:w-64 md:min-w-64">
-					<div class="shrink-0 border-b border-border p-4 flex items-center justify-between gap-2">
+					<div class="shrink-0 border-b border-border p-4">
 						<div class="relative flex-grow">
 							<Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
 							<input
@@ -205,16 +215,6 @@
 								class="w-full rounded-md border border-border bg-background py-2 pl-8 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
 							/>
 						</div>
-						<!-- Collapse Sidebar Button -->
-						<Button
-							variant="ghost"
-							size="icon"
-							onclick={() => toggleSidebar(true)}
-							title={i18n.t('notes.collapse_sidebar') || 'Collapse Sidebar'}
-							class="size-8 shrink-0"
-						>
-							<PanelLeftClose class="size-5" />
-						</Button>
 					</div>
 					<div class="flex-grow overflow-y-auto">
 						{#if loadingList}
