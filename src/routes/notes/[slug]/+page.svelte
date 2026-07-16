@@ -32,6 +32,7 @@
 		isLeftSidebarCollapsed = val;
 	});
 
+	// Use full width layout below the header (no outer margins/paddings)
 	function toggleMaximize(val: boolean) {
 		isNotesMaximized.set(val);
 	}
@@ -129,8 +130,8 @@
 {/snippet}
 
 {#if isMaximized}
-	<!-- Maximized layout (Covering full layout area below main header, no Window borders/shadows/padding) -->
-	<div class="fixed inset-x-0 bottom-0 top-[5.5rem] z-40 flex flex-col bg-background p-0 sm:px-16 pb-4">
+	<!-- Maximized layout (Covering full viewport below main header, no Window borders/shadows/padding) -->
+	<div class="fixed inset-x-0 bottom-0 top-[5.5rem] z-40 flex flex-col bg-background p-0 pb-4">
 		<!-- Toolbar for Maximized Mode -->
 		<div class="flex items-center justify-between border-b border-border bg-background px-4 py-2 sm:px-8 shrink-0">
 			<div class="flex items-center gap-2">

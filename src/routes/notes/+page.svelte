@@ -47,8 +47,8 @@
 </svelte:head>
 
 {#if isMaximized}
-	<!-- Maximized layout for notes overview -->
-	<div class="fixed inset-x-0 bottom-0 top-[5.5rem] z-40 flex flex-col bg-background p-0 sm:px-16 pb-4">
+	<!-- Maximized layout for notes overview (full width) -->
+	<div class="fixed inset-x-0 bottom-0 top-[5.5rem] z-40 flex flex-col bg-background p-0 pb-4">
 		<!-- Toolbar for Maximized Mode -->
 		<div class="flex items-center justify-between border-b border-border bg-background px-4 py-2 sm:px-8 shrink-0">
 			<span class="text-sm font-semibold tracking-tight text-muted-foreground">
