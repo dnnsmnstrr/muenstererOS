@@ -141,7 +141,7 @@
 						size="icon"
 						onclick={() => toggleSidebar(false)}
 						title={i18n.t('notes.expand_sidebar') || 'Expand Sidebar'}
-						class="size-8"
+						class="hidden md:inline-flex size-8"
 					>
 						<PanelLeftOpen class="size-5" />
 					</Button>
@@ -151,7 +151,7 @@
 						size="icon"
 						onclick={() => toggleSidebar(true)}
 						title={i18n.t('notes.collapse_sidebar') || 'Collapse Sidebar'}
-						class="size-8"
+						class="hidden md:inline-flex size-8"
 					>
 						<PanelLeftClose class="size-5" />
 					</Button>
