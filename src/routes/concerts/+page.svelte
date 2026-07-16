@@ -78,7 +78,7 @@
 <div class="container mx-auto p-4">
 	<Tabs.Root bind:value={activeTab}>
 		<div class="mb-4 flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-start">
-			<div class="flex flex-col gap-2">
+			<div class="flex flex-col items-center gap-2 sm:items-start">
 				<Tabs.List class="w-fit border-none px-2 py-7">
 					<Tabs.Trigger class="text-2xl" value="concerts"
 						>{i18n.t('concerts.concerts')}</Tabs.Trigger
@@ -87,7 +87,9 @@
 						>{i18n.t('concerts.festivals')}</Tabs.Trigger
 					>
 				</Tabs.List>
-				<p class="mb-4 text-muted-foreground">{i18n.t('concerts.description')}</p>
+				<p class="mb-4 text-center text-muted-foreground sm:text-left">
+					{i18n.t('concerts.description')}
+				</p>
 			</div>
 
 			<div
