@@ -173,6 +173,8 @@
 		"dark_mode": "Dunkler Modus",
 		"light_mode": "Heller Modus",
 		"search_notes": "Notizen durchsuchen",
+		"search_redirects": "Redirects durchsuchen",
+		"redirects": "Redirects",
 		"searching_notes": "Notizen werden durchsucht...",
 		"notes_load_error": "Notizen konnten nicht geladen werden.",
 		"search_zettelkasten": "Zettelkasten durchsuchen",

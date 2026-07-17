@@ -14,6 +14,7 @@ import { test, expect, type Page } from '@playwright/test';
  *  5. System actions — dark/light mode toggle, language switch
  *  6. Help dialog — Shift+? and the keyboard shortcuts entry
  *  7. Screensaver sub-group — drill in and back
+ *  8. Redirects sub-group — search and back
  */
 
 // ---------------------------------------------------------------------------
@@ -454,5 +455,31 @@ test.describe('screensaver sub-group', () => {
 			page.locator('[data-command-item]').filter({ hasText: /settings/i })
 		).toBeVisible();
 		await expect(page.locator('[data-command-item]').filter({ hasText: /dvd/i })).toHaveCount(0);
+	});
+});
+
+// ---------------------------------------------------------------------------
+// 8. Redirects sub-group
+// ---------------------------------------------------------------------------
+
+test.describe('redirects sub-group', () => {
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/');
+		await openPalette(page);
+		await page.keyboard.type('search redirects');
+		await page.getByRole('option', { name: 'Search Redirects' }).click();
+	});
+
+	test('searches redirects by alias', async ({ page }) => {
+		await page.keyboard.type('gh');
+
+		await expect(page.getByRole('option', { name: /github/i })).toBeVisible();
+	});
+
+	test('Escape returns to the top-level command list', async ({ page }) => {
+		await page.keyboard.press('Escape');
+
+		await expect(page.locator('[data-command-input]')).toBeVisible();
+		await expect(page.getByRole('option', { name: 'Search Redirects' })).toBeVisible();
 	});
 });

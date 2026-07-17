@@ -173,6 +173,8 @@
 		"dark_mode": "Dark Mode",
 		"light_mode": "Light Mode",
 		"search_notes": "Search Notes",
+		"search_redirects": "Search Redirects",
+		"redirects": "Redirects",
 		"searching_notes": "Searching notes...",
 		"notes_load_error": "Could not load notes.",
 		"search_zettelkasten": "Search Zettelkasten",

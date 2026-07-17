@@ -127,6 +127,9 @@
 		desktopFiles,
 		addFileToDesktop
 	} from '$lib/stores/desktop';
+	import { redirects } from '$lib/redirects';
+	import { getRedirectURL } from '$lib/utils/redirect';
+	import { trackRedirect } from '$lib/utils/analytics';
 
 	interface Props {
 		pages?: BookmarkItem[];
@@ -565,6 +568,11 @@
 		void loadPagefind().catch(() => undefined);
 	}
 
+	function enterRedirects() {
+		currentGroup = 'redirects';
+		query = '';
+	}
+
 	$effect(() => {
 		if (currentGroup !== 'notes') return;
 
@@ -610,6 +618,16 @@
 						action: enterNotes
 					},
 					'command.search_notes'
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.search_redirects'),
+						keywords: ['search', 'redirects', 'aliases', 'shortcuts'],
+						icon: Link,
+						group: 'redirects',
+						action: enterRedirects
+					},
+					'command.search_redirects'
 				),
 				enrichLink(
 					{
@@ -786,6 +804,41 @@
 							)
 						]
 					: [])
+			],
+			redirects: [
+				...redirects.map((redirect) =>
+					enrichLink(
+						{
+							name: redirect.name,
+							description: redirect.description || getRedirectURL(redirect),
+							value: [
+								redirect.name,
+								redirect.description,
+								redirect.url,
+								...(redirect.aliases || [])
+							]
+								.filter(Boolean)
+								.join(' '),
+							icon: Link,
+							action: () => {
+								trackRedirect(redirect.name);
+								window.open(getRedirectURL(redirect), '_blank', 'noopener,noreferrer');
+							}
+						},
+						`redirect.${redirect.name}`,
+						true
+					)
+				),
+				enrichLink(
+					{
+						name: i18n.t('command.go_back'),
+						icon: ArrowLeft,
+						group: 'redirects',
+						action: leaveCurrentGroup
+					},
+					'command.go_back_redirects',
+					true
+				)
 			],
 			notes: [
 				...(notesLoading && visibleNotes.length === 0
