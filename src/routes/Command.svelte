@@ -283,7 +283,14 @@
 			toggleMode();
 		}
 		if (e.key === 'Escape' && $isCommandActive) {
-			$isCommandActive = false;
+			if (currentGroup) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				leaveCurrentGroup();
+				return;
+			} else {
+				$isCommandActive = false;
+			}
 		}
 		const isOverlayVisible = $isCommandActive || $showHelp;
 		if (['Escape', '/'].includes(e.key) && isOverlayVisible) {

@@ -445,4 +445,14 @@ test.describe('screensaver sub-group', () => {
 		// Sub-group items should be gone
 		await expect(page.locator('[data-command-item]').filter({ hasText: /dvd/i })).toHaveCount(0);
 	});
+
+	test('Escape returns to the top-level command list without closing the palette', async ({ page }) => {
+		await page.keyboard.press('Escape');
+
+		await expect(page.locator('[data-command-input]')).toBeVisible();
+		await expect(
+			page.locator('[data-command-item]').filter({ hasText: /settings/i })
+		).toBeVisible();
+		await expect(page.locator('[data-command-item]').filter({ hasText: /dvd/i })).toHaveCount(0);
+	});
 });
