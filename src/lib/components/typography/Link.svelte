@@ -18,7 +18,8 @@
   if (node && node.url) {
     href = node.url
   }
-  if (typography?.externalLinks) {
+  const isExternalLink = href ? /^(?:https?:)?\/\//i.test(href) : false;
+  if (typography?.externalLinks && isExternalLink && target == null) {
     target = '_blank'
   }
 </script>
