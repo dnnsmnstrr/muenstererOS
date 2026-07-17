@@ -13,6 +13,7 @@
 	import { onMount } from 'svelte';
 
 	type NoteListItem = { name: string };
+	type Backlink = { slug: string; title: string };
 	type Note = {
 		title?: string;
 		content?: string;
@@ -29,7 +30,9 @@
 	let searchQuery = $state('');
 	let previousTitle = $state('');
 	let nextTitle = $state('');
+	let backlinks = $state<Backlink[]>([]);
 	let navigationRequest = 0;
+	let backlinkRequest = 0;
 	const slug = $derived(page.params.slug);
 	const currentNoteIndex = $derived(notes.findIndex((item) => item.name === slug));
 	const previousNote = $derived(currentNoteIndex > 0 ? notes[currentNoteIndex - 1] : null);
@@ -79,6 +82,18 @@
 		nextTitle = resolvedNextTitle;
 	}
 
+	async function fetchBacklinks(currentSlug: string) {
+		const request = ++backlinkRequest;
+		backlinks = [];
+		try {
+			const response = await fetch(`/api/notes/${encodeURIComponent(currentSlug)}/backlinks`);
+			const result: Backlink[] = response.ok ? await response.json() : [];
+			if (request === backlinkRequest) backlinks = result;
+		} catch (error) {
+			console.error('Failed to fetch backlinks:', error);
+		}
+	}
+
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/notes');
@@ -91,7 +106,10 @@
 	});
 
 	$effect(() => {
-		if (slug) fetchNote(slug);
+		if (slug) {
+			fetchNote(slug);
+			fetchBacklinks(slug);
+		}
 	});
 
 	$effect(() => {
@@ -214,6 +232,23 @@
 		{#if note && !loadingNote}
 			<aside class="hidden h-full w-56 shrink-0 overflow-y-auto border-l border-border bg-background p-8 lg:block">
 				<Toc selector=".prose" rootSelector="#notes-content-area" content={processedContent} />
+				{#if backlinks.length > 0}
+					<nav class="mt-6 border-t border-border pt-6" aria-label={i18n.t('notes.backlinks') || 'Backlinks'}>
+						<p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+							{i18n.t('notes.backlinks') || 'Backlinks'}
+						</p>
+						<ul class="space-y-2 text-sm">
+							{#each backlinks as backlink}
+								<li>
+									<a href="/notes/{encodeURIComponent(backlink.slug)}" class="flex items-start gap-2 py-1 text-muted-foreground transition-colors hover:text-primary">
+										<FileText class="mt-0.5 size-4 shrink-0" />
+										<span class="min-w-0 break-words">{backlink.title}</span>
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</nav>
+				{/if}
 				{#if referencedNotes.length > 0}
 					<nav class="mt-6 border-t border-border pt-6" aria-label={i18n.t('notes.referenced_pages') || 'Referenced pages'}>
 						<p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
