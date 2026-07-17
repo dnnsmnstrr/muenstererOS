@@ -5,6 +5,7 @@
 	import { isNotesMaximized, isNotesSidebarCollapsed } from '$lib/stores/notes';
 	import { FileText, Minimize2, PanelLeftClose, PanelLeftOpen, Search } from 'lucide-svelte';
 	import { onDestroy, type Snippet } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	interface NoteListItem {
 		name: string;
@@ -139,7 +140,13 @@
 	</div>
 {:else}
 	<div class="container mx-auto flex h-[calc(100vh-8rem)] flex-col p-4">
-		<Window class="flex min-h-0 flex-grow flex-col overflow-hidden" childClassName="p-0" onMaximize={() => toggleMaximize(true)} {isMaximized} {titlebarRight}>
+		<Window 
+			class="flex min-h-0 flex-grow flex-col overflow-hidden" 
+			childClassName="p-0" 
+			onClose={() => goto('/notes')}
+			onMaximize={() => toggleMaximize(true)} 
+			{isMaximized} {titlebarRight}
+		>
 			{@render body(false)}
 		</Window>
 	</div>

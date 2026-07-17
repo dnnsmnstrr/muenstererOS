@@ -1,15 +1,24 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import NotesLayout from './NotesLayout.svelte';
 	import { Heading } from '$lib/components/typography';
+	import { Button } from '$lib/components/ui/button';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { ArrowRight, FileText } from 'lucide-svelte';
+	import { ArrowRight, FileText, Shuffle } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	let notes = $state<{ name: string }[]>([]);
 	let recommendations = $state<{ slug: string; reason?: string }[]>([]);
 	let loading = $state(true);
 	let searchQuery = $state('');
+
+	function openRandomNote() {
+		if (notes.length === 0) return;
+
+		const randomNote = notes[Math.floor(Math.random() * notes.length)];
+		goto(`/notes/${encodeURIComponent(randomNote.name)}`);
+	}
 
 	onMount(async () => {
 		try {
@@ -31,11 +40,26 @@
 	<title>{i18n.t('notes.title')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
+{#snippet shuffleButton()}
+	<Button
+		variant="ghost"
+		size="icon"
+		onclick={openRandomNote}
+		disabled={loading || notes.length === 0}
+		title="Open a random note"
+		aria-label="Open a random note"
+	>
+		<Shuffle class="size-4" />
+	</Button>
+{/snippet}
+
 <NotesLayout
 	{notes}
 	{loading}
 	bind:searchQuery
 	title={i18n.t('notes.title') || 'Notes'}
+	titlebarRight={shuffleButton}
+	toolbarActions={shuffleButton}
 >
 	<div class="hidden h-full flex-grow flex-col overflow-y-auto bg-background p-8 md:flex">
 		<div class="mx-auto w-full max-w-3xl">
@@ -46,7 +70,7 @@
 
 			{#if recommendations.length > 0}
 				<section aria-labelledby="recommendations-heading">
-					<Heading id="recommendations-heading" depth={2} class="mb-4">Recommendations</Heading>
+					<Heading depth={3} class="mb-4">Recommendations</Heading>
 					<ul class="grid gap-3">
 						{#each recommendations as recommendation}
 							<li>
