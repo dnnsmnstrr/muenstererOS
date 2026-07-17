@@ -212,7 +212,8 @@
 		"switch_language": "Sprache wechseln",
 		"language_switched": "Sprache gewechselt",
 		"picked_color": "Farbe ausgewählt: {color}",
-		"copy_to_clipboard": "Klicken zum Kopieren"
+		"copy_to_clipboard": "Klicken zum Kopieren",
+		"copied_to_clipboard": "In die Zwischenablage kopiert"
 	},
 	"window": {
 		"close": "Fenster schließen",

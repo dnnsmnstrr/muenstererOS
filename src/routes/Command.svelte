@@ -139,6 +139,7 @@
 
 	let loading = false;
 	let query = $state('');
+	let selectedCommandValue = $state('');
 	let lastKey = '';
 	let hasGithubToken = $state(false);
 	let notes = $state<NoteListItem[]>([]);
@@ -181,6 +182,22 @@
 		...CHEAT_CODES.map((c) => c.sequence?.length || c.code?.length || 0)
 	);
 
+	function selectedCommandHref() {
+		const selectedCommand = Object.values(commandConfig)
+			.flat()
+			.find((command) => command.value === selectedCommandValue);
+
+		return selectedCommand?.href || null;
+	}
+
+	async function copySelectedCommand(href: string) {
+		const url = new URL(href, window.location.href).href;
+		await navigator.clipboard.writeText(url);
+		toast.success(i18n.t('command.copied_to_clipboard'), {
+			description: url
+		});
+	}
+
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
 		if (
@@ -212,6 +229,20 @@
 		if (document.querySelector('.DocSearch-Modal')) {
 			debugLog('DocSearch-Modal is open, ignoring keydown event');
 			return;
+		}
+
+		if (
+			$isCommandActive &&
+			(e.metaKey || e.ctrlKey) &&
+			(e.key.toLowerCase() === 'c')
+		) {
+			const href = selectedCommandHref();
+			if (href) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				void copySelectedCommand(href);
+				return;
+			}
 		}
 
 		// cheat code recognition
@@ -820,6 +851,7 @@
 								.filter(Boolean)
 								.join(' '),
 							icon: Link,
+							href: getRedirectURL(redirect),
 							action: () => {
 								trackRedirect(redirect.name);
 								window.open(getRedirectURL(redirect), '_blank', 'noopener,noreferrer');
@@ -1026,6 +1058,7 @@
 
 <Command.Dialog
 	bind:open={$isCommandActive}
+	bind:value={selectedCommandValue}
 	shouldFilter={currentGroup !== 'notes'}
 	onOpenChange={(open) => {
 		if (!open) leaveCurrentGroup();

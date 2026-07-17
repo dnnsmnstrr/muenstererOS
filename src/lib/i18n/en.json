@@ -212,7 +212,8 @@
 		"switch_language": "Switch Language",
 		"language_switched": "Language switched",
 		"picked_color": "Picked color: {color}",
-		"copy_to_clipboard": "Click to copy to clipboard"
+		"copy_to_clipboard": "Click to copy to clipboard",
+		"copied_to_clipboard": "Copied to clipboard"
 	},
 	"window": {
 		"close": "Close window",

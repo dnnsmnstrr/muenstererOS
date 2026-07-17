@@ -15,6 +15,7 @@ import { test, expect, type Page } from '@playwright/test';
  *  6. Help dialog — Shift+? and the keyboard shortcuts entry
  *  7. Screensaver sub-group — drill in and back
  *  8. Redirects sub-group — search and back
+ *  9. Secondary copy action
  */
 
 // ---------------------------------------------------------------------------
@@ -482,4 +483,33 @@ test.describe('redirects sub-group', () => {
 		await expect(page.locator('[data-command-input]')).toBeVisible();
 		await expect(page.getByRole('option', { name: 'Search Redirects' })).toBeVisible();
 	});
+});
+
+// ---------------------------------------------------------------------------
+// 9. Secondary copy action
+// ---------------------------------------------------------------------------
+
+test.describe('secondary copy action', () => {
+	for (const shortcut of ['Meta+c', 'Meta+Enter']) {
+		test(`${shortcut} copies the selected command path without closing the palette`, async ({
+			page,
+			context
+		}) => {
+			await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+			await page.goto('/');
+			await openPalette(page);
+			await page.keyboard.type('Settings');
+			await expect(page.getByRole('option', { name: 'Settings' })).toHaveAttribute(
+				'aria-selected',
+				'true'
+			);
+
+			await page.keyboard.press(shortcut);
+
+			await expect
+				.poll(() => page.evaluate(() => navigator.clipboard.readText()))
+				.toBe(new URL('/settings', page.url()).href);
+			await expect(page.locator('[data-command-input]')).toBeVisible();
+		});
+	}
 });
