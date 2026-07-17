@@ -9,7 +9,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { formatDate } from '$lib/utils/helper';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
-	import { ArrowLeft, ArrowRight, Calendar, ExternalLink, Github, List, Tag } from 'lucide-svelte';
+	import { ArrowLeft, ArrowRight, Calendar, ExternalLink, FileText, Github, List, Tag } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	type NoteListItem = { name: string };
@@ -105,7 +105,20 @@
 		});
 	}
 
+	function extractReferencedNotes(content: string) {
+		const references = new Map<string, string>();
+		const noteLinkPattern = /\[([^\]]+)\]\((\/notes\/[^\s)#?]+)(?:[?#][^)]*)?\)/g;
+
+		for (const match of content.matchAll(noteLinkPattern)) {
+			const [, title, href] = match;
+			if (href !== `/notes/${encodeURIComponent(slug)}`) references.set(href, title);
+		}
+
+		return Array.from(references, ([href, title]) => ({ href, title }));
+	}
+
 	const processedContent = $derived(processContent(note?.content || ''));
+	const referencedNotes = $derived(extractReferencedNotes(processedContent));
 </script>
 
 <svelte:head>
@@ -201,6 +214,23 @@
 		{#if note && !loadingNote}
 			<aside class="hidden h-full w-56 shrink-0 overflow-y-auto border-l border-border bg-background p-8 lg:block">
 				<Toc selector=".prose" rootSelector="#notes-content-area" content={processedContent} />
+				{#if referencedNotes.length > 0}
+					<nav class="mt-6 border-t border-border pt-6" aria-label={i18n.t('notes.referenced_pages') || 'Referenced pages'}>
+						<p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+							{i18n.t('notes.referenced_pages') || 'Referenced pages'}
+						</p>
+						<ul class="space-y-2 text-sm">
+							{#each referencedNotes as reference}
+								<li>
+									<a href={reference.href} class="flex items-start gap-2 py-1 text-muted-foreground transition-colors hover:text-primary">
+										<FileText class="mt-0.5 size-4 shrink-0" />
+										<span class="min-w-0 break-words">{reference.title}</span>
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</nav>
+				{/if}
 			</aside>
 		{/if}
 	</div>
