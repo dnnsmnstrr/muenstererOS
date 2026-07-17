@@ -57,7 +57,8 @@
 		AtSign,
 		Ship,
 		Trophy,
-		Cog
+		Cog,
+		FileText
 	} from 'lucide-svelte';
 	import type { BookmarkItem } from './Menu.svelte';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
@@ -245,6 +246,7 @@
 
 	const bookmarksRaw: BookmarkItem[] = [
 		{ name: 'Now', href: '/now', icon: CalendarClock },
+		{ name: 'Notes', href: '/notes', icon: FileText },
 		{ name: 'Uses', href: '/uses', icon: TabletSmartphone },
 		{ name: 'Projects', href: '/projects', icon: LayoutGrid },
 		{ name: 'Playlists', href: '/playlists', icon: ListMusic },

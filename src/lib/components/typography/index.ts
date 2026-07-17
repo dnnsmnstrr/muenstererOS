@@ -1,3 +1,5 @@
+import Blockquote from './Blockquote.svelte';
+import Code from './Code.svelte';
 import Heading from './Heading.svelte';
 import Kbd from './Kbd.svelte';
 import Link from './Link.svelte';
@@ -9,9 +11,11 @@ export type TypographyContext = {
 };
 
 const renderers = {
+	blockquote: Blockquote,
+	code: Code,
 	heading: Heading,
 	link: Link,
 	list: List
 };
 
-export { renderers, Heading, Kbd, Link, List };
+export { renderers, Blockquote, Code, Heading, Kbd, Link, List };

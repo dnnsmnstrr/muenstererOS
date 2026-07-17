@@ -1,20 +1,32 @@
 <script lang="ts">
-	import Window from '$lib/components/ui/window/window.svelte';
+	import { goto } from '$app/navigation';
+	import NotesLayout from './NotesLayout.svelte';
 	import { Heading } from '$lib/components/typography';
-	import { i18n } from '$lib/i18n/i18n.svelte';
-	import { onMount } from 'svelte';
-	import { FileText, Search } from 'lucide-svelte';
+	import { Button } from '$lib/components/ui/button';
 	import { PAGE_TITLE_SUFFIX } from '$lib/config';
+	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { ArrowRight, FileText, Shuffle } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
-	let notes = $state<any[]>([]);
+	let notes = $state<{ name: string }[]>([]);
+	let recommendations = $state<{ slug: string; reason?: string }[]>([]);
 	let loading = $state(true);
 	let searchQuery = $state('');
+
+	function openRandomNote() {
+		if (notes.length === 0) return;
+
+		const randomNote = notes[Math.floor(Math.random() * notes.length)];
+		goto(`/notes/${encodeURIComponent(randomNote.name)}`);
+	}
 
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/notes');
-			if (response.ok) {
-				notes = await response.json();
+			if (response.ok) notes = await response.json();
+			const recResponse = await fetch('/api/notes/recommendations');
+			if (recResponse.ok) {
+				recommendations = await recResponse.json();
 			}
 		} catch (error) {
 			console.error('Failed to fetch notes:', error);
@@ -22,72 +34,64 @@
 			loading = false;
 		}
 	});
-
-	const filteredNotes = $derived(
-		notes.filter((note) =>
-			note.name.toLowerCase().includes(searchQuery.toLowerCase())
-		)
-	);
 </script>
 
 <svelte:head>
 	<title>{i18n.t('notes.title')}{PAGE_TITLE_SUFFIX}</title>
 </svelte:head>
 
-<div class="container mx-auto p-4 h-[calc(100vh-8rem)] flex flex-col">
-	<Window class="flex-grow flex flex-col min-h-0 overflow-hidden">
-		<div class="flex flex-col md:flex-row h-full md:divide-x divide-border">
-			<!-- Sidebar -->
-			<div class="w-full md:w-64 flex flex-col bg-muted/30 h-full overflow-hidden">
-				<div class="p-4 border-b border-border shrink-0">
-					<div class="relative">
-						<Search class="absolute left-2 top-2.5 size-4 text-muted-foreground" />
-						<input
-							type="text"
-							placeholder={i18n.t('notes.search_placeholder') || 'Search notes...'}
-							bind:value={searchQuery}
-							class="w-full pl-8 pr-4 py-2 bg-background border border-border rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-						/>
-					</div>
-				</div>
-				<div class="flex-grow overflow-y-auto">
-					{#if loading}
-						<div class="p-4 text-center text-muted-foreground">
-							{i18n.t('common.loading') || 'Loading...'}
-						</div>
-					{:else if filteredNotes.length === 0}
-						<div class="p-4 text-center text-muted-foreground">
-							{i18n.t('notes.no_notes') || 'No notes found'}
-						</div>
-					{:else}
-						<ul class="divide-y divide-border/50">
-							{#each filteredNotes as note}
-								<li>
-									<a
-										href="/notes/{note.name}"
-										class="flex items-center gap-3 p-4 hover:bg-muted transition-colors"
-									>
-										<FileText class="size-4 text-muted-foreground" />
-										<span class="text-sm font-medium truncate">{note.name}</span>
-									</a>
-								</li>
-							{/each}
-						</ul>
-					{/if}
-				</div>
-			</div>
+{#snippet shuffleButton()}
+	<Button
+		variant="ghost"
+		size="icon"
+		onclick={openRandomNote}
+		disabled={loading || notes.length === 0}
+		title="Open a random note"
+		aria-label="Open a random note"
+	>
+		<Shuffle class="size-4" />
+	</Button>
+{/snippet}
 
-			<!-- Main Panel - Hidden on mobile -->
-			<div class="hidden md:flex flex-grow flex-col overflow-y-auto p-8 h-full">
-				<div class="max-w-3xl mx-auto w-full">
-					<Heading class="mb-8">{i18n.t('notes.title') || 'Notes'}</Heading>
-					<div class="prose dark:prose-invert">
-						<p class="text-muted-foreground">
-							{i18n.t('notes.welcome') || 'Select a note from the sidebar to start reading.'}
-						</p>
-					</div>
-				</div>
-			</div>
+<NotesLayout
+	{notes}
+	{loading}
+	bind:searchQuery
+	title={i18n.t('notes.title') || 'Notes'}
+	titlebarRight={shuffleButton}
+	toolbarActions={shuffleButton}
+>
+	<div class="hidden h-full flex-grow flex-col overflow-y-auto bg-background p-8 md:flex">
+		<div class="mx-auto w-full max-w-3xl">
+			<Heading class="mb-8">{i18n.t('notes.title') || 'Notes'}</Heading>
+			<p class="mb-10 text-muted-foreground">
+				{i18n.t('notes.welcome') || 'Select a note from the sidebar to start reading.'}
+			</p>
+
+			{#if recommendations.length > 0}
+				<section aria-labelledby="recommendations-heading">
+					<Heading depth={3} class="mb-4">Recommendations</Heading>
+					<ul class="grid gap-3">
+						{#each recommendations as recommendation}
+							<li>
+								<a
+									href="/notes/{recommendation.slug}"
+									class="group flex items-center gap-4 rounded-lg border border-border p-4 transition-colors hover:bg-muted/50"
+								>
+									<FileText class="size-5 shrink-0 text-muted-foreground group-hover:text-primary" />
+									<div class="min-w-0 flex-grow">
+										<p class="truncate font-medium">{recommendation.slug}</p>
+										{#if recommendation.reason}
+											<p class="mt-1 text-sm text-muted-foreground">{recommendation.reason}</p>
+										{/if}
+									</div>
+									<ArrowRight class="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+								</a>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/if}
 		</div>
-	</Window>
-</div>
+	</div>
+</NotesLayout>
