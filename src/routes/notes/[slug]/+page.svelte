@@ -9,7 +9,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { formatDate } from '$lib/utils/helper';
 	import { MdSvelte } from '@jazzymcjazz/mdsvelte';
-	import { ArrowLeft, Calendar, ExternalLink, Github, List, Tag } from 'lucide-svelte';
+	import { ArrowLeft, ArrowRight, Calendar, ExternalLink, Github, List, Tag } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 
 	type NoteListItem = { name: string };
@@ -27,7 +27,17 @@
 	let loadingList = $state(true);
 	let loadingNote = $state(true);
 	let searchQuery = $state('');
+	let previousTitle = $state('');
+	let nextTitle = $state('');
+	let navigationRequest = 0;
 	const slug = $derived(page.params.slug);
+	const currentNoteIndex = $derived(notes.findIndex((item) => item.name === slug));
+	const previousNote = $derived(currentNoteIndex > 0 ? notes[currentNoteIndex - 1] : null);
+	const nextNote = $derived(
+		currentNoteIndex >= 0 && currentNoteIndex < notes.length - 1
+			? notes[currentNoteIndex + 1]
+			: null
+	);
 
 	async function fetchNote(currentSlug: string) {
 		loadingNote = true;
@@ -40,6 +50,33 @@
 		} finally {
 			loadingNote = false;
 		}
+	}
+
+	async function fetchNavigationTitles(previous: NoteListItem | null, next: NoteListItem | null) {
+		const request = ++navigationRequest;
+		previousTitle = previous?.name || '';
+		nextTitle = next?.name || '';
+
+		const fetchTitle = async (item: NoteListItem | null) => {
+			if (!item) return '';
+			try {
+				const response = await fetch(`/api/notes/${encodeURIComponent(item.name)}`);
+				if (!response.ok) return item.name;
+				const adjacentNote: Note = await response.json();
+				return adjacentNote.title || item.name;
+			} catch {
+				return item.name;
+			}
+		};
+
+		const [resolvedPreviousTitle, resolvedNextTitle] = await Promise.all([
+			fetchTitle(previous),
+			fetchTitle(next)
+		]);
+		if (request !== navigationRequest) return;
+
+		previousTitle = resolvedPreviousTitle;
+		nextTitle = resolvedNextTitle;
 	}
 
 	onMount(async () => {
@@ -55,6 +92,10 @@
 
 	$effect(() => {
 		if (slug) fetchNote(slug);
+	});
+
+	$effect(() => {
+		void fetchNavigationTitles(previousNote, nextNote);
 	});
 
 	function processContent(content: string) {
@@ -128,6 +169,26 @@
 					<div class="prose dark:prose-invert mb-12 max-w-none font-mono text-sm leading-relaxed">
 						<MdSvelte source={processedContent} {renderers} />
 					</div>
+					<nav class="flex items-stretch justify-between gap-4 border-t border-border pt-6" aria-label="Note navigation">
+						{#if previousNote}
+							<Button variant="outline" href="/notes/{encodeURIComponent(previousNote.name)}" class="h-auto min-w-0 max-w-[48%] justify-start px-4 py-3 text-left whitespace-normal">
+								<ArrowLeft class="size-4 shrink-0" />
+								<span class="min-w-0">
+									<span class="block text-xs text-muted-foreground">{i18n.t('notes.previous') || 'Previous'}</span>
+									<span class="block truncate">{previousTitle}</span>
+								</span>
+							</Button>
+						{/if}
+						{#if nextNote}
+							<Button variant="outline" href="/notes/{encodeURIComponent(nextNote.name)}" class="ml-auto h-auto min-w-0 max-w-[48%] justify-end px-4 py-3 text-right whitespace-normal">
+								<span class="min-w-0">
+									<span class="block text-xs text-muted-foreground">{i18n.t('notes.next') || 'Next'}</span>
+									<span class="block truncate">{nextTitle}</span>
+								</span>
+								<ArrowRight class="size-4 shrink-0" />
+							</Button>
+						{/if}
+					</nav>
 				{:else}
 					<div class="py-12 text-center">
 						<Heading depth={2} class="mb-4">{i18n.t('notes.not_found') || 'Note not found'}</Heading>

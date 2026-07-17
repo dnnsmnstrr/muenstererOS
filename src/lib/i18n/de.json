@@ -231,6 +231,8 @@
 		"not_found": "Notiz nicht gefunden",
 		"not_found_desc": "Die angeforderte Notiz konnte nicht geladen werden oder existiert nicht.",
 		"on_this_page": "Auf dieser Seite",
+		"previous": "Zurück",
+		"next": "Weiter",
 		"view_on_github": "Auf GitHub ansehen",
 		"view_on_web": "Auf Webseite ansehen"
 	},
