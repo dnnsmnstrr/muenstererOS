@@ -89,6 +89,21 @@
 		"download_logo_svg": "SVG herunterladen",
 		"copy_logo_url": "Bild-URL kopieren"
 	},
+	"chordlist": {
+		"title": "Chordlist für iPhone",
+		"aria_label": "Ankündigung der Chordlist-App",
+		"dismiss": "Chordlist-Ankündigung schließen",
+		"preorder": {
+			"status": "Demnächst",
+			"message": "Deine Songs, Akkorde und Songtexte — immer griffbereit.",
+			"cta": "Vorbestellen"
+		},
+		"live": {
+			"status": "Jetzt verfügbar",
+			"message": "Erstelle dein Songbook. Nimm es überallhin mit.",
+			"cta": "Herunterladen"
+		}
+	},
 	"experiment": {
 		"title": "Experiment.js",
 		"editor": "Editor",

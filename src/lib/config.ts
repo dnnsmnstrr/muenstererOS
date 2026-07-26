@@ -13,6 +13,27 @@ export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
 export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
 
+export type ChordlistAnnouncementStatus = 'hidden' | 'preorder' | 'live';
+
+/**
+ * Chordlist launch banner.
+ *
+ * Change `status` to `preorder` or `live` to show the banner. Increment
+ * `campaignId` when you want to show it again to visitors who dismissed an
+ * earlier version.
+ */
+export const CHORDLIST_ANNOUNCEMENT: {
+	status: ChordlistAnnouncementStatus;
+	campaignId: string;
+	preorderUrl: string;
+	liveUrl: string;
+} = {
+	status: 'hidden',
+	campaignId: 'launch-1',
+	preorderUrl: 'https://chordlist.app/preorder',
+	liveUrl: 'https://chordlist.app'
+};
+
 // Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);
 export const OWNER_NAME = FIRST_NAME + ' ' + LAST_NAME;

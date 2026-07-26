@@ -67,6 +67,7 @@
 	import { backgroundTextures } from '$lib/config';
 	import pages from '../data/pages.json';
 	import { trackPageVisit, trackDailyVisit, trackCustomization } from '$lib/stores/achievements';
+	import ChordlistAnnouncement from '$lib/components/ChordlistAnnouncement.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -371,6 +372,7 @@
 				<Header pages={bookmarks} />
 			</div>
 		</div>
+		<ChordlistAnnouncement />
 
 		<main
 			class={cn(
