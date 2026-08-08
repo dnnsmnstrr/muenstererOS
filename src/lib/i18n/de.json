@@ -89,20 +89,27 @@
 		"download_logo_svg": "SVG herunterladen",
 		"copy_logo_url": "Bild-URL kopieren"
 	},
-	"announcement_campaigns": {
+	"announcement": {
+		"dismiss": "Ankündigung schließen",
 		"chordlist": {
+			"beta": {
+				"title": "chordlist für iPhone",
+				"aria_label": "Ankündigung der chordlist-App",
+				"message": "Probiere meine neue App in der TestFlight aus.",
+				"cta": "Jetzt testen"
+			},
 			"preorder": {
-				"title": "Chordlist für iPhone",
-				"aria_label": "Ankündigung der Chordlist-App",
-				"dismiss": "Chordlist-Ankündigung schließen",
+				"title": "chordlist für iPhone",
+				"aria_label": "Ankündigung der chordlist-App",
+				"dismiss": "chordlist-Ankündigung schließen",
 				"status": "Demnächst",
 				"message": "Deine Songs, Akkorde und Songtexte — immer griffbereit.",
 				"cta": "Vorbestellen"
 			},
 			"live": {
-				"title": "Chordlist für iPhone",
-				"aria_label": "Ankündigung der Chordlist-App",
-				"dismiss": "Chordlist-Ankündigung schließen",
+				"title": "chordlist für iPhone",
+				"aria_label": "Ankündigung der chordlist-App",
+				"dismiss": "chordlist-Ankündigung schließen",
 				"status": "Jetzt verfügbar",
 				"message": "Erstelle dein Songbook. Nimm es überallhin mit.",
 				"cta": "Herunterladen"

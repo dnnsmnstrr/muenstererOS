@@ -16,6 +16,24 @@
 	const isVisible = $derived(isReady && shouldShow);
 	const copy = (key: string) => (campaign ? i18n.t(`${campaign.translationKey}.${key}`) : '');
 
+	// derive status translation and render badge only when available
+	const statusKey = campaign ? `${campaign.translationKey}.status` : '';
+	let statusText = '';
+
+	// use effect: update statusText on mount and when i18n (store) changes
+	onMount(() => {
+		const update = () => {
+			statusText = campaign && (statusKey !== i18n.t(statusKey)) ? i18n.t(`${campaign.translationKey}.status`) : '';
+		};
+
+		update();
+
+		// if i18n is a store, subscribe to changes
+		const unsub = typeof (i18n.subscribe) === 'function' ? i18n.subscribe(update) : undefined;
+
+		return () => unsub && unsub();
+	});
+
 	onMount(() => {
 		shouldShow = shouldShowAnnouncementCampaign(campaign, localStorage);
 		isReady = true;
@@ -39,10 +57,12 @@
 			<div class="min-w-0 flex-1 sm:flex sm:items-baseline sm:gap-3">
 				<div class="flex items-center gap-2">
 					<p class="truncate text-sm font-semibold">{copy('title')}</p>
-					<span class="status-badge">
-						<span class="status-dot"></span>
-						{copy('status')}
-					</span>
+					{#if statusText}
+						<span class="status-badge">
+							<span class="status-dot"></span>
+							{statusText}
+						</span>
+					{/if}
 				</div>
 				<p class="mt-0.5 truncate text-xs text-muted-foreground sm:mt-0 sm:text-sm">
 					{copy('message')}
@@ -55,7 +75,7 @@
 				<span class="hidden sm:inline">{copy('cta')}</span>
 				<ArrowUpRight class="size-4" strokeWidth={2} />
 			</a>
-			<button type="button" class="dismiss-button" onclick={dismiss} aria-label={copy('dismiss')}>
+			<button type="button" class="dismiss-button" onclick={dismiss} aria-label={copy('dismiss') || i18n.t('announcement.dismiss')}>
 				<X class="size-4" strokeWidth={1.75} />
 			</button>
 		</div>

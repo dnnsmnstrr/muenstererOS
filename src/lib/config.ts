@@ -24,11 +24,16 @@ export type AnnouncementCampaign = {
  * The campaign displayed in the site-wide announcement banner.
  *
  * Set this to a campaign object to show the banner, or `null` to hide it.
- * Matching localized copy belongs below `announcement_campaigns` in the
+ * Matching localized copy belongs below `announcement` in the
  * translation files. Use a unique `campaignId` for every new campaign so a
  * previous dismissal does not hide it. Git keeps the campaign history.
  */
-export const ACTIVE_ANNOUNCEMENT_CAMPAIGN: AnnouncementCampaign | null = null;
+export const ACTIVE_ANNOUNCEMENT_CAMPAIGN: AnnouncementCampaign | null = {
+	campaignId: 'chordlist-beta-1',
+	translationKey: 'announcement.chordlist.beta',
+	iconSrc: '/images/chordlist/keys.svg',
+	href: 'https://testflight.apple.com/join/HS4DNEH8' // https://chordlist.app
+};
 
 // Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);

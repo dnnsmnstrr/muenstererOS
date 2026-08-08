@@ -22,7 +22,7 @@ function createStorage(initialEntries: Record<string, string> = {}) {
 describe('announcement campaign logic', () => {
 	const campaign = {
 		campaignId: 'project-launch-1',
-		translationKey: 'announcement_campaigns.project.launch',
+		translationKey: 'announcement.project.launch',
 		iconSrc: '/images/project.svg',
 		href: 'https://example.com/project'
 	};
