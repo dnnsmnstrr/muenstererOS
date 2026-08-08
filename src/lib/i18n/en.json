@@ -89,19 +89,24 @@
 		"download_logo_svg": "Download SVG",
 		"copy_logo_url": "Copy image URL"
 	},
-	"chordlist": {
-		"title": "Chordlist for iPhone",
-		"aria_label": "Chordlist app announcement",
-		"dismiss": "Dismiss Chordlist announcement",
-		"preorder": {
-			"status": "Coming soon",
-			"message": "Your songs, lyrics and chords — always within reach.",
-			"cta": "Pre-order"
-		},
-		"live": {
-			"status": "Now available",
-			"message": "Build your songbook. Take it anywhere.",
-			"cta": "Download"
+	"announcement_campaigns": {
+		"chordlist": {
+			"preorder": {
+				"title": "Chordlist for iPhone",
+				"aria_label": "Chordlist app announcement",
+				"dismiss": "Dismiss Chordlist announcement",
+				"status": "Coming soon",
+				"message": "Your songs, lyrics and chords — always within reach.",
+				"cta": "Pre-order"
+			},
+			"live": {
+				"title": "Chordlist for iPhone",
+				"aria_label": "Chordlist app announcement",
+				"dismiss": "Dismiss Chordlist announcement",
+				"status": "Now available",
+				"message": "Build your songbook. Take it anywhere.",
+				"cta": "Download"
+			}
 		}
 	},
 	"experiment": {

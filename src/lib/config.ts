@@ -13,26 +13,22 @@ export const CURRENT_DOMAIN = 'muensterer.tech';
 export const API_URL = 'https://dnnsmnstrr.vercel.app';
 export const SPOTIFY_PLAYLIST_LINK = 'https://open.spotify.com/playlist/';
 
-export type ChordlistAnnouncementStatus = 'hidden' | 'preorder' | 'live';
+export type AnnouncementCampaign = {
+	campaignId: string;
+	translationKey: string;
+	iconSrc: string;
+	href: string;
+};
 
 /**
- * Chordlist launch banner.
+ * The campaign displayed in the site-wide announcement banner.
  *
- * Change `status` to `preorder` or `live` to show the banner. Increment
- * `campaignId` when you want to show it again to visitors who dismissed an
- * earlier version.
+ * Set this to a campaign object to show the banner, or `null` to hide it.
+ * Matching localized copy belongs below `announcement_campaigns` in the
+ * translation files. Use a unique `campaignId` for every new campaign so a
+ * previous dismissal does not hide it. Git keeps the campaign history.
  */
-export const CHORDLIST_ANNOUNCEMENT: {
-	status: ChordlistAnnouncementStatus;
-	campaignId: string;
-	preorderUrl: string;
-	liveUrl: string;
-} = {
-	status: 'hidden',
-	campaignId: 'launch-1',
-	preorderUrl: 'https://chordlist.app/preorder',
-	liveUrl: 'https://chordlist.app'
-};
+export const ACTIVE_ANNOUNCEMENT_CAMPAIGN: AnnouncementCampaign | null = null;
 
 // Username variations
 export const NAME_ABBREVIATION = FIRST_NAME.slice(0, 1) + LAST_NAME.slice(0, 1);

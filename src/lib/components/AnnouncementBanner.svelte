@@ -1,64 +1,61 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { ArrowUpRight, X } from 'lucide-svelte';
-	import { CHORDLIST_ANNOUNCEMENT } from '$lib/config';
+	import { ACTIVE_ANNOUNCEMENT_CAMPAIGN } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import {
+		dismissAnnouncementCampaign,
+		shouldShowAnnouncementCampaign
+	} from '$lib/utils/announcement';
 
-	const { status, campaignId, preorderUrl, liveUrl } = CHORDLIST_ANNOUNCEMENT;
-	const storageKey = `chordlist-announcement-${campaignId}-${status}`;
+	const campaign = ACTIVE_ANNOUNCEMENT_CAMPAIGN;
 
 	let isReady = $state(false);
-	let isDismissed = $state(false);
+	let shouldShow = $state(false);
 
-	const href = $derived(status === 'preorder' ? preorderUrl : liveUrl);
-	const isVisible = $derived(status !== 'hidden' && isReady && !isDismissed);
+	const isVisible = $derived(isReady && shouldShow);
+	const copy = (key: string) => (campaign ? i18n.t(`${campaign.translationKey}.${key}`) : '');
 
 	onMount(() => {
-		isDismissed = localStorage.getItem(storageKey) === 'dismissed';
+		shouldShow = shouldShowAnnouncementCampaign(campaign, localStorage);
 		isReady = true;
 	});
 
 	function dismiss() {
-		isDismissed = true;
-		localStorage.setItem(storageKey, 'dismissed');
+		if (!campaign) return;
+
+		shouldShow = false;
+		dismissAnnouncementCampaign(campaign.campaignId, localStorage);
 	}
 </script>
 
-{#if isVisible}
-	<aside
-		class="chordlist-announcement mx-6 mb-2 sm:mx-16"
-		aria-label={i18n.t('chordlist.aria_label')}
-	>
+{#if isVisible && campaign}
+	<aside class="announcement-banner mx-6 mb-2 sm:mx-16" aria-label={copy('aria_label')}>
 		<div class="flex min-w-0 items-center gap-3 sm:gap-4">
-			<div class="app-icon" aria-hidden="true">
-				<img src="/images/chordlist/keys.svg" alt="" />
+			<div class="campaign-icon" aria-hidden="true">
+				<img src={campaign.iconSrc} alt="" />
 			</div>
 
 			<div class="min-w-0 flex-1 sm:flex sm:items-baseline sm:gap-3">
 				<div class="flex items-center gap-2">
-					<p class="truncate text-sm font-semibold">{i18n.t('chordlist.title')}</p>
+					<p class="truncate text-sm font-semibold">{copy('title')}</p>
 					<span class="status-badge">
 						<span class="status-dot"></span>
-						{i18n.t(`chordlist.${status}.status`)}
+						{copy('status')}
 					</span>
 				</div>
 				<p class="mt-0.5 truncate text-xs text-muted-foreground sm:mt-0 sm:text-sm">
-					{i18n.t(`chordlist.${status}.message`)}
+					{copy('message')}
 				</p>
 			</div>
 		</div>
 
 		<div class="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
-			<a class="announcement-cta" {href} target="_blank" rel="noreferrer">
-				<span class="hidden sm:inline">{i18n.t(`chordlist.${status}.cta`)}</span>
+			<a class="announcement-cta" href={campaign.href} target="_blank" rel="noreferrer">
+				<span class="hidden sm:inline">{copy('cta')}</span>
 				<ArrowUpRight class="size-4" strokeWidth={2} />
 			</a>
-			<button
-				type="button"
-				class="dismiss-button"
-				onclick={dismiss}
-				aria-label={i18n.t('chordlist.dismiss')}
-			>
+			<button type="button" class="dismiss-button" onclick={dismiss} aria-label={copy('dismiss')}>
 				<X class="size-4" strokeWidth={1.75} />
 			</button>
 		</div>
@@ -66,7 +63,7 @@
 {/if}
 
 <style>
-	.chordlist-announcement {
+	.announcement-banner {
 		position: relative;
 		z-index: 10;
 		display: flex;
@@ -85,7 +82,7 @@
 		animation: announcement-in 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
 	}
 
-	.chordlist-announcement::before {
+	.announcement-banner::before {
 		position: absolute;
 		inset: 0;
 		background-image: repeating-linear-gradient(
@@ -99,11 +96,11 @@
 		pointer-events: none;
 	}
 
-	.chordlist-announcement > :global(*) {
+	.announcement-banner > :global(*) {
 		position: relative;
 	}
 
-	.app-icon {
+	.campaign-icon {
 		width: 2.25rem;
 		height: 2.25rem;
 		flex: none;
@@ -115,7 +112,7 @@
 			0 1px 2px hsl(var(--foreground) / 0.12);
 	}
 
-	.app-icon img {
+	.campaign-icon img {
 		display: block;
 		width: 100%;
 		height: 100%;
@@ -208,7 +205,7 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.chordlist-announcement,
+		.announcement-banner,
 		.status-dot {
 			animation: none;
 		}
