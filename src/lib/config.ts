@@ -18,6 +18,8 @@ export type AnnouncementCampaign = {
 	translationKey: string;
 	iconSrc: string;
 	href: string;
+	/** Optional separate link for the campaign icon. The icon is static without it. */
+	iconHref?: string;
 };
 
 /**
@@ -32,7 +34,8 @@ export const ACTIVE_ANNOUNCEMENT_CAMPAIGN: AnnouncementCampaign | null = {
 	campaignId: 'chordlist-preorder-1',
 	translationKey: 'announcement.chordlist.preorder',
 	iconSrc: '/images/chordlist/keys.svg',
-	href: 'https://apps.apple.com/us/app/chordlist-personal-songbook/id6798344297' // https://chordlist.app
+	href: 'https://apps.apple.com/us/app/chordlist-personal-songbook/id6798344297',
+	iconHref: 'https://chordlist.app'
 };
 
 // Username variations

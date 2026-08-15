@@ -15,6 +15,11 @@
 
 	const isVisible = $derived(isReady && shouldShow);
 	const copy = (key: string) => (campaign ? i18n.t(`${campaign.translationKey}.${key}`) : '');
+	// t() returns the key itself when a translation is missing
+	const copyOr = (key: string, fallback: string) => {
+		const value = copy(key);
+		return !value || value === `${campaign?.translationKey}.${key}` ? fallback : value;
+	};
 
 	// derive status translation and render badge only when available
 	const statusKey = campaign ? `${campaign.translationKey}.status` : '';
@@ -50,9 +55,21 @@
 {#if isVisible && campaign}
 	<aside class="announcement-banner mx-6 mb-2 sm:mx-16" aria-label={copy('aria_label')}>
 		<div class="flex min-w-0 items-center gap-3 sm:gap-4">
-			<div class="campaign-icon" aria-hidden="true">
-				<img src={campaign.iconSrc} alt="" />
-			</div>
+			{#if campaign.iconHref}
+				<a
+					class="campaign-icon campaign-icon-link"
+					href={campaign.iconHref}
+					target="_blank"
+					rel="noreferrer"
+					aria-label={copyOr('icon_label', copy('title'))}
+				>
+					<img src={campaign.iconSrc} alt="" />
+				</a>
+			{:else}
+				<div class="campaign-icon" aria-hidden="true">
+					<img src={campaign.iconSrc} alt="" />
+				</div>
+			{/if}
 
 			<div class="min-w-0 flex-1 sm:flex sm:items-baseline sm:gap-3">
 				<div class="flex items-center gap-2">
@@ -137,6 +154,20 @@
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
+	}
+
+	.campaign-icon-link {
+		display: block;
+		transition: transform 150ms ease;
+	}
+
+	.campaign-icon-link:hover {
+		transform: translateY(-1px);
+	}
+
+	.campaign-icon-link:focus-visible {
+		outline: 2px solid hsl(var(--ring));
+		outline-offset: 2px;
 	}
 
 	.status-badge {
