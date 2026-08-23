@@ -835,5 +835,54 @@
 			"title": "Theme Master",
 			"description": "Customize your theme."
 		}
+	},
+	"micro": {
+		"title": "Micro",
+		"description": "A small studio for SVG micrographics: pick a template, scatter technical marks, set your text and colors, then export as SVG or PNG.",
+		"seed": "Seed",
+		"density": "Density",
+		"stroke": "Stroke width",
+		"show_labels": "Coordinate labels",
+		"show_grid": "Grid",
+		"field_title": "Title",
+		"field_subtitle": "Subtitle",
+		"field_code": "Code",
+		"field_footer": "Footer",
+		"background": "Background",
+		"ink": "Ink",
+		"accent": "Accent",
+		"accent_ratio": "Accent share",
+		"export_svg": "SVG",
+		"export_png": "PNG",
+		"copy_svg": "Copy",
+		"shuffle": "Shuffle",
+		"reset": "Reset",
+		"toast_svg": "SVG downloaded",
+		"toast_png": "PNG downloaded",
+		"toast_copied": "SVG copied to clipboard",
+		"toast_copy_failed": "Could not copy the SVG",
+		"toast_png_failed": "Could not render the PNG",
+		"tabs": {
+			"template": "Template",
+			"marks": "Marks",
+			"text": "Text",
+			"style": "Style"
+		},
+		"templates": {
+			"coordinates": "Coordinates",
+			"header": "Header band",
+			"matrix": "Matrix",
+			"target": "Target"
+		},
+		"marks": {
+			"crosshair": "Crosshair",
+			"ring": "Ring",
+			"square": "Square",
+			"triangle": "Triangle",
+			"bars": "Bars",
+			"arrow": "Arrow",
+			"dots": "Dots"
+		}
 	}
 }
+
