@@ -1,5 +1,10 @@
 [
 	{
+		"title": "Micro",
+		"path": "/micro",
+		"date": "2026-08-23"
+	},
+	{
 		"title": "Notes",
 		"path": "/notes",
 		"date": "2026-05-30"
@@ -140,3 +145,4 @@
 		"date": "2024-02-05"
 	}
 ]
+

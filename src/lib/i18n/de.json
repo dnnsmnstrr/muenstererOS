@@ -835,5 +835,54 @@
 			"title": "Theme Master",
 			"description": "Passe dein Design an."
 		}
+	},
+	"micro": {
+		"title": "Micro",
+		"description": "Ein kleines Studio für SVG-Mikrografiken: Vorlage wählen, technische Marken streuen, Text und Farben setzen und als SVG oder PNG exportieren.",
+		"seed": "Seed",
+		"density": "Dichte",
+		"stroke": "Linienstärke",
+		"show_labels": "Koordinaten-Labels",
+		"show_grid": "Raster",
+		"field_title": "Titel",
+		"field_subtitle": "Untertitel",
+		"field_code": "Code",
+		"field_footer": "Fußzeile",
+		"background": "Hintergrund",
+		"ink": "Linienfarbe",
+		"accent": "Akzent",
+		"accent_ratio": "Akzentanteil",
+		"export_svg": "SVG",
+		"export_png": "PNG",
+		"copy_svg": "Kopieren",
+		"shuffle": "Zufall",
+		"reset": "Zurücksetzen",
+		"toast_svg": "SVG heruntergeladen",
+		"toast_png": "PNG heruntergeladen",
+		"toast_copied": "SVG in die Zwischenablage kopiert",
+		"toast_copy_failed": "SVG konnte nicht kopiert werden",
+		"toast_png_failed": "PNG konnte nicht erzeugt werden",
+		"tabs": {
+			"template": "Vorlage",
+			"marks": "Marken",
+			"text": "Text",
+			"style": "Stil"
+		},
+		"templates": {
+			"coordinates": "Koordinaten",
+			"header": "Kopfband",
+			"matrix": "Matrix",
+			"target": "Ziel"
+		},
+		"marks": {
+			"crosshair": "Fadenkreuz",
+			"ring": "Ring",
+			"square": "Quadrat",
+			"triangle": "Dreieck",
+			"bars": "Balken",
+			"arrow": "Pfeil",
+			"dots": "Punkte"
+		}
 	}
 }
+
