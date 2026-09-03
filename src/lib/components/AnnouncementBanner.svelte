@@ -3,17 +3,19 @@
 	import { ArrowUpRight, X } from 'lucide-svelte';
 	import { ACTIVE_ANNOUNCEMENT_CAMPAIGN } from '$lib/config';
 	import { i18n } from '$lib/i18n/i18n.svelte';
+	import { page } from '$app/state';
 	import {
 		dismissAnnouncementCampaign,
 		shouldShowAnnouncementCampaign
 	} from '$lib/utils/announcement';
 
 	const campaign = ACTIVE_ANNOUNCEMENT_CAMPAIGN;
+	const ALLOWED_PATHS = ['/'];
 
 	let isReady = $state(false);
 	let shouldShow = $state(false);
 
-	const isVisible = $derived(isReady && shouldShow);
+	const isVisible = $derived(isReady && shouldShow && ALLOWED_PATHS.includes(page.url.pathname));
 	const copy = (key: string) => (campaign ? i18n.t(`${campaign.translationKey}.${key}`) : '');
 	// t() returns the key itself when a translation is missing
 	const copyOr = (key: string, fallback: string) => {
