@@ -87,7 +87,10 @@
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"copy_design_spec_url": "Design-Spezifikation-URL kopieren",
+		"design_spec_copied": "Design-Spezifikation-URL kopiert",
+		"design_spec_copy_failed": "Design-Spezifikation-URL konnte nicht kopiert werden"
 	},
 	"announcement": {
 		"dismiss": "Ankündigung schließen",
@@ -885,4 +888,3 @@
 		}
 	}
 }
-
