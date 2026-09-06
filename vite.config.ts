@@ -17,7 +17,7 @@ export default defineConfig({
 	},
 	server: {
 		fs: {
-			allow: ['src', 'static', 'lib', 'config']
+			allow: ['src', 'static', 'lib', 'config', 'DESIGN.md']
 		}
 	}
 });
