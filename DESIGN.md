@@ -279,9 +279,17 @@ Inputs are 40px high, use the semantic input/border color, and share the 6px rad
 
 Cards use Level 1 depth and 16–24px padding. Make the whole card clickable only when it has exactly one destination; otherwise use explicit actions. Lists are preferred for scanning many similar items. Tables retain semantic markup, align numbers, keep headers visible when useful, and become scrollable or recompose on small screens rather than clipping.
 
-### Menus, command palette, dialogs, and notifications
+### Command bar
 
-Menus and popovers use Level 2 depth, 4–6px internal item radii, compact rows, and clear selected, disabled, and keyboard-focused states. The command palette is keyboard-first but fully usable by touch; show shortcuts as supplementary hints and preserve a visible search label.
+The command bar (command palette) is a core navigational element and a central entry point for pages and actions across the system. Keep it available throughout the site through a visible control and the Cmd+K shortcut. It is keyboard-first and fully usable by pointer and touch; show shortcuts as supplementary hints and preserve a visible search label.
+
+Whenever a user-facing page or action is added, extend the command bar in the same change so users can discover and reach it there. Use clear English and German labels, useful search keywords, and logical groups. Prefer nouns for destinations and verbs for actions. Keep entries in sync when pages or actions are renamed, moved, or removed.
+
+Use Level 3 depth with compact result rows and clear selected, disabled, and keyboard-focused states. Verify that new entries can be found through search and open the intended destination or execute the intended action using keyboard, pointer, and touch interactions.
+
+### Menus, dialogs, and notifications
+
+Menus and popovers use Level 2 depth, 4–6px internal item radii, compact rows, and clear selected, disabled, and keyboard-focused states.
 
 Dialogs use Level 3 depth, move focus inside on open, trap it while modal, close with Escape, and return focus to the trigger. Toasts are concise, nonblocking, and do not contain the only copy of important information. Respect OS and browser reduced-motion settings.
 
@@ -306,6 +314,7 @@ Write concise, human labels. Prefer verbs for actions and nouns for destinations
 - Reuse the 4px spacing system, system typography, Lucide icons, and measured radii in side projects.
 - Preserve familiar window, menu, keyboard, and browser behaviors when invoking them visually.
 - Make every desktop interaction reachable through conventional navigation and on touch screens.
+- Extend the command bar whenever adding a user-facing page or action, and maintain its entries as features change.
 - Use borders, alignment, and typography before adding shadows or extra containers.
 - Test at narrow mobile widths, wide desktops, 200% zoom, keyboard-only input, dark mode, and reduced motion.
 - Keep experiments isolated enough that the core information architecture remains dependable.
