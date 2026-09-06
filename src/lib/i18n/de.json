@@ -898,7 +898,12 @@
 		"themes": "Theme-Explorer",
 		"components": "Komponenten",
 		"guidelines": "Richtlinien",
+		"on_this_page": "Auf dieser Seite",
+		"markdown_source": "Markdown-Quelltext",
+		"markdown_preview": "Gerenderte Vorschau",
 		"theme_description": "Vergleiche alle Farbpaletten im hellen und dunklen Modus. Die Vorschau nutzt das tatsächliche Theme-Stylesheet und verändert deine gespeicherte Darstellung nicht. Wähle ein Token aus, um seine CSS-Deklaration zu prüfen und zu kopieren.",
+		"previous_theme": "Vorheriges Theme",
+		"next_theme": "Nächstes Theme",
 		"copy_theme": "Theme-CSS kopieren",
 		"preview": "Vorschau",
 		"light": "Hell",
@@ -953,7 +958,12 @@
 			"window": "Teste die Schaltflächen zum Schließen, Minimieren und Maximieren.",
 			"loaded": "Geladenen Inhalt zeigen",
 			"status": "Status",
-			"delete": "Löschen"
+			"delete": "Löschen",
+			"typography_title": "Ruhig, präzise und lesbar.",
+			"typography_heading": "Eine klare Hierarchie",
+			"typography_body": "Die Systemtypografie soll beim Lesen in den Hintergrund treten. Eine klare Hierarchie, angenehme Zeilenlängen und zurückhaltende Schriftschnitte machen dichte Oberflächen leicht erfassbar.",
+			"typography_muted": "Zurückhaltender Text unterstützt den Inhalt, ohne mit ihm zu konkurrieren.",
+			"press": "Drücke"
 		},
 		"examples": {
 			"buttons": {
@@ -1019,6 +1029,14 @@
 			"command": {
 				"title": "Command-Bar",
 				"description": "Suche und wähle Befehle in einer isolierten Palette."
+			},
+			"typography": {
+				"title": "Typografie",
+				"description": "Display, Überschriften, Fließtext, Links, Tastaturhinweise und Code."
+			},
+			"markdown": {
+				"title": "Markdown-Vorschau",
+				"description": "Bearbeite Markdown und prüfe die gemeinsamen Typografie-Renderer live."
 			}
 		}
 	}

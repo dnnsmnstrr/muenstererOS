@@ -249,7 +249,7 @@ Use one-pixel borders. Do not combine large radii, thick borders, and heavy shad
 
 ## Components
 
-The interactive styleguide at [/design](/design) presents live component examples with copyable Svelte source and a theme viewer showing the actual light and dark CSS tokens. Use it to test components in isolation and reuse patterns in new pages. Extend the library when adding reusable components or patterns, and keep examples aligned with this specification.
+The interactive library at [/design](/design) presents typography specimens, a live Markdown preview, component examples with copyable Svelte source, and a theme viewer showing the actual light and dark CSS tokens. Use it to test components in isolation and reuse patterns in new pages. Extend the library when adding reusable components or patterns, and keep examples aligned with this specification.
 
 ### System shell
 

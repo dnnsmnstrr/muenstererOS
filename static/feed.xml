@@ -3,7 +3,7 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2026-09-06T16:44:36.712Z</updated>
+    <updated>2026-09-06T21:45:33.914Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
@@ -16,7 +16,7 @@
         <updated>2026-09-06</updated>
         <content type="html">
             <![CDATA[
-                <p>Added DESIGN.md specification and styleguide page with interactive component examples, copyable Svelte snippets, and a light/dark theme token explorer.</p>
+                <p>Added the DESIGN.md specification and /design library with interactive component and typography examples, a Markdown preview, copyable Svelte snippets, and a light/dark theme token explorer.</p>
             ]]>
         </content>
     </entry>

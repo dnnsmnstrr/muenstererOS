@@ -898,7 +898,12 @@
 		"themes": "Theme explorer",
 		"components": "Components",
 		"guidelines": "Guidelines",
+		"on_this_page": "On this page",
+		"markdown_source": "Markdown source",
+		"markdown_preview": "Rendered preview",
 		"theme_description": "Compare every site palette in light and dark. These previews use the actual theme stylesheet and leave your saved appearance unchanged. Select a token to inspect and copy its CSS declaration.",
+		"previous_theme": "Previous theme",
+		"next_theme": "Next theme",
 		"copy_theme": "Copy theme CSS",
 		"preview": "Preview",
 		"light": "Light",
@@ -953,7 +958,12 @@
 			"window": "Try the close, minimize, and maximize controls.",
 			"loaded": "Show loaded content",
 			"status": "Status",
-			"delete": "Delete"
+			"delete": "Delete",
+			"typography_title": "Calm, precise, and readable.",
+			"typography_heading": "A clear hierarchy",
+			"typography_body": "System typography should disappear into the reading experience. Strong hierarchy, comfortable measure, and restrained weights keep dense interfaces easy to scan.",
+			"typography_muted": "Muted text supports the content without competing with it.",
+			"press": "Press"
 		},
 		"examples": {
 			"buttons": {
@@ -1019,6 +1029,14 @@
 			"command": {
 				"title": "Command bar",
 				"description": "Search and select commands in an isolated palette."
+			},
+			"typography": {
+				"title": "Typography",
+				"description": "Display, headings, body text, links, keyboard hints, and code."
+			},
+			"markdown": {
+				"title": "Markdown preview",
+				"description": "Edit Markdown and inspect the shared typography renderers live."
 			}
 		}
 	}

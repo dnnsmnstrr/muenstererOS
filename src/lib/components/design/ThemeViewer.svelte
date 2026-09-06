@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { tick } from 'svelte';
+	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { previewThemes, tokenStyle, themeCSS } from './themes';
 	import CopyButton from './CopyButton.svelte';
 	import { Button } from '$lib/components/ui/button';
@@ -7,6 +9,7 @@
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	let selected = $state('zinc');
 	let selectedToken = $state('');
+	let themeList: HTMLElement | null = $state(null);
 	$effect(() => {
 		selected;
 		tokenMode;
@@ -14,6 +17,20 @@
 	});
 	let tokenMode = $state<'light' | 'dark'>('light');
 	const theme = $derived(previewThemes.find((item) => item.name === selected) ?? previewThemes[0]);
+
+	async function selectTheme(name: string) {
+		selected = name;
+		await tick();
+		themeList
+			?.querySelector<HTMLElement>(`[data-theme-name="${name}"]`)
+			?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+	}
+
+	function cycleTheme(direction: -1 | 1) {
+		const currentIndex = previewThemes.findIndex((item) => item.name === selected);
+		const nextIndex = (currentIndex + direction + previewThemes.length) % previewThemes.length;
+		void selectTheme(previewThemes[nextIndex].name);
+	}
 </script>
 
 <section id="themes" class="scroll-mt-24 space-y-6" aria-labelledby="themes-title">
@@ -31,18 +48,44 @@
 		</div>
 		<CopyButton text={themeCSS(theme)} label={i18n.t('design.copy_theme')} />
 	</div>
-	<div class="flex flex-wrap gap-2" role="group" aria-label={i18n.t('design.themes')}>
-		{#each previewThemes as item}
-			<button
-				class="flex min-h-10 items-center gap-2 rounded-md border px-3 text-sm capitalize transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-				class:bg-secondary={selected === item.name}
-				aria-pressed={selected === item.name}
-				onclick={() => (selected = item.name)}
-			>
-				<span class="size-3 rounded-full border" style:background={`hsl(${item.light.primary})`}
-				></span>{item.name}
-			</button>
-		{/each}
+	<div class="flex min-w-0 items-center gap-2" data-theme-selector>
+		<Button
+			variant="outline"
+			size="icon"
+			class="shrink-0"
+			aria-label={i18n.t('design.previous_theme')}
+			onclick={() => cycleTheme(-1)}
+		>
+			<ChevronLeft />
+		</Button>
+		<div
+			bind:this={themeList}
+			class="flex min-w-0 flex-1 gap-2 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+			role="group"
+			aria-label={i18n.t('design.themes')}
+		>
+			{#each previewThemes as item}
+				<button
+					data-theme-name={item.name}
+					class="flex min-h-10 shrink-0 items-center gap-2 rounded-md border px-3 text-sm capitalize transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+					class:bg-secondary={selected === item.name}
+					aria-pressed={selected === item.name}
+					onclick={() => void selectTheme(item.name)}
+				>
+					<span class="size-3 rounded-full border" style:background={`hsl(${item.light.primary})`}
+					></span>{item.name}
+				</button>
+			{/each}
+		</div>
+		<Button
+			variant="outline"
+			size="icon"
+			class="shrink-0"
+			aria-label={i18n.t('design.next_theme')}
+			onclick={() => cycleTheme(1)}
+		>
+			<ChevronRight />
+		</Button>
 	</div>
 	<div class="grid gap-4 md:grid-cols-2">
 		{#each ['light', 'dark'] as mode}

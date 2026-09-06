@@ -2,7 +2,7 @@
 	{
 		"date": "2026-09-06",
 		"title": "Design library",
-		"description": "Added DESIGN.md specification and styleguide page with interactive component examples, copyable Svelte snippets, and a light/dark theme token explorer.",
+		"description": "Added the DESIGN.md specification and /design library with interactive component and typography examples, a Markdown preview, copyable Svelte snippets, and a light/dark theme token explorer.",
 		"path": "/design"
 	},
 	{

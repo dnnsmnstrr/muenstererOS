@@ -74,6 +74,32 @@ test('themes use real CSS tokens, preserve site theme, and copy both modes', asy
 	expect(css).toContain('--radius: 0.5rem;');
 });
 
+test('theme selector scrolls sideways and arrow controls wrap around', async ({ page }) => {
+	const selector = page.locator('[data-theme-selector]');
+	const list = selector.getByRole('group', { name: 'Theme explorer' });
+
+	await expect(list).toHaveCSS('overflow-x', 'auto');
+	await expect(page.getByRole('button', { name: 'zinc', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await selector.getByRole('button', { name: 'Previous theme' }).click();
+	await expect(page.getByRole('button', { name: 'violet', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await selector.getByRole('button', { name: 'Next theme' }).click();
+	await expect(page.getByRole('button', { name: 'zinc', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+	await selector.getByRole('button', { name: 'Next theme' }).click();
+	await expect(page.getByRole('button', { name: 'slate', exact: true })).toHaveAttribute(
+		'aria-pressed',
+		'true'
+	);
+});
+
 test('component interactions, reset, search, and dialog focus work', async ({ page }) => {
 	await page
 		.locator('#example-buttons')
@@ -112,7 +138,7 @@ test('command bar discovers the page and spec remains accessible', async ({ page
 	await expect(page).toHaveURL(/\/design$/);
 	const response = await page.request.get('/design.md');
 	expect(response.ok()).toBe(true);
-	expect(await response.text()).toContain('interactive styleguide');
+	expect(await response.text()).toContain('interactive library');
 });
 
 test('mobile and German library stay readable', async ({ page }) => {
@@ -130,6 +156,75 @@ test('mobile and German library stay readable', async ({ page }) => {
 	expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
 		true
 	);
+});
+
+test('header and footer wheel gestures scroll content without moving the viewport', async ({
+	page
+}) => {
+	const main = page.locator('main');
+	const header = page.locator('header').first();
+	const footer = page.locator('footer');
+
+	await header.hover();
+	await page.mouse.wheel(0, 500);
+	await expect.poll(() => main.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+	expect(await page.evaluate(() => window.scrollY)).toBe(0);
+
+	await main.evaluate((element) => (element.scrollTop = element.scrollHeight));
+	await footer.hover();
+	await page.mouse.wheel(0, -500);
+	await expect
+		.poll(() =>
+			main.evaluate((element) => element.scrollHeight - element.clientHeight - element.scrollTop)
+		)
+		.toBeGreaterThan(0);
+
+	await main.evaluate((element) => (element.scrollTop = element.scrollHeight));
+	await footer.hover();
+	await page.mouse.wheel(0, 500);
+	expect(await page.evaluate(() => window.scrollY)).toBe(0);
+	await expect(header).toBeVisible();
+	await expect(footer).toBeVisible();
+});
+
+test('typography and Markdown examples are live and copyable', async ({ page }) => {
+	await expect(page.locator('#example-typography')).toContainText('Calm, precise, and readable.');
+
+	const markdown = page.locator('#example-markdown');
+	await markdown
+		.getByRole('textbox', { name: 'Markdown source' })
+		.fill('# Updated preview\n\nThis is **live**.');
+	await expect(markdown.getByRole('heading', { name: 'Updated preview' })).toBeVisible();
+	await expect(markdown.locator('strong')).toHaveText('live');
+	await markdown
+		.getByRole('textbox', { name: 'Markdown source' })
+		.fill('<img src="missing" onerror="window.markdownExecuted = true">');
+	await expect(markdown.locator('[data-example-preview="markdown"] img')).toHaveCount(0);
+	expect(await page.evaluate(() => 'markdownExecuted' in window)).toBe(false);
+	await expect(markdown.getByRole('button', { name: 'Copy snippet' })).toBeVisible();
+});
+
+test('wide layouts show a sticky table of contents', async ({ page }) => {
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await expect(page.getByRole('navigation', { name: 'On this page' })).toBeHidden();
+
+	await page.setViewportSize({ width: 1600, height: 900 });
+	const contents = page.getByRole('navigation', { name: 'On this page' });
+	await expect(contents).toBeVisible();
+	await contents.getByRole('link', { name: 'Guidelines' }).click();
+	await expect(contents.getByRole('link', { name: 'Guidelines' })).toHaveAttribute(
+		'aria-current',
+		'location'
+	);
+	await expect
+		.poll(() => page.locator('main').evaluate((element) => element.scrollTop))
+		.toBeGreaterThan(0);
+});
+
+test('/styleguide permanently redirects to /design', async ({ page }) => {
+	const response = await page.request.get('/styleguide', { maxRedirects: 0 });
+	expect(response.status()).toBe(308);
+	expect(response.headers().location).toBe('/design');
 });
 
 test('select and dropdown menu update their values', async ({ page }) => {
