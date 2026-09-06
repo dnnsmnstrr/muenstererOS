@@ -65,7 +65,8 @@
 		"description": "Personal website of Dennis Muensterer",
 		"na": "N/A",
 		"yes": "Yes",
-		"no": "No"
+		"no": "No",
+		"design": "Design library"
 	},
 	"error": {
 		"404": "No page or redirect found for:",
@@ -885,6 +886,140 @@
 			"bars": "Bars",
 			"arrow": "Arrow",
 			"dots": "Dots"
+		}
+	},
+	"design": {
+		"title": "Design library",
+		"eyebrow": "Styleguide & components",
+		"description": "Explore the visual language of muenstererOS. Inspect theme tokens, try real components, and copy working examples into your next page.",
+		"spec": "Design specification",
+		"navigation": "Design library navigation",
+		"foundations": "Foundations",
+		"themes": "Theme explorer",
+		"components": "Components",
+		"guidelines": "Guidelines",
+		"theme_description": "Compare every site palette in light and dark. These previews use the actual theme stylesheet and leave your saved appearance unchanged. Select a token to inspect and copy its CSS declaration.",
+		"copy_theme": "Copy theme CSS",
+		"preview": "Preview",
+		"light": "Light",
+		"dark": "Dark",
+		"tokens": "Theme tokens",
+		"token_mode": "Token appearance",
+		"inspect": "Inspect",
+		"select_token": "Select a token to copy its declaration.",
+		"copy_token": "Copy token",
+		"theme_source": "View theme CSS",
+		"copy": "Copy snippet",
+		"copied": "Copied",
+		"copy_error": "Clipboard unavailable. Select and copy the visible source manually.",
+		"playground": "Try the components",
+		"component_description": "Live examples use the same components as the site and follow your current site theme. Each snippet includes its imports and state. Interact with the preview, or expand the source to copy it manually.",
+		"reset": "Reset examples",
+		"search": "Find a component…",
+		"source": "View Svelte source",
+		"empty": "No matching components. Try a different search.",
+		"build": "Build with the system",
+		"spec_description": "The specification defines typography, spacing, colors, motion, and accessibility. The examples here show the current implementation.",
+		"command": "Keep the command bar complete",
+		"command_description": "Every new page or user-facing action belongs in the command bar. Add clear labels, search keywords, and translations in the same change.",
+		"reuse": "Reuse and extend",
+		"reuse_description": "Copy an example into a Svelte page and adapt its content. Keep shared components and semantic tokens; add a library example when introducing a new reusable pattern.",
+		"demo": {
+			"small": "Small",
+			"large": "Large",
+			"disabled": "Disabled",
+			"clicks": "Clicks",
+			"name": "Name",
+			"note": "Note",
+			"write": "Write a note…",
+			"check": "Include in navigation",
+			"notifications": "Notifications",
+			"on": "On",
+			"off": "Off",
+			"progress": "Progress",
+			"project": "A little space for your next idea.",
+			"description": "Simple surfaces, clear type, and room to focus.",
+			"saved": "Saved",
+			"draft": "Draft",
+			"save": "Save",
+			"reset": "Reset",
+			"details": "Details",
+			"keyboard": "Use Tab to focus controls and arrow keys to move between options.",
+			"accessibility": "Accessibility",
+			"open": "Open dialog",
+			"dialog": "Try moving focus with Tab. Escape closes the dialog and returns focus to the trigger.",
+			"done": "Done",
+			"restore": "Restore window",
+			"window": "Try the close, minimize, and maximize controls.",
+			"loaded": "Show loaded content",
+			"status": "Status",
+			"delete": "Delete"
+		},
+		"examples": {
+			"buttons": {
+				"title": "Buttons",
+				"description": "Variants, sizes, disabled states, and click feedback."
+			},
+			"inputs": {
+				"title": "Inputs & textarea",
+				"description": "Labeled fields, editable values, and disabled states."
+			},
+			"toggles": {
+				"title": "Checkbox & switch",
+				"description": "Toggle independent options and inspect their state."
+			},
+			"slider": {
+				"title": "Slider & progress",
+				"description": "Adjust a value and watch the progress indicator respond."
+			},
+			"cards": {
+				"title": "Card",
+				"description": "Compose a header, content, status, and an action."
+			},
+			"badges": {
+				"title": "Badges",
+				"description": "Compact status labels in all four variants."
+			},
+			"tabs": {
+				"title": "Tabs",
+				"description": "Switch panels with pointer or keyboard."
+			},
+			"accordion": {
+				"title": "Accordion",
+				"description": "Expand and collapse grouped information."
+			},
+			"dialog": {
+				"title": "Dialog",
+				"description": "Test modal focus, dismissal, and focus restoration."
+			},
+			"window": {
+				"title": "Window",
+				"description": "The system shell with working window controls."
+			},
+			"skeleton": {
+				"title": "Skeleton",
+				"description": "Compare loading placeholders with loaded content."
+			},
+			"table": {
+				"title": "Table",
+				"description": "Semantic rows, headers, captions, and status labels."
+			},
+			"select": {
+				"title": "Select",
+				"description": "Choose a value from a labeled list."
+			},
+			"menu": {
+				"title": "Dropdown menu",
+				"description": "Open actions, select an item, and inspect feedback."
+			},
+			"tooltip": {
+				"title": "Tooltip",
+				"description": "Supplementary hints on hover and keyboard focus."
+			},
+			"command": {
+				"title": "Command bar",
+				"description": "Search and select commands in an isolated palette."
+			}
 		}
 	}
 }

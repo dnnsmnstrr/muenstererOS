@@ -1,8 +1,14 @@
 [
 	{
+		"date": "2026-09-06",
+		"title": "Design library",
+		"description": "Added DESIGN.md specification and styleguide page with interactive component examples, copyable Svelte snippets, and a light/dark theme token explorer.",
+		"path": "/design"
+	},
+	{
 		"date": "2026-08-23",
 		"title": "Micrographics",
-		"description": "Added a /micro page for designing SVG micrographics - templates, marks, text blocks and colors, with SVG and PNG export.",
+		"description": "Editor for designing SVG micrographics - templates, marks, text blocks and colors, with SVG and PNG export.",
 		"path": "/micro"
 	},
 	{
@@ -93,4 +99,3 @@
 		"description": "Created a new personal website with SvelteKit."
 	}
 ]
-

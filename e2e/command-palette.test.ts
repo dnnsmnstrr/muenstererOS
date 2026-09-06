@@ -49,6 +49,8 @@ async function pressKey(
  * This is the most reliable approach — no keyboard interception, no timing issues.
  */
 async function openPalette(page: Page) {
+	// SSR renders the trigger before hydration attaches its click handler.
+	await page.waitForLoadState('networkidle');
 	// The CommandButton in the header has aria-label="Command Palette" (from i18n)
 	await page.locator('button[aria-label="Command Palette"]').click();
 	await expect(page.locator('[data-command-input]')).toBeVisible();
@@ -448,7 +450,9 @@ test.describe('screensaver sub-group', () => {
 		await expect(page.locator('[data-command-item]').filter({ hasText: /dvd/i })).toHaveCount(0);
 	});
 
-	test('Escape returns to the top-level command list without closing the palette', async ({ page }) => {
+	test('Escape returns to the top-level command list without closing the palette', async ({
+		page
+	}) => {
 		await page.keyboard.press('Escape');
 
 		await expect(page.locator('[data-command-input]')).toBeVisible();

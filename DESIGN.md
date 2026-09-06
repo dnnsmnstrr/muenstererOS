@@ -249,6 +249,8 @@ Use one-pixel borders. Do not combine large radii, thick borders, and heavy shad
 
 ## Components
 
+The interactive styleguide at [/design](/design) presents live component examples with copyable Svelte source and a theme viewer showing the actual light and dark CSS tokens. Use it to test components in isolation and reuse patterns in new pages. Extend the library when adding reusable components or patterns, and keep examples aligned with this specification.
+
 ### System shell
 
 The header behaves like a calm menu bar: persistent, horizontally economical, and visually subordinate to the active content. Keep the brand/home affordance at the leading edge and status or utility controls at the trailing edge. On mobile, collapse navigation without hiding current location or essential actions.
