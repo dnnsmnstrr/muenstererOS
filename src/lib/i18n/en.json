@@ -89,9 +89,9 @@
 		"download_logo_png": "Download PNG",
 		"download_logo_svg": "Download SVG",
 		"copy_logo_url": "Copy image URL",
-		"copy_design_spec_url": "Copy design spec URL",
-		"design_spec_copied": "Design spec URL copied",
-		"design_spec_copy_failed": "Could not copy the design spec URL"
+		"copy_design_spec_url": "DESIGN.md URL",
+		"design_spec_copied": "DESIGN.md URL copied",
+		"design_spec_copy_failed": "Could not copy DESIGN.md URL"
 	},
 	"announcement": {
 		"dismiss": "Dismiss announcement",

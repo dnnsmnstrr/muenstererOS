@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { Clipboard, Download } from 'lucide-svelte';
+	import { Clipboard, Download, Info, Link, Wallpaper } from 'lucide-svelte';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { toast } from 'svelte-sonner';
+	import { Button } from './ui/button';
 
 	const logoPath = '/images/muenstererOS.';
 	const defaultFileType = 'svg';
+	let contextMenuOpen = false;
 
 	function downloadLogo(type: 'svg' | 'png' = 'png') {
 		return () => {
@@ -88,7 +90,7 @@
 	}
 </script>
 
-<ContextMenu.Root>
+<ContextMenu.Root bind:open={contextMenuOpen}>
 	<ContextMenu.Trigger
 		class="flex items-center"
 		onpointerdown={handlePointerDown}
@@ -97,13 +99,28 @@
 		onpointercancel={handlePointerUp}
 		onclick={handleClick}
 	>
-		<a href="/" class="ml-4" aria-label={i18n.t('common.home')}>
+		<a href="/" class="ml-2 pl-1.5" aria-label={i18n.t('common.home')}>
 			<img src={logoPath + defaultFileType} alt="muenstererOS" class="w-8 min-w-6" />
 		</a>
 	</ContextMenu.Trigger>
 	<ContextMenu.Content>
 		<ContextMenu.Group>
-			<ContextMenu.GroupHeading inset>{i18n.t('header.brand_kit')}</ContextMenu.GroupHeading>
+			<ContextMenu.GroupHeading class="flex items-center max-h-10 pr-0">
+				<Wallpaper class="mr-2 h-4 w-4" />
+				{i18n.t('header.brand_kit')}
+				<Button
+					variant="ghost"
+					size="sm"
+					class="ml-auto"
+					href="/design"
+					onclick={() => {
+						contextMenuOpen = false;
+					}}
+				>
+					<Info/>
+				</Button>
+			</ContextMenu.GroupHeading>
+			<ContextMenu.Separator />
 			<ContextMenu.Item onclick={downloadLogo()}>
 				<Download class="mr-2 h-4 w-4" />
 				{i18n.t('header.download_logo_png')}
@@ -118,7 +135,7 @@
 			</ContextMenu.Item>
 			<ContextMenu.Separator />
 			<ContextMenu.Item onclick={copyDesignSpecUrl}>
-				<Clipboard class="mr-2 h-4 w-4" />
+				<Link class="mr-2 h-4 w-4" />
 				{i18n.t('header.copy_design_spec_url')}
 			</ContextMenu.Item>
 		</ContextMenu.Group>
