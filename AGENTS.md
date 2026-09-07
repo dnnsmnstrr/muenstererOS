@@ -54,7 +54,7 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 ### Key Features
 
 - Desktop-like interface with draggable windows
-- Command palette (Cmd+K) for navigation
+- Command bar / command palette (Cmd+K) as a core navigation and action entry point
 - Dynamic theming system with color customization
 - Responsive masking effect that follows cursor movement
 - RSS feed generation from changelog data
@@ -62,6 +62,9 @@ This is a SvelteKit-based personal website called "muenstererOS" with a unique i
 
 ### Development Notes
 
+- Treat the command bar as a core navigational element. Whenever adding a user-facing page or action, extend the command entries in `src/routes/Command.svelte` so it is discoverable and accessible from the command bar.
+- Give new commands clear localized labels in English and German, useful search keywords, and an appropriate group. Keep command destinations and actions in sync when features are renamed, moved, or removed.
+- Verify that new commands appear in search and open the intended page or execute the intended action using the existing keyboard and pointer interactions.
 - Uses Svelte 5 syntax (runes: `$state`, `$derived`, `$props`, `$effect`)
 - TypeScript strict mode enabled
 - Prettier for code formatting

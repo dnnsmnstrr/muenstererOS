@@ -65,7 +65,8 @@
 		"description": "Persönliche Webseite von Dennis Münsterer",
 		"na": "n. v.",
 		"yes": "Ja",
-		"no": "Nein"
+		"no": "Nein",
+		"design": "Designbibliothek"
 	},
 	"error": {
 		"404": "Keine Seite verfügbar unter:",
@@ -87,7 +88,10 @@
 		"download_logo": "Logo herunterladen",
 		"download_logo_png": "PNG herunterladen",
 		"download_logo_svg": "SVG herunterladen",
-		"copy_logo_url": "Bild-URL kopieren"
+		"copy_logo_url": "Bild-URL kopieren",
+		"copy_design_spec_url": "DESIGN.md URL",
+		"design_spec_copied": "DESIGN.md URL kopiert",
+		"design_spec_copy_failed": "Konnte nicht kopiert werden"
 	},
 	"announcement": {
 		"dismiss": "Ankündigung schließen",
@@ -883,6 +887,159 @@
 			"arrow": "Pfeil",
 			"dots": "Punkte"
 		}
+	},
+	"design": {
+		"title": "Designbibliothek",
+		"eyebrow": "Styleguide & Komponenten",
+		"description": "Entdecke die Gestaltung von muenstererOS. Prüfe Theme-Tokens, teste echte Komponenten und kopiere funktionierende Beispiele in deine nächste Seite.",
+		"spec": "Designspezifikation",
+		"navigation": "Navigation der Designbibliothek",
+		"foundations": "Grundlagen",
+		"themes": "Theme-Explorer",
+		"components": "Komponenten",
+		"guidelines": "Richtlinien",
+		"on_this_page": "Auf dieser Seite",
+		"markdown_source": "Markdown-Quelltext",
+		"markdown_preview": "Gerenderte Vorschau",
+		"theme_description": "Vergleiche alle Farbpaletten im hellen und dunklen Modus. Die Vorschau nutzt das tatsächliche Theme-Stylesheet und verändert deine gespeicherte Darstellung nicht. Wähle ein Token aus, um seine CSS-Deklaration zu prüfen und zu kopieren.",
+		"previous_theme": "Vorheriges Theme",
+		"next_theme": "Nächstes Theme",
+		"copy_theme": "Theme-CSS kopieren",
+		"apply_theme": "Design anwenden",
+		"preview": "Vorschau",
+		"light": "Hell",
+		"dark": "Dunkel",
+		"tokens": "Theme-Tokens",
+		"token_mode": "Token-Darstellung",
+		"inspect": "Prüfen",
+		"select_token": "Wähle ein Token aus, um seine Deklaration zu kopieren.",
+		"copy_token": "Token kopieren",
+		"theme_source": "Theme-CSS anzeigen",
+		"copy": "Snippet kopieren",
+		"copied": "Kopiert",
+		"copy_error": "Zwischenablage nicht verfügbar. Markiere und kopiere den sichtbaren Quelltext manuell.",
+		"playground": "Komponenten ausprobieren",
+		"component_description": "Die interaktiven Beispiele verwenden dieselben Komponenten wie die Website und folgen deinem aktuellen Website-Theme. Jedes Snippet enthält Importe und Zustand. Teste die Vorschau oder öffne den Quelltext zum manuellen Kopieren.",
+		"reset": "Beispiele zurücksetzen",
+		"search": "Komponente suchen…",
+		"source": "Svelte-Quelltext anzeigen",
+		"empty": "Keine passenden Komponenten. Versuche einen anderen Suchbegriff.",
+		"build": "Mit dem System gestalten",
+		"spec_description": "Die Spezifikation definiert Typografie, Abstände, Farben, Bewegung und Barrierefreiheit. Die Beispiele zeigen die aktuelle Implementierung.",
+		"command": "Command-Bar vollständig halten",
+		"command_description": "Jede neue Seite und Benutzeraktion gehört in die Command-Bar. Ergänze verständliche Bezeichnungen, Suchbegriffe und Übersetzungen in derselben Änderung.",
+		"reuse": "Wiederverwenden und erweitern",
+		"reuse_description": "Kopiere ein Beispiel in eine Svelte-Seite und passe den Inhalt an. Verwende gemeinsame Komponenten und semantische Tokens. Ergänze bei neuen wiederverwendbaren Mustern ein Bibliotheksbeispiel.",
+		"demo": {
+			"small": "Klein",
+			"large": "Groß",
+			"disabled": "Deaktiviert",
+			"clicks": "Klicks",
+			"name": "Name",
+			"note": "Notiz",
+			"write": "Schreibe eine Notiz…",
+			"check": "In Navigation aufnehmen",
+			"notifications": "Benachrichtigungen",
+			"on": "An",
+			"off": "Aus",
+			"progress": "Fortschritt",
+			"project": "Ein wenig Platz für deine nächste Idee.",
+			"description": "Klare Flächen, lesbare Schrift und Raum zum Fokussieren.",
+			"saved": "Gespeichert",
+			"draft": "Entwurf",
+			"save": "Speichern",
+			"reset": "Zurücksetzen",
+			"details": "Details",
+			"share": "Teilen",
+			"keyboard": "Mit Tab fokussierst du Bedienelemente, mit den Pfeiltasten wechselst du zwischen Optionen.",
+			"accessibility": "Barrierefreiheit",
+			"open": "Dialog öffnen",
+			"dialog": "Wechsle den Fokus mit Tab. Escape schließt den Dialog und setzt den Fokus auf den Auslöser zurück.",
+			"done": "Fertig",
+			"restore": "Fenster wiederherstellen",
+			"window": "Teste die Schaltflächen zum Schließen, Minimieren und Maximieren.",
+			"loaded": "Geladenen Inhalt zeigen",
+			"status": "Status",
+			"delete": "Löschen",
+			"typography_title": "Ruhig, präzise und lesbar.",
+			"typography_heading": "Eine klare Hierarchie",
+			"typography_body": "Die Systemtypografie soll beim Lesen in den Hintergrund treten. Eine klare Hierarchie, angenehme Zeilenlängen und zurückhaltende Schriftschnitte machen dichte Oberflächen leicht erfassbar.",
+			"typography_muted": "Zurückhaltender Text unterstützt den Inhalt, ohne mit ihm zu konkurrieren.",
+			"press": "Drücke"
+		},
+		"examples": {
+			"buttons": {
+				"title": "Buttons",
+				"description": "Varianten, Größen, deaktivierte Zustände und Klick-Feedback."
+			},
+			"inputs": {
+				"title": "Eingabefelder & Textbereich",
+				"description": "Beschriftete Felder, editierbare Werte und deaktivierte Zustände."
+			},
+			"toggles": {
+				"title": "Checkbox & Schalter",
+				"description": "Schalte unabhängige Optionen um und prüfe ihren Zustand."
+			},
+			"slider": {
+				"title": "Schieberegler & Fortschritt",
+				"description": "Ändere einen Wert und beobachte die Fortschrittsanzeige."
+			},
+			"cards": {
+				"title": "Karte",
+				"description": "Kombiniere Kopfbereich, Inhalt, Status und Aktion."
+			},
+			"badges": {
+				"title": "Badges",
+				"description": "Kompakte Statusbezeichnungen in allen vier Varianten."
+			},
+			"tabs": {
+				"title": "Tabs",
+				"description": "Wechsle Bereiche per Zeiger oder Tastatur."
+			},
+			"accordion": {
+				"title": "Akkordeon",
+				"description": "Klappe gruppierte Informationen auf und zu."
+			},
+			"dialog": {
+				"title": "Dialog",
+				"description": "Teste modalen Fokus, Schließen und Fokuswiederherstellung."
+			},
+			"window": {
+				"title": "Fenster",
+				"description": "Die Systemoberfläche mit funktionierenden Fenstersteuerungen."
+			},
+			"skeleton": {
+				"title": "Ladeplatzhalter",
+				"description": "Vergleiche Ladeplatzhalter mit geladenem Inhalt."
+			},
+			"table": {
+				"title": "Tabelle",
+				"description": "Semantische Zeilen, Überschriften, Beschriftungen und Statusangaben."
+			},
+			"select": {
+				"title": "Auswahlfeld",
+				"description": "Wähle einen Wert aus einer beschrifteten Liste."
+			},
+			"menu": {
+				"title": "Dropdown-Menü",
+				"description": "Öffne Aktionen, wähle einen Eintrag und prüfe das Feedback."
+			},
+			"tooltip": {
+				"title": "Tooltip",
+				"description": "Zusätzliche Hinweise bei Hover und Tastaturfokus."
+			},
+			"command": {
+				"title": "Command-Bar",
+				"description": "Suche und wähle Befehle in einer isolierten Palette."
+			},
+			"typography": {
+				"title": "Typografie",
+				"description": "Display, Überschriften, Fließtext, Links, Tastaturhinweise und Code."
+			},
+			"markdown": {
+				"title": "Markdown-Vorschau",
+				"description": "Bearbeite Markdown und prüfe die gemeinsamen Typografie-Renderer live."
+			}
+		}
 	}
 }
-

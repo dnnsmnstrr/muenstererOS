@@ -198,6 +198,7 @@
 		});
 	}
 
+	// Keyboard Shortcuts
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
 		if (
@@ -275,6 +276,9 @@
 					break;
 				case 'k':
 					$isCommandActive = !$isCommandActive;
+					break;
+				case 'l':
+					i18n.toggleLanguage();
 					break;
 				case 'm':
 					toggleMode();
@@ -635,9 +639,28 @@
 			navigation: [
 				enrichLink({ name: i18n.t('common.home'), icon: Home, href: '/' }),
 				enrichLink({ name: i18n.t('common.about'), icon: User, href: '/about' }),
+				enrichLink(
+					{
+						name: i18n.t('design.title'),
+						icon: Palette,
+						href: '/design',
+						keywords: [
+							'design',
+							'styleguide',
+							'components',
+							'tokens',
+							'themes',
+							'snippets',
+							'komponenten',
+							'farben',
+							'designbibliothek'
+						]
+					},
+					'design.title'
+				),
 				...pages
 					.filter(
-						(page) => !['/', '/about', '/achievements'].includes(page.href || '')
+						(page) => !['/', '/about', '/achievements', '/design'].includes(page.href || '')
 					)
 					.map((p) => enrichLink(p)),
 				enrichLink(
@@ -723,8 +746,7 @@
 							'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
 						icon: Globe,
 						action: async () => {
-							const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
-							await i18n.setLanguage(newLanguage);
+							await i18n.toggleLanguage();
 							toast.success(i18n.t('command.language_switched'));
 						}
 					},
@@ -1074,6 +1096,7 @@
 		<Command.Empty>{i18n.t('command.no_results')}</Command.Empty>
 		{#each Object.entries(commandConfig).filter(([group, commands]) => (commands.length && !currentGroup && !subGroups.includes(group)) || group === currentGroup) as [group, commands]}
 			<Command.Group
+				value={group}
 				heading={i18n.t(`command.${group}`) !== `command.${group}`
 					? i18n.t(`command.${group}`)
 					: capitalize(group)}

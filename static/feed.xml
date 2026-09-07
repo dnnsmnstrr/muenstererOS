@@ -3,12 +3,34 @@
     <title>Dennis Muensterer</title>
     <link href="https://muensterer.tech/feed.xml" rel="self"/>
     <link href="https://muensterer.tech"/>
-    <updated>2026-06-07T12:26:10.705Z</updated>
+    <updated>2026-09-06T21:45:33.914Z</updated>
     <id>https://muensterer.tech/</id>
     <author>
         <name>Dennis Muensterer</name>
     </author>
     
+    <entry>
+        <title>Design library</title>
+        <link href="https://muensterer.tech/design"/>
+        <id>0-design</id>
+        <updated>2026-09-06</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Added the DESIGN.md specification and /design library with interactive component and typography examples, a Markdown preview, copyable Svelte snippets, and a light/dark theme token explorer.</p>
+            ]]>
+        </content>
+    </entry>
+    <entry>
+        <title>Micrographics</title>
+        <link href="https://muensterer.tech/micro"/>
+        <id>0-micro</id>
+        <updated>2026-08-23</updated>
+        <content type="html">
+            <![CDATA[
+                <p>Editor for designing SVG micrographics - templates, marks, text blocks and colors, with SVG and PNG export.</p>
+            ]]>
+        </content>
+    </entry>
     <entry>
         <title>Notes App</title>
         <link href="https://muensterer.tech/notes"/>

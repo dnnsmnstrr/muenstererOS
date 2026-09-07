@@ -1,5 +1,10 @@
 [
 	{
+		"title": "Design",
+		"path": "/design",
+		"date": "2026-09-06"
+	},
+	{
 		"title": "Micro",
 		"path": "/micro",
 		"date": "2026-08-23"
@@ -145,4 +150,3 @@
 		"date": "2024-02-05"
 	}
 ]
-

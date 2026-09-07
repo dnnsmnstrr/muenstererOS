@@ -77,6 +77,14 @@
 	let innerWidth = $state(0);
 	let innerHeight = $state(0);
 	let canHover = $state(false);
+	let contentScroller: HTMLElement | null = $state(null);
+
+	function handleShellWheel(event: WheelEvent) {
+		if (!contentScroller || contentScroller.contains(event.target as Node)) return;
+
+		event.preventDefault();
+		contentScroller.scrollBy({ left: event.deltaX, top: event.deltaY });
+	}
 
 	const cursor = Spring.of(() => ({ x: 0, y: 0 }), {
 		stiffness: 0.05,
@@ -366,7 +374,7 @@
 		<CrashScreensaver />
 	{/if}
 
-	<div class="flex h-dvh w-full flex-grow flex-col">
+	<div class="flex h-dvh w-full flex-col overflow-hidden" onwheel={handleShellWheel}>
 		<div class="w-fixed w-full p-6 sm:px-16 print:hidden">
 			<div class="sticky top-0 h-full w-full">
 				<Header pages={bookmarks} />
@@ -375,8 +383,9 @@
 		<AnnouncementBanner />
 
 		<main
+			bind:this={contentScroller}
 			class={cn(
-				'inset-0 h-max max-h-screen w-full flex-grow print:max-h-none',
+				'inset-0 min-h-0 w-full flex-1 overscroll-contain print:max-h-none',
 				$isCommandActive ? 'overflow-hidden' : 'overflow-y-auto',
 				isFullWidth ? 'p-0' : 'py-4 sm:px-16',
 				`theme-${$theme}`
