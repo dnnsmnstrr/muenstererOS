@@ -145,6 +145,11 @@
 				<Menubar.Shortcut>⌘R</Menubar.Shortcut>
 			</Menubar.Item>
 			<Menubar.Separator />
+			<Menubar.Item onclick={async () => await i18n.toggleLanguage()}>
+				{i18n.t('command.switch_language')}
+				<Menubar.Shortcut>⌘L</Menubar.Shortcut>
+			</Menubar.Item>
+			<Menubar.Separator />
 			<Menubar.Item onclick={toggleFullscreen}
 				>{isBrowserInFullscreen()
 					? i18n.t('common.exit_fullscreen')

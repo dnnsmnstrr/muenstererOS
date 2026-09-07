@@ -205,12 +205,21 @@ test('typography and Markdown examples are live and copyable', async ({ page }) 
 });
 
 test('wide layouts show a sticky table of contents', async ({ page }) => {
-	await page.setViewportSize({ width: 1440, height: 900 });
+	await page.setViewportSize({ width: 1200, height: 900 });
 	await expect(page.getByRole('navigation', { name: 'On this page' })).toBeHidden();
 
-	await page.setViewportSize({ width: 1600, height: 900 });
+	await page.setViewportSize({ width: 1280, height: 900 });
 	const contents = page.getByRole('navigation', { name: 'On this page' });
 	await expect(contents).toBeVisible();
+	const components = contents.locator('li').filter({
+		has: contents.getByRole('link', { name: 'Components', exact: true })
+	});
+	await expect(components.getByRole('link', { name: 'Buttons', exact: true })).toBeVisible();
+	await components.getByRole('link', { name: 'Buttons', exact: true }).click();
+	await expect(components.getByRole('link', { name: 'Buttons', exact: true })).toHaveAttribute(
+		'aria-current',
+		'location'
+	);
 	await contents.getByRole('link', { name: 'Guidelines' }).click();
 	await expect(contents.getByRole('link', { name: 'Guidelines' })).toHaveAttribute(
 		'aria-current',

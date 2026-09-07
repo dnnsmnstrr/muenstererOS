@@ -198,6 +198,7 @@
 		});
 	}
 
+	// Keyboard Shortcuts
 	function handleKeydown(e: KeyboardEvent) {
 		if ($debug) console.log(e);
 		if (
@@ -275,6 +276,9 @@
 					break;
 				case 'k':
 					$isCommandActive = !$isCommandActive;
+					break;
+				case 'l':
+					i18n.toggleLanguage();
 					break;
 				case 'm':
 					toggleMode();
@@ -742,8 +746,7 @@
 							'switch language, change language, sprache wechseln, german, english, deutsch, englisch',
 						icon: Globe,
 						action: async () => {
-							const newLanguage = i18n.lang === 'en' ? 'de' : 'en';
-							await i18n.setLanguage(newLanguage);
+							await i18n.toggleLanguage();
 							toast.success(i18n.t('command.language_switched'));
 						}
 					},

@@ -25,6 +25,11 @@ class TranslationService {
 		}
 	}
 
+	async toggleLanguage() {
+		const newLang: Language = this.lang === 'en' ? 'de' : 'en';
+		await this.setLanguage(newLang);
+	}
+
 	private async loadTranslations(l: Language) {
 		try {
 			let data;

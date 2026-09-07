@@ -7,7 +7,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Badge } from '$lib/components/ui/badge';
 	import { i18n } from '$lib/i18n/i18n.svelte';
-	let selected = $state('zinc');
+	import { theme as themeStore } from '$lib/stores/app';
+	let selected = $state($themeStore || 'zinc');
 	let selectedToken = $state('');
 	let themeList: HTMLElement | null = $state(null);
 	$effect(() => {
@@ -17,6 +18,7 @@
 	});
 	let tokenMode = $state<'light' | 'dark'>('light');
 	const theme = $derived(previewThemes.find((item) => item.name === selected) ?? previewThemes[0]);
+	const isThemeActive = $derived($themeStore === theme.name);
 
 	async function selectTheme(name: string) {
 		selected = name;
@@ -30,6 +32,16 @@
 		const currentIndex = previewThemes.findIndex((item) => item.name === selected);
 		const nextIndex = (currentIndex + direction + previewThemes.length) % previewThemes.length;
 		void selectTheme(previewThemes[nextIndex].name);
+	}
+
+	function handleThemeKeydown(event: KeyboardEvent) {
+		if (event.key === 'ArrowLeft') {
+			event.preventDefault();
+			cycleTheme(-1);
+		} else if (event.key === 'ArrowRight') {
+			event.preventDefault();
+			cycleTheme(1);
+		}
 	}
 </script>
 
@@ -46,7 +58,19 @@
 				{i18n.t('design.theme_description')}
 			</p>
 		</div>
-		<CopyButton text={themeCSS(theme)} label={i18n.t('design.copy_theme')} />
+		<div class="flex min-h-20 items-end gap-2">
+			<CopyButton text={themeCSS(theme)} label={i18n.t('design.copy_theme')} />
+			<Button
+				variant="outline"
+				size="sm"
+				disabled={isThemeActive}
+				aria-hidden={isThemeActive}
+				class="transition-opacity duration-200 {isThemeActive ? 'opacity-0 pointer-events-none' : ''}"
+				onclick={() => ($themeStore = theme.name)}
+			>
+				{i18n.t('design.apply_theme')}
+			</Button>
+		</div>
 	</div>
 	<div class="flex min-w-0 items-center gap-2" data-theme-selector>
 		<Button
@@ -54,6 +78,7 @@
 			size="icon"
 			class="shrink-0"
 			aria-label={i18n.t('design.previous_theme')}
+			onkeydown={handleThemeKeydown}
 			onclick={() => cycleTheme(-1)}
 		>
 			<ChevronLeft />
@@ -70,6 +95,7 @@
 					class="flex min-h-10 shrink-0 items-center gap-2 rounded-md border px-3 text-sm capitalize transition-colors hover:bg-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
 					class:bg-secondary={selected === item.name}
 					aria-pressed={selected === item.name}
+					onkeydown={handleThemeKeydown}
 					onclick={() => void selectTheme(item.name)}
 				>
 					<span class="size-3 rounded-full border" style:background={`hsl(${item.light.primary})`}
@@ -82,6 +108,7 @@
 			size="icon"
 			class="shrink-0"
 			aria-label={i18n.t('design.next_theme')}
+			onkeydown={handleThemeKeydown}
 			onclick={() => cycleTheme(1)}
 		>
 			<ChevronRight />
@@ -106,13 +133,15 @@
 					placeholder={i18n.t('design.demo.name')}
 					class="mb-4"
 				/>
-				<div class="flex flex-wrap gap-2">
-					<Button>{i18n.t('design.demo.save')}</Button><Button variant="outline"
-						>{i18n.t('design.demo.details')}</Button
-					><Button variant="destructive">{i18n.t('design.demo.delete')}</Button>
+				<div class="flex flex-wrap gap-2 justify-between">
+					<Button>{i18n.t('design.demo.save')}</Button>
+					<Button variant="outline">{i18n.t('design.demo.details')}</Button>
+					<Button variant="ghost">{i18n.t('design.demo.share')}</Button>
+					<Button variant="destructive">{i18n.t('design.demo.delete')}</Button>
 				</div>
+				<div class="my-6 h-0.5 w-full bg-muted"></div>
 				<div class="mt-6 flex h-8 overflow-hidden rounded-md border" aria-hidden="true">
-					{#each ['primary', 'secondary', 'muted', 'accent', 'border', 'destructive'] as token}<span
+					{#each ['primary', 'secondary', 'border', 'destructive'] as token}<span
 							class="flex-1"
 							style:background={`hsl(var(--${token}))`}
 						></span>{/each}

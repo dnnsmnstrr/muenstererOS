@@ -24,7 +24,14 @@
 	);
 	const tocItems = $derived([
 		{ id: 'themes', label: i18n.t('design.themes') },
-		{ id: 'components', label: i18n.t('design.components') },
+		{
+			id: 'components',
+			label: i18n.t('design.components'),
+			children: examples.map((example) => ({
+				id: 'example-' + example.id,
+				label: i18n.t('design.examples.' + example.id + '.title')
+			}))
+		},
 		{ id: 'guidelines', label: i18n.t('design.guidelines') }
 	]);
 </script>
@@ -55,7 +62,7 @@
 			><Button href="#guidelines" variant="ghost">{i18n.t('design.guidelines')}</Button>
 		</nav>
 	</header>
-	<div class="grid items-start gap-12 2xl:grid-cols-[minmax(0,1fr)_12rem]">
+	<div class="grid items-start gap-12 xl:grid-cols-[minmax(0,1fr)_12rem]">
 		<div class="design-content min-w-0 space-y-12">
 			<ThemeViewer />
 			<section id="components" class="scroll-mt-24 space-y-6" aria-labelledby="components-title">
@@ -145,7 +152,7 @@
 					</div>
 					<div>
 						<h3 class="flex items-center gap-2 font-medium">
-							<Command class="size-4" />{i18n.t('design.command')}
+							{i18n.t('design.command')}
 						</h3>
 						<p class="mt-2 text-sm text-muted-foreground">{i18n.t('design.command_description')}</p>
 					</div>
@@ -156,7 +163,7 @@
 				</div>
 			</section>
 		</div>
-		<aside class="sticky top-6 hidden 2xl:block">
+		<aside class="sticky top-6 hidden xl:block">
 			<DesignToc items={tocItems} />
 		</aside>
 	</div>
