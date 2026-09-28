@@ -131,6 +131,8 @@
 		schema = null;
 		responseTime = null;
 		responseSize = null;
+		copied = false;
+		clearTimeout(copyTimeout);
 		const startTime = performance.now();
 		try {
 			const url = buildUrl(endpoint.url, queryParams);
