@@ -528,7 +528,9 @@
 		"select": "select",
 		"number": "number",
 		"response_time": "Response Time",
-		"response_size": "Response Size"
+		"response_size": "Response Size",
+		"copy_response": "Copy Response",
+		"copied": "Copied to clipboard"
 	},
 	"slashes": {
 		"title": "Slashes",

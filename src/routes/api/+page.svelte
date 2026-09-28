@@ -65,7 +65,7 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Input } from '$lib/components/ui/input';
 	import * as Collapsible from '$lib/components/ui/collapsible';
-	import { ChevronDown } from 'lucide-svelte';
+	import { ChevronDown, Copy, Check } from 'lucide-svelte';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import JsonView from '$lib/components/JsonView.svelte';
 	import { Heading } from '$lib/components/typography';
@@ -74,6 +74,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import { toast } from 'svelte-sonner';
 
 	let selected = 0;
 	let response: any = null;
@@ -84,6 +85,23 @@
 	let paramsOpen = false;
 	let responseTime: number | null = null;
 	let responseSize: number | null = null;
+	let copied = false;
+	let copyTimeout: ReturnType<typeof setTimeout>;
+
+	async function copyResponse() {
+		if (!response) return;
+		try {
+			await navigator.clipboard.writeText(JSON.stringify(response, null, 2));
+			copied = true;
+			toast.success(i18n.t('api.copied'));
+			clearTimeout(copyTimeout);
+			copyTimeout = setTimeout(() => {
+				copied = false;
+			}, 2000);
+		} catch (e) {
+			console.error('Failed to copy response:', e);
+		}
+	}
 
 	function formatBytes(bytes: number, decimals = 2) {
 		if (bytes === 0) return '0 B';
@@ -113,6 +131,8 @@
 		schema = null;
 		responseTime = null;
 		responseSize = null;
+		copied = false;
+		clearTimeout(copyTimeout);
 		const startTime = performance.now();
 		try {
 			const url = buildUrl(endpoint.url, queryParams);
@@ -316,13 +336,31 @@
 	{#if response}
 		<Card.Root class="mt-4 max-h-96">
 			<Tabs.Root value="response">
-				<Tabs.List class="flex">
-					<Tabs.Trigger value="response">{i18n.t('api.response')}</Tabs.Trigger>
-					<Tabs.Trigger value="json">{i18n.t('api.json_viewer')}</Tabs.Trigger>
-					{#if schema}
-						<Tabs.Trigger value="schema">{i18n.t('api.schema')}</Tabs.Trigger>
-					{/if}
-				</Tabs.List>
+				<div class="flex items-center justify-between border-b px-2 py-1">
+					<Tabs.List class="flex">
+						<Tabs.Trigger value="response">{i18n.t('api.response')}</Tabs.Trigger>
+						<Tabs.Trigger value="json">{i18n.t('api.json_viewer')}</Tabs.Trigger>
+						{#if schema}
+							<Tabs.Trigger value="schema">{i18n.t('api.schema')}</Tabs.Trigger>
+						{/if}
+					</Tabs.List>
+					<Button
+						variant="ghost"
+						size="sm"
+						onclick={copyResponse}
+						class="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+						title={i18n.t('api.copy_response')}
+						aria-label={i18n.t('api.copy_response')}
+					>
+						{#if copied}
+							<Check class="h-3.5 w-3.5 text-green-500" />
+							<span>{i18n.t('api.copied')}</span>
+						{:else}
+							<Copy class="h-3.5 w-3.5" />
+							<span>{i18n.t('api.copy_response')}</span>
+						{/if}
+					</Button>
+				</div>
 				<Tabs.Content value="response">
 					<Card.Content class="max-h-80 overflow-auto rounded-lg text-sm">
 						<pre>

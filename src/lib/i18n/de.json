@@ -528,7 +528,9 @@
 		"select": "Wählen",
 		"number": "Nummer",
 		"response_time": "Antwortzeit",
-		"response_size": "Antwortgröße"
+		"response_size": "Antwortgröße",
+		"copy_response": "Antwort kopieren",
+		"copied": "In die Zwischenablage kopiert"
 	},
 	"slashes": {
 		"title": "Slashes",
