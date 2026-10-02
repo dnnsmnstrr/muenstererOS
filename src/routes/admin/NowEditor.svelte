@@ -24,9 +24,9 @@
 		Sparkles,
 		Clock,
 		ChevronDown,
-		ChevronRight,
 		Eye,
-		FileText
+		FileText,
+		ExternalLink
 	} from 'lucide-svelte';
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import { formatDate } from '$lib/utils/helper';
@@ -56,6 +56,11 @@
 	let activeTab = $state<'editor' | 'preview'>('editor');
 	let showSidePreview = $state(true);
 
+	// Local playlist field bindings
+	let playlistName = $state(formData?.playlist?.name || '');
+	let playlistUrl = $state(formData?.playlist?.url || '');
+	let playlistUri = $state(formData?.playlist?.uri || '');
+
 	// Ensure default structure for Now page schema
 	$effect(() => {
 		if (!formData || typeof formData !== 'object') {
@@ -66,8 +71,31 @@
 		if (!Array.isArray(formData.plans)) formData.plans = [];
 		if (!Array.isArray(formData.activities)) formData.activities = [];
 		if (formData.location === undefined) formData.location = '';
-		if (!formData.playlist || typeof formData.playlist !== 'object') {
-			formData.playlist = { name: '', uri: '', url: '' };
+	});
+
+	// Sync local playlist state when formData changes externally
+	$effect(() => {
+		playlistName = formData?.playlist?.name || '';
+		playlistUrl = formData?.playlist?.url || '';
+		playlistUri = formData?.playlist?.uri || '';
+	});
+
+	// Update formData.playlist when local inputs change, deleting playlist if all inputs are blank
+	$effect(() => {
+		const name = playlistName.trim();
+		const url = playlistUrl.trim();
+		const uri = playlistUri.trim();
+
+		if (!name && !url && !uri) {
+			if (formData && 'playlist' in formData) {
+				delete formData.playlist;
+			}
+		} else if (formData) {
+			formData.playlist = {
+				...(name ? { name } : {}),
+				...(url ? { url } : {}),
+				...(uri ? { uri } : {})
+			};
 		}
 	});
 
@@ -80,10 +108,13 @@
 	}
 
 	function removeArrayItem(field: 'projects' | 'plans' | 'activities', index: number) {
-		formData[field] = formData[field].filter((_: any, i: number) => i !== index);
+		if (Array.isArray(formData[field])) {
+			formData[field] = formData[field].filter((_: any, i: number) => i !== index);
+		}
 	}
 
 	function moveArrayItem(field: 'projects' | 'plans' | 'activities', index: number, direction: -1 | 1) {
+		if (!Array.isArray(formData[field])) return;
 		const newArr = [...formData[field]];
 		const targetIndex = index + direction;
 		if (targetIndex < 0 || targetIndex >= newArr.length) return;
@@ -165,8 +196,10 @@
 
 	function copyFieldFromHistory(field: string, value: any) {
 		if (value === undefined) return;
-		formData[field] = structuredClone(value);
-		toast.success(`Copied "${field}" from historical entry!`);
+		if (formData) {
+			formData[field] = structuredClone(value);
+			toast.success(`Copied "${field}" from historical entry!`);
+		}
 	}
 
 	// Derived values for preview
@@ -187,6 +220,7 @@
 	);
 </script>
 
+{#if formData}
 <div class="space-y-6">
 	<!-- History collapsible banner -->
 	<Collapsible.Root bind:open={historyOpen} onOpenChange={(open) => { if (open) loadHistory(); }}>
@@ -337,15 +371,26 @@
 			</Button>
 		</div>
 
-		<Button
-			variant="ghost"
-			size="sm"
-			class="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground"
-			onclick={() => (showSidePreview = !showSidePreview)}
-		>
-			<Sparkles class="h-3.5 w-3.5" />
-			{showSidePreview ? 'Hide Side Preview' : 'Show Side Preview'}
-		</Button>
+		<div class="flex items-center gap-2">
+			<Button
+				variant="outline"
+				size="sm"
+				href="/now"
+				target="_blank"
+				class="flex items-center gap-1.5 text-xs"
+			>
+				<ExternalLink class="h-3.5 w-3.5" /> View /now Page
+			</Button>
+			<Button
+				variant="ghost"
+				size="sm"
+				class="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground"
+				onclick={() => (showSidePreview = !showSidePreview)}
+			>
+				<Sparkles class="h-3.5 w-3.5" />
+				{showSidePreview ? 'Hide Side Preview' : 'Show Side Preview'}
+			</Button>
+		</div>
 	</div>
 
 	<!-- Layout Container -->
@@ -387,17 +432,17 @@
 						</Label>
 						<div class="space-y-2">
 							<Input
-								bind:value={formData.playlist.name}
+								bind:value={playlistName}
 								placeholder="Playlist Name"
 								class="text-xs h-8"
 							/>
 							<Input
-								bind:value={formData.playlist.url}
+								bind:value={playlistUrl}
 								placeholder="URL (Apple Music / Spotify)"
 								class="text-xs h-8"
 							/>
 							<Input
-								bind:value={formData.playlist.uri}
+								bind:value={playlistUri}
 								placeholder="URI (Optional Spotify URI)"
 								class="text-xs h-8"
 							/>
@@ -415,7 +460,7 @@
 							<Plus class="mr-1 h-3.5 w-3.5" /> Add Project
 						</Button>
 					</div>
-					{#if formData.projects.length === 0}
+					{#if !Array.isArray(formData.projects) || formData.projects.length === 0}
 						<p class="text-xs text-muted-foreground italic py-2">No projects added yet.</p>
 					{:else}
 						<div class="space-y-2">
@@ -471,7 +516,7 @@
 							<Plus class="mr-1 h-3.5 w-3.5" /> Add Plan
 						</Button>
 					</div>
-					{#if formData.plans.length === 0}
+					{#if !Array.isArray(formData.plans) || formData.plans.length === 0}
 						<p class="text-xs text-muted-foreground italic py-2">No plans added yet.</p>
 					{:else}
 						<div class="space-y-2">
@@ -527,7 +572,7 @@
 							<Plus class="mr-1 h-3.5 w-3.5" /> Add Activity
 						</Button>
 					</div>
-					{#if formData.activities.length === 0}
+					{#if !Array.isArray(formData.activities) || formData.activities.length === 0}
 						<p class="text-xs text-muted-foreground italic py-2">No activities added yet.</p>
 					{:else}
 						<div class="space-y-2">
@@ -637,11 +682,11 @@
 							<Music class="mr-2 inline-block h-4 w-4" />
 							{i18n.t('common.playlist')}
 						</Heading>
-						{#if formData.playlist && formData.playlist.name}
+						{#if formData.playlist && (formData.playlist.name || formData.playlist.url)}
 							<div class="text-sm">
 								{#if formData.playlist.url}
 									<Link href={formData.playlist.url} target="_blank" rel="noopener noreferrer">
-										{formData.playlist.name}
+										{formData.playlist.name || formData.playlist.url}
 									</Link>
 								{:else}
 									<span>{formData.playlist.name}</span>
@@ -699,3 +744,4 @@
 		{/if}
 	</div>
 </div>
+{/if}

@@ -63,7 +63,12 @@
 	});
 
 	$effect(() => {
-		if (!page.url.searchParams.has('mode')) {
+		if (!isNowGist && viewMode === 'now') {
+			const targetMode = schema ? 'form' : 'editor';
+			const url = new URL(page.url);
+			url.searchParams.set('mode', targetMode);
+			goto(url, { replaceState: true, noScroll: true, keepFocus: true });
+		} else if (!page.url.searchParams.has('mode')) {
 			if (isNowGist) {
 				const url = new URL(page.url);
 				url.searchParams.set('mode', 'now');
