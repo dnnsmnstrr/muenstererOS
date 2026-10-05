@@ -331,6 +331,7 @@
 			bind:gistData
 			bind:githubToken
 			bind:gistInfo
+			{selectedGist}
 			schema={gistSchema}
 			onFormatJson={formatJson}
 			onResetEditor={resetEditor}
