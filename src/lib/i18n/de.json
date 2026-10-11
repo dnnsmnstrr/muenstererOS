@@ -115,7 +115,8 @@
 				"title": "chordlist für iPhone",
 				"aria_label": "Ankündigung der chordlist-App",
 				"dismiss": "chordlist-Ankündigung schließen",
-				"status": "Jetzt verfügbar",
+				"icon_label": "chordlist-Website öffnen",
+				"status": "Jetzt erhältlich",
 				"message": "Erstelle dein Songbook. Nimm es überallhin mit.",
 				"cta": "Herunterladen"
 			}

@@ -31,8 +31,8 @@ export type AnnouncementCampaign = {
  * previous dismissal does not hide it. Git keeps the campaign history.
  */
 export const ACTIVE_ANNOUNCEMENT_CAMPAIGN: AnnouncementCampaign | null = {
-	campaignId: 'chordlist-preorder-1',
-	translationKey: 'announcement.chordlist.preorder',
+	campaignId: 'chordlist-live-1',
+	translationKey: 'announcement.chordlist.live',
 	iconSrc: '/images/chordlist/keys.svg',
 	href: 'https://apps.apple.com/us/app/chordlist-personal-songbook/id6798344297',
 	iconHref: 'https://chordlist.app'
