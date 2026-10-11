@@ -1,11 +1,12 @@
 import { browser } from '$app/environment';
+import enTranslations from './en.json';
 
 export type Language = 'en' | 'de';
 
 class TranslationService {
 	lang = $state<Language>('en');
-	translations = $state<Record<string, any>>({});
-	initialized = $state(false);
+	translations = $state<Record<string, any>>(enTranslations);
+	initialized = $state(true);
 
 	constructor() {
 		if (browser) {
@@ -14,7 +15,9 @@ class TranslationService {
 				this.lang = stored;
 			}
 		}
-		this.loadTranslations(this.lang);
+		if (this.lang !== 'en') {
+			this.loadTranslations(this.lang);
+		}
 	}
 
 	async setLanguage(newLang: Language) {
