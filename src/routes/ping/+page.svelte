@@ -25,10 +25,42 @@
 	let isAdmin = $state(false);
 
 	let recentMessages = $state<NtfyMessage[]>([]);
+	let sentPingIds = $state<string[]>([]);
 	let loadingLatest = $state(true);
 	let fetchError = $state(false);
 
 	const ntfyEmail = `ntfy-${NTFY_TOPIC}@ntfy.sh`;
+
+	function loadSentPingIds() {
+		if (!browser) return;
+		try {
+			const stored = localStorage.getItem('sent_ping_ids');
+			if (stored) {
+				sentPingIds = JSON.parse(stored);
+			}
+		} catch (e) {
+			console.error('Failed to parse sent_ping_ids:', e);
+		}
+	}
+
+	function saveSentPingId(id: string) {
+		if (!browser || !id) return;
+		try {
+			if (!sentPingIds.includes(id)) {
+				sentPingIds = [...sentPingIds, id];
+				localStorage.setItem('sent_ping_ids', JSON.stringify(sentPingIds));
+			}
+		} catch (e) {
+			console.error('Failed to save sent ping ID:', e);
+		}
+	}
+
+	let displayedMessages = $derived.by(() => {
+		if (isAdmin) {
+			return recentMessages;
+		}
+		return recentMessages.filter((m) => sentPingIds.includes(m.id));
+	});
 
 	async function checkAdminStatus() {
 		if (!browser) return;
@@ -90,10 +122,18 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		loadSentPingIds();
+		await checkAdminStatus();
 		fetchRecentMessages();
-		checkAdminStatus();
 	});
+
+	function handleSendSuccess(data?: any) {
+		if (data?.id) {
+			saveSentPingId(data.id);
+		}
+		fetchRecentMessages();
+	}
 
 	async function clearAllMessages() {
 		if (recentMessages.length === 0) return;
@@ -180,66 +220,68 @@
 			</CardDescription>
 		</CardHeader>
 		<CardContent>
-			<MessageInput topic={NTFY_TOPIC} onSuccess={fetchRecentMessages} />
+			<MessageInput topic={NTFY_TOPIC} onSuccess={handleSendSuccess} />
 		</CardContent>
 	</Card>
 
 	<ConfirmDeleteDialog />
 
-	<Accordion.Root type="single" class="mt-4">
-		<Accordion.Item value="latest">
-			<Accordion.Trigger class="text-sm">
-				<div class="flex items-center gap-2 overflow-hidden pr-4">
-					<InfoIcon class="h-4 w-4 shrink-0" />
-					<span class="shrink-0">{i18n.t('ping.latest_message')}</span>
-					{#if recentMessages.length > 0}
-						<span class="text-muted-foreground truncate text-xs font-normal">
-							— {recentMessages[0].message}
-						</span>
-					{/if}
-				</div>
-			</Accordion.Trigger>
-			<Accordion.Content>
-				{#if loadingLatest}
-					<p class="text-muted-foreground text-sm">{i18n.t('api.loading')}</p>
-				{:else if fetchError}
-					<p class="text-destructive text-sm">{i18n.t('ping.fetch_error')}</p>
-				{:else if recentMessages.length > 0}
-					<div class="divide-y divide-border">
-						{#each recentMessages as msg}
-							<div class="py-3 first:pt-0 last:pb-0">
-								{#if msg.title}
-									<p class="text-sm font-semibold">{msg.title}</p>
-								{/if}
-								<p class="text-sm">{msg.message}</p>
-								<p class="text-muted-foreground text-xs">
-									{getFriendlyTime(new Date(msg.time * 1000))}
-								</p>
-							</div>
-						{/each}
+	{#if isAdmin || displayedMessages.length > 0}
+		<Accordion.Root type="single" class="mt-4">
+			<Accordion.Item value="latest">
+				<Accordion.Trigger class="text-sm">
+					<div class="flex items-center gap-2 overflow-hidden pr-4">
+						<InfoIcon class="h-4 w-4 shrink-0" />
+						<span class="shrink-0">{i18n.t('ping.latest_message')}</span>
+						{#if displayedMessages.length > 0}
+							<span class="text-muted-foreground truncate text-xs font-normal">
+								— {displayedMessages[0].message}
+							</span>
+						{/if}
 					</div>
-
-					{#if isAdmin}
-						<div class="mt-4 flex justify-end">
-							<Button
-								variant="destructive"
-								size="sm"
-								disabled={clearing}
-								onclick={() => clearAllMessages()}
-							>
-								{#if clearing}
-									{i18n.t('ping.clearing')}
-								{:else}
-									<Trash2 class="mr-2 h-4 w-4" />
-									{i18n.t('ping.clear_all')}
-								{/if}
-							</Button>
+				</Accordion.Trigger>
+				<Accordion.Content>
+					{#if loadingLatest}
+						<p class="text-muted-foreground text-sm">{i18n.t('api.loading')}</p>
+					{:else if fetchError}
+						<p class="text-destructive text-sm">{i18n.t('ping.fetch_error')}</p>
+					{:else if displayedMessages.length > 0}
+						<div class="divide-y divide-border">
+							{#each displayedMessages as msg}
+								<div class="py-3 first:pt-0 last:pb-0">
+									{#if msg.title}
+										<p class="text-sm font-semibold">{msg.title}</p>
+									{/if}
+									<p class="text-sm">{msg.message}</p>
+									<p class="text-muted-foreground text-xs">
+										{getFriendlyTime(new Date(msg.time * 1000))}
+									</p>
+								</div>
+							{/each}
 						</div>
+
+						{#if isAdmin}
+							<div class="mt-4 flex justify-end">
+								<Button
+									variant="destructive"
+									size="sm"
+									disabled={clearing}
+									onclick={() => clearAllMessages()}
+								>
+									{#if clearing}
+										{i18n.t('ping.clearing')}
+									{:else}
+										<Trash2 class="mr-2 h-4 w-4" />
+										{i18n.t('ping.clear_all')}
+									{/if}
+								</Button>
+							</div>
+						{/if}
+					{:else}
+						<p class="text-muted-foreground text-sm">{i18n.t('ping.no_messages')}</p>
 					{/if}
-				{:else}
-					<p class="text-muted-foreground text-sm">{i18n.t('ping.no_messages')}</p>
-				{/if}
-			</Accordion.Content>
-		</Accordion.Item>
-	</Accordion.Root>
+				</Accordion.Content>
+			</Accordion.Item>
+		</Accordion.Root>
+	{/if}
 </div>

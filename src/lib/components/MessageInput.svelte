@@ -14,18 +14,24 @@
 		submittingLabel?: string;
 		successMessage?: string;
 		errorMessage?: string;
-		onSuccess?: () => void;
+		onSuccess?: (data?: any) => void;
 	}
 
 	let {
 		topic,
-		placeholder = i18n.t('ping.placeholder'),
-		submitLabel = i18n.t('ping.send'),
-		submittingLabel = i18n.t('ping.sending'),
-		successMessage = i18n.t('ping.success'),
-		errorMessage = i18n.t('ping.error'),
+		placeholder,
+		submitLabel,
+		submittingLabel,
+		successMessage,
+		errorMessage,
 		onSuccess
 	}: Props = $props();
+
+	let actualPlaceholder = $derived(placeholder ?? i18n.t('ping.placeholder'));
+	let actualSubmitLabel = $derived(submitLabel ?? i18n.t('ping.send'));
+	let actualSubmittingLabel = $derived(submittingLabel ?? i18n.t('ping.sending'));
+	let actualSuccessMessage = $derived(successMessage ?? i18n.t('ping.success'));
+	let actualErrorMessage = $derived(errorMessage ?? i18n.t('ping.error'));
 
 	let message = $state('');
 	let loading = $state(false);
@@ -42,15 +48,21 @@
 			});
 
 			if (response.ok) {
-				toast.success(successMessage);
+				let resData: any = null;
+				try {
+					resData = await response.json();
+				} catch {
+					// Ignored if non-JSON response
+				}
+				toast.success(actualSuccessMessage);
 				message = '';
-				if (onSuccess) onSuccess();
+				if (onSuccess) onSuccess(resData);
 			} else {
 				throw new Error('Failed to send message');
 			}
 		} catch (error) {
 			console.error(error);
-			toast.error(errorMessage);
+			toast.error(actualErrorMessage);
 		} finally {
 			loading = false;
 		}
@@ -66,7 +78,7 @@
 >
 	<Textarea
 		bind:value={message}
-		placeholder={placeholder}
+		placeholder={actualPlaceholder}
 		rows={5}
 		required
 		disabled={loading}
@@ -79,10 +91,10 @@
 	/>
 	<Button type="submit" disabled={loading || !message.trim()} class="w-full">
 		{#if loading}
-			{submittingLabel}
+			{actualSubmittingLabel}
 		{:else}
 			<Send class="mr-2 h-4 w-4" />
-			{submitLabel}
+			{actualSubmitLabel}
 			<Kbd class="ml-2 text-[10px]">cmd + enter</Kbd>
 		{/if}
 	</Button>
