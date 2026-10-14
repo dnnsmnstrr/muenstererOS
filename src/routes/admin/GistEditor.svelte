@@ -2,11 +2,12 @@
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import CustomSelect from '$lib/components/CustomSelect.svelte';
-	import { Save, Code, FormInput, Sparkles } from 'lucide-svelte';
+	import { Save, Code, FormInput, Sparkles, ListMusic } from 'lucide-svelte';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import type { GistData } from '$lib/utils/github-api';
 	import DynamicForm from './DynamicForm.svelte';
 	import NowEditor from './NowEditor.svelte';
+	import PlaylistsEditor from './PlaylistsEditor.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { mode } from 'mode-watcher';
 	import { get } from 'svelte/store';
@@ -35,17 +36,23 @@
 		page.url.searchParams.get('file') === 'now'
 	);
 
+	let isPlaylistsGist = $derived(
+		selectedGist === gists.playlists.id ||
+		(gistInfo?.files && 'playlists.json' in gistInfo.files) ||
+		page.url.searchParams.get('file') === 'playlists'
+	);
+
 	let viewMode = $derived(
-		(page.url.searchParams.get('mode') as 'editor' | 'form' | 'now') ||
-		(isNowGist ? 'now' : schema ? 'form' : 'editor')
+		(page.url.searchParams.get('mode') as 'editor' | 'form' | 'now' | 'playlists') ||
+		(isNowGist ? 'now' : isPlaylistsGist ? 'playlists' : schema ? 'form' : 'editor')
 	);
 
 	let formData = $state<any>(null);
 	let lastSyncedGistData = $state('');
-	let lastViewMode = $state<'editor' | 'form' | 'now'>('editor');
+	let lastViewMode = $state<'editor' | 'form' | 'now' | 'playlists'>('editor');
 
 	$effect(() => {
-		if ((lastViewMode === 'form' || lastViewMode === 'now') && viewMode === 'editor') {
+		if ((lastViewMode === 'form' || lastViewMode === 'now' || lastViewMode === 'playlists') && viewMode === 'editor') {
 			// Sync form data back to editor
 			let dataToSync = formData;
 			const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
@@ -63,7 +70,7 @@
 	});
 
 	$effect(() => {
-		if (!isNowGist && viewMode === 'now') {
+		if (!isNowGist && !isPlaylistsGist && (viewMode === 'now' || viewMode === 'playlists')) {
 			const targetMode = schema ? 'form' : 'editor';
 			const url = new URL(page.url);
 			url.searchParams.set('mode', targetMode);
@@ -73,12 +80,16 @@
 				const url = new URL(page.url);
 				url.searchParams.set('mode', 'now');
 				goto(url, { replaceState: true, noScroll: true, keepFocus: true });
+			} else if (isPlaylistsGist) {
+				const url = new URL(page.url);
+				url.searchParams.set('mode', 'playlists');
+				goto(url, { replaceState: true, noScroll: true, keepFocus: true });
 			} else if (schema) {
 				const url = new URL(page.url);
 				url.searchParams.set('mode', 'form');
 				goto(url, { replaceState: true, noScroll: true, keepFocus: true });
 			}
-		} else if (!schema && !isNowGist && viewMode !== 'editor') {
+		} else if (!schema && !isNowGist && !isPlaylistsGist && viewMode !== 'editor') {
 			const url = new URL(page.url);
 			url.searchParams.set('mode', 'editor');
 			goto(url, { replaceState: true, noScroll: true, keepFocus: true });
@@ -86,13 +97,13 @@
 	});
 
 	$effect(() => {
-		// Sync from editor to form/now when gistData changes from outside
-		if ((viewMode === 'form' || viewMode === 'now') && gistData !== lastSyncedGistData) {
+		// Sync from editor to form/now/playlists when gistData changes from outside
+		if ((viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') && gistData !== lastSyncedGistData) {
 			try {
 				formData = JSON.parse(gistData);
 				lastSyncedGistData = gistData;
 			} catch (e) {
-				console.error('Failed to parse gistData for form/now view', e);
+				console.error('Failed to parse gistData for form/now/playlists view', e);
 			}
 		}
 	});
@@ -107,25 +118,25 @@
 
 	function handleReset() {
 		onResetEditor();
-		if (viewMode === 'form' || viewMode === 'now') {
+		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 			try {
 				formData = JSON.parse(gistData);
 				lastSyncedGistData = gistData;
 			} catch (e) {
-				console.error('Failed to parse gistData for form/now view after reset', e);
+				console.error('Failed to parse gistData for form/now/playlists view after reset', e);
 			}
 		}
 	}
 
 	// Re-export methods for JsonEditor API compatibility
 	export function setValue(value: string) {
-		if (viewMode === 'form' || viewMode === 'now') {
+		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 			try {
 				formData = JSON.parse(value);
 				gistData = value;
 				lastSyncedGistData = value;
 			} catch (e) {
-				console.error('Failed to set value in form/now mode', e);
+				console.error('Failed to set value in form/now/playlists mode', e);
 			}
 		} else {
 			jsonEditorRef?.setValue(value);
@@ -133,7 +144,7 @@
 	}
 
 	export function getValue() {
-		if (viewMode === 'form' || viewMode === 'now') {
+		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 			let dataToSync = formData;
 			const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
 			if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
@@ -145,14 +156,14 @@
 	}
 
 	export function validateJson() {
-		if (viewMode === 'form' || viewMode === 'now') {
+		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 			return { valid: true };
 		}
 		return jsonEditorRef?.validateJson() || { valid: true };
 	}
 
 	export function formatJson() {
-		if (viewMode === 'form' || viewMode === 'now') {
+		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 			return true;
 		}
 		return jsonEditorRef?.formatJson();
@@ -180,13 +191,19 @@
 	<CardHeader>
 		<CardTitle class="flex flex-col items-center justify-between gap-2 text-lg sm:flex-row">
 			<div class="flex w-full items-center justify-between gap-4 sm:w-auto">
-				{#if schema || isNowGist}
+				{#if schema || isNowGist || isPlaylistsGist}
 					<Tabs.Root value={viewMode} onValueChange={handleViewChange} class="w-auto">
 						<Tabs.List>
 							{#if isNowGist}
 								<Tabs.Trigger value="now" class="flex items-center gap-1.5 font-semibold">
 									<Sparkles class="h-4 w-4 text-primary" />
 									Now Editor
+								</Tabs.Trigger>
+							{/if}
+							{#if isPlaylistsGist}
+								<Tabs.Trigger value="playlists" class="flex items-center gap-1.5 font-semibold">
+									<ListMusic class="h-4 w-4 text-primary" />
+									Playlists Editor
 								</Tabs.Trigger>
 							{/if}
 							{#if schema}
@@ -222,7 +239,7 @@
 				</div>
 				<Button
 					onclick={() => {
-						if (viewMode === 'form' || viewMode === 'now') {
+						if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 							let dataToSync = formData;
 							const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
 							if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
@@ -244,6 +261,13 @@
 	<CardContent>
 		{#if viewMode === 'now'}
 			<NowEditor
+				bind:formData
+				{schema}
+				{githubToken}
+				gistId={gistInfo?.id || ''}
+			/>
+		{:else if viewMode === 'playlists'}
+			<PlaylistsEditor
 				bind:formData
 				{schema}
 				{githubToken}
