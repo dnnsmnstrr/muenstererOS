@@ -4,12 +4,14 @@ import type { DataItem } from '$lib/utils/api';
 import changes from '../../../data/changes.json';
 import pages from '../../../data/pages.json';
 import snippets from '../../../data/snippets.json';
+import projects from '../../../data/projects.json';
 import { gists } from '$lib/config';
 
 const dataMap: Record<string, any> = {
 	changes,
 	pages,
-	snippets
+	snippets,
+	projects
 };
 const DEFAULT_LIMIT = 50;
 
