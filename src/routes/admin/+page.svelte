@@ -336,6 +336,7 @@
 			onFormatJson={formatJson}
 			onResetEditor={resetEditor}
 			onSaveGist={saveGist}
+			isConcerts={selectedGist === gists.concerts.id}
 			{isSaving}
 		/>
 	{/if}

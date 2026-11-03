@@ -15,6 +15,7 @@
 	import { goto } from '$app/navigation';
 	import { i18n } from '$lib/i18n/i18n.svelte';
 	import { gists } from '$lib/config';
+	import ConcertEntryEditor from './ConcertEntryEditor.svelte';
 
 	let {
 		githubToken = $bindable(''),
@@ -22,6 +23,7 @@
 		gistInfo = $bindable<GistData>(),
 		selectedGist = '',
 		schema = null,
+		isConcerts = false,
 		isSaving = false,
 		onFormatJson,
 		onResetEditor,
@@ -32,31 +34,48 @@
 
 	let isNowGist = $derived(
 		selectedGist === gists.now.id ||
-		(gistInfo?.files && 'now.json' in gistInfo.files) ||
-		page.url.searchParams.get('file') === 'now'
+			(gistInfo?.files && 'now.json' in gistInfo.files) ||
+			page.url.searchParams.get('file') === 'now'
 	);
 
 	let isPlaylistsGist = $derived(
 		selectedGist === gists.playlists.id ||
-		(gistInfo?.files && 'playlists.json' in gistInfo.files) ||
-		page.url.searchParams.get('file') === 'playlists'
+			(gistInfo?.files && 'playlists.json' in gistInfo.files) ||
+			page.url.searchParams.get('file') === 'playlists'
 	);
 
 	let viewMode = $derived(
-		(page.url.searchParams.get('mode') as 'editor' | 'form' | 'now' | 'playlists') ||
-		(isNowGist ? 'now' : isPlaylistsGist ? 'playlists' : schema ? 'form' : 'editor')
+		(page.url.searchParams.get('mode') as 'editor' | 'form' | 'now' | 'playlists' | 'concerts') ||
+			(isNowGist
+				? 'now'
+				: isPlaylistsGist
+					? 'playlists'
+					: isConcerts
+						? 'concerts'
+						: schema
+							? 'form'
+							: 'editor')
 	);
 
 	let formData = $state<any>(null);
 	let lastSyncedGistData = $state('');
-	let lastViewMode = $state<'editor' | 'form' | 'now' | 'playlists'>('editor');
+	let lastViewMode = $state<'editor' | 'form' | 'now' | 'playlists' | 'concerts'>('editor');
 
 	$effect(() => {
-		if ((lastViewMode === 'form' || lastViewMode === 'now' || lastViewMode === 'playlists') && viewMode === 'editor') {
+		if (
+			(lastViewMode === 'form' || lastViewMode === 'now' || lastViewMode === 'playlists') &&
+			viewMode === 'editor'
+		) {
 			// Sync form data back to editor
 			let dataToSync = formData;
-			const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
-			if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
+			const schemaType =
+				schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
+			if (
+				schemaType === 'array' &&
+				formData &&
+				typeof formData === 'object' &&
+				'root' in formData
+			) {
 				dataToSync = formData.root;
 			}
 
@@ -91,14 +110,17 @@
 			}
 		} else if (!schema && !isNowGist && !isPlaylistsGist && viewMode !== 'editor') {
 			const url = new URL(page.url);
-			url.searchParams.set('mode', 'editor');
+			url.searchParams.set('mode', isConcerts ? 'concerts' : 'editor');
 			goto(url, { replaceState: true, noScroll: true, keepFocus: true });
 		}
 	});
 
 	$effect(() => {
 		// Sync from editor to form/now/playlists when gistData changes from outside
-		if ((viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') && gistData !== lastSyncedGistData) {
+		if (
+			(viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') &&
+			gistData !== lastSyncedGistData
+		) {
 			try {
 				formData = JSON.parse(gistData);
 				lastSyncedGistData = gistData;
@@ -130,7 +152,12 @@
 
 	// Re-export methods for JsonEditor API compatibility
 	export function setValue(value: string) {
-		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
+		if (
+			viewMode === 'form' ||
+			viewMode === 'now' ||
+			viewMode === 'playlists' ||
+			viewMode === 'concerts'
+		) {
 			try {
 				formData = JSON.parse(value);
 				gistData = value;
@@ -144,10 +171,22 @@
 	}
 
 	export function getValue() {
-		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
+		if (
+			viewMode === 'form' ||
+			viewMode === 'now' ||
+			viewMode === 'playlists' ||
+			viewMode === 'concerts'
+		) {
+			if (viewMode === 'concerts') return gistData;
 			let dataToSync = formData;
-			const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
-			if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
+			const schemaType =
+				schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
+			if (
+				schemaType === 'array' &&
+				formData &&
+				typeof formData === 'object' &&
+				'root' in formData
+			) {
 				dataToSync = formData.root;
 			}
 			return JSON.stringify(dataToSync, null, 2);
@@ -156,14 +195,24 @@
 	}
 
 	export function validateJson() {
-		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
+		if (
+			viewMode === 'form' ||
+			viewMode === 'now' ||
+			viewMode === 'playlists' ||
+			viewMode === 'concerts'
+		) {
 			return { valid: true };
 		}
 		return jsonEditorRef?.validateJson() || { valid: true };
 	}
 
 	export function formatJson() {
-		if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
+		if (
+			viewMode === 'form' ||
+			viewMode === 'now' ||
+			viewMode === 'playlists' ||
+			viewMode === 'concerts'
+		) {
 			return true;
 		}
 		return jsonEditorRef?.formatJson();
@@ -191,7 +240,7 @@
 	<CardHeader>
 		<CardTitle class="flex flex-col items-center justify-between gap-2 text-lg sm:flex-row">
 			<div class="flex w-full items-center justify-between gap-4 sm:w-auto">
-				{#if schema || isNowGist || isPlaylistsGist}
+				{#if schema || isNowGist || isPlaylistsGist || isConcerts}
 					<Tabs.Root value={viewMode} onValueChange={handleViewChange} class="w-auto">
 						<Tabs.List>
 							{#if isNowGist}
@@ -216,6 +265,11 @@
 								<Code class="h-4 w-4" />
 								{i18n.t('admin.editor.editor_tab')}
 							</Tabs.Trigger>
+							{#if isConcerts}
+								<Tabs.Trigger value="concerts" class="flex items-center gap-1.5">
+									<FormInput class="h-4 w-4" /> Concerts
+								</Tabs.Trigger>
+							{/if}
 						</Tabs.List>
 					</Tabs.Root>
 				{/if}
@@ -233,7 +287,8 @@
 			<div class="flex w-full justify-between gap-2 sm:w-auto">
 				<div class="flex items-center gap-2">
 					{#if viewMode === 'editor'}
-						<Button onclick={onFormatJson} variant="outline">{i18n.t('admin.editor.format')}</Button>
+						<Button onclick={onFormatJson} variant="outline">{i18n.t('admin.editor.format')}</Button
+						>
 					{/if}
 					<Button onclick={handleReset} variant="outline">{i18n.t('admin.editor.reset')}</Button>
 				</div>
@@ -241,8 +296,15 @@
 					onclick={() => {
 						if (viewMode === 'form' || viewMode === 'now' || viewMode === 'playlists') {
 							let dataToSync = formData;
-							const schemaType = schema?.type || (schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
-							if (schemaType === 'array' && formData && typeof formData === 'object' && 'root' in formData) {
+							const schemaType =
+								schema?.type ||
+								(schema?.properties ? 'object' : schema?.items ? 'array' : 'string');
+							if (
+								schemaType === 'array' &&
+								formData &&
+								typeof formData === 'object' &&
+								'root' in formData
+							) {
 								dataToSync = formData.root;
 							}
 							gistData = JSON.stringify(dataToSync, null, 2);
@@ -260,19 +322,9 @@
 	</CardHeader>
 	<CardContent>
 		{#if viewMode === 'now'}
-			<NowEditor
-				bind:formData
-				{schema}
-				{githubToken}
-				gistId={gistInfo?.id || ''}
-			/>
+			<NowEditor bind:formData {schema} {githubToken} gistId={gistInfo?.id || ''} />
 		{:else if viewMode === 'playlists'}
-			<PlaylistsEditor
-				bind:formData
-				{schema}
-				{githubToken}
-				gistId={gistInfo?.id || ''}
-			/>
+			<PlaylistsEditor bind:formData {schema} {githubToken} gistId={gistInfo?.id || ''} />
 		{:else if viewMode === 'editor'}
 			<JsonEditor
 				bind:this={jsonEditorRef}
@@ -284,6 +336,10 @@
 					detectIndentation: false
 				}}
 			/>
+		{:else if viewMode === 'concerts' && isConcerts}
+			<div class="max-h-[70vh] overflow-y-auto pr-2">
+				<ConcertEntryEditor bind:value={gistData} />
+			</div>
 		{:else if viewMode === 'form' && schema}
 			<div class="max-h-[70vh] overflow-y-auto pr-2">
 				<DynamicForm {schema} bind:data={formData} />
